@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import Main from '../views/Main.vue'
+import Main from '../views/main-page.vue'
 import NotFound from '../views/404.vue'
 
 const router = createRouter({
