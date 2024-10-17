@@ -1,9 +1,9 @@
-import '@arco-design/web-vue/dist/arco.css';
+import '@arco-design/web-vue/dist/arco.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import ArcoVue from '@arco-design/web-vue';
+import ArcoVue from '@arco-design/web-vue'
 import '../mock/index.js'
 
 const app = createApp(App)
