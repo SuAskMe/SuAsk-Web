@@ -15,7 +15,7 @@ interface SvgIconProps {
 }
 
 const props = defineProps<SvgIconProps>();
-const iconName = computed(() => (props.filled ? `${props.icon}-filled` : props.icon));
+const iconName = computed(() => (props.filled ? `${props.icon}-fill` : props.icon));
 </script>
 
 <style scoped>
