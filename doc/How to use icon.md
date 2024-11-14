@@ -10,7 +10,7 @@
 <svg-icon icon="test" size="24" color="black" filled></svg-icon>
 ```
 
-![alt text](../src/assets/icons/test.svg)
+![alt text](../src/assets/icons/link.svg)
 
 ### API
 
