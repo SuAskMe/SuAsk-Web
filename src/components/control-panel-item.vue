@@ -1,8 +1,8 @@
 <template>
     <div class="control-item" @click="handleClick">
-        <svg-icon :icon="props.icon" color="#71B6FF" size="24px" :filled="clicked" />
-        <div style="padding-left: 20px;"></div>
-        <p :class="{ text: !clicked, 'text-clicked': clicked }">{{ text }}</p>
+        <svg-icon :icon="props.icon" color="#71B6FF" :size="size ? size : '24px'" :filled="clicked" />
+        <div v-if="text" style="padding-left: 20px;"></div>
+        <p v-if="text" :class="{ text: !clicked, 'text-clicked': clicked }">{{ text }}</p>
     </div>
 </template>
 
@@ -11,7 +11,8 @@ import { defineProps } from 'vue';
 
 const props = defineProps<{
     icon: string;
-    text: string;
+    size?: string;
+    text?: string;
     clicked?: boolean;
 }>();
 
@@ -30,10 +31,6 @@ const handleClick = () => {
     cursor: pointer;
     transition: background-color 0.2s ease;
     height: 30px;
-}
-
-.control-item:hover {
-    background-color: #f0f0f0;
 }
 
 .text {
