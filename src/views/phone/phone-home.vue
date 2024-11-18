@@ -20,15 +20,32 @@
             </div>
         </a-layout-header>
         <a-layout-content>Content</a-layout-content>
-        <a-layout-footer class="footer">
-            <control-panel-item icon="group" size="30px" :clicked="selectedItem == 'group'"
-                @updateSelected="updateSelected" />
-            <control-panel-item icon="graduation-cap" size="30px" :clicked="selectedItem == 'graduation-cap'"
-                @updateSelected="updateSelected" />
-            <control-panel-item icon="chat-1" size="30px" :clicked="selectedItem == 'chat-1'"
-                @updateSelected="updateSelected" />
-            <control-panel-item icon="settings-2" size="30px" :clicked="selectedItem == 'settings-2'"
-                @updateSelected="updateSelected" />
+        <a-layout-footer>
+            <div v-if="false" class="footer">
+                <control-panel-item icon="group" size="30px" :clicked="selectedItem == 'group'"
+                    @updateSelected="updateSelected" />
+                <control-panel-item icon="graduation-cap" size="30px" :clicked="selectedItem == 'graduation-cap'"
+                    @updateSelected="updateSelected" />
+                <control-panel-item icon="chat-1" size="30px" :clicked="selectedItem == 'chat-1'"
+                    @updateSelected="updateSelected" />
+                <control-panel-item icon="settings-2" size="30px" :clicked="selectedItem == 'settings-2'"
+                    @updateSelected="updateSelected" />
+            </div>
+            <div v-if="false" class="footer">
+                <control-panel-item icon="camera-lens" size="30px" :clicked="selectedItem == 'camera-lens'"
+                    @updateSelected="updateSelected" />
+                <control-panel-item icon="message" size="30px" :clicked="selectedItem == 'message'"
+                    @updateSelected="updateSelected" />
+                <control-panel-item icon="settings-2" size="30px" :clicked="selectedItem == 'settings-2'"
+                    @updateSelected="updateSelected" />
+            </div>
+            <div v-if="true" class="footer" style="gap: 4vw; padding: 0 5vw 0 5vw !important;">
+                <div style=" width: 100%">
+                    <a-input style="width: 100%; border-radius: 50px;" placeholder="请输入..." allow-clear />
+                </div>
+                <svg-icon icon="image" color="#71B6FF" size="30px" />
+                <svg-icon icon="link" color="#71B6FF" size="30px" />
+            </div>
         </a-layout-footer>
     </a-layout>
 </template>
