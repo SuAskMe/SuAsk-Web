@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import NotFound from '../views/404.vue'
 import WebHome from '../views/web/web-home.vue'
+import PhoneHome from '../views/phone/phone-home.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,10 +13,15 @@ const router = createRouter({
         //     component: Main,
         // },
         {
-            path: '/student',
-            name: 'student',
+            path: '/web',
+            name: 'web',
             component: WebHome,
 
+        },
+        {
+            path: '/phone',
+            name: 'phone',
+            component: PhoneHome,
         },
         {
             path: '/:pathMatch(.*)*',
