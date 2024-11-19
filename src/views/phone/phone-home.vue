@@ -19,7 +19,9 @@
                     @click="changeSearch" />
             </div>
         </a-layout-header>
-        <a-layout-content>Content</a-layout-content>
+        <a-layout-content class="content">
+            <background-img img_index=1 />
+        </a-layout-content>
         <a-layout-footer>
             <div v-if="false" class="footer">
                 <control-panel-item icon="group" size="30px" :clicked="selectedItem == 'group'"
@@ -51,6 +53,7 @@
 </template>
 
 <script setup lang='ts'>
+import BackgroundImg from '@/components/background-img.vue';
 import ControlPanelItem from '@/components/control-panel-item.vue';
 import { ref } from 'vue';
 
@@ -109,5 +112,10 @@ const questionContent = ref('我有一个角色，但是输出不够高aaaaaaaaa
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.content {
+    height: 100%;
+    width: 100%;
 }
 </style>

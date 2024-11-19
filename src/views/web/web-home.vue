@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import ControlPanelItem from '../../components/control-panel-item.vue';
 import SvgIcon from '@/components/svg-icon.vue';
+import BackgroundImg from '@/components/background-img.vue';
 
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
 const userId = ref("GenshinStart");
@@ -90,7 +91,9 @@ const questionContent = ref('我有一个角色，但是输出不够高，有什
                     </div>
                 </div>
             </a-layout-header>
-            <a-layout-content>Content</a-layout-content>
+            <a-layout-content class="content">
+                <background-img img_index=1 />
+            </a-layout-content>
             <a-layout-footer class="footer">
                 <div style="margin-left: 20px; width: 100%; margin-right: 20px;">
                     <a-input style="width: 100%; border-radius: 50px;" placeholder="请输入..." allow-clear />
@@ -131,7 +134,7 @@ const questionContent = ref('我有一个角色，但是输出不够高，有什
     gap: 20px;
     padding-right: 20px;
     border-bottom: #E5E5E5 solid 1px;
-    height: 60px;
+    height: 6vh;
 }
 
 .header-item {
@@ -144,8 +147,13 @@ const questionContent = ref('我有一个角色，但是输出不够高，有什
     display: flex;
     align-items: center;
     border-top: #E5E5E5 solid 1px;
-    height: 60px;
+    height: 6vh;
     gap: 20px;
-    margin-right: 20px;
+    padding-right: 20px;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
 }
 </style>
