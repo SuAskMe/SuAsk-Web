@@ -1,18 +1,24 @@
 <template>
-    <img :src="imgUrl" alt="background_img" />
+    <div :style="dynamicImg" />
 </template>
 
 <script setup lang="ts">
-import { defineProps, watch } from 'vue';
+import { computed, defineProps, watch } from 'vue';
 
 const props = defineProps<{
-    img_index?: number;
+    img_index?: string;
     img_url?: string;
 }>();
 
-
 let imgUrl = '';
 
+const dynamicImg = computed(() => {
+    return {
+        background: `center/cover url(${imgUrl})`,
+        height: '100%',
+        width: '100%'
+    };
+});
 
 watch(
     () => [props.img_index, props.img_url],
@@ -29,4 +35,10 @@ watch(
 );
 </script>
 
-<style scoped></style>
+<style scoped>
+.img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
