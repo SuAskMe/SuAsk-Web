@@ -1,48 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { basicRoutes } from "./routes";
+import type { App } from "vue";
 
-import NotFound from '../views/404-page.vue'
-import WebHome from '../views/web/web-home.vue'
-import PhoneHome from '../views/phone/phone-home.vue'
-import Setting from '../views/Setting.vue'
-
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
-        // {
-        //     path: '/',
-        //     name: 'home',
-        //     component: Main,
-        // },
-        {
-            path: '/web',
-            name: 'web',
-            component: WebHome,
-            children: [
-                {
-                    path: 'setting',
-                    name: 'web-setting',
-                    component: Setting,
-                }
-            ]
-        },
-        {
-            path: '/phone',
-            name: 'phone',
-            component: PhoneHome,
-            children: [
-                {
-                    path: 'setting',
-                    name: 'phone-setting',
-                    component: Setting,
-                }
-            ]
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'NotFound',
-            component: NotFound,
-        },
-    ],
+    routes: basicRoutes as unknown as RouteRecordRaw[],
+    strict: true,
+    scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
-export default router
+export function setupRouter(app: App<Element>) {
+    app.use(router);
+}
