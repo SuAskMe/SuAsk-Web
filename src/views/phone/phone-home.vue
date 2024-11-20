@@ -24,22 +24,22 @@
         </a-layout-content>
         <a-layout-footer>
             <div v-if="false" class="footer">
-                <control-panel-item icon="group" size="30px" :clicked="selectedItem == 'group'"
+                <control-panel-item id="stu-ask-all" icon="group" size="30px" :clicked="selectedItem == 'stu-ask-all'"
                     @updateSelected="updateSelected" />
-                <control-panel-item icon="graduation-cap" size="30px" :clicked="selectedItem == 'graduation-cap'"
+                <control-panel-item id="stu-ask-teacher" icon="graduation-cap" size="30px"
+                    :clicked="selectedItem == 'stu-ask-teacher'" @updateSelected="updateSelected" />
+                <control-panel-item id="stu-message" icon="chat-1" size="30px" :clicked="selectedItem == 'stu-message'"
                     @updateSelected="updateSelected" />
-                <control-panel-item icon="chat-1" size="30px" :clicked="selectedItem == 'chat-1'"
-                    @updateSelected="updateSelected" />
-                <control-panel-item icon="settings-2" size="30px" :clicked="selectedItem == 'settings-2'"
-                    @updateSelected="updateSelected" />
+                <control-panel-item id="stu-settings" icon="settings-2" size="30px"
+                    :clicked="selectedItem == 'stu-settings'" @updateSelected="updateSelected" />
             </div>
             <div v-if="false" class="footer">
-                <control-panel-item icon="camera-lens" size="30px" :clicked="selectedItem == 'camera-lens'"
-                    @updateSelected="updateSelected" />
-                <control-panel-item icon="message" size="30px" :clicked="selectedItem == 'message'"
-                    @updateSelected="updateSelected" />
-                <control-panel-item icon="settings-2" size="30px" :clicked="selectedItem == 'settings-2'"
-                    @updateSelected="updateSelected" />
+                <control-panel-item id="tea-see-all" icon="camera-lens" size="30px"
+                    :clicked="selectedItem == 'tea-see-all'" @updateSelected="updateSelected" />
+                <control-panel-item id="tea-question" icon="message" size="30px"
+                    :clicked="selectedItem == 'tea-question'" @updateSelected="updateSelected" />
+                <control-panel-item id="tea-settings" icon="settings-2" size="30px"
+                    :clicked="selectedItem == 'tea-settings'" @updateSelected="updateSelected" />
             </div>
             <div v-if="true" class="footer" style="gap: 4vw; padding: 0 5vw 0 5vw !important;">
                 <div style=" width: 100%">
