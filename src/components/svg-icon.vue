@@ -8,10 +8,10 @@
 import { computed } from 'vue';
 
 interface SvgIconProps {
-    icon: string;
-    size?: number | string;
-    color?: string;
-    filled?: boolean;
+    icon: string; // 图标名称
+    size?: number | string; // 图标大小
+    color?: string; // 图标颜色
+    filled?: boolean; // 是否填充
 }
 
 const props = defineProps<SvgIconProps>();
