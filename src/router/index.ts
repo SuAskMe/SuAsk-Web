@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import NotFound from '../views/404.vue'
+import NotFound from '../views/404-page.vue'
 import WebHome from '../views/web/web-home.vue'
 import PhoneHome from '../views/phone/phone-home.vue'
 
