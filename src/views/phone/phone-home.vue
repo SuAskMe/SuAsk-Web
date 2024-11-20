@@ -56,8 +56,8 @@
 </template>
 
 <script setup lang='ts'>
-import BackgroundImg from '@/components/background-img.vue';
-import ControlPanelItem from '@/components/control-panel-item.vue';
+import BackgroundImg from '@/components/backgroud-img';
+import ControlPanelItem from '@/components/control-panel-item';
 import { ref } from 'vue';
 
 // 选择高亮组件
