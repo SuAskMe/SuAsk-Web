@@ -57,28 +57,29 @@ import BackgroundImg from '@/components/background-img.vue';
 import ControlPanelItem from '@/components/control-panel-item.vue';
 import { ref } from 'vue';
 
+// 选择高亮组件
 const selectedItem = ref<string>('');
 const updateSelected = (id: string) => {
     selectedItem.value = id;
 };
 
+// 排序组件
 const sortText = ref(['按时间排序', '按热度排序']);
 const sortIndex = ref(0);
-
-const searchIndex = ref(0);
-
 function changeSort() {
     sortIndex.value = sortIndex.value === 0 ? 1 : 0;
 }
 
+// 搜索组件
+const searchIndex = ref(0);
 function changeSearch() {
     searchIndex.value = searchIndex.value === 0 ? 1 : 0;
 }
 
+// 是否为问题页面
 const isQuestionPage = ref(true);
-
-const questionTitle = ref('如何提高角色的输出？');
-const questionContent = ref('我有一个角色，但是输出不够高aaaaaaaaaaaaaaaa');
+const questionTitle = ref('如何提高角色的输出？'); // 问题标题
+const questionContent = ref('我有一个角色，但是输出不够高aaaaaaaaaaaaaaaa'); // 问题内容
 </script>
 
 <style scoped>
