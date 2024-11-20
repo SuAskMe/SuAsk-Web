@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import ControlPanelItem from '../../components/control-panel-item.vue';
-import SvgIcon from '@/components/svg-icon.vue';
-import BackgroundImg from '@/components/background-img.vue';
+import ControlPanelItem from '../../components/control-panel-item';
+import SvgIcon from '@/components/svg-icon';
+import BackgroundImg from '@/components/backgroud-img';
 
 // 用户信息
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
