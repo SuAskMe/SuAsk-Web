@@ -17,21 +17,30 @@ const router = createRouter({
             path: '/web',
             name: 'web',
             component: WebHome,
+            children: [
+                {
+                    path: 'setting',
+                    name: 'web-setting',
+                    component: Setting,
+                }
+            ]
         },
         {
             path: '/phone',
             name: 'phone',
             component: PhoneHome,
+            children: [
+                {
+                    path: 'setting',
+                    name: 'phone-setting',
+                    component: Setting,
+                }
+            ]
         },
         {
             path: '/:pathMatch(.*)*',
             name: 'NotFound',
             component: NotFound,
-        },
-        {
-            path: '/setting',
-            name: 'setting-page',
-            component: Setting,
         },
     ],
 })
