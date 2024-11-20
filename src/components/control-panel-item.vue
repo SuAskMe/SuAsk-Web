@@ -10,16 +10,15 @@
 import { defineProps } from 'vue';
 
 const props = defineProps<{
-    id: string;
-    icon?: string;
-    size?: string;
-    text?: string;
-    clicked?: boolean;
+    id: string; // 控制面板的id
+    icon?: string; // 图标 可选
+    size?: string; // 图标大小 可选
+    text?: string; // 内容 可选
+    clicked?: boolean; // 是否被选中 可选
 }>();
 
 const emit = defineEmits(['updateSelected']);
 
-// 点击事件，通知父组件更新选中状态
 const handleClick = () => {
     emit('updateSelected', props.id);
 };
