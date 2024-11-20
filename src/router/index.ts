@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import NotFound from '../views/404.vue'
-import Student_Phone from '../views/main-page.vue'
-import Setting from '../components/Setting.vue'
+import NotFound from '../views/404-page.vue'
+import WebHome from '../views/web/web-home.vue'
+import PhoneHome from '../views/phone/phone-home.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
