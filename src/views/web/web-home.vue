@@ -124,8 +124,9 @@ function toggleOpen() {
                     </div>
                 </div>
             </a-layout-header>
-            <a-layout-content class="content">
-                <background-img img_index=1 />
+            <a-layout-content class="content" style="position:relative">
+                <background-img img_index="1" style="position:absolute;left:0;top:0; z-index: -1;" />
+                <router-view style="position:absolute;left:0;top:0; z-index: 1;" />
             </a-layout-content>
             <a-layout-footer class="footer">
                 <div style="margin-left: 20px; width: 100%; margin-right: 20px;">

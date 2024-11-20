@@ -20,7 +20,10 @@
             </div>
         </a-layout-header>
         <a-layout-content class="content">
-            <background-img img_index=1 />
+            <a-layout-content class="content" style="position:relative">
+                <background-img img_index="1" style="position:absolute;left:0;top:0; z-index: -1;" />
+                <router-view style="position:absolute;left:0;top:0; z-index: 1;" />
+            </a-layout-content>
         </a-layout-content>
         <a-layout-footer>
             <div v-if="false" class="footer">
