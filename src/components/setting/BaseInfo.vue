@@ -1,6 +1,6 @@
 <template>
   <div class="profile-edit">
-    <h3>基础信息</h3>
+    <h1>基础信息</h1>
     <div class="profile-container">
       <div class="profile-avatar">
         <div class="avatar-circle">
