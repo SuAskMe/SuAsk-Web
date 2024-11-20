@@ -4,35 +4,37 @@ import ControlPanelItem from '../../components/control-panel-item.vue';
 import SvgIcon from '@/components/svg-icon.vue';
 import BackgroundImg from '@/components/background-img.vue';
 
+// 用户信息
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
 const userId = ref("GenshinStart");
 const userName = ref("原神启动");
 
+// 选择高亮组件
 const selectedItem = ref<string>('');
 const updateSelected = (id: string) => {
     selectedItem.value = id;
 };
 
+// 排序组件
 const sortText = ref(['按时间排序', '按热度排序']);
 const sortIndex = ref(0);
-
-const searchIndex = ref(0);
-
 function changeSort() {
     sortIndex.value = sortIndex.value === 0 ? 1 : 0;
 }
 
+// 搜索组件
+const searchIndex = ref(0);
 function changeSearch() {
     searchIndex.value = searchIndex.value === 0 ? 1 : 0;
 }
+const searchText = ref(''); // 搜索内容
 
-const searchText = ref('');
-
+// 是否为问题页面
 const isQuestionPage = ref(true);
+const questionTitle = ref('如何提高角色的输出？'); // 问题标题
+const questionContent = ref('我有一个角色，但是输出不够高，有什么办法可以提高输出？'); // 问题内容
 
-const questionTitle = ref('如何提高角色的输出？');
-const questionContent = ref('我有一个角色，但是输出不够高，有什么办法可以提高输出？');
-
+// 教师 [我的提问箱] 是否展开
 const isOpen = ref(false);
 function toggleOpen() {
     isOpen.value = !isOpen.value;
