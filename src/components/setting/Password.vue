@@ -1,6 +1,8 @@
 <template>
   <div class="password-reset">
     <h1>密码</h1>
+    <hr>
+
     <div class="form-group">
       <label for="newPassword">重置密码</label>
       <input
@@ -10,6 +12,7 @@
         placeholder="请输入内容"
       />
     </div>
+
     <div class="form-group">
       <label for="confirmPassword">再次输入密码</label>
       <input
@@ -19,6 +22,7 @@
         placeholder="请输入内容"
       />
     </div>
+    
     <button class="reset-button" @click="resetPassword">重置</button>
   </div>
 </template>

@@ -1,23 +1,22 @@
 <template>
   <BaseInfo> </BaseInfo>
-  <hr>
 
   <Password> </Password>
-  <hr>
 
-  <h1>主题</h1>
-  <hr>
+  <MyStyle> </MyStyle>
 
 </template>
 
 <script>
 import BaseInfo from './setting/BaseInfo.vue';
 import Password from './setting/Password.vue';
+import MyStyle from './setting/MyStyle.vue';
 
 export default {
     components: {
         Password,
-        BaseInfo
+        BaseInfo,
+        MyStyle
     }
 }
 </script>

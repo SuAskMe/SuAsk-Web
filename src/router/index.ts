@@ -25,7 +25,7 @@ const router = createRouter({
         },
         {
             path: '/setting',
-            name: 'setting',
+            name: 'setting-page',
             component: Setting,
         },
     ],

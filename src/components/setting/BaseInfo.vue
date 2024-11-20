@@ -1,6 +1,8 @@
 <template>
   <div class="profile-edit">
     <h1>基础信息</h1>
+    <hr>
+
     <div class="profile-container">
       <div class="profile-avatar">
         <div class="avatar-circle">
@@ -8,6 +10,7 @@
         </div>
         <p class="username">@DreamingLri</p>
       </div>
+
       <div class="profile-form">
         <div class="form-group">
           <label for="nickname">昵称</label>
@@ -18,6 +21,7 @@
             placeholder="请输入昵称"
           />
         </div>
+
         <div class="form-group">
           <label for="bio">简介</label>
           <textarea
@@ -26,6 +30,7 @@
             placeholder="请输入内容"
           ></textarea>
         </div>
+        
         <button class="save-button" @click="saveProfile">保存</button>
       </div>
     </div>
