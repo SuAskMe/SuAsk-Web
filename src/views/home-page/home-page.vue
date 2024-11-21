@@ -26,6 +26,7 @@ function jumpToLogin() {
 
 onMounted(() => {
     isMobile.value = _isMobile();
+    localStorage.setItem('isMobile', JSON.stringify(isMobile.value));
 });
 </script>
 
