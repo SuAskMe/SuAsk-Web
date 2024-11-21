@@ -1,8 +1,8 @@
 import type { AppRouteRecordRaw } from "../types"
-import WebHome from '@/views/web/web-home.vue'
 import { PageNotFound } from "./basic"
 import { PhoneHomeRoute } from "./modules/phone-home"
 import { WebHomeRoute } from "./modules/web-home"
+import HomePage from '@/views/home-page/home-page.vue'
 
 export const RootRoot: AppRouteRecordRaw = {
     path: '/',
@@ -10,7 +10,7 @@ export const RootRoot: AppRouteRecordRaw = {
     meta: {
         title: 'Root',
     },
-    component: WebHome
+    component: HomePage,
 }
 
 export const basicRoutes = [
