@@ -1,16 +1,14 @@
 import type { AppRouteRecordRaw } from "@/router/types";
-import WebHome from '@/views/web/web-home.vue'
-import Setting from '@/views/Setting.vue'
 
 export const WebHomeRoute: AppRouteRecordRaw = {
     path: '/web',
     name: 'web',
-    component: WebHome,
+    component: () => import('@/views/web/web-home.vue'),
     children: [
         {
             path: 'setting',
             name: 'web-setting',
-            component: Setting,
+            component: () => import('@/views/Setting.vue'),
         }
     ]
 
