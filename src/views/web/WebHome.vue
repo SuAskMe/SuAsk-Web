@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import ControlPanelItem from '../../components/control-panel-item';
 import SvgIcon from '@/components/svg-icon';
 import BackgroundImg from '@/components/backgroud-img';
-import AskDialog from '@/components/AskDialog.vue';
+import AskDialog from '@/components/ask-dialog';
 
 // 用户信息
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");

@@ -10,7 +10,7 @@
 
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
-import Typewriter from './type-writer.vue';
+import Typewriter from './TypeWriter.vue';
 import { router } from '@/router';
 
 const isMobile = ref(false);

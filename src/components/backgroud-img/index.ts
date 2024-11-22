@@ -1,3 +1,3 @@
-import BackgroundImg from "./background-img.vue"
+import BackgroundImg from "./BackgroundImg.vue"
 
 export default BackgroundImg;

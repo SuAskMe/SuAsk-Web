@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '../types'
-import NotFound from '@/views/404-page.vue'
+import NotFound from '@/views/404.vue'
 
 export const PageNotFound: AppRouteRecordRaw = {
     path: '/:pathMatch(.*)*',
