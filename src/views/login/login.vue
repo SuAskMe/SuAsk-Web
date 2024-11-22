@@ -39,8 +39,8 @@
 
 <script setup lang='ts'>
 import { computed, onMounted, ref } from 'vue';
-import ForgetPasswordPage from './forget-password-page.vue';
-import RegisterPage from './register-page.vue';
+import ForgetPasswordPage from './ForgetPasswordPage.vue';
+import RegisterPage from './RegisterPage.vue';
 
 const userName = ref('');
 const password = ref('');

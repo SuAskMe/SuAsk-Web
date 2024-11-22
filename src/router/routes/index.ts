@@ -2,7 +2,7 @@ import type { AppRouteModule, AppRouteRecordRaw } from "../types"
 import { PageNotFound } from "./basic"
 import { PhoneHomeRoute } from "./modules/phone-home"
 import { WebHomeRoute } from "./modules/web-home"
-import HomePage from '@/views/home-page/home-page.vue'
+import HomePage from '@/views/home-page/HomePage.vue'
 
 
 
@@ -20,7 +20,7 @@ export const RootRoot: AppRouteRecordRaw = {
 export const LoginRoute: AppRouteRecordRaw = {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/login/login.vue'),
+    component: () => import('@/views/login/Login.vue'),
     meta: {
         title: '登录',
     },
@@ -29,7 +29,7 @@ export const LoginRoute: AppRouteRecordRaw = {
 export const TestRoute: AppRouteRecordRaw = {
     path: '/test',
     name: 'Test',
-    component: () => import('@/views/test.vue'),
+    component: () => import('@/views/TestPage.vue'),
     meta: {
         title: '测试',
     },

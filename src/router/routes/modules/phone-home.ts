@@ -4,7 +4,7 @@ import type { AppRouteRecordRaw } from "@/router/types";
 export const PhoneHomeRoute: AppRouteRecordRaw = {
     path: '/phone',
     name: 'phone',
-    component: () => import('@/views/phone/phone-home.vue'),
+    component: () => import('@/views/phone/PhoneHome.vue'),
     meta: {
         title: '主页',
     },
@@ -12,7 +12,7 @@ export const PhoneHomeRoute: AppRouteRecordRaw = {
         {
             path: 'setting',
             name: 'phone-setting',
-            component: () => import('@/views/Setting.vue'),
+            component: () => import('@/views/setting/Setting.vue'),
             meta: {
                 title: '设置',
             },
