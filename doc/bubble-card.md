@@ -106,18 +106,6 @@ const addLike = (key: typeof keyObj)=>{
     :click-card="navigateToDetail"
     :click-favourite="addFavourite">
 </bubble-question>
-
-    title: string;
-    text: string;
-    views: number;
-    timeStamp: number;
-    bubbleKey?: any;
-    answerNum?: number;
-    imagesUrls?: string[];
-    avatars?: string[];
-    isFavourite?: boolean;
-    clickCard?: (key: any) => void;
-    clickFavourite?: (key: any) => void;
 ```
 
 #### API
@@ -142,6 +130,44 @@ const addLike = (key: typeof keyObj)=>{
 
 ---
 
-### bubble-basic-question 通用问题气泡（TODO
+### bubble-card 通用气泡
 
-**由于已有的问题气泡功能已经太过于复杂，为了单个组件的易用性，我特地将原来的问题气泡抽取一个框架出来，继续开发一个通用的问题气泡**
+**由于已有的问题气泡功能已经太过于复杂，为了单个组件的易用性，我特地将原来的问题气泡抽取一个框架出来，继续开发一个通用的气泡**
+
+**样例**
+
+```html
+<bubble-card 
+	:title="title" 
+   	:text="text" 
+    :views="views"
+    :time-stamp="ts"
+    :has-news="hasNews"
+    :show-pin="showPin"
+    :is-pinned="isPinned"
+    :image-urls="urls"
+    :bubble-key="key"
+    :click-card="..."
+    :click-pin="...">
+</bubble-card>    
+```
+
+#### API
+
+| 参数名     | 描述                                   | 类型              | 默认值 | 备注                                                         |
+| ---------- | -------------------------------------- | ----------------- | ------ | ------------------------------------------------------------ |
+| title      | 标题                                   | string!           | 无     |                                                              |
+| text       | 正文                                   | string!           | 无     |                                                              |
+| views      | 浏览量                                 | number!           | 无     |                                                              |
+| time-stamp | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| has-news   | 是否有新消息                           | boolean?          | false  | 在标题左边会出现一个蓝点                                     |
+| show-pin   | 是否展示置顶图标                       | boolean?          | false  | 在右上方出现一个图钉                                         |
+| is-pinned  | 是否已经置顶                           | boolean?          | false  | 是否已经置顶                                                 |
+| image-urls | 图片链接                               | string[]?         | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
+| bubble-key | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
+| click-card | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
+| click-pin  | 置顶事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数            |
+
+#### 讲解
+
+参照 `bubble-answer` 组件，不多赘述
