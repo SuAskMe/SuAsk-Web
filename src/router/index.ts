@@ -1,32 +1,21 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import { basicRoutes } from "./routes";
+import type { App } from "vue";
 
-// 导入视图组件
-import NotFound from '../views/404.vue'
-import StudentPhone from '../views/main-page.vue'
-import TeacherList from '../views/teacher-list.vue'
-
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [
-        // 学生主页面
-        {
-            path: '/student',
-            name: 'student',
-            component: StudentPhone,
-        },
-        // 教师列表页面
-        {
-            path: '/teachers',
-            name: 'TeacherList',
-            component: TeacherList,
-        },
-        // 捕获所有未知路径
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'NotFound',
-            component: NotFound,
-        },
-    ],
-});
+    routes: basicRoutes as unknown as RouteRecordRaw[],
+    strict: true,
+    scrollBehavior: () => ({ left: 0, top: 0 }),
+})
 
-export default router;
+export function setupRouter(app: App<Element>) {
+    app.use(router);
+}
+
+router.beforeEach((to, from, next) => {
+    if (to.meta && to.meta.title) {
+        document.title = to.meta.title as string;
+    }
+    next();
+});
