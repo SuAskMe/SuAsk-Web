@@ -9,25 +9,16 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue';
+import { inject } from 'vue';
 import Typewriter from './TypeWriter.vue';
 import { router } from '@/router';
 
-const isMobile = ref(false);
-
-function _isMobile() {
-    const ua = navigator.userAgent;
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-}
+const isMobile = !(inject('deviceType', 'desktop') == 'desktop')
 
 function jumpToLogin() {
     router.push('/login');
 }
 
-onMounted(() => {
-    isMobile.value = _isMobile();
-    localStorage.setItem('isMobile', JSON.stringify(isMobile.value));
-});
 </script>
 
 <style scoped>

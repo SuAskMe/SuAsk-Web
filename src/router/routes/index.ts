@@ -1,8 +1,7 @@
 import type { AppRouteModule, AppRouteRecordRaw } from "../types"
 import { PageNotFound } from "./basic"
-import { PhoneHomeRoute } from "./modules/phone-home"
-import { WebHomeRoute } from "./modules/web-home"
-import HomePage from '@/views/home-page/HomePage.vue'
+import { HomeRoute } from "./modules/home"
+import HomePage from '@/views/root-page/HomePage.vue'
 
 
 
@@ -36,10 +35,9 @@ export const TestRoute: AppRouteRecordRaw = {
 }
 
 export const basicRoutes = [
+    HomeRoute,
     LoginRoute,
     TestRoute,
     RootRoot,
     PageNotFound,
-    PhoneHomeRoute,
-    WebHomeRoute,
 ]

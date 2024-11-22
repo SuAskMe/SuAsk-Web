@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="main-item" :class="{ blurred: showModel }">
+        <div class="main-item" :class="{ blurred: showModal }">
             <div class="title">
                 <span>欢迎使用 SuAsk</span>
                 <svg-icon icon="qr-code" color="#808080" size="20px" />
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div v-if="showModel" class="modal-overlay">
+        <div v-if="showModal" class="modal-overlay">
             <forget-password-page v-if="showForgetPassword" />
             <register-page v-if="showRegister" />
         </div>
@@ -52,7 +52,7 @@ function login() {
 
 const showForgetPassword = ref(false);
 const showRegister = ref(false);
-const showModel = computed(() => showForgetPassword.value || showRegister.value);
+const showModal = computed(() => showForgetPassword.value || showRegister.value);
 
 function forgetPassword() {
     showForgetPassword.value = true;
