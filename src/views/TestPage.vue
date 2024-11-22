@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang='ts'>
-import AskDialog from '@/components/AskDialog.vue';
+import AskDialog from '@/components/ask-dialog';
 </script>
 
 <style></style>
