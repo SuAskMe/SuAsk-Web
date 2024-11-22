@@ -26,8 +26,18 @@ export const LoginRoute: AppRouteRecordRaw = {
     },
 }
 
+export const TestRoute: AppRouteRecordRaw = {
+    path: '/test',
+    name: 'Test',
+    component: () => import('@/views/test.vue'),
+    meta: {
+        title: '测试',
+    },
+}
+
 export const basicRoutes = [
     LoginRoute,
+    TestRoute,
     RootRoot,
     PageNotFound,
     PhoneHomeRoute,
