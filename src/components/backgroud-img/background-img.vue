@@ -38,7 +38,7 @@ watch(
         if (newImgUrl) {
             imgUrl = String(newImgUrl);
         } else if (newImgIndex !== undefined) {
-            imgUrl = new URL(`../assets/bg_imgs/${newImgIndex}.png`, import.meta.url).href;
+            imgUrl = new URL(`../../assets/bg_imgs/${newImgIndex}.png`, import.meta.url).href;
         } else {
             imgUrl = '';
         }
