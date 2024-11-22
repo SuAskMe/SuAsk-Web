@@ -1,5 +1,5 @@
-import BubbleQuestion from "./bubble-question/BubbleQuestion.vue";
-import BubbleAnswer from "./bubble-answer/BubbleAnswer.vue";
-import BubbleBasicQuestion from "./bubble-basic-question/BubbleBasicQuestion.vue";
+import BubbleQuestion from "./bubble-question/__BubbleQuestion__.vue";
+import BubbleAnswer from "./bubble-answer/__BubbleAnswer__.vue";
+import BubbleCard from "./bubble-basic-card/__BubbleCard__.vue";
 
-export { BubbleQuestion, BubbleAnswer, BubbleBasicQuestion };
+export { BubbleQuestion, BubbleAnswer, BubbleCard };

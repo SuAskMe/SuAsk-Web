@@ -1,11 +1,12 @@
-const MAX_SIZE = 460;
+const MAX_SIZE = 450;
 
 export function getImgStyle(photos: string[] | undefined) {
     let hasImages = false;
     let size = 0;
+    let containerWidth = 0;
     if (!photos || photos.length === 0) {
         // 没有图片
-        return { size, hasImages };
+        return { size, hasImages, containerWidth };
     }
     if (photos.length > 9) {
         // 最多显示9张图片
@@ -15,7 +16,8 @@ export function getImgStyle(photos: string[] | undefined) {
     let col = photos.length >= 3 ? 3 : photos.length;
     let width = (100 - (col - 1) * 2) / col; // 图片宽度百分比
     size = (width / 100) * MAX_SIZE; // 图片大小，单位px
-    return { size, hasImages };
+    containerWidth = col * size + (col - 1) * 10; // 图片容器宽度，单位px
+    return { size, hasImages, containerWidth };
 }
 
 export function getTimeStr(timeStamp: number) {

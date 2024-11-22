@@ -13,6 +13,11 @@
   transform: translateY(-4px);
 }
 
+.card-body {
+  /* background-color: aliceblue; */
+  padding: 14px 18px 5px 18px;
+}
+
 .q-title {
   font-size: 16px;
   font-weight: bold;
@@ -21,6 +26,9 @@
 }
 
 .q-body {
+  display: flex;
+  flex-direction: column;
+
   .text {
     white-space: pre-wrap;
     display: block;
@@ -32,10 +40,15 @@
 
   .photos-container {
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
+    justify-content: center;
     margin-bottom: 10px;
-    gap: 10px 10px;
+
+    .preview-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px 10px;
+    }
   }
 }
 
@@ -69,7 +82,6 @@
   border-top: #eeeded solid 1px;
   display: flex;
   align-items: center;
-  margin-top: 5px;
   padding-bottom: 5px;
 
   .avatar {
