@@ -2,7 +2,6 @@
     <div class="main">
         <p>基础信息</p>
         <div class="basic-info">
-
             <div class="avatar-and-id">
                 <a-avatar :style="{ backgroundColor: '#14a9f8' }" :size="100">
                     <img :src="basicInfo.avatar" />
@@ -16,27 +15,30 @@
                 </div>
                 <p>简介</p>
                 <div>
-                    <a-textarea v-model="basicInfo.bio" allow-clear />
+                    <bio-panel v-model="basicInfo.bio" style="width: 300px;" />
                 </div>
             </div>
             <div>
                 <a-button type="primary">保存</a-button>
             </div>
         </div>
-        <p>密码</p>
-        <div class="password">
-
-        </div>
         <p>主题</p>
         <div class="theme">
-
+            <theme-image :src="imgList" width="100px" />
         </div>
+        <p class="danger-option">重置密码</p>
+        <p class="danger-option">账户注销</p>
     </div>
 </template>
 
 <script setup lang='ts'>
-import { reactive } from 'vue';
-import { MdEditor } from 'md-editor-v3';
+import { reactive, ref } from 'vue';
+import BioPanel from '@/components/bio-panel';
+import ThemeImage from './ThemeImage.vue';
+
+const imgList = ref<string[]>([]);
+const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
+imgList.value = Object.values(images).map((module) => (module as any).default);
 
 interface BasicInfo {
     avatar: string
@@ -57,7 +59,7 @@ const basicInfo: BasicInfo = reactive({
 .main {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     height: 100%;
     padding: 0 10%;
@@ -80,10 +82,26 @@ const basicInfo: BasicInfo = reactive({
         .name-and-bio {
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
             gap: 10px;
         }
+    }
+
+    .theme {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .danger-option {
+        color: red;
+        cursor: pointer;
+    }
+
+    .danger-option:hover {
+        font-weight: bold;
     }
 }
 </style>

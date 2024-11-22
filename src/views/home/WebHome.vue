@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import ControlPanelItem from '../../components/control-panel-item';
 import SvgIcon from '@/components/svg-icon';
 import BackgroundImg from '@/components/backgroud-img';
 import AskDialog from '@/components/ask-dialog';
+import ControlPanelItem from '@/components/control-panel-item';
 
 // 用户信息
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
@@ -15,25 +15,6 @@ const selectedItem = ref<string>('');
 const updateSelected = (id: string) => {
     selectedItem.value = id;
 };
-
-// 排序组件
-const sortText = ref(['按时间排序', '按热度排序']);
-const sortIndex = ref(0);
-function changeSort() {
-    sortIndex.value = sortIndex.value === 0 ? 1 : 0;
-}
-
-// 搜索组件
-const searchIndex = ref(0);
-function changeSearch() {
-    searchIndex.value = searchIndex.value === 0 ? 1 : 0;
-}
-const searchText = ref(''); // 搜索内容
-
-// 是否为问题页面
-const isQuestionPage = ref(true);
-const questionTitle = ref('如何提高角色的输出？'); // 问题标题
-const questionContent = ref('我有一个角色，但是输出不够高，有什么办法可以提高输出？'); // 问题内容
 
 // 教师 [我的提问箱] 是否展开
 const isOpen = ref(false);
@@ -61,7 +42,7 @@ function toggleOpen() {
                 <div class="user-id">
                     <span>@{{ userId }}</span>
                 </div>
-                <div v-if="false" class="control-panel">
+                <div v-if="true" class="control-panel">
                     <control-panel-item id="stu-ask-all" icon="group" text="问大家"
                         :clicked="selectedItem == 'stu-ask-all'" @updateSelected="updateSelected" />
                     <control-panel-item id="stu-ask-teacher" icon="graduation-cap" text="问老师"
@@ -75,7 +56,7 @@ function toggleOpen() {
                     <control-panel-item id="stu-help" icon="question" text="帮助" :clicked="selectedItem == 'stu-help'"
                         @updateSelected="updateSelected" />
                 </div>
-                <div v-if="true" class="control-panel">
+                <div v-if="false" class="control-panel">
                     <control-panel-item id="tea-see-all" icon="camera-lens" text="看看大家"
                         :clicked="selectedItem == 'tea-see-all'" @updateSelected="updateSelected" />
                     <div>
@@ -103,42 +84,9 @@ function toggleOpen() {
                 </div>
             </div>
         </a-layout-sider>
-        <a-layout>
-            <a-layout-header class="header">
-                <div v-if="isQuestionPage" class="header-item"
-                    style="float: left; margin-right: auto; margin-left: 20px;">
-                    <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
-                    <div style="display: flex; flex-direction: column;">
-                        <span style="color: #71B6FF; font-size: 20px;"> {{ questionTitle }} </span>
-                        <span style="padding-top: 5px;"> {{ questionContent }} </span>
-                    </div>
-                </div>
-                <div class="header-item" @click="changeSort">
-                    <span style="line-height: 60px; font-size: 18px;"> {{ sortText[sortIndex] }} </span>
-                    <svg-icon icon="sort-down" :color="sortIndex == 0 ? '#808080' : '#71B6FF'" size="24px" />
-                </div>
-                <div class="header-item">
-                    <svg-icon v-if="searchIndex == 0" icon="search" :color="searchIndex == 0 ? '#808080' : '#71B6FF'"
-                        size="24px" @click="changeSearch" />
-                    <div v-else>
-                        <a-input-search v-model="searchText" :style="{ width: '320px' }" placeholder="请输入搜索内容" />
-                    </div>
-                </div>
-            </a-layout-header>
-            <a-layout-content class="content" style="position:relative">
-                <background-img img_index="1" style="position:absolute;left:0;top:0; z-index: -1;" />
-                <router-view style="position:absolute;left:0;top:0; z-index: 1;" />
-            </a-layout-content>
-            <a-layout-footer class="footer">
-                <div style="margin-left: 20px; width: 100%; margin-right: 20px;">
-                    <a-input style="width: 100%; border-radius: 50px;" placeholder="请输入..." allow-clear />
-                </div>
-                <svg-icon icon="image" color="#71B6FF" size="30px" />
-                <svg-icon icon="link" color="#71B6FF" size="30px" />
-            </a-layout-footer>
-        </a-layout>
+        <router-view />
     </a-layout>
-    <ask-dialog :visible="true" :fullscreen="false" teacher-name="苏钰鑫" />
+    <!-- <ask-dialog :visible="true" :fullscreen="false" teacher-name="苏钰鑫" /> -->
 </template>
 
 <style scoped>
