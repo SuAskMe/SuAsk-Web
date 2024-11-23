@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { getImgStyle, getTimeStr } from "../bubble-card";
+import { MdPreview } from "md-editor-v3";
+import "md-editor-v3/lib/preview.css";
 interface BubbleCardProps {
     title: string;
     text: string;
     views: number;
     timeStamp: number;
+    width?: number;
+    isMarkdown?: boolean;
+    showAllMarkdown?: boolean;
     hasNews?: boolean;
     showPin?: boolean;
     isPinned?: boolean;
@@ -15,19 +20,21 @@ interface BubbleCardProps {
     clickPin?: (key: any) => void;
 }
 const props = defineProps<BubbleCardProps>();
-const imageContainer = computed(() => getImgStyle(props.imageUrls));
 const timeStr = computed(() => getTimeStr(props.timeStamp));
-const key = computed(() => {
-    return props.bubbleKey ? props.bubbleKey : null;
+const key = computed(() => (props.bubbleKey ? props.bubbleKey : null));
+const containerStyle = computed(() => {
+    return { width: props.width ? props.width + "px" : "500px" };
 });
-const hasClickCard = computed(() => (props.clickCard ? true : false));
+const imageContainer = computed(() =>
+    getImgStyle(props.imageUrls, props.width ? props.width * 0.9 : 450)
+);
 </script>
 
 <template>
     <div
         class="card-container"
         @click.stop="clickCard(key)"
-        :style="hasClickCard ? { cursor: 'pointer' } : {}"
+        :style="containerStyle"
     >
         <div class="card-body">
             <div v-if="hasNews" class="news-dot"></div>
@@ -46,7 +53,17 @@ const hasClickCard = computed(() => (props.clickCard ? true : false));
             </div>
             <div class="q-title">{{ title }}</div>
             <div class="q-body">
-                <div class="text">{{ text }}</div>
+                <div v-if="!isMarkdown" class="text">{{ text }}</div>
+                <div
+                    v-else
+                    :class="'md-container' + (showAllMarkdown ? '-all' : '')"
+                >
+                    <MdPreview
+                        id="preview-only"
+                        :model-value="text"
+                        class="md-preview"
+                    />
+                </div>
                 <div v-if="imageContainer.hasImages" class="photos-container">
                     <div
                         class="preview-group"
@@ -58,11 +75,11 @@ const hasClickCard = computed(() => (props.clickCard ? true : false));
                                 v-for="(img, index) in imageUrls"
                                 :key="index"
                                 :src="img"
-                                :width="imageContainer.size"
-                                :height="imageContainer.size"
                                 fit="cover"
                                 show-loader
-                                style="cursor: zoom-in; z-index: 9"
+                                style="cursor: zoom-in"
+                                :width="imageContainer.size"
+                                :height="imageContainer.size"
                             ></a-image>
                         </a-image-preview-group>
                     </div>
