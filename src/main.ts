@@ -8,7 +8,7 @@ import 'virtual:svg-icons-register';
 import SvgIcon from "@/components/svg-icon"
 import { setupRouter } from './router'
 import { config } from 'md-editor-v3'
-import { isMobile } from './utils/divece'
+import { isMobile } from './utils/device'
 
 config({
     markdownItConfig(md) {
