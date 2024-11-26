@@ -1,9 +1,12 @@
 <template>
     <div class="main">
-        <p>基础信息</p>
+        <div class="title">
+            <p>基础信息</p>
+            <hr />
+        </div>
         <div class="basic-info">
             <div class="avatar-and-id">
-                <a-avatar :style="{ backgroundColor: '#14a9f8' }" :size="100">
+                <a-avatar :style="{ backgroundColor: '#14a9f8' }" :size="deviceType == 'desktop' ? 200 : 150">
                     <img :src="basicInfo.avatar" />
                 </a-avatar>
                 <p> @{{ basicInfo.id }} </p>
@@ -15,30 +18,38 @@
                 </div>
                 <p>简介</p>
                 <div>
-                    <bio-panel v-model="basicInfo.bio" style="width: 300px;" />
+                    <bio-panel v-model="basicInfo.bio" />
                 </div>
             </div>
-            <div>
+            <div class="button" v-if="deviceType == 'desktop'">
                 <a-button type="primary">保存</a-button>
             </div>
         </div>
-        <p>主题</p>
-        <div class="theme">
-            <theme-image :src="imgList" width="100px" />
+        <div class="title">
+            <p>主题</p>
+            <hr />
         </div>
-        <p class="danger-option">重置密码</p>
-        <p class="danger-option">账户注销</p>
+        <div class="theme">
+            <theme-image :src="imgList" :width="deviceType == 'desktop' ? '100px' : '70px'" />
+        </div>
+        <div class="danger-place">
+            <p class="danger-option">重置密码</p>
+            <p class="danger-option">账户注销</p>
+        </div>
+
     </div>
 </template>
 
 <script setup lang='ts'>
-import { reactive, ref } from 'vue';
+import { inject, onMounted, reactive, ref, watch } from 'vue';
 import BioPanel from '@/components/bio-panel';
 import ThemeImage from './ThemeImage.vue';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
 imgList.value = Object.values(images).map((module) => (module as any).default);
+
+const deviceType = inject('deviceType', 'desktop');
 
 interface BasicInfo {
     avatar: string
@@ -53,55 +64,23 @@ const basicInfo: BasicInfo = reactive({
     name: '原神启动',
     bio: '原神启动的个人简介',
 })
-</script>
 
-<style scoped>
-.main {
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-    justify-content: center;
-    height: 100%;
-    padding: 0 10%;
-
-    .basic-info {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-
-        .avatar-and-id {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .name-and-bio {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-        }
-    }
-
-    .theme {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .danger-option {
-        color: red;
-        cursor: pointer;
-    }
-
-    .danger-option:hover {
-        font-weight: bold;
+async function loadCss() {
+    const scssFile = deviceType == 'desktop' ? 'desktop.scss' : 'phone.scss';
+    try {
+        await import(`./${scssFile}`);
+    } catch (error) {
+        console.error('加载 SCSS 文件失败:', error);
     }
 }
-</style>
+
+onMounted(() => {
+    loadCss();
+})
+
+watch(() => deviceType, () => {
+    loadCss();
+})
+</script>
+
+<style lang="scss" scoped></style>

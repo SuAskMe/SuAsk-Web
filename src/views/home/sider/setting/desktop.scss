@@ -1,0 +1,75 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  height: 100%;
+  padding: 0 10%;
+  gap: 10%;
+
+  .title {
+    font-size: 20px;
+  }
+
+  .basic-info {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    .avatar-and-id {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+
+      p {
+        font-size: 20px;
+        color: $su-grey;
+      }
+    }
+
+    .name-and-bio {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      margin: 0 10%;
+      gap: 10px;
+
+      bio-panel {
+        width: 300px;
+        height: 200px;
+      }
+    }
+
+    .button {
+      margin-top: auto;
+    }
+  }
+
+  .theme {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .danger-place {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+
+    .danger-option {
+      color: red;
+      cursor: pointer;
+    }
+
+    .danger-option:hover {
+      font-weight: bold;
+    }
+  }
+}

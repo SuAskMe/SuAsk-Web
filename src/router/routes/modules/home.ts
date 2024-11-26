@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from "@/router/types";
-import { isMobile } from "@/utils/divece"
+import { isMobile } from "@/utils/device"
 
 
 const WebHome = () => import('@/views/home/WebHome.vue')
