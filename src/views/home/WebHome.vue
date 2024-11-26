@@ -4,6 +4,7 @@ import SvgIcon from '@/components/svg-icon';
 import BackgroundImg from '@/components/backgroud-img';
 import AskDialog from '@/components/ask-dialog';
 import ControlPanelItem from '@/components/control-panel-item';
+import { router } from '@/router';
 
 // 用户信息
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
@@ -20,6 +21,10 @@ const updateSelected = (id: string) => {
 const isOpen = ref(false);
 function toggleOpen() {
     isOpen.value = !isOpen.value;
+}
+
+function jumpToSetting() {
+    router.push('/home/setting');
 }
 
 </script>
@@ -52,7 +57,8 @@ function toggleOpen() {
                     <control-panel-item id="stu-star" icon="star" text="我的收藏" :clicked="selectedItem == 'stu-star'"
                         @updateSelected="updateSelected" />
                     <control-panel-item id="stu-settings" icon="settings" text="设置"
-                        :clicked="selectedItem == 'stu-settings'" @updateSelected="updateSelected" />
+                        :clicked="selectedItem == 'stu-settings'" @updateSelected="updateSelected"
+                        jump-to-path="setting" />
                     <control-panel-item id="stu-help" icon="question" text="帮助" :clicked="selectedItem == 'stu-help'"
                         @updateSelected="updateSelected" />
                 </div>
@@ -84,7 +90,10 @@ function toggleOpen() {
                 </div>
             </div>
         </a-layout-sider>
-        <router-view />
+        <a-layout style="width: 100%;">
+            <router-view />
+        </a-layout>
+
     </a-layout>
     <!-- <ask-dialog :visible="true" :fullscreen="false" teacher-name="苏钰鑫" /> -->
 </template>
