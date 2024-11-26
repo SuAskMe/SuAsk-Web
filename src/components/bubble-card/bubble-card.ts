@@ -1,6 +1,5 @@
-const MAX_SIZE = 450;
 
-export function getImgStyle(photos: string[] | undefined) {
+export function getImgStyle(photos: string[] | undefined, MAX_SIZE = 450) {
     let hasImages = false;
     let size = 0;
     let containerWidth = 0;

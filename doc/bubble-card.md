@@ -39,6 +39,7 @@
 | text         | 正文                       | string!                       | 无     |                                                              |
 | like-count   | 点赞数                     | number!                       | 无     |                                                              |
 | time-stamp   | 时间戳                     | number!                       | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| width        | 气泡宽度                   | number?                       | 450    | 单位px，因为图片控件的大小只能传px                           |
 | is-liked     | 是否已点赞                 | boolean?                      | false  | 点赞完记得更改为true                                         |
 | quote        | 引用的信息                 | {text:string, author:string}? | 无     | text为正文，author为作者昵称                                 |
 | image-urls   | 图片链接                   | string[]?                     | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
@@ -110,19 +111,22 @@ const addLike = (key: typeof keyObj)=>{
 
 #### API
 
-| 参数名          | 描述                                   | 类型              | 默认值 | 备注                                                         |
-| --------------- | -------------------------------------- | ----------------- | ------ | ------------------------------------------------------------ |
-| title           | 标题                                   | string!           | 无     |                                                              |
-| text            | 正文                                   | string!           | 无     |                                                              |
-| views           | 浏览量                                 | number!           | 无     |                                                              |
-| time-stamp      | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
-| image-urls      | 图片链接                               | string[]?         | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
-| answer-num      | 回答的数量                             | number?           | 0      |                                                              |
-| avatars         | 头像链接                               | string[]?         | 无     | 没有限定数量，但不建议超过5张，推荐使用本地缓存，而不是直接使用后端获取的url |
-| is-favourite    | 是否已收藏                             | boolean           | false  | 收藏完记得改为true                                           |
-| bubble-key      | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
-| click-card      | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
-| click-favourite | 收藏事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
+| 参数名            | 描述                                   | 类型              | 默认值 | 备注                                                         |
+| ----------------- | -------------------------------------- | ----------------- | ------ | ------------------------------------------------------------ |
+| title             | 标题                                   | string!           | 无     |                                                              |
+| text              | 正文                                   | string!           | 无     |                                                              |
+| views             | 浏览量                                 | number!           | 无     |                                                              |
+| time-stamp        | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| width             | 宽度                                   | number?           | 500    | 单位px                                                       |
+| is-markdown       | 是否为markdown文本                     | boolean?          | false  |                                                              |
+| show-all-markdown | 是否显示全部markdown                   | boolean?          | false  |                                                              |
+| image-urls        | 图片链接                               | string[]?         | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
+| answer-num        | 回答的数量                             | number?           | 0      |                                                              |
+| avatars           | 头像链接                               | string[]?         | 无     | 没有限定数量，但不建议超过5张，推荐使用本地缓存，而不是直接使用后端获取的url |
+| is-favourite      | 是否已收藏                             | boolean           | false  | 收藏完记得改为true                                           |
+| bubble-key        | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
+| click-card        | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
+| click-favourite   | 收藏事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
 
 #### 讲解
 
@@ -154,19 +158,22 @@ const addLike = (key: typeof keyObj)=>{
 
 #### API
 
-| 参数名     | 描述                                   | 类型              | 默认值 | 备注                                                         |
-| ---------- | -------------------------------------- | ----------------- | ------ | ------------------------------------------------------------ |
-| title      | 标题                                   | string!           | 无     |                                                              |
-| text       | 正文                                   | string!           | 无     |                                                              |
-| views      | 浏览量                                 | number!           | 无     |                                                              |
-| time-stamp | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
-| has-news   | 是否有新消息                           | boolean?          | false  | 在标题左边会出现一个蓝点                                     |
-| show-pin   | 是否展示置顶图标                       | boolean?          | false  | 在右上方出现一个图钉                                         |
-| is-pinned  | 是否已经置顶                           | boolean?          | false  | 是否已经置顶                                                 |
-| image-urls | 图片链接                               | string[]?         | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
-| bubble-key | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
-| click-card | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
-| click-pin  | 置顶事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数            |
+| 参数名            | 描述                                   | 类型              | 默认值 | 备注                                                         |
+| ----------------- | -------------------------------------- | ----------------- | ------ | ------------------------------------------------------------ |
+| title             | 标题                                   | string!           | 无     |                                                              |
+| text              | 正文                                   | string!           | 无     |                                                              |
+| views             | 浏览量                                 | number!           | 无     |                                                              |
+| time-stamp        | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| width             | 宽度                                   | number?           | 500    | 单位px                                                       |
+| is-markdown       | 是否为markdown文本                     | boolean?          | false  |                                                              |
+| show-all-markdown | 是否显示全部markdown                   | boolean?          | false  |                                                              |
+| has-news          | 是否有新消息                           | boolean?          | false  | 在标题左边会出现一个蓝点                                     |
+| show-pin          | 是否展示置顶图标                       | boolean?          | false  | 在右上方出现一个图钉                                         |
+| is-pinned         | 是否已经置顶                           | boolean?          | false  | 是否已经置顶                                                 |
+| image-urls        | 图片链接                               | string[]?         | 无     | 最多支持9张，超过不会显示，推荐使用本地缓存，而不是直接使用后端获取的url |
+| bubble-key        | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
+| click-card        | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
+| click-pin         | 置顶事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数            |
 
 #### 讲解
 

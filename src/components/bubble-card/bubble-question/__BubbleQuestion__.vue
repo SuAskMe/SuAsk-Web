@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { getImgStyle, getTimeStr } from "../bubble-card";
+import { MdPreview } from "md-editor-v3";
+import "md-editor-v3/lib/preview.css";
 interface BubbleQuestionProps {
     title: string;
     text: string;
     views: number;
     timeStamp: number;
+    width?: number;
+    isMarkdown?: boolean;
+    showAllMarkdown?: boolean;
     bubbleKey?: any;
     answerNum?: number;
     imageUrls?: string[];
@@ -15,19 +20,38 @@ interface BubbleQuestionProps {
     clickFavourite?: (key: any) => void;
 }
 const props = defineProps<BubbleQuestionProps>();
-const imageContainer = computed(() => getImgStyle(props.imageUrls));
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => {
     return props.bubbleKey ? props.bubbleKey : null;
 });
+const containerStyle = computed(() => {
+    return { width: props.width ? props.width + "px" : "500px" };
+});
+const imageContainer = computed(() =>
+    getImgStyle(props.imageUrls, props.width ? props.width * 0.9 : 450)
+);
 </script>
 
 <template>
-    <div class="card-container" @click.stop="clickCard(key)">
+    <div
+        class="card-container"
+        @click.stop="clickCard(key)"
+        :style="containerStyle"
+    >
         <div class="card-body">
             <div class="q-title">{{ title }}</div>
             <div class="q-body">
-                <div class="text">{{ text }}</div>
+                <div v-if="!isMarkdown" class="text">{{ text }}</div>
+                <div
+                    v-else
+                    :class="'md-container' + (showAllMarkdown ? '-all' : '')"
+                >
+                    <MdPreview
+                        id="preview-only"
+                        :model-value="text"
+                        class="md-preview"
+                    />
+                </div>
                 <div v-if="imageContainer.hasImages" class="photos-container">
                     <div
                         class="preview-group"

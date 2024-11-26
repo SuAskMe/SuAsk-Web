@@ -8,6 +8,7 @@ interface BubbleAnswerProps {
     text: string;
     likeCount: number;
     timeStamp: number;
+    width?: number;
     isLiked?: boolean;
     quote?: {
         text: string;
@@ -22,7 +23,6 @@ interface BubbleAnswerProps {
 
 const props = defineProps<BubbleAnswerProps>();
 
-const imageContainer = computed(() => getImgStyle(props.imageUrls));
 const Quote = computed(() =>
     props.quote && props.quote.text && props.quote.author
         ? {
@@ -34,6 +34,23 @@ const Quote = computed(() =>
 );
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => (props.bubbleKey ? props.bubbleKey : null));
+const containerStyle = computed(() => {
+    let style1 = {
+        marginRight: "12px",
+        backgroundColor: "#e5f0fc",
+        alignItems: "flex-end",
+        width: props.width ? props.width + "px" : "450px",
+    };
+    let style2 = {
+        marginLeft: "12px",
+        backgroundColor: "#fff",
+        width: props.width ? props.width + "px" : "450px",
+    };
+    return props.isMine ? style1 : style2;
+});
+const imageContainer = computed(() =>
+    getImgStyle(props.imageUrls, props.width ? props.width * 0.96 : 450 * 0.96)
+);
 </script>
 <template>
     <div
@@ -45,16 +62,9 @@ const key = computed(() => (props.bubbleKey ? props.bubbleKey : null));
             :src="avatar"
             onerror="this.src='/src/assets/default-avatar.png'; this.onerror=null;"
             class="avatar"
-            :style="isMine ? 'margin-right: 72px;' : 'margin-left: 24px;'"
+            :style="isMine ? 'margin-right: 24px;' : 'margin-left: 24px;'"
         />
-        <div
-            class="card-container"
-            :style="
-                isMine
-                    ? 'margin-right: 12px; background-color: #e5f0fc; align-items: flex-end;'
-                    : 'margin-left: 12px;'
-            "
-        >
+        <div class="card-container" :style="containerStyle">
             <div class="ans-title">{{ nickName }}</div>
             <div class="ans-body">
                 <div
