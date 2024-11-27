@@ -6,22 +6,21 @@
                 <svg-icon icon="qr-code" color="#808080" size="20px" />
             </div>
             <div>
-                <a-input v-model="userName" :style="{ height: '40px' }" placeholder="请输入用户名或邮箱" allow-clear>
+                <el-input v-model="userName" style="height: 40px;" placeholder="请输入用户名或邮箱" clearable>
                     <template #prefix>
                         <svg-icon icon="user" color="#71B6FF" size="20px" />
                     </template>
-                </a-input>
+                </el-input>
             </div>
             <div>
-                <a-input-password v-model="password" placeholder="请输入密码" :style="{ height: '40px' }"
-                    :defaultVisibility="false" allow-clear>
+                <el-input v-model="password" style="height: 40px;" placeholder="请输入密码" clearable show-password>
                     <template #prefix>
                         <svg-icon icon="key" color="#71B6FF" size="20px" />
                     </template>
-                </a-input-password>
+                </el-input>
             </div>
             <div>
-                <a-button @click="login" type="primary" long>登录</a-button>
+                <el-button type="primary" long @click="login">登录</el-button>
             </div>
             <div class="footer">
                 <span @click="forgetPassword" style="color: #808080;">忘记密码</span>
