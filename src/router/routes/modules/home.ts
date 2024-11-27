@@ -2,25 +2,78 @@ import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device"
 
 
-const WebHome = () => import('@/views/home/WebHome.vue')
+const WebHome = () => import('@/layout/home/WebHome.vue')
 const PhoneHome = () => import('@/views/home/PhoneHome.vue')
-const Setting = () => import('@/views/home/sider/setting/Setting.vue')
+const Setting = () => import('@/views/home/content/setting/Setting.vue')
+const AskAll = () => import('@/views/home/content/ask-all/AskAll.vue')
+const AskTeacher = () => import('@/views/home/content/ask-teacher/AskTeacher.vue')
+const AskHistory = () => import('@/views/home/content/ask-history/AskHistory.vue')
+const MyFavorite = () => import('@/views/home/content/my-favorites/MyFavorites.vue')
+const Help = () => import('@/views/home/content/help/Help.vue')
+const Sidebar = () => import('@/views/home/sidebar/Sidebar.vue')
 
 export const HomeRoute: AppRouteRecordRaw = {
     path: '/home',
     name: 'Home',
     meta: {
-        title: '主页'
+        title: '主页',
     },
     component: isMobile() ? PhoneHome : WebHome,
     children: [
+        {
+            path: '',
+            redirect: 'home/setting'
+        },
         {
             path: 'setting',
             name: 'Setting',
             meta: {
                 title: '设置'
             },
-            component: Setting
+            components: {
+                default: Setting,
+                sidebar: Sidebar
+            }
+        },
+        {
+            path: 'ask-all',
+            name: 'AskAll',
+            meta: {
+                title: '问大家'
+            },
+            component: AskAll
+        },
+        {
+            path: 'ask-teacher',
+            name: 'AskTeacher',
+            meta: {
+                title: '问老师'
+            },
+            component: AskTeacher
+        },
+        {
+            path: 'ask-history',
+            name: 'AskHistory',
+            meta: {
+                title: '历史提问'
+            },
+            component: AskHistory
+        },
+        {
+            path: 'my-favorite',
+            name: 'MyFavorite',
+            meta: {
+                title: '我的收藏'
+            },
+            component: MyFavorite
+        },
+        {
+            path: 'help',
+            name: 'Help',
+            meta: {
+                title: '帮助'
+            },
+            component: Help
         }
     ]
 }
