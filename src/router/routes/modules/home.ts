@@ -32,7 +32,8 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: Setting,
-                sidebar: Sidebar
+                sidebar: Sidebar,
+                header: () => import('@/views/home/header/WebHeader.vue'),
             }
         },
         {

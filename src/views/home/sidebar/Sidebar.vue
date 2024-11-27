@@ -34,6 +34,8 @@ const userName = ref("原神启动");
 
 <style scoped lang="scss">
 .sidebar {
+    height: 100%;
+
     .title {
         height: 80px;
         padding: 20px 10% 0 10%;
