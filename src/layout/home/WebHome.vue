@@ -2,14 +2,16 @@
 </script>
 
 <template>
-    <a-layout style="height: 100vh;">
-        <a-layout-sider style="width: 300px">
+    <el-container style="height: 100vh;">
+        <el-aside width="300px">
             <router-view name="sidebar" />
-        </a-layout-sider>
-        <a-layout style="width: 100%;">
-            <router-view />
-        </a-layout>
-    </a-layout>
+        </el-aside>
+        <el-container>
+            <el-main>
+                <router-view />
+            </el-main>
+        </el-container>
+    </el-container>
 </template>
 
 <style scoped lang="scss"></style>

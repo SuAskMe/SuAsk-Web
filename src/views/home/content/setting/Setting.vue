@@ -6,15 +6,13 @@
         </div>
         <div class="basic-info">
             <div class="avatar-and-id">
-                <a-avatar :style="{ backgroundColor: '#14a9f8' }" :size="deviceType == 'desktop' ? 200 : 150">
-                    <img :src="basicInfo.avatar" />
-                </a-avatar>
+                <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar" />
                 <p> @{{ basicInfo.id }} </p>
             </div>
             <div class="name-and-bio">
                 <p>昵称</p>
                 <div>
-                    <a-input v-model="basicInfo.name" />
+                    <el-input v-model="basicInfo.name" placeholder="Please input" />
                 </div>
                 <p>简介</p>
                 <div>
@@ -22,7 +20,7 @@
                 </div>
             </div>
             <div class="button" v-if="deviceType == 'desktop'">
-                <a-button type="primary">保存</a-button>
+                <el-button type="primary">保存</el-button>
             </div>
         </div>
         <div class="title">
