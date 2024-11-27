@@ -66,12 +66,12 @@ const basicInfo: BasicInfo = reactive({
 })
 
 async function loadCss() {
-    const scssFile = deviceType == 'desktop' ? 'desktop.scss' : 'phone.scss';
-    try {
-        await import(`./${scssFile}`);
-    } catch (error) {
-        console.error('加载 SCSS 文件失败:', error);
+    if (deviceType === 'desktop') {
+        await import('./desktop.scss');
+    } else {
+        await import('./phone.scss');
     }
+
 }
 
 onMounted(() => {

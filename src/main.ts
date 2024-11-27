@@ -9,6 +9,7 @@ import SvgIcon from "@/components/svg-icon"
 import { setupRouter } from './router'
 import { config } from 'md-editor-v3'
 import { isMobile } from './utils/device'
+import { setupStore } from './store'
 
 config({
     markdownItConfig(md) {
@@ -27,13 +28,16 @@ config({
     },
 });
 
-const deviceType = isMobile() ? 'mobile' : 'desktop';
+
 
 const app = createApp(App)
 
+const deviceType = isMobile() ? 'mobile' : 'desktop';
 app.provide('deviceType', deviceType);
 
+
 setupRouter(app);
+setupStore(app);
 app.use(ArcoVue)
 app.component("svg-icon", SvgIcon)
 app.mount('#app')
