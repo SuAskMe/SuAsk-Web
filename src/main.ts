@@ -1,8 +1,5 @@
-import '@arco-design/web-vue/dist/arco.css'
-
 import { createApp } from 'vue'
 import App from './App.vue'
-import ArcoVue from '@arco-design/web-vue'
 import '../mock/index.js'
 import 'virtual:svg-icons-register';
 import SvgIcon from "@/components/svg-icon"
@@ -10,6 +7,8 @@ import { setupRouter } from './router'
 import { config } from 'md-editor-v3'
 import { isMobile } from './utils/device'
 import { setupStore } from './store'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 config({
     markdownItConfig(md) {
@@ -38,6 +37,6 @@ app.provide('deviceType', deviceType);
 
 setupRouter(app);
 setupStore(app);
-app.use(ArcoVue)
+app.use(ElementPlus)
 app.component("svg-icon", SvgIcon)
 app.mount('#app')

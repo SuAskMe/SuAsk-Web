@@ -3,7 +3,7 @@ import { isMobile } from "@/utils/device"
 
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
-const PhoneHome = () => import('@/views/home/PhoneHome.vue')
+const PhoneHome = () => import('@/layout/home/PhoneHome.vue')
 const Setting = () => import('@/views/home/content/setting/Setting.vue')
 const AskAll = () => import('@/views/home/content/ask-all/AskAll.vue')
 const AskTeacher = () => import('@/views/home/content/ask-teacher/AskTeacher.vue')
@@ -11,6 +11,11 @@ const AskHistory = () => import('@/views/home/content/ask-history/AskHistory.vue
 const MyFavorite = () => import('@/views/home/content/my-favorites/MyFavorites.vue')
 const Help = () => import('@/views/home/content/help/Help.vue')
 const Sidebar = () => import('@/views/home/sidebar/Sidebar.vue')
+const Header = () => import('@/views/home/header/Header.vue')
+const SearchFooter = () => import('@/views/home/footer/SearchFooter.vue')
+const PhoneMainFooter = () => import('@/views/home/footer/phone/PhoneMainFooter.vue')
+
+
 
 export const HomeRoute: AppRouteRecordRaw = {
     path: '/home',
@@ -18,10 +23,15 @@ export const HomeRoute: AppRouteRecordRaw = {
     meta: {
         title: '主页',
     },
+    props: {
+        user: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop'
+    },
     component: isMobile() ? PhoneHome : WebHome,
     children: [
         {
             path: '',
+            name: 'Index',
             redirect: 'home/setting'
         },
         {
@@ -32,8 +42,10 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: Setting,
-                sidebar: Sidebar
-            }
+                sidebar: Sidebar,
+                header: Header,
+                footer: PhoneMainFooter
+            },
         },
         {
             path: 'ask-all',
