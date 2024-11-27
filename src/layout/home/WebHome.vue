@@ -1,10 +1,14 @@
 <script lang="ts" setup>
+defineProps({
+    user: String,
+    deviceType: String
+});
 </script>
 
 <template>
     <el-container>
         <el-aside width="300px">
-            <router-view name="sidebar" />
+            <router-view name="sidebar" :userType="user" />
         </el-aside>
         <el-container>
             <el-header style="height: auto;">
@@ -16,7 +20,7 @@
                 </el-scrollbar>
             </el-main>
             <el-footer style="height: auto;">
-                <router-view name="footer" />
+                <router-view name="footer" :deviceType="deviceType" />
             </el-footer>
         </el-container>
     </el-container>

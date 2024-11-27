@@ -14,14 +14,14 @@
             </div>
         </div>
         <div class="control-panel">
-            <student-item v-if="true" />
-            <teacher-item v-if="false" />
+            <student-item v-if="isStudent" />
+            <teacher-item v-if="!isStudent" />
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
@@ -30,6 +30,12 @@ import TeacherItem from './TeacherItem.vue';
 const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
 const userId = ref("GenshinStart");
 const userName = ref("原神启动");
+
+const props = defineProps({
+    userType: String
+});
+
+const isStudent = computed(() => props.userType === 'student');
 </script>
 
 <style scoped lang="scss">

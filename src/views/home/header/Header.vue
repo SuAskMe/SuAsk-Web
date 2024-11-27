@@ -4,8 +4,8 @@
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
         <div v-if="isQuestionPage" class="question-title">
-            <p class="title"> {{ questionTitle }} </p>
-            <p class="sub-title"> {{ questionContent }} </p>
+            <p :class="isDesktop ? 'title-web' : 'title-phone'"> {{ questionTitle }} </p>
+            <p :class="isDesktop ? 'sub-title-web' : 'sub-title-phone'"> {{ questionContent }} </p>
         </div>
         <div class="sort-and-search">
             <div class="header-item" @click="changeSort">
@@ -16,16 +16,17 @@
                 <svg-icon v-if="searchIndex == 0" icon="search" :color="searchIndex == 0 ? '#808080' : '#71B6FF'"
                     size="22px" @click="changeSearch" />
                 <div v-else>
-                    <a-input-search v-model="searchText" :style="{ width: '320px' }" placeholder="请输入搜索内容" />
+                    <!-- <a-input-search v-model="searchText" :style="{ width: '320px' }" placeholder="请输入搜索内容" /> -->
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { computed, inject, ref } from 'vue';
+
+const isDesktop = computed(() => inject('deviceType', 'desktop') == 'desktop')
 
 // 排序组件
 const sortText = ref(['按时间排序', '按热度排序']);
@@ -64,19 +65,34 @@ const questionContent = ref('我有一个角色，但是输出不够高，有什
         display: flex;
         flex-direction: column;
         justify-content: center;
+        overflow: hidden;
+        white-space: nowrap;
+
 
         p {
             margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .title {
+        .title-web {
             color: $su-blue;
             font-size: 20px;
         }
 
-        .sub-title {
+        .title-phone {
+            color: $su-blue;
+            font-size: 16px;
+        }
+
+        .sub-title-web {
             padding-top: 5px;
             font-size: 16px
+        }
+
+        .sub-title-phone {
+            padding-top: 5px;
+            font-size: 12px
         }
     }
 
@@ -95,6 +111,7 @@ const questionContent = ref('我有一个角色，但是输出不够高，有什
         span {
             line-height: 60px;
             font-size: 16px;
+            white-space: nowrap;
         }
     }
 }
