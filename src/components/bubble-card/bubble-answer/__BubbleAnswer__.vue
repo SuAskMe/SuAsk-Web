@@ -8,12 +8,14 @@ interface BubbleAnswerProps {
     text: string;
     likeCount: number;
     timeStamp: number;
-    width?: number;
+    width?: string;
     isLiked?: boolean;
     quote?: {
         text: string;
         author: string;
     };
+    isTeacher?: boolean;
+    teacherName?: string;
     imageUrls?: string[];
     bubbleKey?: any;
     clickAvatar?: (key: any) => void;
@@ -39,17 +41,17 @@ const containerStyle = computed(() => {
         marginRight: "12px",
         backgroundColor: "#e5f0fc",
         alignItems: "flex-end",
-        width: props.width ? props.width + "px" : "450px",
+        width: props.width ? props.width : "450px",
     };
     let style2 = {
         marginLeft: "12px",
         backgroundColor: "#fff",
-        width: props.width ? props.width + "px" : "450px",
+        width: props.width ? props.width : "450px",
     };
     return props.isMine ? style1 : style2;
 });
 const imageContainer = computed(() =>
-    getImgStyle(props.imageUrls, props.width ? props.width * 0.96 : 450 * 0.96)
+    getImgStyle(props.imageUrls, props.width)
 );
 </script>
 <template>
@@ -65,7 +67,12 @@ const imageContainer = computed(() =>
             :style="isMine ? 'margin-right: 24px;' : 'margin-left: 24px;'"
         />
         <div class="card-container" :style="containerStyle">
-            <div class="ans-title">{{ nickName }}</div>
+            <div class="ans-title">
+                <div class="nickname">{{ nickName }}</div>
+                <div v-if="isTeacher" class="suffixed-text">
+                    {{ teacherName }}
+                </div>
+            </div>
             <div class="ans-body">
                 <div
                     v-if="Quote.hasQuote"
@@ -79,21 +86,28 @@ const imageContainer = computed(() =>
                 <div v-if="imageContainer.hasImages" class="photos-container">
                     <div
                         class="preview-group"
-                        :style="{ width: imageContainer.containerWidth + 'px' }"
+                        :style="{
+                            width: imageContainer.containerWidth,
+                            gap: imageContainer.gap + ' ' + imageContainer.gap,
+                        }"
                     >
-                        <a-image-preview-group infinite>
-                            <a-image
-                                @click.stop
-                                v-for="(img, index) in imageUrls"
-                                :key="index"
-                                :src="img"
-                                :width="imageContainer.size"
-                                :height="imageContainer.size"
-                                fit="cover"
-                                show-loader
-                                style="cursor: zoom-in; z-index: 9"
-                            ></a-image>
-                        </a-image-preview-group>
+                        <el-image
+                            @click.stop
+                            v-for="(img, index) in imageUrls"
+                            :key="img"
+                            :src="img"
+                            :style="{
+                                width: imageContainer.size,
+                                height: imageContainer.size,
+                            }"
+                            :preview-src-list="imageUrls"
+                            :initial-index="index"
+                            fit="cover"
+                            lazy
+                            infinite
+                            preview-teleported
+                            style="cursor: zoom-in"
+                        ></el-image>
                     </div>
                 </div>
             </div>
@@ -119,4 +133,4 @@ const imageContainer = computed(() =>
     </div>
 </template>
 
-<style scoped src="./BubbleAnswer.css"></style>
+<style scoped src="./BubbleAnswer.scss"></style>
