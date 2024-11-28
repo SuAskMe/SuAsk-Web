@@ -16,7 +16,6 @@ const SearchFooter = () => import('@/views/home/footer/SearchFooter.vue')
 const PhoneMainFooter = () => import('@/views/home/footer/phone/PhoneMainFooter.vue')
 
 
-
 export const HomeRoute: AppRouteRecordRaw = {
     path: '/home',
     name: 'Home',
@@ -25,7 +24,7 @@ export const HomeRoute: AppRouteRecordRaw = {
     },
     props: {
         user: 'student',
-        deviceType: isMobile() ? 'phone' : 'desktop'
+        deviceType: isMobile() ? 'phone' : 'desktop',
     },
     component: isMobile() ? PhoneHome : WebHome,
     children: [
@@ -43,9 +42,13 @@ export const HomeRoute: AppRouteRecordRaw = {
             components: {
                 default: Setting,
                 sidebar: Sidebar,
-                header: Header,
+                // header: Header,
                 footer: PhoneMainFooter
             },
+            props: {
+                // header: { isQuestionPage: false },
+                footer: { isQuestionPage: false },
+            }
         },
         {
             path: 'ask-all',

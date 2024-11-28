@@ -1,26 +1,26 @@
 <script lang="ts" setup>
 defineProps({
-    user: String,
-    deviceType: String
+    userType: String,
+    deviceType: String,
 });
 </script>
 
 <template>
     <el-container>
         <el-aside width="300px">
-            <router-view name="sidebar" :userType="user" />
+            <router-view name="sidebar" :deviceType="deviceType" :userType="userType" />
         </el-aside>
         <el-container>
             <el-header style="height: auto;">
-                <router-view name="header" />
+                <router-view name="header" :deviceType="deviceType" :userType="userType" />
             </el-header>
             <el-main>
                 <el-scrollbar>
-                    <router-view />
+                    <router-view :deviceType="deviceType" :userType="userType" />
                 </el-scrollbar>
             </el-main>
             <el-footer style="height: auto;">
-                <router-view name="footer" :deviceType="deviceType" />
+                <router-view name="footer" :deviceType="deviceType" :userType="userType" />
             </el-footer>
         </el-container>
     </el-container>
