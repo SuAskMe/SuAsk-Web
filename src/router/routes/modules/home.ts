@@ -23,7 +23,7 @@ export const HomeRoute: AppRouteRecordRaw = {
         title: '主页',
     },
     props: {
-        user: 'student',
+        userType: 'student',
         deviceType: isMobile() ? 'phone' : 'desktop',
     },
     component: isMobile() ? PhoneHome : WebHome,
