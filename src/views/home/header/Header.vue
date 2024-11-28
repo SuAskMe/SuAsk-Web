@@ -3,7 +3,7 @@
         <div class="back-button">
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
-        <div v-if="isQuestionPage" class="question-title">
+        <div v-if="props.isQuestionPage" class="question-title">
             <p :class="isDesktop ? 'title-web' : 'title-phone'"> {{ questionTitle }} </p>
             <p :class="isDesktop ? 'sub-title-web' : 'sub-title-phone'"> {{ questionContent }} </p>
         </div>
@@ -26,7 +26,23 @@
 <script setup lang='ts'>
 import { computed, inject, ref } from 'vue';
 
-const isDesktop = computed(() => inject('deviceType', 'desktop') == 'desktop')
+// const isDesktop = computed(() => inject('deviceType', 'desktop') == 'desktop')
+const props = defineProps({
+    userType: String,
+    deviceType: String,
+    isQuestionPage: {
+        type: Boolean,
+        // required: true
+    }
+})
+
+const isDesktop = computed(() => {
+    if (props.deviceType){
+        return props.deviceType
+    } else {
+        return 'desktop'
+    }
+})
 
 // 排序组件
 const sortText = ref(['按时间排序', '按热度排序']);
@@ -42,8 +58,6 @@ function changeSearch() {
 }
 const searchText = ref(''); // 搜索内容
 
-// 是否为问题页面
-const isQuestionPage = ref(true);
 const questionTitle = ref('如何提高角色的输出？'); // 问题标题
 const questionContent = ref('我有一个角色，但是输出不够高，有什么办法可以提高输出？'); // 问题内容
 </script>

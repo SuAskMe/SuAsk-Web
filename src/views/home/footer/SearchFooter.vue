@@ -1,8 +1,6 @@
 <template>
-    <div class="footer">
-
+    <div v-if="isQuestionPage" class="footer">
         <el-input class="search" v-model="searchText" placeholder="请输入..." allow-clear />
-
         <svg-icon icon="image" color="#71B6FF" size="30px" />
         <svg-icon icon="link" color="#71B6FF" size="30px" />
     </div>
@@ -10,6 +8,10 @@
 
 <script setup lang='ts'>
 import { ref } from 'vue';
+
+defineProps({
+    isQuestionPage: Boolean
+})
 
 const searchText = ref(''); // 搜索内容
 </script>

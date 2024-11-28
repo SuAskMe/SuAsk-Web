@@ -1,23 +1,23 @@
 <template>
     <el-container>
         <el-header style="height: auto;">
-            <router-view name="header" />
+            <router-view name="header" :deviceType="deviceType" :userType="userType" />
         </el-header>
         <el-main>
             <el-scrollbar>
-                <router-view />
+                <router-view :deviceType="deviceType" :userType="userType" />
             </el-scrollbar>
         </el-main>
         <el-footer style="height: auto;">
-            <router-view name="footer" :deviceType="deviceType" :user="user" />
+            <router-view name="footer" :deviceType="deviceType" :userType="userType" />
         </el-footer>
     </el-container>
 </template>
 
 <script setup lang='ts'>
 defineProps({
-    user: String,
-    deviceType: String
+    userType: String,
+    deviceType: String,
 });
 </script>
 
