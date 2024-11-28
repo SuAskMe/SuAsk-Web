@@ -31,6 +31,9 @@ export const HomeRoute: AppRouteRecordRaw = {
         {
             path: '',
             name: 'Index',
+            meta: {
+                title: 'Index'
+            },
             redirect: 'home/setting'
         },
         {
