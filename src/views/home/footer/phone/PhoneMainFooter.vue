@@ -1,22 +1,23 @@
 <template>
     <div v-if="deviceType == 'phone'">
-        <div v-if="user == 'student'" class="footer-item">
+        <div v-if="userType == 'student'" class="footer-item">
             <control-panel-item id="stu-ask-all" icon="group" size="30px" :clicked="selectedItem == 'stu-ask-all'"
-                @updateSelected="updateSelected" />
+                @updateSelected="updateSelected" jumpToPath="ask-all" />
             <control-panel-item id="stu-ask-teacher" icon="graduation-cap" size="30px"
-                :clicked="selectedItem == 'stu-ask-teacher'" @updateSelected="updateSelected" />
+                :clicked="selectedItem == 'stu-ask-teacher'" @updateSelected="updateSelected"
+                jumpToPath="ask-teacher" />
             <control-panel-item id="stu-message" icon="chat-1" size="30px" :clicked="selectedItem == 'stu-message'"
-                @updateSelected="updateSelected" />
+                @updateSelected="updateSelected" jumpToPath="message" />
             <control-panel-item id="stu-settings" icon="settings-2" size="30px"
-                :clicked="selectedItem == 'stu-settings'" @updateSelected="updateSelected" />
+                :clicked="selectedItem == 'stu-settings'" @updateSelected="updateSelected" jumpToPath="setting" />
         </div>
-        <div v-if="user == 'teacher'" class="footer-item">
+        <div v-if="userType == 'teacher'" class="footer-item">
             <control-panel-item id="tea-see-all" icon="camera-lens" size="30px" :clicked="selectedItem == 'tea-see-all'"
-                @updateSelected="updateSelected" />
+                @updateSelected="updateSelected" jumpToPath="ask-all" />
             <control-panel-item id="tea-question" icon="message" size="30px" :clicked="selectedItem == 'tea-question'"
-                @updateSelected="updateSelected" />
+                @updateSelected="updateSelected" jumpToPath="message" />
             <control-panel-item id="tea-settings" icon="settings-2" size="30px"
-                :clicked="selectedItem == 'tea-settings'" @updateSelected="updateSelected" />
+                :clicked="selectedItem == 'tea-settings'" @updateSelected="updateSelected" jumpToPath="setting" />
         </div>
     </div>
 </template>
@@ -27,7 +28,7 @@ import ControlPanelItem from '@/components/control-panel-item';
 
 defineProps({
     deviceType: String,
-    user: String
+    userType: String
 })
 
 // 选择高亮组件
