@@ -30,10 +30,7 @@ import { computed, inject, ref } from 'vue';
 const props = defineProps({
     userType: String,
     deviceType: String,
-    isQuestionPage: {
-        type: Boolean,
-        // required: true
-    }
+    isQuestionPage: Boolean
 })
 
 const isDesktop = computed(() => {
