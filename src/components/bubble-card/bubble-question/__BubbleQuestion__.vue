@@ -22,7 +22,7 @@ interface BubbleQuestionProps {
 const props = defineProps<BubbleQuestionProps>();
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => {
-    return props.bubbleKey ? props.bubbleKey : null;
+    return props.bubbleKey !== undefined ? props.bubbleKey : null;
 });
 const containerStyle = computed(() => {
     return { width: props.width ? props.width : "450px" };
@@ -62,8 +62,8 @@ const imageContainer = computed(() =>
                             :key="img"
                             :src="img"
                             :style="{
-                                width: imageContainer.size,
-                                height: imageContainer.size,
+                                width: imageContainer.sizew,
+                                height: imageContainer.sizeh,
                             }"
                             :preview-src-list="imageUrls"
                             :initial-index="index"
@@ -71,7 +71,6 @@ const imageContainer = computed(() =>
                             lazy
                             infinite
                             preview-teleported
-                            style="cursor: zoom-in"
                         ></el-image>
                     </div>
                 </div>
@@ -87,7 +86,7 @@ const imageContainer = computed(() =>
         <div v-if="answerNum && answerNum > 0" class="card-footer">
             <img
                 :src="avatar"
-                onerror="this.src='src/assets/default-avatar.png'; this.onerror=null;"
+                onerror="this.src='/src/assets/default-avatar.png'; this.onerror=null;"
                 v-for="(avatar, index) in avatars"
                 :key="index"
                 :style="{
