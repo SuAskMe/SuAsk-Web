@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="main-item" :class="{ blurred: showModal }">
+        <div class="main-item">
             <div class="title">
                 <span>欢迎使用 SuAsk</span>
                 <svg-icon icon="qr-code" color="#808080" size="20px" />
@@ -27,23 +27,22 @@
                 <span @click="register" style="color: #71B6FF;">注册账号</span>
             </div>
         </div>
-
-        <div v-if="showModal" class="modal-overlay">
-            <forget-password-page v-if="showForgetPassword" />
-            <register-page v-if="showRegister" />
-        </div>
+        <el-dialog v-model="showForgetPassword" width="400px" align-center>
+            <forget-password-page :closed="showForgetPassword" />
+        </el-dialog>
+        <el-dialog v-model="showRegister" width="400px" align-center>
+            <register-page :closed="showRegister" />
+        </el-dialog>
     </div>
-
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import ForgetPasswordPage from './ForgetPasswordPage.vue';
 import RegisterPage from './RegisterPage.vue';
 
 const userName = ref('');
 const password = ref('');
-const isMobile = ref(false);
 
 function login() {
     console.log(userName.value, password.value);
@@ -51,7 +50,6 @@ function login() {
 
 const showForgetPassword = ref(false);
 const showRegister = ref(false);
-const showModal = computed(() => showForgetPassword.value || showRegister.value);
 
 function forgetPassword() {
     showForgetPassword.value = true;
@@ -61,15 +59,9 @@ function register() {
     showRegister.value = true;
 }
 
-onMounted(() => {
-    isMobile.value = JSON.parse(localStorage.getItem('isMobile') || 'false');
-})
-
-
-
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .main {
     display: flex;
     justify-content: center;
@@ -114,23 +106,9 @@ onMounted(() => {
             }
         }
     }
+}
 
-    .main-item.blurred {
-        filter: blur(5px);
-        /* 模糊效果 */
-    }
-
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.4);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
+::v-deep .el-dialog {
+    border-radius: 15px;
 }
 </style>
