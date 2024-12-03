@@ -11,12 +11,11 @@ export function getImgStyle(photos: string[] | undefined, MAX_SIZE = "450px") {
     let { val, unit } = splitStr(MAX_SIZE);
     val *= 0.97; // 留出一点边距
     let hasImages = false;
-    let size: number | string = 0;
+    let sizew: number | string = 0;
     let containerWidth: number | string = 0;
-    let gap = ""; // 图片间距
     if (!photos || photos.length === 0) {
         // 没有图片
-        return { size, hasImages, containerWidth };
+        return { sizew, sizewh: 0, hasImages, containerWidth, gap: 0 };
     }
     if (photos.length > 9) {
         // 最多显示9张图片
@@ -24,11 +23,13 @@ export function getImgStyle(photos: string[] | undefined, MAX_SIZE = "450px") {
     }
     hasImages = true;
     let col = photos.length >= 3 ? 3 : photos.length;
+    // let row = Math.ceil(photos.length / col); // 图片行数
     let width = (100 - (col - 1) * 2) / col; // 图片宽度百分比
-    size = (width / 100) * val; // 图片大小
+    sizew = (width / 100) * val; // 图片大小
     containerWidth = ((width * col + (col - 1) * 2) / 100) * val; // 图片容器宽度
     return {
-        size: `${size}${unit}`,
+        sizew: `${sizew}${unit}`,
+        sizeh: `${sizew * 0.66}${unit}`,
         hasImages,
         containerWidth: `${containerWidth}${unit}`,
         gap: `${(2 / 100) * val}${unit}`,
