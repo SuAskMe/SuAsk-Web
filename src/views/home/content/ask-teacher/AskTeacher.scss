@@ -1,0 +1,15 @@
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  .main-container {
+    border-top: solid 1px $su-border;
+    padding: 0;
+  }
+}
+
+.background-img {
+  position: absolute;
+  //   top: 0;
+}

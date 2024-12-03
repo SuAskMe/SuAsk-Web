@@ -8,7 +8,7 @@ interface BubbleQuestionProps {
     text: string;
     views: number;
     timeStamp: number;
-    width?: number;
+    width?: string;
     isMarkdown?: boolean;
     showAllMarkdown?: boolean;
     bubbleKey?: any;
@@ -22,23 +22,19 @@ interface BubbleQuestionProps {
 const props = defineProps<BubbleQuestionProps>();
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => {
-    return props.bubbleKey ? props.bubbleKey : null;
+    return props.bubbleKey !== undefined ? props.bubbleKey : null;
 });
 const containerStyle = computed(() => {
-    return { width: props.width ? props.width + "px" : "500px" };
+    return { width: props.width ? props.width : "450px" };
 });
 const imageContainer = computed(() =>
-    getImgStyle(props.imageUrls, props.width ? props.width * 0.9 : 450)
+    getImgStyle(props.imageUrls, props.width)
 );
 </script>
 
 <template>
-    <div
-        class="card-container"
-        @click.stop="clickCard(key)"
-        :style="containerStyle"
-    >
-        <div class="card-body">
+    <div class="card-container" @click.stop="clickCard(key)">
+        <div class="card-body" :style="containerStyle">
             <div class="q-title">{{ title }}</div>
             <div class="q-body">
                 <div v-if="!isMarkdown" class="text">{{ text }}</div>
@@ -55,21 +51,27 @@ const imageContainer = computed(() =>
                 <div v-if="imageContainer.hasImages" class="photos-container">
                     <div
                         class="preview-group"
-                        :style="{ width: imageContainer.containerWidth + 'px' }"
+                        :style="{
+                            width: imageContainer.containerWidth,
+                            gap: imageContainer.gap + ' ' + imageContainer.gap,
+                        }"
                     >
-                        <a-image-preview-group infinite>
-                            <a-image
-                                @click.stop
-                                v-for="(img, index) in imageUrls"
-                                :key="index"
-                                :src="img"
-                                :width="imageContainer.size"
-                                :height="imageContainer.size"
-                                fit="cover"
-                                show-loader
-                                style="cursor: zoom-in; z-index: 9"
-                            ></a-image>
-                        </a-image-preview-group>
+                        <el-image
+                            @click.stop
+                            v-for="(img, index) in imageUrls"
+                            :key="img"
+                            :src="img"
+                            :style="{
+                                width: imageContainer.sizew,
+                                height: imageContainer.sizeh,
+                            }"
+                            :preview-src-list="imageUrls"
+                            :initial-index="index"
+                            fit="cover"
+                            lazy
+                            infinite
+                            preview-teleported
+                        ></el-image>
                     </div>
                 </div>
             </div>
@@ -84,7 +86,7 @@ const imageContainer = computed(() =>
         <div v-if="answerNum && answerNum > 0" class="card-footer">
             <img
                 :src="avatar"
-                onerror="this.src='src/assets/default-avatar.png'; this.onerror=null;"
+                onerror="this.src='/src/assets/default-avatar.png'; this.onerror=null;"
                 v-for="(avatar, index) in avatars"
                 :key="index"
                 :style="{
@@ -137,4 +139,4 @@ const imageContainer = computed(() =>
     </div>
 </template>
 
-<style scoped src="./BubbleQuestion.css"></style>
+<style scoped src="./BubbleQuestion.scss"></style>
