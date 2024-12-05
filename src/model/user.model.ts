@@ -5,7 +5,7 @@ enum Role {
 }
 
 export interface RegisterForm {
-    userName: string,
+    name: string,
     password: string,
     role: Role,
     token: string, // 搭载 Email 和过期时间
@@ -16,11 +16,10 @@ export interface ForgetPasswordForm {
     password: string;
 }
 
-export interface User {
+export interface UpdateUser {
     id: number;
-    userName: string;
-    email: string;
-    role: Role;
-    nickName: string;
+    nickname: string;
     introduction: string;
+    avatar: string;
+    themeId: number;
 }
