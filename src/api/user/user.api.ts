@@ -1,4 +1,4 @@
-import type { User } from "@/model/user.model";
+import type { UpdateUser } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
@@ -10,7 +10,7 @@ export function updatePassword(password: string) {
     return request.post(Api.UPDATE_PASSWORD, password);
 }
 
-export function updateUserInfo(userInfo: User) {
+export function updateUserInfo(userInfo: UpdateUser) {
     return request.post(Api.UPDATE_USER_INFO, userInfo);
 }
 
