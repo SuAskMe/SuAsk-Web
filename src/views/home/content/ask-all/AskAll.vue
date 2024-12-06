@@ -16,12 +16,7 @@
                     :image-urls="question.imageUrls"
                     :is-favourite="question.isFavourite"
                     :bubble-key="index"
-                    :click-favourite="
-                        (key) => {
-                            questionList[key].isFavourite =
-                                !questionList[key].isFavourite;
-                        }
-                    "
+                    :click-favourite="favourite"
                     width="45vw"
                     :style="{
                         marginTop: index === 0 ? '24px' : '0',
@@ -36,20 +31,11 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import Header from "../../header/Header.vue";
+import Header from "./Header.vue";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 
-const imagesUrls: string[] = [
-    "/src/assets/default-avatar.png",
-    "/src/assets/default-avatar.png",
-    "/src/assets/default-avatar.png",
-    "/src/assets/default-avatar.png",
-    "/src/assets/default-avatar.png",
-    // "/src/assets/default-avatar.png",
-    // "/src/assets/default-avatar.png",
-    // "/src/assets/default-avatar.png",
-];
+const imagesUrls: string[] = ["/src/assets/bg_imgs/2.png"];
 
 const questionList = reactive([
     {
@@ -117,6 +103,10 @@ const questionList = reactive([
         isFavourite: false,
     },
 ]);
+
+const favourite = (key: number) => {
+    questionList[key].isFavourite = !questionList[key].isFavourite;
+};
 </script>
 
 <style scoped src="./AskAll.scss"></style>
