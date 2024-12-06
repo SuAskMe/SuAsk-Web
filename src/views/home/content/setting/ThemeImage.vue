@@ -13,7 +13,7 @@ defineProps<{
     width: string;
 }>();
 
-const selectIndex = ref(0);
+const selectIndex = defineModel()
 const selectImg = (index: number) => {
     selectIndex.value = index;
     console.log(selectIndex.value);
