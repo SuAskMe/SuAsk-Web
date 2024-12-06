@@ -23,3 +23,23 @@ export interface UpdateUser {
     avatar: string;
     themeId: number;
 }
+
+export interface User {
+    id: number;
+    name: string;
+    nickname: string;
+    role: Role;
+    introduction: string;
+    avatar: string;
+    themeId: number;
+}
+
+export interface ResetPassword {
+    id: number;
+    newPassword: string;
+}
+
+export interface CheckOldPassword {
+    id: number;
+    oldPassword: string;
+}
