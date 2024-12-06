@@ -7,7 +7,7 @@
         <control-panel-item id="stu-ask-history" icon="chat-history" text="历史提问"
             :clicked="selectedItem == 'stu-ask-history'" @updateSelected="updateSelected" jump-to-path="ask-history" />
         <control-panel-item id="stu-star" icon="star" text="我的收藏" :clicked="selectedItem == 'stu-star'"
-            @updateSelected="updateSelected" jump-to-path="my-star" />
+            @updateSelected="updateSelected" jump-to-path="my-favorite" />
         <control-panel-item id="stu-settings" icon="settings" text="设置" :clicked="selectedItem == 'stu-settings'"
             @updateSelected="updateSelected" jump-to-path="setting" />
         <control-panel-item id="stu-help" icon="question" text="帮助" :clicked="selectedItem == 'stu-help'"
