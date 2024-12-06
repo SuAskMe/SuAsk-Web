@@ -1,6 +1,6 @@
 <template>
     <el-container class="container">
-        <el-mian class="main-container" ref="mainContainer">
+        <div class="main-container" ref="mainContainer">
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
                     <div class="header-content">
@@ -8,9 +8,11 @@
                             v-model="searchInput"
                             placeholder="请输入想要搜索的老师姓名"
                             :fetch-suggestions="querySearch"
+                            :debounce="100"
+                            @input="resetList"
                             clearable
                         ></el-autocomplete>
-                        <div class="search-teacher-btn">
+                        <div class="search-teacher-btn" @click.stop="searchBtn">
                             <SvgIcon
                                 icon="search"
                                 size="calc(1em + 10px)"
@@ -22,22 +24,22 @@
                 </div>
                 <div class="teacher-list">
                     <TeacherCard
-                        v-for="teacher in teacherList"
-                        :key="teacher.name"
+                        v-for="(teacher, index) in teacherList"
+                        :key="index"
                         :teacher="teacher"
-                    />
+                    ></TeacherCard>
                 </div>
             </el-scrollbar>
-        </el-mian>
+        </div>
     </el-container>
 </template>
 
 <script setup lang="ts">
 import SvgIcon from "@/components/svg-icon";
 import { onMounted, onUnmounted, reactive, ref } from "vue";
-import TeacherCard from "./TeacherCard.vue";
+import TeacherCard from "@/components/teacher-card";
 
-const teachers = [
+let teachersObj: TeacherItem[] = [
     {
         name: "郑子彬",
         avatar: "https://sse.sysu.edu.cn/sites/default/files/styles/image_style_2/public/%E9%83%91%E5%AD%90%E5%BD%AC_0.jpg?itok=IFxeXGlr", // 替换为实际图片地址
@@ -126,6 +128,8 @@ const teachers = [
     },
 ];
 
+let teachersStr = JSON.stringify(teachersObj);
+
 type TeacherItem = {
     value?: string;
     name: string; // 老师姓名
@@ -137,12 +141,13 @@ type TeacherItem = {
 };
 
 const searchInput = ref("");
-const teacherList: TeacherItem[] = reactive(teachers);
+const teacherList: TeacherItem[] = reactive(teachersObj);
 
 const querySearch = (queryString: string, cb: any) => {
+    teachersObj = JSON.parse(teachersStr);
     const results = queryString
-        ? teacherList.filter(createFilter(queryString))
-        : teacherList;
+        ? teachersObj.filter(createFilter(queryString))
+        : teachersObj;
     // call callback function to return suggestions
     cb(results);
 };
@@ -164,10 +169,31 @@ const checkStickyHeader = () => {
     const d = cur - top;
     isAtTop.value = d === 0;
 };
+
+const resetList = (value: string | number) => {
+    // console.log(value);
+    if (value === "") {
+        teachersObj = JSON.parse(teachersStr);
+        teacherList.length = teachersObj.length;
+        Object.assign(teacherList, teachersObj);
+    }
+};
+
+const searchBtn = () => {
+    teachersObj = JSON.parse(teachersStr);
+    const results = searchInput.value
+        ? teachersObj.filter(createFilter(searchInput.value))
+        : teachersObj;
+
+    teacherList.length = results.length;
+    Object.assign(teacherList, results);
+};
+
 onMounted(() => {
-    teacherList.forEach((teacher) => {
+    teachersObj.forEach((teacher) => {
         teacher.value = teacher.name;
     });
+    teachersStr = JSON.stringify(teachersObj);
 });
 </script>
 

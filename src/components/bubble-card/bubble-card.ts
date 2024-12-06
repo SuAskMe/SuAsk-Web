@@ -15,21 +15,20 @@ export function getImgStyle(photos: string[] | undefined, MAX_SIZE = "450px") {
     let containerWidth: number | string = 0;
     if (!photos || photos.length === 0) {
         // 没有图片
-        return { sizew, sizewh: 0, hasImages, containerWidth, gap: 0 };
+        return { size: "0px", hasImages, containerWidth, gap: 0 };
     }
-    if (photos.length > 9) {
-        // 最多显示9张图片
-        photos.length = 9;
+    if (photos.length > 8) {
+        // 最多显示8张图片
+        photos.length = 8;
     }
     hasImages = true;
-    let col = photos.length >= 3 ? 3 : photos.length;
+    let col = 4
     // let row = Math.ceil(photos.length / col); // 图片行数
     let width = (100 - (col - 1) * 2) / col; // 图片宽度百分比
     sizew = (width / 100) * val; // 图片大小
     containerWidth = ((width * col + (col - 1) * 2) / 100) * val; // 图片容器宽度
     return {
-        sizew: `${sizew}${unit}`,
-        sizeh: `${sizew * 0.66}${unit}`,
+        size: `${sizew}${unit}`,
         hasImages,
         containerWidth: `${containerWidth}${unit}`,
         gap: `${(2 / 100) * val}${unit}`,
