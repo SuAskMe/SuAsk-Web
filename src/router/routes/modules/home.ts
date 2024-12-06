@@ -40,23 +40,6 @@ export const HomeRoute: AppRouteRecordRaw = {
             redirect: "home/setting",
         },
         {
-            path: "setting",
-            name: "Setting",
-            meta: {
-                title: "设置",
-            },
-            components: {
-                default: Setting,
-                sidebar: Sidebar,
-                // header: Header,
-                footer: PhoneMainFooter,
-            },
-            props: {
-                // header: { isQuestionPage: false },
-                footer: { isQuestionPage: false },
-            },
-        },
-        {
             path: "ask-all",
             name: "AskAll",
             meta: {
@@ -84,7 +67,10 @@ export const HomeRoute: AppRouteRecordRaw = {
             meta: {
                 title: "历史提问",
             },
-            component: AskHistory,
+            components: {
+                default: AskHistory,
+                sidebar: Sidebar,
+            },
         },
         {
             path: "my-favorite",
@@ -92,7 +78,27 @@ export const HomeRoute: AppRouteRecordRaw = {
             meta: {
                 title: "我的收藏",
             },
-            component: MyFavorite,
+            components: {
+                default: MyFavorite,
+                sidebar: Sidebar,
+            },
+        },
+        {
+            path: "setting",
+            name: "Setting",
+            meta: {
+                title: "设置",
+            },
+            components: {
+                default: Setting,
+                sidebar: Sidebar,
+                // header: Header,
+                footer: PhoneMainFooter,
+            },
+            props: {
+                // header: { isQuestionPage: false },
+                footer: { isQuestionPage: false },
+            },
         },
         {
             path: "help",
@@ -100,7 +106,14 @@ export const HomeRoute: AppRouteRecordRaw = {
             meta: {
                 title: "帮助",
             },
-            component: Help,
+            components: {
+                default: Help,
+                sidebar: Sidebar,
+                footer: PhoneMainFooter,
+            },
+            props: {
+                footer: { isQuestionPage: false },
+            }
         },
     ],
 };
