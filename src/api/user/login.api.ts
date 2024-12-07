@@ -5,10 +5,10 @@ enum Api {
     LOGOUT = '/user/logout',
 }
 
-export function login(name: string, password: string) {
+export async function loginApi(name: string, password: string) {
     return request.post(Api.LOGIN, { name, password });
 }
 
-export function logout() {
+export async function logoutApi() {
     return request.post(Api.LOGOUT);
 }

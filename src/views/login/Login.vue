@@ -40,12 +40,24 @@
 import { ref } from 'vue';
 import ForgetPasswordPage from './ForgetPasswordPage.vue';
 import RegisterPage from './RegisterPage.vue';
+import { loginApi } from '@/api/user/login.api';
+import { getUserInfoApi } from '@/api/user/user.api';
 
 const userName = ref('');
 const password = ref('');
 
-function login() {
+async function login() {
     console.log(userName.value, password.value);
+    const res = await loginApi(userName.value, password.value);
+    const token = res.data.token;
+    localStorage.setItem('token', token);
+    getUserInfo();
+}
+
+async function getUserInfo() {
+    const res = await getUserInfoApi()
+    const userInfo = res.data;
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
 }
 
 const showForgetPassword = ref(false);
@@ -108,7 +120,7 @@ function register() {
     }
 }
 
-::v-deep .el-dialog {
-    border-radius: 15px;
+:deep(.el-dialog) {
+    border-radius: 20px;
 }
 </style>

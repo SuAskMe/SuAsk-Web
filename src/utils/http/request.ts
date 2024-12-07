@@ -11,11 +11,12 @@ request.interceptors.response.use(res => {
         return res.data
     } else {
         ElMessage.error("请求错误")
-        return res.statusText
+        return false
     }
 }, error => {
-    ElMessage.error("请求错误")
-    return error
+    ElMessage.error("请求无响应")
+    console.log("请求无响应:", error);
+    return false
 })
 
 // request.interceptors.request.use(
