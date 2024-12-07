@@ -46,14 +46,14 @@
 </template>
 
 <script setup lang="ts">
-import { el } from "element-plus/es/locales.mjs";
-import { computed, inject, ref } from "vue";
-
+import { ref } from "vue";
+const emit = defineEmits(["changeSort"]);
 // 排序组件
 const sortText = ref(["按时间降序", "按时间升序", "按热度降序", "按热度升序"]);
 const sortIndex = ref(0);
 function changeSort(index: number) {
     sortIndex.value = index;
+    emit("changeSort", index);
 }
 
 // 搜索组件
