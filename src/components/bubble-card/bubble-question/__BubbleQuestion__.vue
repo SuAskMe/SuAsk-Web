@@ -62,8 +62,9 @@ const imageContainer = computed(() =>
                             :key="img"
                             :src="img"
                             :style="{
-                                width: imageContainer.sizew,
-                                height: imageContainer.sizeh,
+                                width: imageContainer.size,
+                                height: imageContainer.size,
+                                borderRadius: '6px',
                             }"
                             :preview-src-list="imageUrls"
                             :initial-index="index"

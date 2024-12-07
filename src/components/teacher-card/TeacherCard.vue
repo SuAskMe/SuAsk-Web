@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 interface CardProps {
     teacher: {
         name: string;
@@ -44,6 +43,7 @@ const props = defineProps<CardProps>();
     height: 240px;
     border-radius: 8px;
     padding: 0;
+    user-select: none;
 }
 
 .card-left {
