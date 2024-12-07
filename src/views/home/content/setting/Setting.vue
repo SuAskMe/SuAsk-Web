@@ -52,7 +52,7 @@
         <el-dialog v-model="showResetPassword" width="400px" align-center>
             <reset-password-dialog />
         </el-dialog>
-        <el-dialog v-model="showLogout" width="400px" align-center :modal="false">
+        <el-dialog v-model="showLogout" width="400px" align-center :modal="false" title="你确定要注销吗?">
             <logout-dialog />
         </el-dialog>
     </div>
@@ -109,7 +109,16 @@ function getUserInfo() {
 async function updateUserInfo() {
     if (userInfo) {
         localStorage.setItem('userInfo', JSON.stringify(userInfo))
-        await updateUserInfoApi(userInfo)
+        await updateUserInfoApi(userInfo).then(res => {
+            if (res) {
+                ElMessage.success('保存成功')
+            } else {
+                ElMessage.error('保存失败')
+            }
+        }).catch(err => {
+            console.log(err)
+            ElMessage.error('保存失败')
+        })
     }
     ElMessage.success('保存成功')
 

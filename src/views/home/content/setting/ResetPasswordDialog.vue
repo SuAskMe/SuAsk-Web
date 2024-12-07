@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang='ts'>
-import { checkOldPassword } from '@/api/user/reset_password.api';
+import { checkOldPasswordApi } from '@/api/user/reset_password.api';
 import type { User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
@@ -34,7 +34,7 @@ async function resetPassword() {
     } else if (resetPasswordForm.value.newPassword != resetPasswordForm.value.confirmPassword) {
         ElMessage.error('两次输入的新密码不一致');
         return;
-    } else if (userInfo.value && await checkOldPassword({ id: userInfo.value.id, oldPassword: resetPasswordForm.value.oldPassword })) {
+    } else if (userInfo.value && await checkOldPasswordApi({ id: userInfo.value.id, oldPassword: resetPasswordForm.value.oldPassword })) {
         ElMessage.error('旧密码错误');
         return;
     }
