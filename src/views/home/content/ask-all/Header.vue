@@ -24,8 +24,12 @@
                         v-if="showInput"
                         v-model="searchText"
                         placeholder="搜索问题"
+                        :fetch-suggestions="querySearch"
+                        :debounce="100"
+                        :trigger-on-focus="false"
+                        clearable
                     ></el-autocomplete>
-                    <div class="search-icon" @click.stop="searchBtn">
+                    <div class="search-icon" @click.stop="search">
                         <svg-icon
                             icon="search"
                             :color="showInput ? '#71B6FF' : '#808080'"
@@ -35,7 +39,7 @@
                     <div
                         v-if="showInput"
                         class="cancel-btn"
-                        @click.stop="searchBtn"
+                        @click.stop="cancelSearch"
                     >
                         取消
                     </div>
@@ -47,7 +51,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-const emit = defineEmits(["changeSort"]);
+import { GetKeyWords } from "./request";
+const emit = defineEmits(["changeSort", "search", "cancelSearch"]);
 // 排序组件
 const sortText = ref(["按时间降序", "按时间升序", "按热度降序", "按热度升序"]);
 const sortIndex = ref(0);
@@ -58,10 +63,41 @@ function changeSort(index: number) {
 
 // 搜索组件
 const showInput = ref(false);
-function searchBtn() {
-    showInput.value = !showInput.value;
-}
 const searchText = ref(""); // 搜索内容
+
+const querySearch = async (queryString: string, cb: any) => {
+    if (queryString.length === 0) {
+        return;
+    }
+    const results = await GetKeyWords({
+        keyword: queryString,
+        sort_type: sortIndex.value,
+    });
+    if (results) {
+        // console.log(results.words);
+        cb(results.words);
+    } else {
+        cb([]);
+    }
+};
+
+const search = () => {
+    if (
+        showInput.value &&
+        searchText.value.length > 0 &&
+        searchText.value.trim() !== ""
+    ) {
+        emit("search", searchText.value);
+    } else {
+        showInput.value = true;
+    }
+};
+
+const cancelSearch = () => {
+    showInput.value = false;
+    searchText.value = "";
+    emit("cancelSearch");
+};
 </script>
 
 <style scoped lang="scss">

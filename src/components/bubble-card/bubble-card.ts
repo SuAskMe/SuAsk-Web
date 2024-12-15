@@ -22,7 +22,7 @@ export function getImgStyle(photos: string[] | undefined, MAX_SIZE = "450px") {
         photos.length = 8;
     }
     hasImages = true;
-    let col = 4
+    let col = 4;
     // let row = Math.ceil(photos.length / col); // 图片行数
     let width = (100 - (col - 1) * 2) / col; // 图片宽度百分比
     sizew = (width / 100) * val; // 图片大小

@@ -8,19 +8,37 @@ defineProps({
 <template>
     <el-container>
         <el-aside width="300px">
-            <router-view name="sidebar" :deviceType="deviceType" :userType="userType" />
+            <router-view
+                name="sidebar"
+                :deviceType="deviceType"
+                :userType="userType"
+            />
         </el-aside>
         <el-container>
-            <el-header style="height: auto;">
-                <router-view name="header" :deviceType="deviceType" :userType="userType" />
+            <el-header style="height: auto">
+                <router-view
+                    name="header"
+                    :deviceType="deviceType"
+                    :userType="userType"
+                />
             </el-header>
             <el-main>
-                <el-scrollbar>
-                    <router-view :deviceType="deviceType" :userType="userType" />
-                </el-scrollbar>
+                <router-view
+                    :deviceType="deviceType"
+                    :userType="userType"
+                    v-slot="{ Component }"
+                >
+                    <keep-alive>
+                        <component :is="Component" />
+                    </keep-alive>
+                </router-view>
             </el-main>
-            <el-footer style="height: auto;">
-                <router-view name="footer" :deviceType="deviceType" :userType="userType" />
+            <el-footer style="height: auto">
+                <router-view
+                    name="footer"
+                    :deviceType="deviceType"
+                    :userType="userType"
+                />
             </el-footer>
         </el-container>
     </el-container>
