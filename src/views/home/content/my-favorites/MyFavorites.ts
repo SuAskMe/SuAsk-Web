@@ -1,25 +1,27 @@
 import {
     Get,
-    type GetFavoritesResponse,
+    type GetFavoriteResponse,
 } from "./request";
 
-export interface FavoritesQuestion {
+export interface FavoriteQuestion {
     id: number;
     title: string;
     contents: string;
     views: number;
-    star_at: number; 
+    favorite_at: string; 
     // image_urls: string[];
 }
 
-export async function GetFavoritesList(
+export async function GetFavoriteList(
     // page: number
-): Promise<FavoritesQuestion[]> {
-    var res: GetFavoritesResponse;
+): Promise<FavoriteQuestion[]> {
+    var res: GetFavoriteResponse;
     res = await Get();
-    if (res.star_question_list) {
-        return res.star_question_list;
+    if (res.favorite_question_list) {
+        console.log("收藏列表：", res.favorite_question_list);
+        return res.favorite_question_list;
     } else {
+        console.log("空的！");
         return [];
     }
 }

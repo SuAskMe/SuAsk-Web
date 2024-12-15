@@ -7,13 +7,14 @@
                 ref="scrollBar"
                 @scroll="handleScroll"
             >
+                <!-- 修改至favorite_at字段后，气泡会显示出来，刷新又消失了？？ -->
                 <BubbleCard
                     v-for="(question, index) in FavoriteList"
                     :key="question.id"
                     :title="question.title"
                     :text="question.contents"
                     :views="question.views"
-                    :time-stamp="question.star_at"
+                    :time-stamp="question.favorite_at"
 
                     width="45vw"
                     :style="{
@@ -33,18 +34,22 @@ import { ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
-import type { FavoritesQuestion } from "./MyFavorites";
-import { GetFavoritesList } from "./MyFavorites";
+import type { FavoriteQuestion } from "./MyFavorites";
+import { GetFavoriteList } from "./MyFavorites";
+import { da } from "element-plus/es/locale";
 
-// const showDialog = ref(false);
+const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const FavoriteList: FavoritesQuestion[] = []; // 非响应式数组
+const FavoriteList: FavoriteQuestion[] = []; // 非响应式数组
 
 onMounted(async () => {
   // 填充数据到 FavoriteList，非响应式数据
-  FavoriteList.push(...await(GetFavoritesList()));
+  console.log("start");
+  const data = await GetFavoriteList();
+  FavoriteList.push(...data);
+  console.log(FavoriteList);
 });
 
 // const handleScroll = async () => {

@@ -1,5 +1,5 @@
 import request from "@/utils/http/request";
-import type { FavoritesQuestion } from "./MyFavorites";
+import type { FavoriteQuestion } from "./MyFavorites";
 
 interface ResponseData<T = any> {
     code: number;
@@ -7,21 +7,21 @@ interface ResponseData<T = any> {
     data?: T;
 }
 
-interface GetFavoritesRequest {
+interface GetFavoriteRequest {
     // page: number;
     // user_id: number;
 }
 
-export interface GetFavoritesResponse {
-    star_question_list: FavoritesQuestion[];
+export interface GetFavoriteResponse {
+    favorite_question_list: FavoriteQuestion[];
     // remain_page: number;
 }
 
 export async function Get(
-    // data: GetFavoritesRequest
-): Promise<GetFavoritesResponse> {
+    // data: GetFavoriteRequest
+): Promise<GetFavoriteResponse> {
     return request<ResponseData, any>({
-        url: "/star/get",
+        url: "/favorite/get",
         method: "get",
         // params: data,
     })
