@@ -22,7 +22,7 @@
                 />
             </el-scrollbar>
             <AskDialog v-model:visible="showDialog" />
-            <div class="ask-btn" @click.stop="showDialog = true">+</div>
+            <!-- <div class="ask-btn" @click.stop="showDialog = true">+</div> -->
         </el-main>
     </el-container>
 </template>
@@ -36,7 +36,7 @@ import AskDialog from "@/components/ask-dialog";
 import type { FavoritesQuestion } from "./MyFavorites";
 import { GetFavoritesList } from "./MyFavorites";
 
-const showDialog = ref(false);
+// const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
