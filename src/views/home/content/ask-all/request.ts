@@ -13,25 +13,9 @@ interface GetAskAllParams {
     sort_type: number;
 }
 
-interface GetAskAllByKeywordParams {
-    page: number;
-    keyword: string;
-    user_id: number;
-    sort_type: number;
-}
-
 export interface GetAskAllResponse {
     question_list: QuestionItem[];
     remain_page: number;
-}
-
-interface GetKeyWordsParams {
-    sort_type: number;
-    keyword: string;
-}
-
-interface GetKeyWordsResponse {
-    words: { value: string }[];
 }
 
 export async function GetAskAll(
@@ -50,6 +34,15 @@ export async function GetAskAll(
         });
 }
 
+interface GetKeyWordsParams {
+    sort_type: number;
+    keyword: string;
+}
+
+interface GetKeyWordsResponse {
+    words: { value: string }[];
+}
+
 export async function GetKeyWords(
     data: GetKeyWordsParams
 ): Promise<GetKeyWordsResponse> {
@@ -66,6 +59,13 @@ export async function GetKeyWords(
         });
 }
 
+interface GetAskAllByKeywordParams {
+    page: number;
+    keyword: string;
+    user_id: number;
+    sort_type: number;
+}
+
 export async function GetAskAllByKeyword(
     data: GetAskAllByKeywordParams
 ): Promise<GetAskAllResponse> {
@@ -75,6 +75,34 @@ export async function GetAskAllByKeyword(
         params: data,
     })
         .then((res) => {
+            return Promise.resolve(res.data);
+        })
+        .catch((err) => {
+            return Promise.reject(err);
+        });
+}
+
+interface FavoriteParams {
+    question_id: number;
+    user_id: number;
+}
+
+interface FavoriteResponse {
+    is_favorited: boolean;
+}
+
+export async function FavoriteRequest(
+    data: FavoriteParams
+): Promise<FavoriteResponse> {
+    return request<ResponseData, any>({
+        url: "/questions/public/favorite",
+        method: "post",
+        data: data,
+    })
+        .then((res) => {
+            if (res.code !== 0) {
+                return Promise.reject(res.message);
+            }
             return Promise.resolve(res.data);
         })
         .catch((err) => {
