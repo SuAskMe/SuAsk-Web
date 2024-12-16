@@ -18,7 +18,6 @@ export async function GetFavoriteList(
     var res: GetFavoriteResponse;
     res = await Get();
     if (res.favorite_question_list) {
-        console.log("收藏列表：", res.favorite_question_list);
         return res.favorite_question_list;
     } else {
         console.log("空的！");

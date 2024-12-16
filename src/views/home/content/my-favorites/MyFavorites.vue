@@ -7,7 +7,7 @@
                 ref="scrollBar"
                 @scroll="handleScroll"
             >
-                <!-- 修改至favorite_at字段后，气泡会显示出来，刷新又消失了？？ -->
+                <!-- 修改字段后，气泡会显示出来，刷新又消失了？？ -->
                 <BubbleCard
                     v-for="(question, index) in FavoriteList"
                     :key="question.id"
@@ -47,9 +47,13 @@ const FavoriteList: FavoriteQuestion[] = []; // 非响应式数组
 onMounted(async () => {
   // 填充数据到 FavoriteList，非响应式数据
   console.log("start");
+
+  loading.value = true;
   const data = await GetFavoriteList();
   FavoriteList.push(...data);
-  console.log(FavoriteList);
+  loading.value = false;
+
+  console.log("FavoriteList: ", FavoriteList);
 });
 
 // const handleScroll = async () => {
