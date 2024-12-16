@@ -22,7 +22,7 @@
                     :views="question.views"
                     :time-stamp="question.created_at"
                     :image-urls="question.image_urls"
-                    :is-favourite="question.is_favourite"
+                    :is-favourite="question.is_favorited"
                     :answer-num="question.answer_num"
                     :avatars="question.answer_avatars"
                     :bubble-key="index"
@@ -46,7 +46,7 @@ import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
-import { getNextQuestions, type QuestionItem } from "./AskAll";
+import { Favorite, getNextQuestions, type QuestionItem } from "./AskAll";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
@@ -101,8 +101,9 @@ const cancelSearch = async () => {
 
 const questionList: QuestionItem[] = reactive([]);
 
-const favourite = (key: number) => {
-    questionList[key].is_favourite = !questionList[key].is_favourite;
+const favourite = async (key: number) => {
+    let res = await Favorite(questionList[key].id);
+    questionList[key].is_favorited = res;
 };
 
 onMounted(() => {

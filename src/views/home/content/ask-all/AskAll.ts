@@ -1,8 +1,8 @@
 import { ElMessage } from "element-plus";
 import {
+    FavoriteRequest,
     GetAskAll,
     GetAskAllByKeyword,
-    GetKeyWords,
     type GetAskAllResponse,
 } from "./request";
 
@@ -13,7 +13,7 @@ export interface QuestionItem {
     views: number;
     created_at: number;
     image_urls: string[];
-    is_favourite: boolean;
+    is_favorited: boolean;
     answer_num: number;
     answer_avatars: string[];
 }
@@ -81,6 +81,16 @@ async function getQuestionsByPage(
         return res.question_list;
     } else {
         return [];
+    }
+}
+
+export async function Favorite(question_id: number): Promise<boolean> {
+    var res = await FavoriteRequest({ question_id, user_id: 1 });
+    if (res) {
+        return res.is_favorited;
+    } else {
+        ElMessage({ message: "请求失败", type: "error" });
+        return false;
     }
 }
 
