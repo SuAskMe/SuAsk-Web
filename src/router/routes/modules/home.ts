@@ -1,11 +1,12 @@
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
-import { tr } from "element-plus/es/locales.mjs";
 
 const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
 const AskAll = () => import("@/views/home/content/ask-all/AskAll.vue");
+const AskAllDetail = () =>
+    import("@/views/home/content/ask-all-detail/AskAllDetail.vue");
 const AskTeacher = () =>
     import("@/views/home/content/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
@@ -47,6 +48,17 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskAll,
+                sidebar: Sidebar,
+            },
+        },
+        {
+            path: "ask-all-detail",
+            name: "AskAllDetail",
+            meta: {
+                title: "我想知道饭怎么吃",
+            },
+            components: {
+                default: AskAllDetail,
                 sidebar: Sidebar,
             },
         },
@@ -113,7 +125,7 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             props: {
                 footer: { isQuestionPage: false },
-            }
+            },
         },
     ],
 };
