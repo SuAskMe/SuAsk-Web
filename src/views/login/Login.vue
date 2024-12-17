@@ -6,7 +6,7 @@
                 <svg-icon icon="qr-code" color="#808080" size="20px" />
             </div>
             <div>
-                <el-input v-model="userName" style="height: 40px;" placeholder="请输入用户名或邮箱" clearable>
+                <el-input v-model="userNameOrEmail" style="height: 40px;" placeholder="请输入用户名或邮箱" clearable>
                     <template #prefix>
                         <svg-icon icon="user" color="#71B6FF" size="20px" />
                     </template>
@@ -42,16 +42,39 @@ import ForgetPasswordPage from './ForgetPasswordPage.vue';
 import RegisterPage from './RegisterPage.vue';
 import { loginApi } from '@/api/user/login.api';
 import { getUserInfoApi } from '@/api/user/user.api';
+import { mailCheck } from '@/utils/login/register';
+import type { LoginReq, LoginRes } from '@/model/user.model';
+import { ElMessage } from 'element-plus';
 
-const userName = ref('');
+const userNameOrEmail = ref('');
 const password = ref('');
 
 async function login() {
-    console.log(userName.value, password.value);
-    const res = await loginApi(userName.value, password.value);
-    const token = res.data.token;
-    localStorage.setItem('token', token);
-    getUserInfo();
+    if (userNameOrEmail.value == '' || password.value == '') {
+        ElMessage.error('用户名或密码不能为空');
+        return;
+    }
+    const loginData: LoginReq = {
+        name: '',
+        email: '',
+        password: password.value
+    }
+    console.log(userNameOrEmail.value, password.value);
+    if (mailCheck(userNameOrEmail.value)) {
+        loginData.email = userNameOrEmail.value;
+    } else {
+        loginData.name = userNameOrEmail.value;
+    }
+    await loginApi(loginData).then(res => {
+        console.log(res);
+        const user: LoginRes = res.data;
+        const token = res.data.token;
+        localStorage.setItem('token', token);
+        localStorage.setItem('userInfo', JSON.stringify(user));
+        console.log(user);
+    }).catch(err => {
+        console.log(err);
+    });
 }
 
 async function getUserInfo() {

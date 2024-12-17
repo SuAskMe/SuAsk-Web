@@ -10,17 +10,12 @@ function mailCheck(mail: string): boolean {
     return regex.test(mail);
 }
 
-function verificationCodeCheck(verificationCode: string): boolean {
-    const regex = /^[0-9]{6}$/;
-    return regex.test(verificationCode);
-}
-
 function passwordCheck(newPassword: string, confirmPassword: string): boolean {
-    if (newPassword === confirmPassword) {
+    if (newPassword.trim() == confirmPassword.trim()) {
         return true;
     } else {
         return false;
     }
 }
 
-export { userNameCheck, mailCheck, verificationCodeCheck, passwordCheck };
+export { userNameCheck, mailCheck, passwordCheck };

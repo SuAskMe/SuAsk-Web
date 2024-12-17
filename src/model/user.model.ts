@@ -1,4 +1,4 @@
-enum Role {
+export enum Role {
     ADMIN = 'admin',
     TEACHER = 'teacher',
     STUDENT = 'student',
@@ -7,7 +7,7 @@ enum Role {
 export interface RegisterForm {
     name: string,
     password: string,
-    role: Role,
+    email: string,
     token: string, // 搭载 Email 和过期时间
 }
 
@@ -42,4 +42,20 @@ export interface ResetPassword {
 export interface CheckOldPassword {
     id: number;
     oldPassword: string;
+}
+
+export interface LoginReq {
+    name: string;
+    email: string;
+    password: string;
+}
+export interface LoginRes {
+    name: string;
+    nickname: string;
+    role: string;
+    introduction: string;
+    email: string;
+    avatar: string;
+    themeId: number;
+    type: string;
 }

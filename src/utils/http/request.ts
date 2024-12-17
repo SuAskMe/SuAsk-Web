@@ -8,10 +8,15 @@ const request = axios.create({
 
 request.interceptors.response.use(res => {
     if (res.status === 200) {
-        return res.data
+        if (res.data.code == 0) {
+            return res.data
+        } else {
+            ElMessage.error(res.data.message)
+            return res.data.message
+        }
     } else {
         ElMessage.error("请求错误")
-        return false
+        return res.data
     }
 }, error => {
     ElMessage.error("请求无响应")
