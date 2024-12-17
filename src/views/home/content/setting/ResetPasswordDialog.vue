@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang='ts'>
-import { checkOldPasswordApi } from '@/api/user/reset_password.api';
-import type { User } from '@/model/user.model';
+import { checkOldPasswordApi, resetPasswordApi } from '@/api/user/reset_password.api';
+import type { ResetPassword, User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
 
@@ -27,6 +27,8 @@ const resetPasswordForm = ref<resetPasswordForm>({
     confirmPassword: ''
 });
 
+const userInfo = ref<User>()
+
 async function resetPassword() {
     if (resetPasswordForm.value.oldPassword == '' || resetPasswordForm.value.newPassword == '' || resetPasswordForm.value.confirmPassword == '') {
         ElMessage.error('请填写完整信息');
@@ -38,10 +40,26 @@ async function resetPassword() {
         ElMessage.error('旧密码错误');
         return;
     }
-    console.log(resetPasswordForm.value);
+    if (!userInfo.value?.id) {
+        ElMessage.error('用户ID不存在');
+        return;
+    }
+    const req: ResetPassword = {
+        id: userInfo.value.id,
+        newPassword: resetPasswordForm.value.newPassword
+    }
+    resetPasswordApi(req).then(res => {
+        if (res) {
+            ElMessage.success('密码修改成功');
+        } else {
+            ElMessage.error('密码修改失败');
+        }
+    }).catch(err => {
+        ElMessage.error('密码修改失败', err);
+    })
 }
 
-const userInfo = ref<User>()
+
 
 function getUserInfo() {
     let tmp = localStorage.getItem('userInfo')

@@ -43,12 +43,14 @@
 </template>
 
 <script setup lang='ts'>
+import { registerApi, sendVerificationCodeApi, verifyVerificationCodeApi } from '@/api/user/register_and_forget.api';
+import { Role, type RegisterForm } from '@/model/user.model';
 import { router } from '@/router';
-import { mailCheck, passwordCheck, userNameCheck, verificationCodeCheck } from '@/utils/login/register';
+import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register';
 import { ElMessage } from 'element-plus';
 import { ref, watchEffect } from 'vue';
 
-export interface RegisterForm {
+export interface Register {
     userName: string,
     mail: string,
     verificationCode: string,
@@ -56,7 +58,7 @@ export interface RegisterForm {
     confirmPassword: string
 }
 
-const registerForm = ref<RegisterForm>({
+const registerForm = ref<Register>({
     userName: '',
     mail: '',
     verificationCode: '',
@@ -88,7 +90,7 @@ watchEffect(() => {
     }
 });
 
-function next_step() {
+async function next_step() {
     if (registerForm.value.userName == '' || registerForm.value.mail == '' || registerForm.value.verificationCode == '') {
         ElMessage.error('请填写完整信息');
         return;
@@ -98,31 +100,61 @@ function next_step() {
     } else if (!mailCheck(registerForm.value.mail)) {
         ElMessage.error('邮箱格式错误');
         return;
-    } else if (verificationCodeCheck(registerForm.value.verificationCode)) {
-        ElMessage.error('验证码格式错误');
-        return;
     } else {
-        isBasicInfo.value = false;
-        isPassword.value = true;
+        await verifyVerificationCodeApi(registerForm.value.mail, registerForm.value.verificationCode).then(res => {
+            if (res instanceof String) {
+                return
+            } else {
+                console.log(res);
+                localStorage.setItem('verificationToken', res.data.token);
+                ElMessage.success('验证成功');
+                isBasicInfo.value = false;
+                isPassword.value = true;
+            }
+        })
     }
 }
 
-function register() {
+async function register() {
     if (registerForm.value.newPassword == '' || registerForm.value.confirmPassword == '') {
         ElMessage.error('请填写完整密码');
         return;
-    } else if (passwordCheck(registerForm.value.newPassword, registerForm.value.confirmPassword)) {
+    } else if (!passwordCheck(registerForm.value.newPassword, registerForm.value.confirmPassword)) {
         ElMessage.error('两次输入的密码不一致');
         return;
     } else {
+        const registerData: RegisterForm = {
+            name: registerForm.value.userName,
+            password: registerForm.value.confirmPassword,
+            email: registerForm.value.mail,
+            token: localStorage.getItem('verificationToken') || '',
+        }
+        await registerApi(registerData).then(res => {
+            if (res instanceof String) {
+                return
+            } else {
+                console.log(res);
+                ElMessage.success('注册成功');
+                // router.push('/login');
+                // window.location.reload();
+            }
+        })
         ElMessage.success('注册成功');
         router.push('/login');
         window.location.reload();
     }
 }
 
-function getVerificationCode() {
-    console.log('getVerificationCode');
+async function getVerificationCode() {
+    // console.log('getVerificationCode');
+    await sendVerificationCodeApi(registerForm.value.mail, registerForm.value.userName).then(res => {
+        if (res instanceof String) {
+            return
+        } else {
+            console.log(res);
+            ElMessage.success('验证码发送成功');
+        }
+    })
 }
 
 </script>
