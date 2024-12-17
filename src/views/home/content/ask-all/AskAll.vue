@@ -1,7 +1,11 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <Header @change-sort="changeSort" />
+            <Header
+                @change-sort="changeSort"
+                @search="search"
+                @cancel-search="cancelSearch"
+            />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg img_index="1" class="background-img" />
@@ -14,11 +18,11 @@
                     v-for="(question, index) in questionList"
                     :key="question.id"
                     :title="question.title"
-                    :text="question.text"
+                    :text="question.contents"
                     :views="question.views"
                     :time-stamp="question.created_at"
                     :image-urls="question.image_urls"
-                    :is-favourite="question.is_favourite"
+                    :is-favourite="question.is_favorited"
                     :answer-num="question.answer_num"
                     :avatars="question.answer_avatars"
                     :bubble-key="index"
@@ -42,10 +46,18 @@ import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
-import { getNextQuestions, type QuestionItem } from "./AskAll";
+import { Favorite, getNextQuestions, type QuestionItem } from "./AskAll";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+
+const Init = async () => {
+    if (questionList.length === 0) {
+        loading.value = true;
+        questionList.push(...(await getNextQuestions(0)));
+        loading.value = false;
+    }
+};
 
 const handleScroll = async () => {
     if (scrollBar.value) {
@@ -59,18 +71,11 @@ const handleScroll = async () => {
             Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
             loading.value === false
         ) {
-            getQuestions();
+            loading.value = true;
+            questionList.push(...(await getNextQuestions()));
+            loading.value = false;
         }
     }
-};
-
-const getQuestions = async (isNew: boolean = false) => {
-    loading.value = true;
-    if (isNew) {
-        questionList.length = 0;
-    }
-    questionList.push(...(await getNextQuestions()));
-    loading.value = false;
 };
 
 const changeSort = async (sortType: number) => {
@@ -80,14 +85,29 @@ const changeSort = async (sortType: number) => {
     loading.value = false;
 };
 
+const search = async (keyword: string) => {
+    loading.value = true;
+    questionList.length = 0;
+    questionList.push(...(await getNextQuestions(undefined, keyword)));
+    loading.value = false;
+};
+
+const cancelSearch = async () => {
+    loading.value = true;
+    questionList.length = 0;
+    questionList.push(...(await getNextQuestions(undefined, undefined, true)));
+    loading.value = false;
+};
+
 const questionList: QuestionItem[] = reactive([]);
 
-const favourite = (key: number) => {
-    questionList[key].is_favourite = !questionList[key].is_favourite;
+const favourite = async (key: number) => {
+    let res = await Favorite(questionList[key].id);
+    questionList[key].is_favorited = res;
 };
 
 onMounted(() => {
-    getQuestions(true);
+    Init();
 });
 </script>
 
