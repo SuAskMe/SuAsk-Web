@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="return-btn">
+        <div class="return-btn" @click.stop="$emit('return')">
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
         <div class="title">{{ title }}</div>
@@ -35,7 +35,7 @@ interface HeaderProps {
 
 const props = defineProps<HeaderProps>();
 
-const emit = defineEmits(["changeSort"]);
+const emit = defineEmits(["changeSort", "return"]);
 
 // 排序组件
 const sortText = ref(["按时间降序", "按时间升序", "按热度降序", "按热度升序"]);

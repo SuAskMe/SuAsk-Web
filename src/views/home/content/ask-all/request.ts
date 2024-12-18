@@ -32,6 +32,9 @@ export async function GetAskAll(
         .catch((err) => {
             return Promise.reject(err);
         });
+    // return new Promise((resolve) => {
+    //     resolve(mockQuestions());
+    // });
 }
 
 interface GetKeyWordsParams {

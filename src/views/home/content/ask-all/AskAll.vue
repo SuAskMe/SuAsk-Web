@@ -26,6 +26,7 @@
                     :answer-num="question.answer_num"
                     :avatars="question.answer_avatars"
                     :bubble-key="index"
+                    :click-card="navigateTo"
                     :click-favourite="favourite"
                     width="45vw"
                     :style="{
@@ -47,6 +48,7 @@ import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
 import { Favorite, getNextQuestions, type QuestionItem } from "./AskAll";
+import { router } from "@/router";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
@@ -104,6 +106,12 @@ const questionList: QuestionItem[] = reactive([]);
 const favourite = async (key: number) => {
     let res = await Favorite(questionList[key].id);
     questionList[key].is_favorited = res;
+};
+
+const navigateTo = (key: number) => {
+    router.push({
+        path: `question-detail/${questionList[key].id}/${questionList[key].title}`,
+    });
 };
 
 onMounted(() => {
