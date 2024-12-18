@@ -22,7 +22,7 @@ export interface PageOutput {
 export async function GetPageHistoryList(
     page: number
 ): Promise<PageOutput> {
-    var req: GetPageHistoryRequest = { page_idx: page };
+    var req: GetPageHistoryRequest = { page: page };
     var res: GetPageHistoryResponse;
     res = await GetPage(req);
     if (res.question_list) {

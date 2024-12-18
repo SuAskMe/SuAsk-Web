@@ -36,7 +36,7 @@
   
   <script lang="ts">
   export default {
-    name: "收藏页面组件",
+    name: "页面组件",
   
     created: async function () {
       // 在这里放组件的逻辑

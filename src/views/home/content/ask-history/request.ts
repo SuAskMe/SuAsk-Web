@@ -8,7 +8,7 @@ interface ResponseData<T = any> {
 }
 
 export interface GetPageHistoryRequest {
-    page_idx: number;
+    page: number;
 }
 
 export interface GetPageHistoryResponse {
