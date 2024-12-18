@@ -5,6 +5,8 @@ const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
 const AskAll = () => import("@/views/home/content/ask-all/AskAll.vue");
+const QuestionDetail = () =>
+    import("@/views/home/content/question-detail/QuestionDetail.vue");
 const AskTeacher = () =>
     import("@/views/home/content/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
@@ -21,9 +23,7 @@ const PhoneMainFooter = () =>
 export const HomeRoute: AppRouteRecordRaw = {
     path: "/home",
     name: "Home",
-    meta: {
-        title: "主页",
-    },
+    meta: {},
     props: {
         userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
@@ -46,6 +46,15 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskAll,
+                sidebar: Sidebar,
+            },
+        },
+        {
+            path: "question-detail/:id/:title",
+            name: "QuestionDetail",
+            meta: {},
+            components: {
+                default: QuestionDetail,
                 sidebar: Sidebar,
             },
         },
@@ -112,7 +121,7 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             props: {
                 footer: { isQuestionPage: false },
-            }
+            },
         },
         {
             path: "user/:id",
