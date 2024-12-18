@@ -28,7 +28,7 @@ defineProps({
                     :userType="userType"
                     v-slot="{ Component }"
                 >
-                    <keep-alive>
+                    <keep-alive :exclude="['QuestionDetail']">
                         <component :is="Component" />
                     </keep-alive>
                 </router-view>

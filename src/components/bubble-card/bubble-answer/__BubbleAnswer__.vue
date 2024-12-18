@@ -2,7 +2,7 @@
 import { getImgStyle, getTimeStr } from "../bubble-card";
 import { computed } from "vue";
 interface BubbleAnswerProps {
-    isMine: boolean;
+    isMine?: boolean;
     avatar: string;
     nickName: string;
     text: string;
@@ -99,6 +99,7 @@ const imageContainer = computed(() =>
                             :style="{
                                 width: imageContainer.size,
                                 height: imageContainer.size,
+                                borderRadius: '6px',
                             }"
                             :preview-src-list="imageUrls"
                             :initial-index="index"

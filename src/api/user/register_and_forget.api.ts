@@ -9,12 +9,12 @@ enum Api {
 }
 
 
-export async function sendVerificationCodeApi(email: string) {
-    return request.post(Api.SEND_VERIFICATION_CODE, email);
+export async function sendVerificationCodeApi(email: string, name: string) {
+    return request.post(Api.SEND_VERIFICATION_CODE, { email, name });
 }
 
-export async function verifyVerificationCodeApi(email: string, verificationCode: string) {
-    return request.post(Api.VERIFY_VERIFICATION_CODE, { email, verificationCode });
+export async function verifyVerificationCodeApi(email: string, code: string) {
+    return request.post(Api.VERIFY_VERIFICATION_CODE, { email, code });
 }
 
 export async function registerApi(registerForm: RegisterForm) {
