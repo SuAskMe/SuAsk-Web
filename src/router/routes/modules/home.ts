@@ -123,5 +123,16 @@ export const HomeRoute: AppRouteRecordRaw = {
                 footer: { isQuestionPage: false },
             },
         },
+        {
+            path: "user/:id",
+            name: "User",
+            meta: {
+                title: "用户",
+            },
+            components: {
+                default: () => import("@/views/user/User.vue"),
+                sidebar: Sidebar,
+            }
+        }
     ],
 };

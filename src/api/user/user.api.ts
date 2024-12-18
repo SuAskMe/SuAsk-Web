@@ -5,6 +5,7 @@ enum Api {
     UPDATE_PASSWORD = '/user/update-password',
     UPDATE_USER_INFO = '/user/update-user-info',
     GET_USER_INFO = '/user/info',
+    GET_USER_BY_ID = '/user/get-user',
 }
 
 export async function updatePasswordApi(password: string) {
@@ -19,3 +20,6 @@ export async function getUserInfoApi() {
     return request.get(Api.GET_USER_INFO);
 }
 
+export async function getUserByIdApi(id: string) {
+    return request.get(Api.GET_USER_BY_ID, { params: { id } });
+}
