@@ -14,10 +14,6 @@ interface GetFavoriteRequest {
 
 export interface GetFavoriteResponse {
     favorite_question_list: FavoriteQuestion[];
-    total: number;
-    size: number;
-    remain_page: number;
-    page_num: number;
 }
 
 export async function Get(): Promise<GetFavoriteResponse> {
