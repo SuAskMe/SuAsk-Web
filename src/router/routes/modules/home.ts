@@ -1,6 +1,5 @@
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
-import { tr } from "element-plus/es/locales.mjs";
 
 const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
@@ -115,5 +114,16 @@ export const HomeRoute: AppRouteRecordRaw = {
                 footer: { isQuestionPage: false },
             }
         },
+        {
+            path: "user/:id",
+            name: "User",
+            meta: {
+                title: "用户",
+            },
+            components: {
+                default: () => import("@/views/user/User.vue"),
+                sidebar: Sidebar,
+            }
+        }
     ],
 };
