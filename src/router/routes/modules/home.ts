@@ -5,8 +5,8 @@ const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
 const AskAll = () => import("@/views/home/content/ask-all/AskAll.vue");
-const AskAllDetail = () =>
-    import("@/views/home/content/ask-all-detail/AskAllDetail.vue");
+const QuestionDetail = () =>
+    import("@/views/home/content/question-detail/QuestionDetail.vue");
 const AskTeacher = () =>
     import("@/views/home/content/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
@@ -23,9 +23,7 @@ const PhoneMainFooter = () =>
 export const HomeRoute: AppRouteRecordRaw = {
     path: "/home",
     name: "Home",
-    meta: {
-        title: "主页",
-    },
+    meta: {},
     props: {
         userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
@@ -52,13 +50,11 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: "ask-all-detail",
-            name: "AskAllDetail",
-            meta: {
-                title: "我想知道饭怎么吃",
-            },
+            path: "question-detail/:id/:title",
+            name: "QuestionDetail",
+            meta: {},
             components: {
-                default: AskAllDetail,
+                default: QuestionDetail,
                 sidebar: Sidebar,
             },
         },

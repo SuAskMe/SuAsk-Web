@@ -36,7 +36,7 @@
 import SvgIcon from "@/components/svg-icon";
 import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
-import { GenId } from "./AskAllDetail";
+import { GenId } from "./QuestionDetail";
 interface Img {
     id: number;
     url: string;

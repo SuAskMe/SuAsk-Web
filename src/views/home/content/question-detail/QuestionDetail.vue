@@ -4,6 +4,7 @@
             <Header
                 :title="'Ask All Detail'"
                 @change-sort="changeSort"
+                @return="navigateBack"
             ></Header>
         </el-header>
         <el-main class="main-container">
@@ -54,13 +55,6 @@
                     :key="img.id"
                     :id="'image-' + img.id"
                 >
-                    <div class="delete-btn" @click.stop="deleteImage(index)">
-                        <SvgIcon
-                            icon="delete-round"
-                            color="#FF5F96"
-                            size="16px"
-                        ></SvgIcon>
-                    </div>
                     <el-image
                         @click.stop
                         :src="img.url"
@@ -69,6 +63,13 @@
                         fit="cover"
                         preview-teleported
                     ></el-image>
+                    <div class="delete-btn" @click.stop="deleteImage(index)">
+                        <SvgIcon
+                            icon="delete-round"
+                            color="#FF5F96"
+                            size="16px"
+                        ></SvgIcon>
+                    </div>
                 </div>
             </transition-group>
         </el-main>
@@ -85,15 +86,19 @@
 import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import Header from "./Header.vue";
 import BackgroundImg from "@/components/backgroud-img";
-import { scrollToQuoute, answerList_, type AnswerItem } from "./AskAllDetail";
-import { reactive, ref } from "vue";
+import { scrollToQuoute, answerList_, type AnswerItem } from "./QuestionDetail";
+import { onMounted, reactive, ref } from "vue";
 import Footer from "./Footer.vue";
 import SvgIcon from "@/components/svg-icon";
+import { pullInfo } from "./request";
+import { useRoute } from "vue-router";
+import { router } from "@/router";
 interface Img {
     id: number;
     url: string;
 }
-
+const route = useRoute();
+const question = ref();
 const answerList: AnswerItem[] = reactive(answerList_);
 const fileList = ref<File[]>([]);
 const imageList = ref<Img[]>([]);
@@ -121,6 +126,15 @@ const changeSort = (index: number) => {
             break;
     }
 };
+
+const navigateBack = () => {
+    router.go(-1);
+};
+
+onMounted(() => {
+    document.title = route.params.title as string;
+    question.value = pullInfo(parseInt(route.params.id as string));
+});
 </script>
 
-<style scoped src="./AskAllDetail.scss"></style>
+<style scoped src="./QuestionDetail.scss"></style>

@@ -15,7 +15,6 @@
                     :text="question.contents"
                     :views="question.views"
                     :time-stamp="question.favorite_at"
-
                     width="45vw"
                     :style="{
                         marginTop: index === 0 ? '24px' : '0',
@@ -36,7 +35,6 @@ import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
 import type { FavoriteQuestion } from "./MyFavorites";
 import { GetFavoriteList } from "./MyFavorites";
-import { da } from "element-plus/es/locale";
 
 const showDialog = ref(false);
 const loading = ref(false);
@@ -45,11 +43,11 @@ const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 const FavoriteList: FavoriteQuestion[] = []; // 非响应式数组
 
 onMounted(async () => {
-  // 填充数据到 FavoriteList，非响应式数据
-  console.log("start");
-  const data = await GetFavoriteList();
-  FavoriteList.push(...data);
-  console.log(FavoriteList);
+    // 填充数据到 FavoriteList，非响应式数据
+    console.log("start");
+    const data = await GetFavoriteList();
+    FavoriteList.push(...data);
+    console.log(FavoriteList);
 });
 
 // const handleScroll = async () => {

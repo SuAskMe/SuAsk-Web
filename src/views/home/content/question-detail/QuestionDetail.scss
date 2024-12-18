@@ -21,20 +21,20 @@
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
+      gap: 8px;
       // background-color: #80808050;
       width: 100%;
       pointer-events: none;
 
       .picked-image {
-        position: relative;
-        width: 10%;
+        width: 11%;
         pointer-events: all;
+        display: flex;
+        justify-content: flex-end;
 
         .delete-btn {
-          position: absolute;
-          top: -6px;
-          right: -8px;
+          margin-top: -7px;
+          margin-left: -12px;
           background-color: #fff;
           border-radius: 50%;
           width: 16px;
@@ -63,38 +63,20 @@
   animation: card-highlight-animation 1.5s linear forwards;
 }
 
-.fade-list-enter-active {
-  animation: fade-in 0.3s ease-in-out forwards;
-  // position: absolute;
-}
-.fade-list-leave-active {
-  animation: fade-out 0.3s ease-in-out forwards;
-  // position: absolute;
-}
+.fade-list-enter-active,
 .fade-list-move {
-  transition-duration: 0.28s !important;
+  transition: all 0.5s ease;
 }
 
-@keyframes fade-in {
-  0% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+.fade-list-leave-active {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
 }
 
-@keyframes fade-out {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.3);
-    opacity: 0;
-  }
+.fade-list-enter-from {
+  opacity: 0;
+  transform: translateY(-50px) scale(0.3);
 }
 
 @keyframes card-highlight-animation {
