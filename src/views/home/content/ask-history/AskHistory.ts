@@ -8,8 +8,8 @@ export interface HistoryQuestion {
     id: number;
     title: string;
     contents: string;
-    views: number;
     created_at: string;
+    views: number;
     image_urls: string[];
 }
 
@@ -17,6 +17,8 @@ export interface PageOutput {
     list: HistoryQuestion[];
     total: number;
     size: number;
+    remain_page: number;
+    page_num: number;
 }
 
 export async function GetPageHistoryList(
@@ -30,6 +32,8 @@ export async function GetPageHistoryList(
             list: res.question_list,
             total: res.total,
             size: res.size,
+            remain_page: res.remain_page,
+            page_num: res.page_num
         };
         return output;
     } else {
@@ -38,6 +42,8 @@ export async function GetPageHistoryList(
             list: [],
             total: 0,
             size: 0,
+            remain_page: 1,
+            page_num: 1,
         };
         return output;
     }
