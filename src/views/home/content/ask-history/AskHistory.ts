@@ -25,9 +25,9 @@ export async function GetPageHistoryList(
     var req: GetPageHistoryRequest = { page_idx: page };
     var res: GetPageHistoryResponse;
     res = await GetPage(req);
-    if (res.page_history_question_list) {
+    if (res.question_list) {
         var output: PageOutput = {
-            list: res.page_history_question_list,
+            list: res.question_list,
             total: res.total,
             size: res.size,
         };

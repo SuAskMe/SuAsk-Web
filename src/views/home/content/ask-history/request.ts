@@ -12,7 +12,7 @@ export interface GetPageHistoryRequest {
 }
 
 export interface GetPageHistoryResponse {
-    page_history_question_list: HistoryQuestion[];
+    question_list: HistoryQuestion[];
     total: number;
     size: number;
     remain_page: number;
