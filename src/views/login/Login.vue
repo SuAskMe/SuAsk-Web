@@ -45,6 +45,7 @@ import { getUserInfoApi } from '@/api/user/user.api';
 import { mailCheck } from '@/utils/login/register';
 import type { LoginReq, LoginRes } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
+import { router } from '@/router';
 
 const userNameOrEmail = ref('');
 const password = ref('');
@@ -71,7 +72,8 @@ async function login() {
         const token = res.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('userInfo', JSON.stringify(user));
-        console.log(user);
+        ElMessage.success('登录成功');
+        router.push('home')
     }).catch(err => {
         console.log(err);
     });
