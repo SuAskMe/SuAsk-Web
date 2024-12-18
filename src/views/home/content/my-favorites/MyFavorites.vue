@@ -59,7 +59,7 @@ export default {
   data: function () {
     return {
       FavoriteList: [],
-      currentPage: 2,
+      currentPage: 1,
       pageSize: 1,
     };
   },
