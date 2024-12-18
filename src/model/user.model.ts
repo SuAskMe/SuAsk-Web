@@ -28,7 +28,7 @@ export interface User {
     id: number;
     name: string;
     nickname: string;
-    role: Role;
+    role: string;
     introduction: string;
     avatar: string;
     themeId: number;

@@ -4,13 +4,13 @@
             <svg-icon icon="qr-code" color="#808080" size="24px" />
             <svg-icon icon="communicate_message_emoji" color="#808080" size="24px" />
         </div>
-        <div class="avatar-and-id">
-            <el-avatar :size="120" :src="userAvatar" />
+        <div class="avatar-and-id" @click="toUserInfo">
+            <el-avatar :size="120" :src="basicInfo.avatar" />
             <div class="user-name">
-                <span>{{ userName }}</span>
+                <span>{{ basicInfo.name }}</span>
             </div>
             <div class="user-id">
-                <span>@{{ userId }}</span>
+                <span>@{{ basicInfo.nickname }}</span>
             </div>
         </div>
         <div class="control-panel">
@@ -21,15 +21,54 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
+import type { User } from '@/model/user.model';
+import { ElMessage } from 'element-plus';
+import { router } from '@/router';
+
+const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) as User : null;
+
+interface basicInfo {
+    id: number;
+    avatar: string;
+    name: string;
+    nickname: string;
+}
 
 // 用户信息
-const userAvatar = ref("https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp");
-const userId = ref("GenshinStart");
-const userName = ref("原神启动");
+
+const basicInfo = ref<basicInfo>({
+    id: 0,
+    avatar: '',
+    name: '',
+    nickname: '',
+});
+
+function getUserInfo() {
+    if (userInfo) {
+        const parsedUserInfo = userInfo
+        basicInfo.value.avatar = parsedUserInfo.avatar
+        basicInfo.value.name = parsedUserInfo.name
+        basicInfo.value.nickname = parsedUserInfo.nickname
+    } else {
+        ElMessage.error('获取用户信息失败')
+    }
+}
+
+function toUserInfo() {
+    if (userInfo) {
+        router.push(`/home/user/${userInfo.id}`)
+    } else {
+        ElMessage.error('获取用户信息失败')
+    }
+}
+
+onMounted(() => {
+    getUserInfo();
+});
 
 const props = defineProps({
     userType: String
