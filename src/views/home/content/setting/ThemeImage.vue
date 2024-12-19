@@ -1,12 +1,11 @@
 <template>
-    <div v-for="(src, index) in src" :key="index">
+    <div v-for="(src, index) in src" :key="src">
         <img :class="{ select: selectIndex == index }" class="theme-image" @click="selectImg(index)" :src="src"
             :width="width" />
     </div>
 </template>
 
 <script setup lang='ts'>
-import { ref } from 'vue';
 
 defineProps<{
     src: string[];
@@ -15,8 +14,7 @@ defineProps<{
 
 const selectIndex = defineModel()
 const selectImg = (index: number) => {
-    selectIndex.value = index;
-    console.log(selectIndex.value);
+    selectIndex.value = index
 }
 </script>
 

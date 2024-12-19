@@ -1,28 +1,14 @@
 <template>
   <el-container class="container">
     <el-main class="main-container">
-      <BackgroundImg img_index="1" class="background-img" />
+      <BackgroundImg :img_index="bg_img_index" class="background-img" />
       <el-scrollbar>
-        <BubbleCard
-          v-for="(question, index) in FavoriteList"
-          :key="question.id"
-          :title="question.title"
-          :text="question.contents"
-          :views="question.views"
-          :time-stamp="question.favorite_at"
-          width="45vw"
-          :style="{
+        <BubbleCard v-for="(question, index) in FavoriteList" :key="question.id" :title="question.title"
+          :text="question.contents" :views="question.views" :time-stamp="question.favorite_at" width="45vw" :style="{
             marginTop: index === 0 ? '24px' : '0',
-          }"
-        />
-        <el-pagination
-          class="pagination-bottom"
-          layout="prev, pager, next"
-          :page-size="size"
-          :total="total"
-          v-model:current-page="currentPage"
-          @current-change="changePage"
-        ></el-pagination>
+          }" />
+        <el-pagination class="pagination-bottom" layout="prev, pager, next" :page-size="size" :total="total"
+          v-model:current-page="currentPage" @current-change="changePage"></el-pagination>
       </el-scrollbar>
     </el-main>
   </el-container>
@@ -32,6 +18,10 @@
 import BackgroundImg from "@/components/backgroud-img";
 import { BubbleCard } from "@/components/bubble-card";
 import { GetPageFavoriteList } from "./MyFavorites";
+import { getUserInfo } from "@/utils/userInfo";
+
+const bg_img_index = getUserInfo().themeId
+console.log(bg_img_index);
 </script>
 
 <script lang="ts">

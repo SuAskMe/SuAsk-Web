@@ -12,7 +12,7 @@ import { computed, defineProps, watch } from 'vue';
     * img_url?: 图片链接
 */
 const props = defineProps<{
-    img_index?: string;
+    img_index?: number;
     img_url?: string;
 }>();
 
