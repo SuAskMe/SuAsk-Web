@@ -50,7 +50,7 @@ const basicInfo = ref<basicInfo>({
 function getUserInfo() {
     if (userInfo) {
         const parsedUserInfo = userInfo
-        basicInfo.value.avatar = parsedUserInfo.avatar
+        basicInfo.value.avatar = parsedUserInfo.avatar?.toString() || ''
         basicInfo.value.name = parsedUserInfo.name
         basicInfo.value.nickname = parsedUserInfo.nickname
     } else {
