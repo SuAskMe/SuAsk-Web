@@ -95,7 +95,13 @@ let avatarId = 0
 
 function getUserInfo() {
     if (userInfo) {
-        basicInfo.value = userInfo
+        basicInfo.value.id = userInfo.id
+        basicInfo.value.role = userInfo.role
+        basicInfo.value.avatar = userInfo.avatar
+        basicInfo.value.name = userInfo.name
+        basicInfo.value.nickname = userInfo.nickname
+        basicInfo.value.introduction = userInfo.introduction
+        basicInfo.value.themeId = userInfo.themeId - 1
     } else {
         ElMessage.error('获取用户信息失败')
     }
@@ -104,16 +110,17 @@ function getUserInfo() {
 async function updateUserInfo() {
     // localStorage.setItem('userInfo', JSON.stringify(userInfo))
     const updateUserInfo: UpdateUser = {
-        avatarId: avatarId == 0 ? null : avatarId,
+        avatarId: avatarId === 0 ? null : avatarId,
         nickname: basicInfo.value.nickname,
         introduction: basicInfo.value.introduction,
-        themeId: basicInfo.value.themeId
+        themeId: basicInfo.value.themeId + 1
     }
     await updateUserInfoApi(updateUserInfo).then(res => {
         if (!(res instanceof String)) {
             ElMessage.success('保存成功')
             console.log(basicInfo.value);
-            updateLocalUserInfo(null, basicInfo.value.nickname, basicInfo.value.introduction, basicInfo.value.themeId)
+            updateLocalUserInfo(null, basicInfo.value.nickname, basicInfo.value.introduction, basicInfo.value.themeId + 1)
+            location.reload()
         } else {
             ElMessage.error('保存失败')
         }
@@ -134,12 +141,13 @@ function updateLocalUserInfo(avatarURL: string | null, nickname: string | null, 
         if (introduction) {
             userInfo.introduction = introduction
         }
-        if (themeId) {
+        if (themeId != null) {
             userInfo.themeId = themeId
         }
         if (avatarURL) {
             userInfo.avatar = avatarURL
         }
+        console.log(userInfo);
         localStorage.setItem('userInfo', JSON.stringify(userInfo))
     }
 }
@@ -163,7 +171,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = async (
             if (!(res instanceof String)) {
                 ElMessage.success('保存成功')
                 updateLocalUserInfo(response.data.url, null, null, null)
-                // location.reload()
+                location.reload()
             } else {
                 ElMessage.error('保存失败')
             }
