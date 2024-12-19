@@ -21,17 +21,17 @@ export interface PageOutput {
     size: number;
 }
 
-export async function GetFavoriteList(): Promise<FavoriteQuestion[]> {
-// page: number
-    var res: GetFavoriteResponse;
-    res = await Get();
-    if (res.favorite_question_list) {
-        return res.favorite_question_list;
-    } else {
-        console.log("空的！");
-        return [];
-    }
-}
+// export async function GetFavoriteList(): Promise<FavoriteQuestion[]> {
+// // page: number
+//     var res: GetFavoriteResponse;
+//     res = await Get();
+//     if (res.favorite_question_list) {
+//         return res.favorite_question_list;
+//     } else {
+//         console.log("空的！");
+//         return [];
+//     }
+// }
 
 export async function GetPageFavoriteList(
     page: number

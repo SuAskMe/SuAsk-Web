@@ -43,6 +43,7 @@ const userInfo = ref<User>({
 const route = useRoute();
 
 
+
 async function getUserInfo() {
     const userId = route.params.id.toString();
     await getUserByIdApi(userId).then(res => {
