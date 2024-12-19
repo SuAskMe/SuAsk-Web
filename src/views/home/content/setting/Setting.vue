@@ -22,6 +22,7 @@
                         <el-upload action="http://127.0.0.1:8080/files" :show-file-list="false"
                             :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
                             :data="{ token: getToken() }">
+
                             <el-button type="default" size="small">
                                 <template #icon>
                                     <svg-icon icon="edit" color="#808080" />

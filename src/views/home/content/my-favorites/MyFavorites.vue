@@ -16,8 +16,10 @@
           }"
         />
         <el-pagination
-          :page-size=size
-          :total=total
+          class="pagination-bottom"
+          layout="prev, pager, next"
+          :page-size="size"
+          :total="total"
           v-model:current-page="currentPage"
           @current-change="changePage"
         ></el-pagination>
@@ -29,7 +31,7 @@
 <script setup lang="ts">
 import BackgroundImg from "@/components/backgroud-img";
 import { BubbleCard } from "@/components/bubble-card";
-import { GetFavoriteList, GetPageFavoriteList } from "./MyFavorites";
+import { GetPageFavoriteList } from "./MyFavorites";
 </script>
 
 <script lang="ts">
@@ -49,7 +51,7 @@ export default {
   methods: {
     changePage: async function () {
       this.FavoriteList = [];
-      console.log("当前页：",this.currentPage);
+      console.log("当前页：", this.currentPage);
       const data = await GetPageFavoriteList(this.currentPage);
       console.log(data);
       this.FavoriteList.push(...data.list);
@@ -61,6 +63,8 @@ export default {
       FavoriteList: [],
       currentPage: 1,
       pageSize: 1,
+      size: 1,
+      total: 1,
     };
   },
 };
