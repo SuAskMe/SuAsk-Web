@@ -19,8 +19,10 @@
                 <div class="avatar-and-id">
                     <div style="position: relative;">
                         <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar" />
-                        <el-upload action="" :show-file-list="false" :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
+                        <el-upload action="http://127.0.0.1:8080/files" :show-file-list="false"
+                            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
+                            :data="{ token: getToken() }">
+
                             <el-button type="default" size="small">
                                 <template #icon>
                                     <svg-icon icon="edit" color="#808080" />
@@ -69,7 +71,7 @@ import { ElMessage, type UploadProps } from 'element-plus';
 import ResetPasswordDialog from './ResetPasswordDialog.vue';
 import LogoutDialog from './LogoutDialog.vue';
 import { updateUserInfoApi } from '@/api/user/user.api';
-import type { User } from '@/model/user.model';
+import type { UpdateAvatar, UpdateUser, User } from '@/model/user.model';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
@@ -77,64 +79,102 @@ imgList.value = Object.values(images).map((module) => (module as any).default);
 
 const deviceType = inject('deviceType', 'desktop');
 
-interface BasicInfo {
-    avatar: string
-    name: string
-    nickname: string
-    introduction: string
-    themeId: number
-}
 
-const basicInfo: BasicInfo = reactive({
-    avatar: 'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp',
-    name: 'GenshinStart',
-    nickname: '原神启动',
-    introduction: '原神启动的个人简介',
-    themeId: 3
+const basicInfo = ref<User>({
+    id: 0,
+    role: '',
+    avatar: '',
+    name: '',
+    nickname: '',
+    introduction: '',
+    themeId: 0
 })
 
-const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) as User : null
+const userInfo: User | null = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) as User : null
+let avatarId = 0
 
 function getUserInfo() {
     if (userInfo) {
-        const parsedUserInfo = userInfo
-        basicInfo.avatar = parsedUserInfo.avatar
-        basicInfo.name = parsedUserInfo.name
-        basicInfo.nickname = parsedUserInfo.nickname
-        basicInfo.introduction = parsedUserInfo.introduction
-        basicInfo.themeId = parsedUserInfo.themeId
+        basicInfo.value = userInfo
     } else {
         ElMessage.error('获取用户信息失败')
     }
 }
 
 async function updateUserInfo() {
+    // localStorage.setItem('userInfo', JSON.stringify(userInfo))
+    const updateUserInfo: UpdateUser = {
+        avatarId: avatarId == 0 ? null : avatarId,
+        nickname: basicInfo.value.nickname,
+        introduction: basicInfo.value.introduction,
+        themeId: basicInfo.value.themeId
+    }
+    await updateUserInfoApi(updateUserInfo).then(res => {
+        if (!(res instanceof String)) {
+            ElMessage.success('保存成功')
+            console.log(basicInfo.value);
+            updateLocalUserInfo(null, basicInfo.value.nickname, basicInfo.value.introduction, basicInfo.value.themeId)
+        } else {
+            ElMessage.error('保存失败')
+        }
+    }).catch(err => {
+        console.log(err)
+        ElMessage.error('保存失败')
+        return
+    })
+}
+
+
+function updateLocalUserInfo(avatarURL: string | null, nickname: string | null, introduction: string | null, themeId: number | null) {
+    const userInfo: User = JSON.parse(localStorage.getItem('userInfo')!) as User
     if (userInfo) {
+        if (nickname) {
+            userInfo.nickname = nickname
+        }
+        if (introduction) {
+            userInfo.introduction = introduction
+        }
+        if (themeId) {
+            userInfo.themeId = themeId
+        }
+        if (avatarURL) {
+            userInfo.avatar = avatarURL
+        }
         localStorage.setItem('userInfo', JSON.stringify(userInfo))
-        await updateUserInfoApi(userInfo).then(res => {
-            if (res) {
+    }
+}
+onMounted(() => {
+    getUserInfo()
+})
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = async (
+    response,
+    uploadFile
+) => {
+    if (response.code != 0) {
+        ElMessage.error('上传失败')
+        return
+    } else {
+        avatarId = response.data.id
+        const updateUserInfo: UpdateAvatar = {
+            avatarId: avatarId,
+        }
+        await updateUserInfoApi(updateUserInfo).then(res => {
+            if (!(res instanceof String)) {
                 ElMessage.success('保存成功')
+                updateLocalUserInfo(response.data.url, null, null, null)
+                // location.reload()
             } else {
                 ElMessage.error('保存失败')
             }
         }).catch(err => {
             console.log(err)
             ElMessage.error('保存失败')
+            return
         })
     }
-    ElMessage.success('保存成功')
 
-}
-
-onMounted(() => {
-    getUserInfo()
-})
-
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response,
-    uploadFile
-) => {
-    basicInfo.avatar = URL.createObjectURL(uploadFile.raw!)
+    basicInfo.value.avatar = URL.createObjectURL(uploadFile.raw!)
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -148,22 +188,10 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     return true
 }
 
-async function loadCss() {
-    if (deviceType === 'desktop') {
-        await import('./desktop.scss');
-    } else {
-        await import('./phone.scss');
-    }
-
+function getToken() {
+    return localStorage.getItem('token')
 }
 
-onMounted(() => {
-    loadCss();
-})
-
-watch(() => deviceType, () => {
-    loadCss();
-})
 
 const showResetPassword = ref(false);
 
@@ -178,7 +206,7 @@ function showLogoutDialog() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped src="./desktop.scss">
 :deep(.el-dialog) {
     border-radius: 15px;
 }

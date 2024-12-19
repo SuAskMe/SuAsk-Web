@@ -17,11 +17,14 @@ export interface ForgetPasswordForm {
 }
 
 export interface UpdateUser {
-    id: number;
-    nickname: string;
-    introduction: string;
-    avatar: string;
-    themeId: number;
+    nickname: string | null;
+    introduction: string | null;
+    avatarId: number | null;
+    themeId: number | null;
+}
+
+export interface UpdateAvatar {
+    avatarId: number | null;
 }
 
 export interface User {
@@ -30,7 +33,7 @@ export interface User {
     nickname: string;
     role: string;
     introduction: string;
-    avatar: string;
+    avatar: string | null;
     themeId: number;
 }
 
