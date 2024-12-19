@@ -36,15 +36,23 @@ const userInfo = ref<User>({
     nickname: '',
     role: '',
     introduction: '',
-    avatar: '',
+    avatar: null,
     themeId: 0
 });
+
 const route = useRoute();
+
 
 async function getUserInfo() {
     const userId = route.params.id.toString();
     await getUserByIdApi(userId).then(res => {
         userInfo.value = res.data;
+        console.log(userInfo.value);
+        const default_avatar = 'default-avatar';
+        if (userInfo.value.avatar == default_avatar) {
+            userInfo.value.avatar = new URL('@/assets/default-avatar.png', import.meta.url).href;
+            console.log(userInfo.value.avatar);
+        }
     }).catch(err => {
         console.log(err);
     });
