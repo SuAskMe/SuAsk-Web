@@ -94,7 +94,6 @@ const deleteImage = (index: number) => {
 
 // 草稿
 import { db, type Question } from "./db";
-import { fi } from "element-plus/es/locales.mjs";
 
 const deleteDrafts = ref<any[]>([]);
 const deleteMod = ref(false);
