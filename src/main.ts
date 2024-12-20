@@ -9,6 +9,7 @@ import { isMobile } from './utils/device'
 import { setupStore } from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 config({
     markdownItConfig(md) {
@@ -34,6 +35,9 @@ const app = createApp(App)
 const deviceType = isMobile() ? 'mobile' : 'desktop';
 app.provide('deviceType', deviceType);
 
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 
 setupRouter(app);
 setupStore(app);
