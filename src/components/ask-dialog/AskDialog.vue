@@ -94,9 +94,8 @@ const deleteImage = (index: number) => {
 
 // 草稿
 import { db, type Question } from "./db";
-import { fi } from "element-plus/es/locales.mjs";
 
-const deleteDrafts = ref<any>([]);
+const deleteDrafts = ref<any[]>([]);
 const deleteMod = ref(false);
 
 function handleDeleteMod() {
@@ -121,8 +120,12 @@ function handleCheckAllChange() {
 }
 
 function useDraft(draft: Question) {
+    if (deleteMod.value)
+        return;
     title.value = draft.title;
     contents.value = draft.content;
+    fileList.value = [];
+    imageList.value = [];
     for (const img of draft.imgList) {
         imageList.value.push({
             id: GenId(),
@@ -186,7 +189,7 @@ async function deleteDraft() {
                         @mouseleave="hoverColor = '#000000'">
                         <Close />
                     </el-icon>
-                    <el-button @click="openDraft" type="primary" round>草稿</el-button>
+                    <el-button @click="openDraft" type="primary" round text>草稿</el-button>
                 </div>
             </template>
             <div v-if="!isDraft">
@@ -213,7 +216,7 @@ async function deleteDraft() {
                     <SvgIcon @click.stop="pickImage" icon="image" size="24px" color="#71b6ff" style="cursor: pointer" />
                     <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
                         @change="pickImageImpl" multiple />
-                    <el-button type="primary" round>发布</el-button>
+                    <el-button type="primary" round color="#71b6ff" style="color: white;">发布</el-button>
                 </div>
             </div>
             <!-- 草稿 -->
@@ -226,24 +229,30 @@ async function deleteDraft() {
                         </el-icon>
                         <p>草稿</p>
                     </div>
-                    <el-button v-if="!deleteMod" @click="handleDeleteMod" type="primary" round>编辑</el-button>
-                    <el-button v-if="deleteMod" @click="handleDeleteMod" type="primary" round>完成</el-button>
+                    <el-button v-if="!deleteMod" @click="handleDeleteMod" type="primary" round color="#71b6ff"
+                        style="color: white;">编辑</el-button>
+                    <el-button v-if="deleteMod" @click="handleDeleteMod" type="primary" round color="#71b6ff"
+                        style="color: white;">完成</el-button>
                 </div>
             </template>
             <div v-if="isDraft">
                 <el-checkbox-group v-model="deleteDrafts" class="draft" v-if="drafts.length != 0">
-                    <div @click="useDraft(draft)" v-for="draft in drafts" :key="draft.id" class="draft-card">
-                        <div style="display: flex; flex-direction: column;">
-                            <p class="title">{{ draft.title }}</p>
-                            <p class="content">{{ draft.content }}</p>
+                    <div v-for="draft in drafts" :key="draft.id" class="border">
+                        <div @click="useDraft(draft)" class="draft-card">
+                            <div style="display: flex; flex-direction: column;">
+                                <p class="title">{{ draft.title }}</p>
+                                <p class="content">{{ draft.content }}</p>
+                            </div>
+                            <img-list v-if="draft.imgList.length != 0" :img-list="draft.imgList"></img-list>
                         </div>
-                        <img-list v-if="draft.imgList.length != 0" :img-list="draft.imgList"></img-list>
                         <el-checkbox v-if="deleteMod" :value="draft.id" />
                     </div>
                 </el-checkbox-group>
                 <div v-if="deleteMod" class="footer">
-                    <el-button @click="handleCheckAllChange" type="primary" size="small" round>全选</el-button>
-                    <el-button @click="deleteDraft" type="danger" size="small" round>删除</el-button>
+                    <el-button @click="handleCheckAllChange" type="primary" size="small" round color="#71b6ff"
+                        style="color: white;">全选</el-button>
+                    <el-button @click="deleteDraft" type="danger" size="small" round
+                        :disabled="deleteDrafts.length == 0">删除</el-button>
                 </div>
                 <div v-if="drafts.length == 0">
                     <p>暂无草稿</p>
@@ -327,13 +336,19 @@ async function deleteDraft() {
     .draft {
         line-height: 20px;
 
+        .border {
+            display: flex;
+            border-top: 1px solid #ebeef5;
+            border-bottom: 1px solid #ebeef5;
+        }
+
         .draft-card {
             display: flex;
+            width: 100%;
             justify-content: space-between;
             gap: 10px;
             padding: 10px;
-            border-top: 1px solid #ebeef5;
-            border-bottom: 1px solid #ebeef5;
+
 
             .title {
                 height: 16px;
