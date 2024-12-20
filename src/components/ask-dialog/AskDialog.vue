@@ -39,6 +39,10 @@ function saveDraft() {
 function cancelSaveDraft() {
     innerVisible.value = false;
     visible.value = false;
+    title.value = "";
+    contents.value = "";
+    fileList.value = [];
+    imageList.value = [];
 }
 
 defineProps<{
@@ -180,7 +184,7 @@ async function deleteDraft() {
 
 <template>
     <div class="dialog">
-        <el-dialog v-model="visible" :fullscreen="fullscreen" width="40%" :show-close="false"
+        <el-dialog v-model="visible" :fullscreen="fullscreen" width="600px" :show-close="false"
             :before-close="handleClose">
             <!-- 正文 -->
             <template v-if="!isDraft" #header="{ close }">
@@ -239,7 +243,7 @@ async function deleteDraft() {
                 <el-checkbox-group v-model="deleteDrafts" class="draft" v-if="drafts.length != 0">
                     <div v-for="draft in drafts" :key="draft.id" class="border">
                         <div @click="useDraft(draft)" class="draft-card">
-                            <div style="display: flex; flex-direction: column;">
+                            <div class="text-space">
                                 <p class="title">{{ draft.title }}</p>
                                 <p class="content">{{ draft.content }}</p>
                             </div>
@@ -334,7 +338,8 @@ async function deleteDraft() {
     }
 
     .draft {
-        line-height: 20px;
+        line-height: auto;
+        width: 100%;
 
         .border {
             display: flex;
@@ -343,23 +348,38 @@ async function deleteDraft() {
         }
 
         .draft-card {
-            display: flex;
+            display: inline-flex;
             width: 100%;
             justify-content: space-between;
-            gap: 10px;
             padding: 10px;
 
+            .text-space {
+                width: 400px;
+                display: flex;
+                flex-direction: column;
 
-            .title {
-                height: 16px;
-                font-size: 16px;
-                font-weight: bold;
+                .title {
+                    padding-top: 10px;
+                    font-size: 16px;
+                    line-height: 16px;
+                    font-weight: bold;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .content {
+                    padding-top: 5px;
+                    line-height: 14px;
+                    font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
 
-            .content {
-                padding-top: 5px;
-                height: 14px;
-                font-size: 14px;
+            img-list {
+                width: 100%;
             }
 
             p {
