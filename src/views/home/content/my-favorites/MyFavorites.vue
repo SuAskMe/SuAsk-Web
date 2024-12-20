@@ -17,14 +17,43 @@
 <script setup lang="ts">
 import BackgroundImg from "@/components/backgroud-img";
 import { BubbleCard } from "@/components/bubble-card";
-import { GetPageFavoriteList } from "./MyFavorites";
+import { GetPageFavoriteList, type FavoriteQuestion } from "./MyFavorites";
 import { getUserInfo } from "@/utils/userInfo";
+import { onMounted, ref } from "vue";
 
 const bg_img_index = getUserInfo().themeId
-console.log(bg_img_index);
+// console.log(bg_img_index);
+
+const FavoriteList = ref<FavoriteQuestion[]>([]);
+const currentPage = ref(1);
+const size = ref(1);
+const total = ref(1);
+const pageSize = ref(1);
+
+async function changePage() {
+  FavoriteList.value = [];
+  console.log("当前页：", currentPage.value);
+  const data = await GetPageFavoriteList(currentPage.value);
+  console.log(data);
+  FavoriteList.value.push(...data.list);
+  console.log(FavoriteList.value);
+
+}
+
+async function created() {
+  const data = await GetPageFavoriteList(currentPage.value);
+  console.log(data);
+  size.value = data.size;
+  total.value = data.total;
+  FavoriteList.value.push(...data.list);
+}
+
+onMounted(() => {
+  created();
+});
 </script>
 
-<script lang="ts">
+<!-- <script lang="ts">
 export default {
   name: "收藏页面组件",
 
@@ -58,6 +87,6 @@ export default {
     };
   },
 };
-</script>
+</script> -->
 
 <style scoped src="./MyFavorites.scss"></style>
