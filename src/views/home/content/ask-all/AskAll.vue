@@ -35,7 +35,7 @@ const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 const bg_img_index = getUserInfo().themeId
-console.log(bg_img_index);
+// console.log(bg_img_index);
 
 
 const Init = async () => {

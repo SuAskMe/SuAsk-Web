@@ -22,7 +22,7 @@ import { getUserInfo } from "@/utils/userInfo";
 import { onMounted, ref } from "vue";
 
 const bg_img_index = getUserInfo().themeId
-console.log(bg_img_index);
+// console.log(bg_img_index);
 
 const FavoriteList = ref<FavoriteQuestion[]>([]);
 const currentPage = ref(1);
