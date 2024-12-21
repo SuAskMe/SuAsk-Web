@@ -4,7 +4,6 @@ export interface QuestionBase {
     title: string;
     content: string;
     is_private: boolean;
-    files: File[];
 }
 
 export interface Teacher {
