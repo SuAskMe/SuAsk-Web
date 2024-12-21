@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { ref } from "vue";
 import "md-editor-v3/lib/style.css";
 import SvgIcon from "@/components/svg-icon";
-import { ElMessage, ElMessageBox, type UploadInstance } from "element-plus";
+import { ElMessage } from "element-plus";
 import { GenId } from "@/views/home/content/question-detail/QuestionDetail";
 import { getUserInfo } from "@/utils/userInfo";
 import ImgList from "./ImgList.vue";
@@ -22,7 +22,8 @@ function handleClose(done: () => void) {
         setTimeout(() => {
             isDraft.value = false;
         }, 300);
-    } else if (title.value == "" && contents.value == "" && fileList.value.length == 0) {
+        clearQuestionContent();
+    } else if (questionContent.value.title == "" && questionContent.value.content == "" && questionContent.value.fileList.length == 0) {
         done();
     }
     else {
@@ -36,20 +37,46 @@ function saveDraft() {
     visible.value = false;
 }
 
+function clearQuestionContent() {
+    questionContent.value.title = "";
+    questionContent.value.content = "";
+    questionContent.value.fileList = [];
+    questionContent.value.imageList = [];
+}
+
 function cancelSaveDraft() {
     innerVisible.value = false;
     visible.value = false;
+    clearQuestionContent();
 }
 
-defineProps<{
+const props = defineProps<{
     fullscreen?: boolean;
-    teacherName?: string;
-    avatarURL?: string;
+    teacher?: Teacher
 }>();
 
-const title = ref("");
-const contents = ref("");
-const isPublic = ref(false);
+interface Img {
+    id: number;
+    url: string;
+}
+
+interface Ask {
+    draftId?: number,
+    title: string,
+    content: string,
+    isPrivate: boolean
+    fileList: File[]
+    imageList: Img[]
+}
+
+const questionContent = ref<Ask>({
+    draftId: undefined,
+    title: "",
+    content: "",
+    isPrivate: false,
+    fileList: [],
+    imageList: []
+})
 
 const avatarURL = getUserInfo().avatar;
 
@@ -61,41 +88,37 @@ const pickImage = () => {
         imgPicker.value.click();
     }
 };
-interface Img {
-    id: number;
-    url: string;
-}
-const fileList = ref<File[]>([]);
-const imageList = ref<Img[]>([]);
 
 const pickImageImpl = (event: any) => {
-    if (fileList.value && imageList.value) {
+    if (questionContent.value.fileList && questionContent.value.imageList) {
         const files = event.target.files;
-        if (fileList.value.length + files.length > 8) {
+        if (questionContent.value.fileList.length + files.length > 8) {
             ElMessage.error("最多只能上传8张图片");
             return;
         }
-        fileList.value.push(...files);
+        questionContent.value.fileList.push(...files);
         for (let i = 0; i < files.length; i++) {
-            imageList.value.push({
+            questionContent.value.imageList.push({
                 id: GenId(),
                 url: URL.createObjectURL(files[i]),
             });
         }
         if (imgPicker.value) imgPicker.value.value = "";
-        console.log(fileList.value, imageList.value);
+        console.log(questionContent.value.fileList, questionContent.value.imageList);
     }
 };
 
 const deleteImage = (index: number) => {
-    fileList.value.splice(index, 1);
-    imageList.value.splice(index, 1);
+    questionContent.value.fileList.splice(index, 1);
+    questionContent.value.imageList.splice(index, 1);
 };
 
 // 草稿
 import { db, type Question } from "./db";
+import type { QuestionBase, Teacher } from "@/model/question.model";
+import { addQuestionApi } from "@/api/question/question.api";
 
-const deleteDrafts = ref<any[]>([]);
+const deleteDrafts = ref<number[]>([]);
 const deleteMod = ref(false);
 
 function handleDeleteMod() {
@@ -122,30 +145,31 @@ function handleCheckAllChange() {
 function useDraft(draft: Question) {
     if (deleteMod.value)
         return;
-    title.value = draft.title;
-    contents.value = draft.content;
-    fileList.value = [];
-    imageList.value = [];
+    questionContent.value.title = draft.title;
+    questionContent.value.content = draft.content;
+    questionContent.value.fileList = [];
+    questionContent.value.imageList = [];
     for (const img of draft.imgList) {
-        imageList.value.push({
+        questionContent.value.imageList.push({
             id: GenId(),
             url: URL.createObjectURL(img),
         });
         const file = img as File;
-        fileList.value.push(new File([file], file.name, { type: file.type }));
+        questionContent.value.fileList.push(new File([file], file.name, { type: file.type }));
     }
+    questionContent.value.draftId = draft.id;
     isDraft.value = false;
 }
 
 async function addDraft() {
     let imgList: Blob[] = [];
-    for (const file of fileList.value) {
+    for (const file of questionContent.value.fileList) {
         imgList.push(file);
     }
     try {
         const id = await db.questions.add({
-            title: title.value,
-            content: contents.value,
+            title: questionContent.value.title,
+            content: questionContent.value.content,
             imgList: imgList,
             time: new Date(),
         });
@@ -164,11 +188,16 @@ async function getDrafts() {
     }
 }
 
-async function deleteDraft() {
+async function deleteDraft(id: number | number[]) {
     try {
-        for (const id of deleteDrafts.value) {
+        if (typeof id === 'number') {
             await db.questions.delete(id);
             console.log("Draft deleted with id", id);
+        } else {
+            for (const draftId of id) {
+                await db.questions.delete(draftId);
+                console.log("Draft deleted with id", draftId);
+            }
         }
         await getDrafts();
     } catch (error) {
@@ -176,11 +205,37 @@ async function deleteDraft() {
     }
 }
 
+async function postQuestion() {
+    let userId = getUserInfo().id ? getUserInfo().id : null
+    let req: QuestionBase = {
+        src_user_id: userId,
+        dst_user_id: null,
+        title: questionContent.value.title,
+        content: questionContent.value.content,
+        is_private: questionContent.value.isPrivate,
+        files: questionContent.value.fileList
+    }
+    if (props.teacher) {
+        req.dst_user_id = props.teacher.teacherId
+    }
+    await addQuestionApi(req).then(res => {
+        if (!(typeof res == "string")) {
+            ElMessage.success("提问成功")
+            visible.value = false
+            if (questionContent.value.draftId) {
+                deleteDraft(questionContent.value.draftId)
+            }
+        } else {
+            ElMessage.error("提问失败")
+        }
+    })
+}
+
 </script>
 
 <template>
     <div class="dialog">
-        <el-dialog v-model="visible" :fullscreen="fullscreen" width="40%" :show-close="false"
+        <el-dialog v-model="visible" :fullscreen="fullscreen" width="600px" :show-close="false"
             :before-close="handleClose">
             <!-- 正文 -->
             <template v-if="!isDraft" #header="{ close }">
@@ -195,15 +250,16 @@ async function deleteDraft() {
             <div v-if="!isDraft">
                 <div class="title">
                     <el-avatar :src="avatarURL" :size="40" />
-                    <el-input v-model="title" placeholder="问题标题" style="width: 87%;"
+                    <el-input v-model="questionContent.title" placeholder="问题标题" style="width: 87%;"
                         :input-attrs="{ style: 'font-size: 16px;' }" />
                 </div>
                 <div class="content">
-                    <el-input v-model="contents" :autosize="{ minRows: 6, maxRows: 8 }" type="textarea"
+                    <el-input v-model="questionContent.content" :autosize="{ minRows: 6, maxRows: 8 }" type="textarea"
                         placeholder="问题内容" />
                 </div>
                 <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
-                    <div class="picked-image" v-for="(img, index) in imageList" :key="img.id" :id="'image-' + img.id">
+                    <div class="picked-image" v-for="(img, index) in questionContent.imageList" :key="img.id"
+                        :id="'image-' + img.id">
                         <el-image @click.stop :src="img.url" :preview-src-list="[img.url]" class="image" fit="cover"
                             preview-teleported></el-image>
                         <div class="delete-btn" @click.stop="deleteImage(index)">
@@ -216,7 +272,8 @@ async function deleteDraft() {
                     <SvgIcon @click.stop="pickImage" icon="image" size="24px" color="#71b6ff" style="cursor: pointer" />
                     <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
                         @change="pickImageImpl" multiple />
-                    <el-button type="primary" round color="#71b6ff" style="color: white;">发布</el-button>
+                    <el-button @click="postQuestion" type="primary" round color="#71b6ff"
+                        style="color: white;">发布</el-button>
                 </div>
             </div>
             <!-- 草稿 -->
@@ -239,7 +296,7 @@ async function deleteDraft() {
                 <el-checkbox-group v-model="deleteDrafts" class="draft" v-if="drafts.length != 0">
                     <div v-for="draft in drafts" :key="draft.id" class="border">
                         <div @click="useDraft(draft)" class="draft-card">
-                            <div style="display: flex; flex-direction: column;">
+                            <div class="text-space">
                                 <p class="title">{{ draft.title }}</p>
                                 <p class="content">{{ draft.content }}</p>
                             </div>
@@ -251,7 +308,7 @@ async function deleteDraft() {
                 <div v-if="deleteMod" class="footer">
                     <el-button @click="handleCheckAllChange" type="primary" size="small" round color="#71b6ff"
                         style="color: white;">全选</el-button>
-                    <el-button @click="deleteDraft" type="danger" size="small" round
+                    <el-button @click="deleteDraft(deleteDrafts)" type="danger" size="small" round
                         :disabled="deleteDrafts.length == 0">删除</el-button>
                 </div>
                 <div v-if="drafts.length == 0">
@@ -334,7 +391,8 @@ async function deleteDraft() {
     }
 
     .draft {
-        line-height: 20px;
+        line-height: auto;
+        width: 100%;
 
         .border {
             display: flex;
@@ -343,23 +401,38 @@ async function deleteDraft() {
         }
 
         .draft-card {
-            display: flex;
+            display: inline-flex;
             width: 100%;
             justify-content: space-between;
-            gap: 10px;
             padding: 10px;
 
+            .text-space {
+                width: 400px;
+                display: flex;
+                flex-direction: column;
 
-            .title {
-                height: 16px;
-                font-size: 16px;
-                font-weight: bold;
+                .title {
+                    padding-top: 10px;
+                    font-size: 16px;
+                    line-height: 16px;
+                    font-weight: bold;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .content {
+                    padding-top: 5px;
+                    line-height: 14px;
+                    font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
             }
 
-            .content {
-                padding-top: 5px;
-                height: 14px;
-                font-size: 14px;
+            img-list {
+                width: 100%;
             }
 
             p {
