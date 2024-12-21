@@ -43,7 +43,7 @@ import RegisterPage from './RegisterPage.vue';
 import { loginApi } from '@/api/user/login.api';
 import { getUserInfoApi } from '@/api/user/user.api';
 import { mailCheck } from '@/utils/login/register';
-import type { LoginReq, LoginRes } from '@/model/user.model';
+import type { LoginReq, LoginRes, User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
 import { router } from '@/router';
 
@@ -67,9 +67,20 @@ async function login() {
         loginData.name = userNameOrEmail.value;
     }
     await loginApi(loginData).then(res => {
-        console.log(res);
-        const user: LoginRes = res.data;
+        const user: User = {
+            id: res.data.id,
+            name: res.data.name,
+            nickname: res.data.nickname,
+            role: res.data.role,
+            introduction: res.data.introduction,
+            avatar: res.data.avatar,
+            themeId: res.data.themeId
+        }
         const token = res.data.token;
+        if (user.avatar == 'default-avatar') {
+            user.avatar = new URL('@/assets/default-avatar.png', import.meta.url).href;
+        }
+        console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('userInfo', JSON.stringify(user));
         ElMessage.success('登录成功');

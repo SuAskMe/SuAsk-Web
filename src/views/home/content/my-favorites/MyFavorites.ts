@@ -11,7 +11,7 @@ export interface FavoriteQuestion {
     title: string;
     contents: string;
     views: number;
-    favorite_at: string;
+    favorite_at: number;
     // image_urls: string[];
 }
 

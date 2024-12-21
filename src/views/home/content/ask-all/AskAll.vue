@@ -1,38 +1,18 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <Header
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-            />
+            <Header @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" />
         </el-header>
         <el-main class="main-container">
-            <BackgroundImg img_index="1" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleQuestion
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-favourite="question.is_favorited"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favourite="favourite"
-                    width="45vw"
-                    :style="{
+            <BackgroundImg :img_index="bg_img_index" class="background-img" />
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                    :text="question.contents" :views="question.views" :time-stamp="question.created_at"
+                    :image-urls="question.image_urls" :is-favourite="question.is_favorited"
+                    :answer-num="question.answer_num" :avatars="question.answer_avatars" :bubble-key="index"
+                    :click-card="navigateTo" :click-favourite="favourite" width="45vw" :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }"
-                />
+                    }" />
             </el-scrollbar>
             <AskDialog v-model:visible="showDialog" />
             <div class="ask-btn" @click.stop="showDialog = true">+</div>
@@ -49,9 +29,14 @@ import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
 import { Favorite, getNextQuestions, type QuestionItem } from "./AskAll";
 import { router } from "@/router";
+import { getUserInfo } from "@/utils/userInfo";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+
+const bg_img_index = getUserInfo().themeId
+// console.log(bg_img_index);
+
 
 const Init = async () => {
     if (questionList.length === 0) {

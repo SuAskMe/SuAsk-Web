@@ -1,9 +1,9 @@
-import type { UpdateUser } from "@/model/user.model";
+import type { UpdateAvatar, UpdateUser } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
     UPDATE_PASSWORD = '/user/update-password',
-    UPDATE_USER_INFO = '/user/update-user-info',
+    UPDATE_USER_INFO = '/user/update-user',
     GET_USER_INFO = '/user/info',
     GET_USER_BY_ID = '/user/get-user',
 }
@@ -12,7 +12,7 @@ export async function updatePasswordApi(password: string) {
     return request.post(Api.UPDATE_PASSWORD, password);
 }
 
-export async function updateUserInfoApi(userInfo: UpdateUser) {
+export async function updateUserInfoApi(userInfo: UpdateUser | UpdateAvatar) {
     return request.post(Api.UPDATE_USER_INFO, userInfo);
 }
 
