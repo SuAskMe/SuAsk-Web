@@ -3,10 +3,15 @@
     <el-main class="main-container">
       <BackgroundImg :img_index="bg_img_index" class="background-img" />
       <el-scrollbar>
-        <BubbleCard v-for="(question, index) in HistoryList" :key="question.id" :title="question.title"
-          :text="question.contents" :views="question.views" :time-stamp="question.created_at"
-          :image-urls="question.image_urls" width="45vw" :style="{
-            marginTop: index === 0 ? '24px' : '0',
+        <BubbleCard v-for="(question, index) in HistoryList" 
+        :key="question.id" 
+        :title="question.title"
+        :text="question.contents" 
+        :views="question.views" 
+        :time-stamp="question.created_at"
+        :image-urls="question.image_urls" width="45vw" 
+        :style="{
+          marginTop: index === 0 ? '24px' : '0',
           }" />
         <el-pagination class="pagination-bottom" layout="prev, pager, next" :page-size="size" :total="total"
           v-model:current-page="currentPage" @current-change="changePage"></el-pagination>
