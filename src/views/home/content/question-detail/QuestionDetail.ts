@@ -1,23 +1,20 @@
 let skipLock = false;
-let animationLock = false;
 
 const obersever = new IntersectionObserver(
     (entries) => {
         entries.forEach((entry) => {
-            if (!animationLock && entry.isIntersecting) {
-                animationLock = true;
-                entry.target.classList.add("card-highlight");
-                setTimeout(() => {
-                    entry.target.classList.remove("card-highlight");
-                    animationLock = false;
-                }, 1800);
+            if (entry.isIntersecting) {
+                entry.target.animate(
+                    [{ background: "#80808050" }, { background: "#80808000" }],
+                    { duration: 1500, easing: "ease-in-out", iterations: 1 }
+                )
             }
         });
     },
     { threshold: 1.0 }
 );
 
-export const scrollToQuoute = (key: {
+export const scrollToQuote = (key: {
     id: number;
     quoteId: number;
     userId: number;
