@@ -3,7 +3,7 @@
         <div class="return-btn" @click.stop="$emit('return')">
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
-        <div class="title">{{ title }}</div>
+        <!-- <div class="title">{{ title }}</div> -->
         <div class="sort-and-search">
             <el-dropdown class="header-item">
                 <span class="dropdown">
@@ -12,11 +12,7 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item
-                            v-for="(item, index) in sortText"
-                            :key="index"
-                            @click="changeSort(index)"
-                        >
+                        <el-dropdown-item v-for="(item, index) in sortText" :key="index" @click="changeSort(index)">
                             {{ item }}
                         </el-dropdown-item>
                     </el-dropdown-menu>
