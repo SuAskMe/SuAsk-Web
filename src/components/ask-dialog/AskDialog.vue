@@ -229,7 +229,7 @@ async function postQuestion() {
     formData.append('is_private', req.is_private.toString());
 
     await addQuestionApi(formData).then(res => {
-        if (!(typeof res == "string")) {
+        if (res) {
             ElMessage.success("提问成功");
             visible.value = false;
             if (questionContent.value.draftId) {
@@ -240,34 +240,6 @@ async function postQuestion() {
         }
     });
 }
-
-// async function postQuestion() {
-//     let userId = getUserInfo().id ? getUserInfo().id : null;
-//     console.log(questionContent.value.fileList);
-
-//     let formData = new FormData();
-//     formData.append('src_user_id', userId?.toString() || '');
-//     formData.append('dst_user_id', props.teacher ? props.teacher.teacherId.toString() : '');
-//     formData.append('title', questionContent.value.title);
-//     formData.append('content', questionContent.value.content);
-//     formData.append('is_private', questionContent.value.isPrivate.toString());
-
-//     questionContent.value.fileList.forEach((file: File) => {
-//         formData.append('files', file);
-//     });
-
-//     await addQuestionApi(formData).then(res => {
-//         if (!(typeof res == "string")) {
-//             ElMessage.success("提问成功");
-//             visible.value = false;
-//             if (questionContent.value.draftId) {
-//                 deleteDraft(questionContent.value.draftId);
-//             }
-//         } else {
-//             ElMessage.error("提问失败");
-//         }
-//     });
-// }
 
 </script>
 

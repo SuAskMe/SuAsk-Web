@@ -1,7 +1,7 @@
 <template>
-    <el-card shadow="hover" class="teacher-card">
+    <el-card shadow="hover" class="teacher-card" :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
         <div class="card-left">
-            <img :src="teacher.avatar" class="teacher-avatar" />
+            <img :src="teacher.avatarUrl" class="teacher-avatar" />
             <el-button class="teacher-btn" round>Ta的主页</el-button>
         </div>
         <div class="card-right">
@@ -9,30 +9,26 @@
                 <div class="teacher-name">{{ teacher.name }}</div>
 
                 <div class="teacher-title">教师简介：</div>
-                <div class="teacher-text">
+                <div class="teacher-introduction">
                     {{ teacher.introduction }}
                 </div>
                 <div class="teacher-title">教师邮箱：</div>
-                <div class="teacher-text">{{ teacher.email }}</div>
+                <div class="teacher-email">{{ teacher.email }}</div>
             </div>
         </div>
 
         <div class="card-corner">
             <svg-icon icon="chat-history" size="20" color="#808080" />
-            <div class="card-corner-text">{{ teacher.count }}</div>
+            <div class="card-corner-text">{{ teacher.responses }}</div>
         </div>
     </el-card>
 </template>
 
 <script setup lang="ts">
+import type { TeacherItem } from '@/model/teacher.model';
+
 interface CardProps {
-    teacher: {
-        name: string;
-        avatar: string;
-        introduction: string;
-        email: string | null;
-        count: number;
-    };
+    teacher: TeacherItem;
 }
 const props = defineProps<CardProps>();
 </script>
@@ -109,9 +105,22 @@ const props = defineProps<CardProps>();
             color: $su-blue;
         }
 
-        .teacher-text {
+        .teacher-email {
             font-size: 1em;
             line-height: 1.25;
+            margin-bottom: 10px;
+            color: $su-grey;
+        }
+
+        .teacher-introduction {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: 1em;
+            line-height: 1.25;
+            overflow: hidden;
+            text-overflow: ellipsis;
             margin-bottom: 10px;
             color: $su-grey;
         }

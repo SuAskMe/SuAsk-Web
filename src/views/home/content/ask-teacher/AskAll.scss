@@ -1,0 +1,40 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .main-container {
+    position: relative;
+    border-top: solid 1px $su-border;
+    padding: 0;
+
+    .ask-btn {
+      position: absolute;
+      bottom: 56px;
+      right: 56px;
+      width: 56px;
+      height: 56px;
+      background-color: $su-blue-dark;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 46px;
+      font-weight: lighter;
+      cursor: pointer;
+      transform: translateY(0);
+      transition: all 0.3s ease;
+    }
+
+    .ask-btn:hover {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+.background-img {
+  position: absolute;
+  //   top: 0;
+}

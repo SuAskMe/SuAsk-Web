@@ -27,7 +27,7 @@ import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import AskDialog from "@/components/ask-dialog";
-import { Favorite, getNextQuestions, type QuestionItem } from "./AskAll";
+import { Favorite, getNextQuestions, type QuestionItem } from "./askTeacher";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 const showDialog = ref(false);
@@ -35,7 +35,6 @@ const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 const bg_img_index = getUserInfo().themeId
-// console.log(bg_img_index);
 
 
 const Init = async () => {

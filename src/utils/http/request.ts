@@ -11,8 +11,9 @@ request.interceptors.response.use(res => {
         if (res.data.code == 0) {
             return res.data
         } else {
-            ElMessage.error(res.data.message)
-            return res.data.message
+            // ElMessage.error(res.data.message)
+            console.log("错误:\n", res.data.message);
+            return null
         }
     } else {
         ElMessage.error("请求错误")

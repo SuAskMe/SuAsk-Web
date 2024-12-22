@@ -1,6 +1,7 @@
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
+
 const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
@@ -19,6 +20,7 @@ const Header = () => import("@/views/home/header/Header.vue");
 const SearchFooter = () => import("@/views/home/footer/SearchFooter.vue");
 const PhoneMainFooter = () =>
     import("@/views/home/footer/phone/PhoneMainFooter.vue");
+const TeacherQuestionBox = () => import("@/views/home/content/ask-teacher/TeacherQuestionBox.vue");
 
 export const HomeRoute: AppRouteRecordRaw = {
     path: "/home",
@@ -50,7 +52,7 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: "question-detail/:id/:title",
+            path: "question-detail/:id",
             name: "QuestionDetail",
             meta: {},
             components: {
@@ -66,6 +68,17 @@ export const HomeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskTeacher,
+                sidebar: Sidebar,
+            }
+        },
+        {
+            path: "ask-teacher/:id",
+            name: "AskTeacherDetail",
+            meta: {
+                title: "问老师",
+            },
+            components: {
+                default: TeacherQuestionBox,
                 sidebar: Sidebar,
             },
         },

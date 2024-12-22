@@ -4,30 +4,18 @@
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
                     <div class="header-content">
-                        <el-autocomplete
-                            v-model="searchInput"
-                            placeholder="请输入想要搜索的老师姓名"
-                            :fetch-suggestions="querySearch"
-                            :debounce="100"
-                            @input="resetList"
-                            clearable
-                        ></el-autocomplete>
+                        <el-autocomplete v-model="searchInput" placeholder="请输入想要搜索的老师姓名"
+                            :fetch-suggestions="querySearch" :debounce="100" @input="resetList"
+                            clearable></el-autocomplete>
                         <div class="search-teacher-btn" @click.stop="searchBtn">
-                            <SvgIcon
-                                icon="search"
-                                size="calc(1em + 10px)"
-                                color="#71b6ff"
-                            />
+                            <SvgIcon icon="search" size="calc(1em + 10px)" color="#71b6ff" />
                         </div>
                         <div :class="{ 'bottom-line': isAtTop }"></div>
                     </div>
                 </div>
                 <div class="teacher-list">
-                    <TeacherCard
-                        v-for="(teacher, index) in teacherList"
-                        :key="index"
-                        :teacher="teacher"
-                    ></TeacherCard>
+                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher">
+                    </TeacherCard>
                 </div>
             </el-scrollbar>
         </div>
@@ -36,115 +24,36 @@
 
 <script setup lang="ts">
 import SvgIcon from "@/components/svg-icon";
-import { onMounted, onUnmounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import TeacherCard from "@/components/teacher-card";
+import { getTeacherApi } from "@/api/teacher/teacher.api";
+import type { TeacherItem } from "@/model/teacher.model";
 
-let teachersObj: TeacherItem[] = [
-    {
-        name: "郑子彬",
-        avatar: "https://sse.sysu.edu.cn/sites/default/files/styles/image_style_2/public/%E9%83%91%E5%AD%90%E5%BD%AC_0.jpg?itok=IFxeXGlr", // 替换为实际图片地址
-        introduction:
-            "软件可靠性、程序分析、区块链、智能合约、可信软件。本科...",
-        email: null,
-        count: 100,
-    },
-    {
-        name: "余阳",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "工作流/BPM、服务计算/云计算、网络社会协作、软件工程。",
-        email: "yuy@mail.sysu.edu.cn",
-        count: 50,
-    },
-    {
-        name: "王国利",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "普适计算、泛在感知与泛在智能。",
-        email: null,
-        count: 10,
-    },
-    {
-        name: "王若梅",
-        avatar: "https://via.placeholder.com/150",
-        introduction:
-            "计算机图形学理论和应用，三维计算机仿真，视频数据分析与处理。",
-        email: null,
-        count: 20,
-    },
-    {
-        name: "aaa",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "算法设计与分析，演化算法。",
-        email: null,
-        count: 15,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-    {
-        name: "陈武辉",
-        avatar: "https://via.placeholder.com/150",
-        introduction: "软件工程、软件测试、软件质量保证。",
-        email: "chenwuh@mail.sysu.edu.cn",
-        count: 30,
-    },
-];
+async function getTeacherList() {
+    await getTeacherApi().then((res) => {
+        teacherList.value = res.data.teachers;
+        console.log(teacherList.value);
+    }).then(() => {
+        let teachersObj = teacherList.value
+        // teachersObj.for((teacher) => {
+        //     teacher.value = teacher.name;
+        // });
+        for (let i = 0; i < teachersObj.length; i++) {
+            teachersObj[i].value = teachersObj[i].name;
+        }
+        teachersStr = JSON.stringify(teachersObj);
+    });
+}
 
-let teachersStr = JSON.stringify(teachersObj);
+let teacherList = ref<TeacherItem[]>([]);
 
-type TeacherItem = {
-    value?: string;
-    name: string; // 老师姓名
-    avatar: string; // 老师头像
-    // level: string; // 老师级别
-    introduction: string; // 老师介绍
-    email: string | null; // 老师邮箱
-    count: number; // 老师回复数量
-};
+let teachersStr = JSON.stringify(teacherList);
 
 const searchInput = ref("");
-const teacherList: TeacherItem[] = reactive(teachersObj);
+// const teacherList: TeacherItem[] = reactive(teachersObj);
 
 const querySearch = (queryString: string, cb: any) => {
-    teachersObj = JSON.parse(teachersStr);
+    let teachersObj = JSON.parse(teachersStr);
     const results = queryString
         ? teachersObj.filter(createFilter(queryString))
         : teachersObj;
@@ -173,27 +82,21 @@ const checkStickyHeader = () => {
 const resetList = (value: string | number) => {
     // console.log(value);
     if (value === "") {
-        teachersObj = JSON.parse(teachersStr);
-        teacherList.length = teachersObj.length;
-        Object.assign(teacherList, teachersObj);
+        teacherList.value = JSON.parse(teachersStr);
     }
 };
 
 const searchBtn = () => {
-    teachersObj = JSON.parse(teachersStr);
+    let teachersObj = JSON.parse(teachersStr);
     const results = searchInput.value
         ? teachersObj.filter(createFilter(searchInput.value))
         : teachersObj;
-
-    teacherList.length = results.length;
-    Object.assign(teacherList, results);
+    teacherList.value = results;
 };
 
 onMounted(() => {
-    teachersObj.forEach((teacher) => {
-        teacher.value = teacher.name;
-    });
-    teachersStr = JSON.stringify(teachersObj);
+    getTeacherList();
+
 });
 </script>
 
@@ -201,8 +104,10 @@ onMounted(() => {
 <style>
 .header .el-autocomplete {
     width: 50%;
+
     .el-input {
         --el-input-border-radius: var(--el-border-radius-round);
+
         .el-input__wrapper {
             padding: 5px 18px;
         }

@@ -1,9 +1,10 @@
 import request from "@/utils/http/request";
 
 enum Api {
-    Add = '/questions/add',
+    ADD = '/questions/add',
+
 }
 
 export async function addQuestionApi(question: FormData) {
-    return request.post(Api.Add, question);
+    return request.post(Api.ADD, question);
 }
