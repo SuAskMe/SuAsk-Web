@@ -26,7 +26,7 @@ import Header from "./Header.vue";
 import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import AskDialog from "@/components/ask-dialog";
+import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { Favorite, getNextQuestions, type QuestionItem } from "./askTeacher";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
