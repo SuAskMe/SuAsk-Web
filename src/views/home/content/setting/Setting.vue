@@ -18,7 +18,9 @@
                 </div>
                 <div class="avatar-and-id">
                     <div style="position: relative;">
-                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar" />
+                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar">
+                            <img src="@/assets/default-avatar.png" />
+                        </el-avatar>
                         <el-upload action="http://127.0.0.1:8080/files" :show-file-list="false"
                             :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
                             :data="{ token: getToken() }">

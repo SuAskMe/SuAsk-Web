@@ -8,14 +8,14 @@ enum Api {
     UPVOTE = '/answer/upvote',
 }
 
-export async function getAnswer(question_id: number) {
+export async function getAnswerApi(question_id: number) {
     return request.get(Api.GET, { params: { question_id } });
 }
 
-export async function addAnswer(answer: FormData) {
+export async function addAnswerApi(answer: FormData) {
     return request.post(Api.ADD, answer);
 }
 
-export async function upvoteAnswer(answer: UpvoteAnswerReq) {
+export async function upvoteAnswerApi(answer: UpvoteAnswerReq) {
     return request.post(Api.UPVOTE, answer);
 }

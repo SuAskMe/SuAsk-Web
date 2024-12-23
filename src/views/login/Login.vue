@@ -77,9 +77,6 @@ async function login() {
             themeId: res.data.themeId
         }
         const token = res.data.token;
-        if (user.avatar == 'default-avatar') {
-            user.avatar = new URL('@/assets/default-avatar.png', import.meta.url).href;
-        }
         console.log(user);
         localStorage.setItem('token', token);
         localStorage.setItem('userInfo', JSON.stringify(user));

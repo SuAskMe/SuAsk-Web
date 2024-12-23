@@ -5,7 +5,9 @@
             <svg-icon icon="communicate_message_emoji" color="#808080" size="24px" />
         </div>
         <div class="avatar-and-id" @click="toUserInfo">
-            <el-avatar :size="120" :src="basicInfo.avatar" />
+            <el-avatar :size="120" :src="basicInfo.avatar">
+                <img src="@/assets/default-avatar.png" />
+            </el-avatar>
             <div class="user-name">
                 <span>{{ basicInfo.name }}</span>
             </div>

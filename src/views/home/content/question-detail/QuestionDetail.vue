@@ -12,11 +12,15 @@
                 <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
                     :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"
                     :nick-name="item.nickname" :text="item.contents" :like-count="item.upvotes"
-                    :is-liked="item.is_upvoted" :time-stamp="item.created_at" :image-urls="item.image_urls"
-                    :is-teacher="item.teacher_name != ''" :teacher-name="item.teacher_name" :bubble-key="{
+                    :is-liked="item.is_upvoted" :time-stamp="item.created_at" :quote="getQuote(item.in_reply_to)"
+                    :image-urls="item.image_urls" :is-teacher="item.teacher_name != ''"
+                    :teacher-name="item.teacher_name" :bubble-key="{
                         idx: index,
+                        quoteId: item.in_reply_to,
                         userId: item.user_id,
-                    }" width="35vw" :click-quote="scrollToQuote"></BubbleAnswer>
+                        answerId: item.id,
+                    }" width="35vw" :click-quote="scrollToQuote" :click-like="upVote" :click-card="openDialog">
+                </BubbleAnswer>
             </el-scrollbar>
             <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
                 <div class="picked-image" v-for="(img, index) in imageList" :key="img.id" :id="'image-' + img.id">
@@ -28,9 +32,16 @@
                 </div>
             </transition-group>
         </el-main>
-        <el-footer v-if="canReply" style="height: auto">
+        <answer-dialog v-model:visible="showDialog" :question-id="question.id" :quote="quote"
+            @answer-posted="handleAnswerPosted"></answer-dialog>
+        <div v-if="canReply" class="ask-btn" @click.stop="openDialog(undefined)">
+            <el-icon size="30" color="#fff">
+                <Plus />
+            </el-icon>
+        </div>
+        <!-- <el-footer v-if="canReply" style="height: auto">
             <Footer :question_id="question.id" v-model:file-list="fileList" v-model:image-list="imageList"></Footer>
-        </el-footer>
+        </el-footer> -->
     </el-container>
 </template>
 
@@ -39,15 +50,15 @@ import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import Header from "./Header.vue";
 import BackgroundImg from "@/components/backgroud-img";
 import { scrollToQuote } from "./QuestionDetail";
-import { onMounted, ref } from "vue";
-import Footer from "./Footer.vue";
+import { nextTick, onMounted, ref } from "vue";
 import SvgIcon from "@/components/svg-icon";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
-import { getAnswer } from "@/api/answer/answer.api";
-import type { Answer, Question, QuestionDetailRes } from "@/model/answer.model";
-
+import { getAnswerApi, upvoteAnswerApi } from "@/api/answer/answer.api";
+import type { Answer, Question, UpvoteAnswerReq, UpvoteAnswerRes } from "@/model/answer.model";
+import { AnswerDialog } from "@/components/ask-and-answer-dialog"
+import { ElMessage } from "element-plus";
 const bg_img_index = getUserInfo().themeId;
 
 interface Img {
@@ -87,19 +98,106 @@ const navigateBack = () => {
     router.go(-1);
 };
 
-onMounted(() => {
+onMounted(async () => {
     document.title = "加载中..."
-    getAnswerList();
+    await getAnswerList();
+    document.title = question.value.title;
 });
+
+const showDialog = ref(false);
 
 
 async function getAnswerList() {
-    console.log(parseInt(route.params.id as string));
+    // console.log(parseInt(route.params.id as string));
 
-    await getAnswer(parseInt(route.params.id as string)).then((res) => {
+    await getAnswerApi(parseInt(route.params.id as string)).then((res) => {
         answerList.value = res.data.answer_list;
         question.value = res.data.question;
         canReply.value = res.data.can_reply;
+        // console.log(answerList.value);
+
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
+function getQuote(in_reply_to: number) {
+    let answer = answerList.value.find((item) => item.id === in_reply_to);
+    if (!answer) return undefined;
+    return {
+        text: answer.contents,
+        author: answer.nickname,
+        avatar: answer.user_avatar
+    }
+}
+
+interface Quote {
+    in_replay_to: number
+    avatar: string,
+    author: string
+    text: string
+}
+
+const quote = ref<Quote>({
+    in_replay_to: 0,
+    avatar: "",
+    text: "",
+    author: ""
+})
+
+function openDialog(key?: { answerId: number }) {
+    if (key) {
+        quote.value.in_replay_to = key.answerId
+        let tmp = getQuote(key.answerId)
+        if (tmp) {
+            quote.value.author = tmp.author
+            quote.value.avatar = tmp.avatar
+            quote.value.text = tmp.text
+        }
+    } else {
+        quote.value.in_replay_to = 0
+        quote.value.author = ""
+        quote.value.avatar = ""
+        quote.value.text = ""
+    }
+    showDialog.value = true;
+}
+
+async function handleAnswerPosted(answer_id: number) {
+    console.log(answer_id);
+    await getAnswerList();
+    nextTick(() => {
+        const el = document.getElementById(`answer-${answer_id}`);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+}
+
+async function upVote(key: { answerId: number }) {
+    let req: UpvoteAnswerReq = {
+        question_id: question.value.id,
+        answer_id: key.answerId
+    }
+
+    let data: UpvoteAnswerRes
+    await upvoteAnswerApi(req).then((res) => {
+        if (res) {
+            data = res.data
+            answerList.value = answerList.value.map(answer => {
+                if (answer.id == req.answer_id) {
+                    return {
+                        ...answer,
+                        upvotes: data.upvote_num,
+                        is_upvoted: data.is_upvoted
+                    }
+                }
+                return answer
+            })
+        } else {
+            console.log("Error", res);
+
+        }
     }).catch((err) => {
         console.log(err);
     });
