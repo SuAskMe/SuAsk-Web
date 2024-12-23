@@ -15,6 +15,7 @@ export interface Answer {
     user_avatar: string;
     contents: string;
     created_at: number;
+    in_reply_to: number;
     upvotes: number;
     image_urls: string[];
     is_upvoted: boolean;
@@ -32,6 +33,7 @@ export interface QuestionDetailRes {
 
 export interface AddAnswer {
     question_id: number;
+    in_reply_to?: number;
     content: string;
     // files 这里需要formData拼装
 }
