@@ -251,7 +251,7 @@ async function postQuestion() {
 <template>
     <div class="dialog">
         <el-dialog v-model="visible" :fullscreen="fullscreen" width="600px" :show-close="false"
-            :before-close="handleClose">
+            :before-close="handleClose" align-center>
             <!-- 正文 -->
             <template v-if="!isDraft" #header="{ close }">
                 <div class="header">

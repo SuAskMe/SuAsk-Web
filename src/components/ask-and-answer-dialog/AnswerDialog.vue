@@ -235,14 +235,14 @@ async function postAnswer() {
 
     await addAnswerApi(formData).then(res => {
         if (res) {
-            ElMessage.success("提问成功");
+            ElMessage.success("回复成功");
             visible.value = false;
             if (answerContent.value.draftId) {
                 deleteDraft(answerContent.value.draftId);
             }
             emit('answerPosted', res.data.id);
         } else {
-            ElMessage.error("提问失败");
+            ElMessage.error("回复失败");
         }
     });
 }
@@ -252,7 +252,7 @@ async function postAnswer() {
 <template>
     <div class="dialog">
         <el-dialog v-model="visible" :fullscreen="fullscreen" width="600px" :show-close="false"
-            :before-close="handleClose">
+            :before-close="handleClose" align-center>
             <!-- 正文 -->
             <template v-if="!isDraft" #header="{ close }">
                 <div class="header">
