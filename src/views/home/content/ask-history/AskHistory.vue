@@ -83,11 +83,10 @@ export default {
               <BubbleQuestion v-for="(question, index) in questionList" 
               :key="question.id" 
               :title="question.title"
-              :id="'question-' + question.id" 
-              :text="question.contents" :views="question.views"
+              :text="question.contents" 
+              :views="question.views"
               :time-stamp="question.created_at" 
               :image-urls="question.image_urls"
-              :bubble-key="index" 
               :click-card="navigateTo" width="45vw" 
               :style="{
                       marginTop: index === 0 ? '24px' : '0',
