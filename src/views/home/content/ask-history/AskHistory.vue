@@ -86,7 +86,7 @@ export default {
               :title="question.title"
               :text="question.contents" 
               :views="question.views"
-              :time-stamp="question.created_at" 
+              :time-stamp="question.create_at" 
               :image-urls="question.image_urls"
               :click-card="() => navigateTo(index)" width="45vw" 
               :style="{
@@ -173,7 +173,7 @@ const navigateTo = (key: number) => {
     return;
   }
   router.push({
-      path: `question-detail/${questionList[key].id}`,
+      path: `/home/question-detail/${questionList[key].id}`,
   });
 };
 

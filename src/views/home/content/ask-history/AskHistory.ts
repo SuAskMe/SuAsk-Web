@@ -8,7 +8,7 @@ export interface HistoryQuestion {
     id: number;
     title: string;
     contents: string;
-    created_at: number;
+    create_at: number;
     views: number;
     image_urls: string[];
 }
@@ -35,6 +35,7 @@ export async function GetPageHistoryList(
             remain_page: res.remain_page,
             page_num: res.page_num
         };
+        console.log(output.list);
         return output.list;
     } else {
         console.log("空的！");
