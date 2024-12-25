@@ -2,7 +2,7 @@ import type { ResetPassword, CheckOldPassword } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
-    RESET_PASSWORD = '/user/reset-password',
+    RESET_PASSWORD = '/user/password',
     CHECK_OLD_PASSWORD = '/user/check-old-password',
 }
 
