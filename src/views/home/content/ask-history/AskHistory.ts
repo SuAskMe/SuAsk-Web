@@ -8,7 +8,7 @@ export interface HistoryQuestion {
     id: number;
     title: string;
     contents: string;
-    created_at: string;
+    created_at: number;
     views: number;
     image_urls: string[];
 }
