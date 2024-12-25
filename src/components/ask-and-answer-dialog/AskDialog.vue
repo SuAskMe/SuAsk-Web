@@ -240,6 +240,7 @@ async function postQuestion() {
                 deleteDraft(questionContent.value.draftId);
             }
             emit('questionPosted', res.data.id);
+            clearQuestionContent();
         } else {
             ElMessage.error("提问失败");
         }

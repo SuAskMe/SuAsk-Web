@@ -213,7 +213,7 @@ async function deleteDraft(id: number | number[]) {
 const emit = defineEmits(['answerPosted'])
 
 async function postAnswer() {
-    let userId = getUserInfo().id ? getUserInfo().id : null;
+    // let userId = getUserInfo().id ? getUserInfo().id : null;
     console.log(answerContent.value.fileList);
 
     let formData = new FormData();
@@ -241,6 +241,7 @@ async function postAnswer() {
                 deleteDraft(answerContent.value.draftId);
             }
             emit('answerPosted', res.data.id);
+            clearAnswerContent();
         } else {
             ElMessage.error("回复失败");
         }
