@@ -173,7 +173,7 @@ const navigateTo = (key: number) => {
     return;
   }
   router.push({
-      path: `question-detail/${questionList[key].id}`,
+      path: `/home/question-detail/${questionList[key].id}`,
   });
 };
 
