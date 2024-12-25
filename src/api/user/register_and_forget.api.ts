@@ -3,9 +3,9 @@ import request from '@/utils/http/request';
 
 
 enum Api {
-    SEND_VERIFICATION_CODE = '/user/send-verification-code',
-    VERIFY_VERIFICATION_CODE = '/user/verify-verification-code',
-    REGISTER = '/user/register',
+    SEND_VERIFICATION_CODE = '/register/send-verification-code',
+    VERIFY_VERIFICATION_CODE = '/register/verify-verification-code',
+    REGISTER = '/register',
 }
 
 

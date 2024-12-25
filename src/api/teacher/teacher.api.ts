@@ -1,7 +1,7 @@
 import request from "@/utils/http/request";
 
 enum Api {
-    GET_TEACHER = '/teacher'
+    GET_TEACHER = '/info/teacher'
 }
 
 export async function getTeacherApi() {

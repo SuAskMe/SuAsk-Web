@@ -7,7 +7,8 @@
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar>
                 <BubbleCard :title="question.title" :text="question.contents" :views="question.views"
-                    :time-stamp="question.created_at" width="45vw" style="margin-top: 24px" :click-card="() => { }">
+                    :time-stamp="question.created_at" :image-urls="question.image_urls" width="45vw"
+                    style="margin-top: 24px" :click-card="() => { }">
                 </BubbleCard>
                 <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
                     :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"

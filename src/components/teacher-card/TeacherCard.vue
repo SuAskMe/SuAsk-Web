@@ -1,5 +1,6 @@
 <template>
-    <el-card shadow="hover" class="teacher-card" :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
+    <el-card @click.stop="clickCard(teacher.id)" shadow="hover" class="teacher-card"
+        :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
         <div class="card-left">
             <img :src="teacher.avatarUrl" class="teacher-avatar" />
             <el-button class="teacher-btn" round>Ta的主页</el-button>
@@ -29,8 +30,10 @@ import type { TeacherItem } from '@/model/teacher.model';
 
 interface CardProps {
     teacher: TeacherItem;
+    clickCard?: (key: any) => void;
 }
 const props = defineProps<CardProps>();
+
 </script>
 <style scoped lang="scss">
 .teacher-card {
