@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <el-container class="container">
     <el-main class="main-container">
       <BackgroundImg :img_index="bg_img_index" class="background-img" />
@@ -25,7 +25,7 @@ import BackgroundImg from "@/components/backgroud-img";
 import { BubbleCard } from "@/components/bubble-card";
 import { GetPageHistoryList } from "./AskHistory";
 import { getUserInfo } from "@/utils/userInfo";
-
+import { router } from "@/router";
 const bg_img_index = getUserInfo().themeId
 console.log(bg_img_index);
 </script>
@@ -63,7 +63,91 @@ export default {
       total: 1,
     };
   },
+
+  // const navigateTo = (key: number) => {
+  //   router.push({
+  //       path: `question-detail/${HistoryList[key].id}`,
+  //   });
+  // },
+
 };
+</script>
+
+<style scoped src="./AskHistory.scss"></style> -->
+
+<template>
+  <el-container class="container">
+      <el-main class="main-container">
+          <BackgroundImg :img_index="bg_img_index" class="background-img" />
+          <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+              <BubbleQuestion v-for="(question, index) in questionList" 
+              :key="question.id" 
+              :title="question.title"
+              :id="'question-' + question.id" 
+              :text="question.contents" :views="question.views"
+              :time-stamp="question.created_at" 
+              :image-urls="question.image_urls"
+              :bubble-key="index" 
+              :click-card="navigateTo" width="45vw" 
+              :style="{
+                      marginTop: index === 0 ? '24px' : '0',
+                  }" />
+          </el-scrollbar>
+      </el-main>
+  </el-container>
+</template>
+
+<script setup lang="ts">
+import { nextTick, onMounted, reactive, ref } from "vue";
+import { ElScrollbar } from "element-plus";
+import { BubbleQuestion } from "@/components/bubble-card";
+import BackgroundImg from "@/components/backgroud-img";
+import { GetPageHistoryList, type HistoryQuestion } from "./AskHistory";
+import { router } from "@/router";
+import { getUserInfo } from "@/utils/userInfo";
+const loading = ref(false);
+const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+const bg_img_index = getUserInfo().themeId
+
+const Init = async () => {
+  if (questionList.length === 0) {
+      loading.value = true;
+      questionList.push(...(await GetPageHistoryList(0)));
+      loading.value = false;
+  }
+};
+
+const handleScroll = async () => {
+  if (scrollBar.value) {
+      const scrollTop = scrollBar.value.wrapRef?.scrollTop;
+      const clientHeight = scrollBar.value.wrapRef?.clientHeight;
+      const scrollHeight = scrollBar.value.wrapRef?.scrollHeight;
+      if (
+          scrollTop &&
+          clientHeight &&
+          scrollHeight &&
+          Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
+          loading.value === false
+      ) {
+          loading.value = true;
+          questionList.push(...(await GetPageHistoryList(0)));
+          loading.value = false;
+      }
+  }
+};
+
+
+const questionList: HistoryQuestion[] = reactive([]);
+
+const navigateTo = (key: number) => {
+  router.push({
+      path: `question-detail/${questionList[key].id}`,
+  });
+};
+
+onMounted(() => {
+  Init();
+});
 </script>
 
 <style scoped src="./AskHistory.scss"></style>
