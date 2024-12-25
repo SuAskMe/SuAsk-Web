@@ -88,6 +88,7 @@ export default {
               :views="question.views"
               :time-stamp="question.created_at" 
               :image-urls="question.image_urls"
+              :bubble-key="index"
               :click-card="navigateTo" width="45vw" 
               :style="{
                       marginTop: index === 0 ? '24px' : '0',
@@ -113,7 +114,7 @@ const currentPage = ref(1)
 const Init = async () => {
   if (questionList.length === 0) {
       loading.value = true;
-      questionList.push(...(await GetPageHistoryList(currentPage.value)));
+      const data = questionList.push(...(await GetPageHistoryList(currentPage.value)));
       loading.value = false;
   }
 };
@@ -135,6 +136,7 @@ const handleScroll = async () => {
           // console.log(currentPage.value);
           loading.value = true;
           questionList.push(...(await GetPageHistoryList(currentPage.value)));
+          // console.log("API 返回的数据:",questionList[1].created_at ); // 检查是否有 created_at 字段
           loading.value = false;
       }
   }
@@ -144,6 +146,24 @@ const handleScroll = async () => {
 const questionList: HistoryQuestion[] = reactive([]);
 
 const navigateTo = (key: number) => {
+  console.log("key 值:", key);
+  console.log("questionList:", questionList);
+
+  if (key < 0 || key >= questionList.length) {
+    console.error("key 超出范围！");
+    return;
+  }
+
+  const question = questionList[key];
+  if (!question) {
+    console.error("没找到 未定义！");
+    return;
+  }
+
+  if (!question || !question.id) {
+    console.error("id 未定义！");
+    return;
+  }
   router.push({
       path: `question-detail/${questionList[key].id}`,
   });
