@@ -80,8 +80,9 @@ export default {
       <el-main class="main-container">
           <BackgroundImg :img_index="bg_img_index" class="background-img" />
           <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-              <BubbleQuestion v-for="(question, index) in questionList" 
+              <BubbleCard v-for="(question, index) in questionList" 
               :key="question.id" 
+              :id="'question-' + question.id"
               :title="question.title"
               :text="question.contents" 
               :views="question.views"
@@ -99,7 +100,7 @@ export default {
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from "vue";
 import { ElScrollbar } from "element-plus";
-import { BubbleQuestion } from "@/components/bubble-card";
+import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { GetPageHistoryList, type HistoryQuestion } from "./AskHistory";
 import { router } from "@/router";
@@ -107,11 +108,12 @@ import { getUserInfo } from "@/utils/userInfo";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 const bg_img_index = getUserInfo().themeId
+const currentPage = ref(1)
 
 const Init = async () => {
   if (questionList.length === 0) {
       loading.value = true;
-      questionList.push(...(await GetPageHistoryList(0)));
+      questionList.push(...(await GetPageHistoryList(currentPage.value)));
       loading.value = false;
   }
 };
@@ -128,8 +130,11 @@ const handleScroll = async () => {
           Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
           loading.value === false
       ) {
+          
+          currentPage.value+=1
+          // console.log(currentPage.value);
           loading.value = true;
-          questionList.push(...(await GetPageHistoryList(0)));
+          questionList.push(...(await GetPageHistoryList(currentPage.value)));
           loading.value = false;
       }
   }
