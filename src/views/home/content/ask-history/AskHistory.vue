@@ -88,8 +88,7 @@ export default {
               :views="question.views"
               :time-stamp="question.created_at" 
               :image-urls="question.image_urls"
-              :bubble-key="index"
-              :click-card="navigateTo" width="45vw" 
+              :click-card="() => navigateTo(index)" width="45vw" 
               :style="{
                       marginTop: index === 0 ? '24px' : '0',
                   }" />
@@ -114,8 +113,14 @@ const currentPage = ref(1)
 const Init = async () => {
   if (questionList.length === 0) {
       loading.value = true;
-      const data = questionList.push(...(await GetPageHistoryList(currentPage.value)));
-      loading.value = false;
+      try {
+          const data = await GetPageHistoryList(currentPage.value);
+          questionList.push(...data);
+      } catch (error) {
+          console.error("获取历史记录失败:", error);
+      } finally {
+          loading.value = false;
+      }
   }
 };
 
@@ -133,11 +138,14 @@ const handleScroll = async () => {
       ) {
           
           currentPage.value+=1
-          // console.log(currentPage.value);
-          loading.value = true;
-          questionList.push(...(await GetPageHistoryList(currentPage.value)));
-          // console.log("API 返回的数据:",questionList[1].created_at ); // 检查是否有 created_at 字段
-          loading.value = false;
+          try {
+              const data = await GetPageHistoryList(currentPage.value);
+              questionList.push(...data);
+          } catch (error) {
+              console.error("获取历史记录失败:", error);
+          } finally {
+              loading.value = false;
+          }
       }
   }
 };
