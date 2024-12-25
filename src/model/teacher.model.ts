@@ -1,4 +1,5 @@
 export interface TeacherItem {
+    id: number;
     responses: number;
     name: string;
     avatarUrl: string;

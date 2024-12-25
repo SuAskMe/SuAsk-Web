@@ -14,7 +14,8 @@
                     </div>
                 </div>
                 <div class="teacher-list">
-                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher">
+                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher"
+                        :click-card="navigateTo">
                     </TeacherCard>
                 </div>
             </el-scrollbar>
@@ -28,6 +29,7 @@ import { onMounted, reactive, ref } from "vue";
 import TeacherCard from "@/components/teacher-card";
 import { getTeacherApi } from "@/api/teacher/teacher.api";
 import type { TeacherItem } from "@/model/teacher.model";
+import { router } from "@/router";
 
 async function getTeacherList() {
     await getTeacherApi().then((res) => {
@@ -50,19 +52,16 @@ let teacherList = ref<TeacherItem[]>([]);
 let teachersStr = JSON.stringify(teacherList);
 
 const searchInput = ref("");
-// const teacherList: TeacherItem[] = reactive(teachersObj);
 
 const querySearch = (queryString: string, cb: any) => {
     let teachersObj = JSON.parse(teachersStr);
     const results = queryString
         ? teachersObj.filter(createFilter(queryString))
         : teachersObj;
-    // call callback function to return suggestions
     cb(results);
 };
 const createFilter = (queryString: string) => {
     return (teacher: TeacherItem) => {
-        // console.log(teacher.name.toLowerCase(), queryString.toLowerCase());
         return (
             teacher.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
@@ -92,6 +91,12 @@ const searchBtn = () => {
         ? teachersObj.filter(createFilter(searchInput.value))
         : teachersObj;
     teacherList.value = results;
+};
+
+const navigateTo = (key: number) => {
+    router.push({
+        path: `/home/ask-teacher/${key}`,
+    });
 };
 
 onMounted(() => {
