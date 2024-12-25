@@ -23,7 +23,7 @@ export interface PageOutput {
 
 export async function GetPageHistoryList(
     page: number
-): Promise<PageOutput> {
+): Promise<HistoryQuestion[]> {
     var req: GetPageHistoryRequest = { page: page };
     var res: GetPageHistoryResponse;
     res = await GetPage(req);
@@ -35,7 +35,7 @@ export async function GetPageHistoryList(
             remain_page: res.remain_page,
             page_num: res.page_num
         };
-        return output;
+        return output.list;
     } else {
         console.log("空的！");
         var output: PageOutput = {
@@ -45,6 +45,6 @@ export async function GetPageHistoryList(
             remain_page: 1,
             page_num: 1,
         };
-        return output;
+        return [];
     }
 }
