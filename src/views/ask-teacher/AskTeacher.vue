@@ -1,16 +1,18 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <Header @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch"
+                @return="navigateBack" search return_btn get_keywords_url="/questions/teacher/keywords" has_sort_upvote
+                :teacher_id="teacher_id" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
                 <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
                     :text="question.contents" :views="question.views" :time-stamp="question.created_at"
-                    :image-urls="question.image_urls" :is-favourite="question.is_favorited"
+                    :image-urls="question.image_urls" :is-favorite="question.is_favorite"
                     :answer-num="question.answer_num" :avatars="question.answer_avatars" :bubble-key="index"
-                    :click-card="navigateTo" :click-favourite="favourite" width="45vw" :style="{
+                    :click-card="navigateTo" :click-favorite="favorite" width="45vw" :style="{
                         marginTop: index === 0 ? '24px' : '0',
                     }" />
             </el-scrollbar>
@@ -22,25 +24,28 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import Header from "./Header.vue";
 import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { Favorite, getNextQuestions, type QuestionItem } from "./askTeacher";
+import { Favorite, getNextQuestions } from "./askTeacher";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
+import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
+import type { QuestionItem } from "@/model/question.model";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 const bg_img_index = getUserInfo().themeId
 
+const teacher_id = router.currentRoute.value.params.id as unknown as number;
+
 
 const Init = async () => {
     if (questionList.length === 0) {
         loading.value = true;
-        questionList.push(...(await getNextQuestions(0)));
+        questionList.push(...(await getNextQuestions(teacher_id, 0)));
         loading.value = false;
     }
 };
@@ -58,7 +63,7 @@ const handleScroll = async () => {
             loading.value === false
         ) {
             loading.value = true;
-            questionList.push(...(await getNextQuestions()));
+            questionList.push(...(await getNextQuestions(teacher_id)));
             loading.value = false;
         }
     }
@@ -67,29 +72,29 @@ const handleScroll = async () => {
 const changeSort = async (sortType: number) => {
     loading.value = true;
     questionList.length = 0;
-    questionList.push(...(await getNextQuestions(sortType)));
+    questionList.push(...(await getNextQuestions(teacher_id, sortType)));
     loading.value = false;
 };
 
 const search = async (keyword: string) => {
     loading.value = true;
     questionList.length = 0;
-    questionList.push(...(await getNextQuestions(undefined, keyword)));
+    questionList.push(...(await getNextQuestions(teacher_id, undefined, keyword)));
     loading.value = false;
 };
 
 const cancelSearch = async () => {
     loading.value = true;
     questionList.length = 0;
-    questionList.push(...(await getNextQuestions(undefined, undefined, true)));
+    questionList.push(...(await getNextQuestions(teacher_id, undefined, undefined, true)));
     loading.value = false;
 };
 
 const questionList: QuestionItem[] = reactive([]);
 
-const favourite = async (key: number) => {
+const favorite = async (key: number) => {
     let res = await Favorite(questionList[key].id);
-    questionList[key].is_favorited = res;
+    questionList[key].is_favorite = res;
 };
 
 const navigateTo = (key: number) => {
@@ -98,9 +103,13 @@ const navigateTo = (key: number) => {
     });
 };
 
+const navigateBack = () => {
+    router.back();
+};
+
 onMounted(() => {
     Init();
 });
 </script>
 
-<style scoped src="./AskAll.scss"></style>
+<style scoped src="./AskTeacher.scss"></style>

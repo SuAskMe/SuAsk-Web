@@ -105,7 +105,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped src="./AskTeacher.scss" />
+<style scoped src="./TeacherQuestionBox.scss" />
 <style>
 .header .el-autocomplete {
     width: 50%;

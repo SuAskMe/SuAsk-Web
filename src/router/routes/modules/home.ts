@@ -19,7 +19,7 @@ const SearchFooter = () => import("@/views/home/footer/SearchFooter.vue");
 const PhoneMainFooter = () =>
     import("@/views/home/footer/phone/PhoneMainFooter.vue");
 const TeacherQuestionBox = () =>
-    import("@/views/home/content/ask-teacher/TeacherQuestionBox.vue");
+    import("@/views/ask-teacher/TeacherQuestionBox.vue");
 const AskMe = () => import("@/views/ask-me/AskMe.vue");
 
 export const HomeRoute: AppRouteRecordRaw = {
@@ -27,7 +27,7 @@ export const HomeRoute: AppRouteRecordRaw = {
     name: "Home",
     meta: {},
     props: {
-        userType: "teacher",
+        userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
     },
     component: isMobile() ? PhoneHome : WebHome,

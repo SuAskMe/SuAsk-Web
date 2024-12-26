@@ -1,4 +1,4 @@
-import type { GetQuestionByKeywordReq, GetQuestionByKeywordRes, GetQuestionReq, GetQuestionRes, SearchQuestionReq, SearchQuestionRes } from "@/model/question.model";
+import type { GetKeywordReq, GetKeywordRes, GetQuestionReq, GetQuestionRes, SearchQuestionReq, SearchQuestionRes } from "@/model/question.model";
 import request from "@/utils/http/request";
 
 enum Api {
@@ -34,17 +34,9 @@ export async function getQuestionTeacherApi(req: GetQuestionReq): Promise<GetQue
     })
 }
 
-// 获取问题关键词
-export async function getQuestionPublicByKeywordApi(req: GetQuestionByKeywordReq): Promise<GetQuestionByKeywordRes> {
+// 获取问题关键字
+export async function getQuestionKeywordApi(req: GetKeywordReq): Promise<GetKeywordRes> {
     return request.get(Api.GET_QUESTION_PUBLIC_BY_KEYWORD, { params: req }).then((res) => {
-        if (res) {
-            return res.data
-        }
-    })
-}
-
-export async function getQuestionTeacherByKeywordApi(req: GetQuestionByKeywordReq): Promise<GetQuestionByKeywordRes> {
-    return request.get(Api.GET_QUESTION_TEACHER_BY_KEYWORD, { params: req }).then((res) => {
         if (res) {
             return res.data
         }
