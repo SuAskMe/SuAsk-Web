@@ -10,7 +10,7 @@ const QuestionDetail = () =>
 const AskTeacher = () =>
     import("@/views/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
-    import("@/views/home/content/ask-history/AskHistory.vue");
+    import("@/views/ask-history");
 const MyFavorite = () => import("@/views/my-favorites");
 const Help = () => import("@/views/home/content/help/Help.vue");
 const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
