@@ -36,7 +36,9 @@
 </template>
 
 <script setup lang="ts">
+import type { GetKeywordReq, GetKeywordRes } from "@/model/question.model";
 import request from "@/utils/http/request";
+import { da } from "element-plus/es/locales.mjs";
 import { computed, ref } from "vue";
 const emit = defineEmits(["changeSort", "search", "cancelSearch", "return"]);
 
@@ -46,6 +48,7 @@ const props = defineProps<{
     return_btn?: boolean;
     search?: boolean;
     has_sort_upvote?: boolean;
+    teacher_id?: number;
 }>();
 
 // 排序组件
@@ -71,6 +74,7 @@ async function querySearch(queryString: string, cb: any) {
     const results = await getKeyWords({
         keyword: queryString,
         sort_type: sortIndex.value,
+        teacher_id: props.teacher_id,
     });
     if (results) {
         // console.log(results.words);
@@ -98,16 +102,9 @@ const cancelSearch = () => {
     emit("cancelSearch");
 };
 
-interface GetKeyWordsParams {
-    sort_type: number;
-    keyword: string;
-}
+async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
+    console.log(data);
 
-interface GetKeyWordsResponse {
-    words: { value: string }[];
-}
-
-async function getKeyWords(data: GetKeyWordsParams): Promise<GetKeyWordsResponse> {
     if (!props.get_keywords_url) {
         return Promise.reject("url is not defined");
     }
