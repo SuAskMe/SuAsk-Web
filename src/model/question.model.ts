@@ -7,8 +7,8 @@ export interface QuestionBase {
 }
 
 export interface Teacher {
-    teacherId: number,
-    teacherName: string
+    teacherId: number;
+    teacherName: string;
 }
 
 export interface QuestionItem {

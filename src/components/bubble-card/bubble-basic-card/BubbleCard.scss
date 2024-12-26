@@ -128,12 +128,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  user-select: none;
+  // user-select: none;
+  gap: 16px;
 
   .looks {
     display: flex;
     align-items: center;
-    margin-right: 16px;
 
     .counts {
       font-size: 12px;
@@ -146,5 +146,13 @@
     font-size: 12px;
     color: #818181;
     /* margin-right: 16px; */
+  }
+
+  .favorite {
+    // user-select: all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // width: 24px;
   }
 }

@@ -92,6 +92,8 @@ const addLike = (key: typeof keyObj)=>{
 
 ### bubble-question 问题气泡（特化）
 
+<mark>**2024/12/26更新选项show-favourite**</mark>
+
 **样例**
 
 ```html
@@ -117,6 +119,7 @@ const addLike = (key: typeof keyObj)=>{
 | text              | 正文                                   | string!           | 无     |                                                              |
 | views             | 浏览量                                 | number!           | 无     |                                                              |
 | time-stamp        | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| show-favourite    | 是否展示收藏按钮                       | boolean?          | true   |                                                              |
 | width             | 宽度                                   | number?           | 500    | 单位px                                                       |
 | is-markdown       | 是否为markdown文本                     | boolean?          | false  |                                                              |
 | show-all-markdown | 是否显示全部markdown                   | boolean?          | false  |                                                              |
@@ -135,6 +138,8 @@ const addLike = (key: typeof keyObj)=>{
 ---
 
 ### bubble-card 通用气泡
+
+<mark>**2024/12/26更新选项show-favourite以及click-favourite**</mark>
 
 **由于已有的问题气泡功能已经太过于复杂，为了单个组件的易用性，我特地将原来的问题气泡抽取一个框架出来，继续开发一个通用的气泡**
 
@@ -164,6 +169,7 @@ const addLike = (key: typeof keyObj)=>{
 | text              | 正文                                   | string!           | 无     |                                                              |
 | views             | 浏览量                                 | number!           | 无     |                                                              |
 | time-stamp        | 时间戳                                 | number!           | 无     | 直接传后端返回的时间戳即可，组件会自动格式化为相应的时间来展示 |
+| show-favourite    | 是否展示收藏按钮                       | boolean?          | false  |                                                              |
 | width             | 宽度                                   | number?           | 500    | 单位px                                                       |
 | is-markdown       | 是否为markdown文本                     | boolean?          | false  |                                                              |
 | show-all-markdown | 是否显示全部markdown                   | boolean?          | false  |                                                              |
@@ -174,6 +180,7 @@ const addLike = (key: typeof keyObj)=>{
 | bubble-key        | 自定义key值                            | any？             | 无     | 仅在绑定函数的时候作为参数使用（后面有讲解）                 |
 | click-card        | 点击问题事件（指定为跳转到问题详情页） | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
 | click-pin         | 置顶事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数            |
+| click-favourite   | 收藏事件                               | (key: any)=>void? | 无     | bubble-key中所传入的值会在调用该函数时作为key参数传入        |
 
 #### 讲解
 

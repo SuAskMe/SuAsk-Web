@@ -1,7 +1,6 @@
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
-
 const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
@@ -12,26 +11,38 @@ const AskTeacher = () =>
     import("@/views/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
     import("@/views/home/content/ask-history/AskHistory.vue");
-const MyFavorite = () =>
-    import("@/views/my-favorites");
+const MyFavorite = () => import("@/views/my-favorites");
 const Help = () => import("@/views/home/content/help/Help.vue");
 const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
 const Header = () => import("@/views/home/header/Header.vue");
 const SearchFooter = () => import("@/views/home/footer/SearchFooter.vue");
 const PhoneMainFooter = () =>
     import("@/views/home/footer/phone/PhoneMainFooter.vue");
-const TeacherQuestionBox = () => import("@/views/ask-teacher/TeacherQuestionBox.vue");
+const TeacherQuestionBox = () =>
+    import("@/views/home/content/ask-teacher/TeacherQuestionBox.vue");
+const AskMe = () => import("@/views/ask-me/AskMe.vue");
 
 export const HomeRoute: AppRouteRecordRaw = {
     path: "/home",
     name: "Home",
     meta: {},
     props: {
-        userType: "student",
+        userType: "teacher",
         deviceType: isMobile() ? "phone" : "desktop",
     },
     component: isMobile() ? PhoneHome : WebHome,
     children: [
+        {
+            path: "ask-me",
+            name: "AskMe",
+            meta: {
+                title: "我的提问箱",
+            },
+            components: {
+                default: AskMe,
+                sidebar: Sidebar,
+            },
+        },
         {
             path: "",
             name: "Index",
@@ -69,7 +80,7 @@ export const HomeRoute: AppRouteRecordRaw = {
             components: {
                 default: TeacherQuestionBox,
                 sidebar: Sidebar,
-            }
+            },
         },
         {
             path: "ask-teacher/:id",
@@ -145,7 +156,7 @@ export const HomeRoute: AppRouteRecordRaw = {
             components: {
                 default: () => import("@/views/user/User.vue"),
                 sidebar: Sidebar,
-            }
-        }
+            },
+        },
     ],
 };
