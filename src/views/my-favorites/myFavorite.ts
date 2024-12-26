@@ -1,9 +1,6 @@
 import { ElMessage } from "element-plus";
-import {
-    FavoriteRequest,
-} from "./request";
 import { favoriteApi, getFavoriteApi, searchFavoriteApi } from "@/api/question/favorite.api";
-import type { FavoriteItem, SearchFavoriteRes } from "@/model/favorite.model";
+import type { FavoriteItem, GetFavoriteRes } from "@/model/favorite.model";
 
 let isEnd = false;
 let currentPage = 1;
@@ -45,7 +42,7 @@ async function getQuestionsByPage(
     page: number,
     keyword: string
 ): Promise<FavoriteItem[]> {
-    var res: SearchFavoriteRes;
+    var res: GetFavoriteRes;
     if (keyword !== "") {
         res = await searchFavoriteApi({ keyword, sort_type: sortType, page: page })
     } else {
@@ -66,6 +63,6 @@ export async function Favorite(question_id: number): Promise<boolean | null> {
     if (res) {
         return res.is_favorite;
     }
-    ElMessage.error("当前用户未登录");
+    ElMessage.error("请求失败");
     return null
 }
