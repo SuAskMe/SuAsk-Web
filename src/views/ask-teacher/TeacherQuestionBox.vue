@@ -95,7 +95,7 @@ const searchBtn = () => {
 
 const navigateTo = (key: number) => {
     router.push({
-        path: `/home/ask-teacher/${key}`,
+        path: `/ask-teacher/${key}`,
     });
 };
 

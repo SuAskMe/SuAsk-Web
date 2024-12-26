@@ -1,7 +1,14 @@
-import type { AppRouteModule, AppRouteRecordRaw } from "../types"
+import type { AppRouteRecordRaw } from "../types"
 import { PageNotFound } from "./basic"
-import { HomeRoute } from "./modules/home"
+import { AskAllRoute } from "./modules/student-page"
+import { AskTeacherRoute } from "./modules/student-page"
+import { HelpRoute } from "./modules/help"
 import HomePage from '@/views/root-page/HomePage.vue'
+import { MyFavoriteRoute } from "./modules/student-page"
+import { SettingRoute } from "./modules/setting"
+import { UserRoute } from "./modules/user"
+import { AskHistoryRoute } from "./modules/student-page"
+import { QuestionDetailRoute } from "./modules/questionDetail"
 
 
 
@@ -35,9 +42,17 @@ export const TestRoute: AppRouteRecordRaw = {
 }
 
 export const basicRoutes = [
-    HomeRoute,
+    // HomeRoute,
     LoginRoute,
     TestRoute,
     RootRoot,
     PageNotFound,
+    AskAllRoute,
+    AskHistoryRoute,
+    AskTeacherRoute,
+    HelpRoute,
+    MyFavoriteRoute,
+    SettingRoute,
+    UserRoute,
+    QuestionDetailRoute,
 ]

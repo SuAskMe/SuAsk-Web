@@ -1,13 +1,14 @@
 <template>
-    <router-link @click="handleClick" class="control-item" :to="jumpToPath">
+    <div @click="handleClick" class="control-item">
         <svg-icon v-if="icon" :icon="props.icon" color="#71B6FF" :size="size ? size : '24px'" :filled="clicked" />
         <div v-if="text" style="padding-left: 20px;"></div>
         <p v-if="text" :class="{ text: !clicked, 'text-clicked': clicked }">{{ text }}</p>
-    </router-link>
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     id: string; // 控制面板的id
@@ -19,9 +20,11 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['updateSelected']);
+const router = useRouter();
 
 const handleClick = () => {
     emit('updateSelected', props.id);
+    router.push(props.jumpToPath);
 };
 </script>
 

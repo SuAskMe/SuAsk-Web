@@ -99,7 +99,7 @@ const favorite = async (key: number) => {
 
 const navigateTo = (key: number) => {
     router.push({
-        path: `/home/question-detail/${questionList[key].id}`,
+        path: `/question-detail/${questionList[key].id}`,
     });
 };
 

@@ -81,7 +81,7 @@ async function login() {
         localStorage.setItem('token', token);
         localStorage.setItem('userInfo', JSON.stringify(user));
         ElMessage.success('登录成功');
-        router.push('home')
+        router.push('ask-all');
     }).catch(err => {
         console.log(err);
     });
