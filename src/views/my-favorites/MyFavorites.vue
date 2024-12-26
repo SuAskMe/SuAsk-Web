@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from "vue";
 import QuestionHeader from "@/components/question-header";
-import { ElScrollbar } from "element-plus";
+import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { Favorite, getNextQuestions } from "./myFavorite";
@@ -88,6 +88,7 @@ const questionList: FavoriteItem[] = reactive([]);
 const favorite = async (key: number) => {
   let res = await Favorite(questionList[key].id);
   if (res == null) {
+    ElMessage.error("用户未登录");
     return
   }
   questionList[key].is_favorite = res;

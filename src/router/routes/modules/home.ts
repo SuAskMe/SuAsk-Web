@@ -5,7 +5,7 @@ import { isMobile } from "@/utils/device";
 const WebHome = () => import("@/layout/home/WebHome.vue");
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const Setting = () => import("@/views/home/content/setting/Setting.vue");
-const AskAll = () => import("@/views/home/content/ask-all/AskAll.vue");
+const AskAll = () => import("@/views/ask-all/AskAll.vue");
 const QuestionDetail = () =>
     import("@/views/home/content/question-detail/QuestionDetail.vue");
 const AskTeacher = () =>
