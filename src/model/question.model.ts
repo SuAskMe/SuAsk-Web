@@ -34,13 +34,13 @@ export interface GetQuestionRes {
     remain_page: number;
 }
 
-export interface GetQuestionByKeywordReq {
+export interface GetKeywordReq {
     teacher_id?: number;
     keyword: string;
-    page: number;
+    sort_type: number;
 }
 
-export interface GetQuestionByKeywordRes {
+export interface GetKeywordRes {
     words: Word[];
 }
 

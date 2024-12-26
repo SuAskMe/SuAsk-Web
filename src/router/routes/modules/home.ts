@@ -9,7 +9,7 @@ const AskAll = () => import("@/views/ask-all/AskAll.vue");
 const QuestionDetail = () =>
     import("@/views/home/content/question-detail/QuestionDetail.vue");
 const AskTeacher = () =>
-    import("@/views/home/content/ask-teacher/AskTeacher.vue");
+    import("@/views/ask-teacher/AskTeacher.vue");
 const AskHistory = () =>
     import("@/views/home/content/ask-history/AskHistory.vue");
 const MyFavorite = () =>
@@ -20,7 +20,7 @@ const Header = () => import("@/views/home/header/Header.vue");
 const SearchFooter = () => import("@/views/home/footer/SearchFooter.vue");
 const PhoneMainFooter = () =>
     import("@/views/home/footer/phone/PhoneMainFooter.vue");
-const TeacherQuestionBox = () => import("@/views/home/content/ask-teacher/TeacherQuestionBox.vue");
+const TeacherQuestionBox = () => import("@/views/ask-teacher/TeacherQuestionBox.vue");
 
 export const HomeRoute: AppRouteRecordRaw = {
     path: "/home",
@@ -67,7 +67,7 @@ export const HomeRoute: AppRouteRecordRaw = {
                 title: "问老师",
             },
             components: {
-                default: AskTeacher,
+                default: TeacherQuestionBox,
                 sidebar: Sidebar,
             }
         },
@@ -78,7 +78,7 @@ export const HomeRoute: AppRouteRecordRaw = {
                 title: "问老师",
             },
             components: {
-                default: TeacherQuestionBox,
+                default: AskTeacher,
                 sidebar: Sidebar,
             },
         },
