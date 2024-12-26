@@ -4,9 +4,7 @@
   margin-bottom: 24px;
 
   .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    border: solid 2px #fff;
     cursor: pointer;
   }
 
@@ -29,7 +27,8 @@
 
 .ans-title {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  margin-top: -5px;
   margin-bottom: 10px;
 
   .nickname {
