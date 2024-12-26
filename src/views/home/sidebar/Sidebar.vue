@@ -62,7 +62,7 @@ function getUserInfo() {
 
 function toUserInfo() {
     if (userInfo) {
-        router.push(`/home/user/${userInfo.id}`)
+        router.push(`/user/${userInfo.id}`)
     } else {
         ElMessage.error('获取用户信息失败')
     }
