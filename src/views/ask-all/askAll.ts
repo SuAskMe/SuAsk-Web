@@ -1,22 +1,7 @@
 import { ElMessage } from "element-plus";
-import {
-    FavoriteRequest,
-    GetAskAll,
-    GetAskAllByKeyword,
-    type GetAskAllResponse,
-} from "./request";
-
-export interface QuestionItem {
-    id: number;
-    title: string;
-    contents: string;
-    views: number;
-    created_at: number;
-    image_urls: string[];
-    is_favorited: boolean;
-    answer_num: number;
-    answer_avatars: string[];
-}
+import type { GetQuestionRes, QuestionItem } from "@/model/question.model";
+import { favoriteApi } from "@/api/question/favorite.api";
+import { getQuestionPublicApi, searchQuestionPublicApi } from "@/api/question/question.api";
 
 let isEnd = false;
 let currentPage = 1;
@@ -59,19 +44,17 @@ async function getQuestionsByPage(
     page: number,
     keyword: string
 ): Promise<QuestionItem[]> {
-    var res: GetAskAllResponse;
+    var res: GetQuestionRes;
     if (keyword !== "") {
-        res = await GetAskAllByKeyword({
+        res = await searchQuestionPublicApi({
             keyword: keyword,
             sort_type: sortType,
             page: page,
-            user_id: 1,
         });
     } else {
-        res = await GetAskAll({
+        res = await getQuestionPublicApi({
             sort_type: sortType,
             page: page,
-            user_id: 1,
         });
     }
     if (res.remain_page <= 0) {
@@ -84,12 +67,12 @@ async function getQuestionsByPage(
     }
 }
 
-export async function Favorite(question_id: number): Promise<boolean> {
-    var res = await FavoriteRequest({ question_id, user_id: 1 });
+export async function Favorite(question_id: number): Promise<boolean | null> {
+    var res = await favoriteApi({ question_id });
     if (res) {
-        return res.is_favorited;
+        return res.is_favorite;
     } else {
-        ElMessage({ message: "请求失败", type: "error" });
-        return false;
+        ElMessage.error("请求失败");
+        return null;
     }
 }
