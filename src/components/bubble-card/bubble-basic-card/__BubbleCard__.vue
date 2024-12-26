@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { getImgStyle, getTimeStr } from "../bubble-card";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
+import { sv } from "element-plus/es/locales.mjs";
 interface BubbleCardProps {
     title: string;
     text: string;
@@ -16,8 +17,10 @@ interface BubbleCardProps {
     isPinned?: boolean;
     bubbleKey?: any;
     imageUrls?: string[];
+    showFavorite?: boolean;
     clickCard?: (key: any) => void;
     clickPin?: (key: any) => void;
+    clickFavorite?: (key: any) => void;
 }
 const props = defineProps<BubbleCardProps>();
 const timeStr = computed(() => getTimeStr(props.timeStamp));
@@ -99,6 +102,15 @@ const imageContainer = computed(() =>
                     <span class="counts">{{ views }}</span>
                 </div>
                 <div class="time">{{ timeStr }}</div>
+                <svg-icon
+                    v-if="showFavorite"
+                    icon="bookmark"
+                    size="18"
+                    color="#818181"
+                    hover-color="#71b6ff"
+                    style="cursor: pointer"
+                    @click.stop="clickFavorite(key)"
+                />
             </div>
         </div>
     </div>
