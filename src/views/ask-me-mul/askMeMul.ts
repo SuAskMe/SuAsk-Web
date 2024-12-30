@@ -1,23 +1,33 @@
 import { ElMessage } from "element-plus";
-import { favoriteApi } from "@/api/question/favorite.api";
 import type { GetQFMRes, QFMItem } from "@/model/teacher-self.model";
 import {
-    getQFMAllApi,
+    getQFMAnsweredApi,
+    getQFMOnTopApi,
+    getQFMUnansweredApi,
     pinQFMApi,
-    searchQFMApi,
 } from "@/api/question/teacher-self.api";
 
+let Api = getQFMAnsweredApi;
 let isEnd = false;
 let currentPage = 1;
 let sortType = -1;
-let keyword = "";
 let alock = false;
 
-export async function getNextQuestions(
-    sortType_?: number,
-    keyword_?: string,
-    cancelSearch?: boolean
-): Promise<QFMItem[]> {
+export function setAnsweredOrNot(type: string): void {
+    switch (type) {
+        case "answered":
+            Api = getQFMAnsweredApi;
+            break;
+        case "unanswered":
+            Api = getQFMUnansweredApi;
+            break;
+        case "top":
+            Api = getQFMOnTopApi;
+            break;
+    }
+}
+
+export async function getNextQuestions(sortType_?: number): Promise<QFMItem[]> {
     // let mock = mockQuestions();
     // return mock.question_list;
     if (alock) {
@@ -33,17 +43,8 @@ export async function getNextQuestions(
         currentPage = 1;
         sortType = sortType_;
         isEnd = false;
-    } else if (keyword_ !== undefined && keyword_ !== keyword) {
-        currentPage = 1;
-        keyword = keyword_;
-        isEnd = false;
     } else {
         currentPage++;
-    }
-    if (cancelSearch) {
-        keyword = "";
-        currentPage = 1;
-        isEnd = false;
     }
     if (isEnd) {
         ElMessage({ message: "没有更多了", type: "success" });
@@ -52,27 +53,18 @@ export async function getNextQuestions(
         });
     }
     // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType, currentPage, keyword);
+    return getQuestionsByPage(sortType, currentPage);
 }
 
 async function getQuestionsByPage(
     sortType: number,
-    page: number,
-    keyword: string
+    page: number
 ): Promise<QFMItem[]> {
     var res: GetQFMRes;
-    if (keyword !== "") {
-        res = await searchQFMApi({
-            keyword: keyword,
-            sort_type: sortType,
-            page: page,
-        });
-    } else {
-        res = await getQFMAllApi({
-            sort_type: sortType,
-            page: page,
-        });
-    }
+    res = await Api({
+        sort_type: sortType,
+        page: page,
+    });
     if (res.remain_page <= 0) {
         isEnd = true;
     }

@@ -1,41 +1,96 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <Header :title="'Ask All Detail'" @change-sort="changeSort" @return="navigateBack"></Header>
+            <Header
+                :title="'Ask All Detail'"
+                @change-sort="changeSort"
+                @return="navigateBack"
+            ></Header>
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar>
-                <BubbleCard :title="question.title" :text="question.contents" :views="question.views"
-                    :time-stamp="question.created_at" :image-urls="question.image_urls" width="45vw"
-                    style="margin-top: 24px" :click-card="() => { }">
+                <BubbleCard
+                    :title="question.title"
+                    :text="question.contents"
+                    :views="question.views"
+                    :time-stamp="question.created_at"
+                    :image-urls="question.image_urls"
+                    width="45vw"
+                    style="margin-top: 24px"
+                    :click-card="() => {}"
+                >
                 </BubbleCard>
-                <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
-                    :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"
-                    :nick-name="item.nickname" :text="item.contents" :like-count="item.upvotes"
-                    :is-liked="item.is_upvoted" :time-stamp="item.created_at" :quote="getQuote(item.in_reply_to)"
-                    :image-urls="item.image_urls" :is-teacher="item.teacher_name != ''"
-                    :teacher-name="item.teacher_name" :bubble-key="{
+                <BubbleAnswer
+                    v-for="(item, index) in answerList"
+                    :key="item.id"
+                    class="answer-card"
+                    :id="'answer-' + item.id"
+                    :is-mine="item.user_id == userId"
+                    :avatar="item.user_avatar"
+                    :nick-name="item.nickname"
+                    :text="item.contents"
+                    :like-count="item.upvotes"
+                    :is-liked="item.is_upvoted"
+                    :time-stamp="item.created_at"
+                    :quote="getQuote(item.in_reply_to)"
+                    :image-urls="item.image_urls"
+                    :is-teacher="item.teacher_name != ''"
+                    :teacher-name="item.teacher_name"
+                    :bubble-key="{
                         idx: index,
                         quoteId: item.in_reply_to,
                         userId: item.user_id,
                         answerId: item.id,
-                    }" width="35vw" :click-quote="scrollToQuote" :click-like="upVote" :click-card="openDialog">
+                    }"
+                    width="35vw"
+                    :click-quote="scrollToQuote"
+                    :click-like="upVote"
+                    :click-card="openDialog"
+                >
                 </BubbleAnswer>
             </el-scrollbar>
-            <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
-                <div class="picked-image" v-for="(img, index) in imageList" :key="img.id" :id="'image-' + img.id">
-                    <el-image @click.stop :src="img.url" :preview-src-list="[img.url]" class="image" fit="cover"
-                        preview-teleported></el-image>
+            <transition-group
+                class="image-container"
+                tag="div"
+                name="fade-list"
+                move-class="fade-list-move"
+            >
+                <div
+                    class="picked-image"
+                    v-for="(img, index) in imageList"
+                    :key="img.id"
+                    :id="'image-' + img.id"
+                >
+                    <el-image
+                        @click.stop
+                        :src="img.url"
+                        :preview-src-list="[img.url]"
+                        class="image"
+                        fit="cover"
+                        preview-teleported
+                    ></el-image>
                     <div class="delete-btn" @click.stop="deleteImage(index)">
-                        <SvgIcon icon="delete-round" color="#FF5F96" size="16px"></SvgIcon>
+                        <SvgIcon
+                            icon="delete-round"
+                            color="#FF5F96"
+                            size="16px"
+                        ></SvgIcon>
                     </div>
                 </div>
             </transition-group>
         </el-main>
-        <answer-dialog v-model:visible="showDialog" :question-id="question.id" :quote="quote"
-            @answer-posted="handleAnswerPosted"></answer-dialog>
-        <div v-if="canReply" class="ask-btn" @click.stop="openDialog(undefined)">
+        <answer-dialog
+            v-model:visible="showDialog"
+            :question-id="question.id"
+            :quote="quote"
+            @answer-posted="handleAnswerPosted"
+        ></answer-dialog>
+        <div
+            v-if="canReply"
+            class="ask-btn"
+            @click.stop="openDialog(undefined)"
+        >
             <el-icon size="30" color="#fff">
                 <Plus />
             </el-icon>
@@ -57,10 +112,16 @@ import { useRoute } from "vue-router";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import { getAnswerApi, upvoteAnswerApi } from "@/api/answer/answer.api";
-import type { Answer, Question, UpvoteAnswerReq, UpvoteAnswerRes } from "@/model/answer.model";
-import { AnswerDialog } from "@/components/ask-and-answer-dialog"
+import type {
+    Answer,
+    Question,
+    UpvoteAnswerReq,
+    UpvoteAnswerRes,
+} from "@/model/answer.model";
+import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
-const bg_img_index = getUserInfo().themeId;
+const userInfo = getUserInfo();
+const bg_img_index = userInfo ? userInfo.themeId : 1;
 
 interface Img {
     id: number;
@@ -100,26 +161,26 @@ const navigateBack = () => {
 };
 
 onMounted(async () => {
-    document.title = "加载中..."
+    document.title = "加载中...";
     await getAnswerList();
     document.title = question.value.title;
 });
 
 const showDialog = ref(false);
 
-
 async function getAnswerList() {
     // console.log(parseInt(route.params.id as string));
 
-    await getAnswerApi(parseInt(route.params.id as string)).then((res) => {
-        answerList.value = res.data.answer_list;
-        question.value = res.data.question;
-        canReply.value = res.data.can_reply;
-        // console.log(answerList.value);
-
-    }).catch((err) => {
-        console.log(err);
-    });
+    await getAnswerApi(parseInt(route.params.id as string))
+        .then((res) => {
+            answerList.value = res.data.answer_list;
+            question.value = res.data.question;
+            canReply.value = res.data.can_reply;
+            // console.log(answerList.value);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 function getQuote(in_reply_to: number) {
@@ -128,38 +189,38 @@ function getQuote(in_reply_to: number) {
     return {
         text: answer.contents,
         author: answer.nickname,
-        avatar: answer.user_avatar
-    }
+        avatar: answer.user_avatar,
+    };
 }
 
 interface Quote {
-    in_replay_to: number
-    avatar: string,
-    author: string
-    text: string
+    in_replay_to: number;
+    avatar: string;
+    author: string;
+    text: string;
 }
 
 const quote = ref<Quote>({
     in_replay_to: 0,
     avatar: "",
     text: "",
-    author: ""
-})
+    author: "",
+});
 
 function openDialog(key?: { answerId: number }) {
     if (key) {
-        quote.value.in_replay_to = key.answerId
-        let tmp = getQuote(key.answerId)
+        quote.value.in_replay_to = key.answerId;
+        let tmp = getQuote(key.answerId);
         if (tmp) {
-            quote.value.author = tmp.author
-            quote.value.avatar = tmp.avatar
-            quote.value.text = tmp.text
+            quote.value.author = tmp.author;
+            quote.value.avatar = tmp.avatar;
+            quote.value.text = tmp.text;
         }
     } else {
-        quote.value.in_replay_to = 0
-        quote.value.author = ""
-        quote.value.avatar = ""
-        quote.value.text = ""
+        quote.value.in_replay_to = 0;
+        quote.value.author = "";
+        quote.value.avatar = "";
+        quote.value.text = "";
     }
     showDialog.value = true;
 }
@@ -178,30 +239,31 @@ async function handleAnswerPosted(answer_id: number) {
 async function upVote(key: { answerId: number }) {
     let req: UpvoteAnswerReq = {
         question_id: question.value.id,
-        answer_id: key.answerId
-    }
+        answer_id: key.answerId,
+    };
 
-    let data: UpvoteAnswerRes
-    await upvoteAnswerApi(req).then((res) => {
-        if (res) {
-            data = res.data
-            answerList.value = answerList.value.map(answer => {
-                if (answer.id == req.answer_id) {
-                    return {
-                        ...answer,
-                        upvotes: data.upvote_num,
-                        is_upvoted: data.is_upvoted
+    let data: UpvoteAnswerRes;
+    await upvoteAnswerApi(req)
+        .then((res) => {
+            if (res) {
+                data = res.data;
+                answerList.value = answerList.value.map((answer) => {
+                    if (answer.id == req.answer_id) {
+                        return {
+                            ...answer,
+                            upvotes: data.upvote_num,
+                            is_upvoted: data.is_upvoted,
+                        };
                     }
-                }
-                return answer
-            })
-        } else {
-            console.log("Error", res);
-
-        }
-    }).catch((err) => {
-        console.log(err);
-    });
+                    return answer;
+                });
+            } else {
+                console.log("Error", res);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 const answerList = ref<Answer[]>([]);
@@ -211,10 +273,10 @@ const question = ref<Question>({
     contents: "",
     views: 0,
     created_at: 0,
-    image_urls: []
-})
+    image_urls: [],
+});
 const canReply = ref<boolean>(false);
-const userId = getUserInfo().id;
+const userId = userInfo ? userInfo.id : 0;
 </script>
 
 <style scoped src="./QuestionDetail.scss"></style>

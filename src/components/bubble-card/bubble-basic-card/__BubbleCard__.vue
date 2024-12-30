@@ -18,6 +18,8 @@ interface BubbleCardProps {
     bubbleKey?: any;
     imageUrls?: string[];
     showFavorite?: boolean;
+    isFavorited?: boolean;
+    tag?: string;
     clickCard?: (key: any) => void;
     clickPin?: (key: any) => void;
     clickFavorite?: (key: any) => void;
@@ -31,6 +33,18 @@ const containerStyle = computed(() => {
 const imageContainer = computed(() =>
     getImgStyle(props.imageUrls, props.width)
 );
+const tagStyle = computed(() => {
+    switch (props.tag) {
+        case "置顶":
+            return { border: "solid 1px #ffc107", color: "#ffc107" };
+        case "未回复":
+            return { border: "solid 1px #808080", color: "#808080" };
+        case "已回复":
+            return { border: "solid 1px #71b6ff", color: "#71b6ff" };
+        default:
+            return { border: "solid 1px #808080", color: "#808080" };
+    }
+});
 </script>
 
 <template>
@@ -45,12 +59,21 @@ const imageContainer = computed(() =>
             class="pin"
             :data-tips="isPinned ? '取消置顶' : '置顶'"
         >
-            <svg-icon
+            <!-- <svg-icon
                 icon="pushpin"
                 size="20"
                 :color="isPinned ? '#FFC107' : '#818181'"
+                :hover-color="isPinned ? '#FFC107' : '#818181'"
                 :filled="isPinned"
-            />
+            /> -->
+            <svg
+                :width="20"
+                :height="20"
+                :color="isPinned ? '#FFC107' : '#808080'"
+                :fill="isPinned ? '#FFC107' : '#808080'"
+            >
+                <use :href="`#icon-pushpin${isPinned ? '-fill' : ''}`"></use>
+            </svg>
         </div>
         <div class="card-body">
             <div v-if="hasNews" class="news-dot"></div>
@@ -97,6 +120,9 @@ const imageContainer = computed(() =>
                 </div>
             </div>
             <div class="q-footer">
+                <div v-if="tag !== undefined" class="tag" :style="tagStyle">
+                    {{ tag }}
+                </div>
                 <div class="looks">
                     <svg-icon icon="eye" size="16" color="#818181" />
                     <span class="counts">{{ views }}</span>
@@ -106,8 +132,9 @@ const imageContainer = computed(() =>
                     v-if="showFavorite"
                     icon="bookmark"
                     size="18"
-                    color="#818181"
-                    hover-color="#71b6ff"
+                    :color="isFavorited ? '#ffc107' : '#818181'"
+                    :hover-color="isFavorited ? '#ffc107' : '#71b6ff'"
+                    :filled="isFavorited"
                     style="cursor: pointer"
                     @click.stop="clickFavorite(key)"
                 />
