@@ -53,11 +53,13 @@ export function getTimeStr(timeStamp: number) {
         // 不同日
         let diff = now.getDate() - day;
         if (diff === 1) {
-            return `昨天 ${hour}:${minute < 10 ? "0" + minute : minute}`;
+            return `昨天  ${hour}:${minute < 10 ? "0" + minute : minute}`;
         } else if (diff === 2) {
-            return `前天 ${hour}:${minute < 10 ? "0" + minute : minute}`;
+            return `前天  ${hour}:${minute < 10 ? "0" + minute : minute}`;
         } else if (diff <= 7) {
-            return `${diff}天前 ${hour}:${minute < 10 ? "0" + minute : minute}`;
+            return `${diff}天前  ${hour}:${
+                minute < 10 ? "0" + minute : minute
+            }`;
         } else {
             return `${month}-${day}`;
         }

@@ -6,9 +6,9 @@ const WebHome = () => import("@/layout/home/WebHome.vue");
 const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
 
 const AskMe = () => import("@/views/ask-me/AskMe.vue");
+const AskMeMul = () => import("@/views/ask-me-mul/AskMeMul.vue");
 
 export const AskMeRoute: AppRouteRecordRaw = {
-
     path: "/ask-me",
     name: "AskMeRoot",
     meta: {
@@ -31,5 +31,47 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 sidebar: Sidebar,
             },
         },
-    ]
-}
+        {
+            path: "answered",
+            name: "AskMeAnswered",
+            meta: {
+                title: "已回答",
+            },
+            components: {
+                default: AskMeMul,
+                sidebar: Sidebar,
+            },
+            props: {
+                default: { type: "answered" },
+            },
+        },
+        {
+            path: "unanswered",
+            name: "AskMeUnanswered",
+            meta: {
+                title: "未回答",
+            },
+            components: {
+                default: AskMeMul,
+                sidebar: Sidebar,
+            },
+            props: {
+                default: { type: "unanswered" },
+            },
+        },
+        {
+            path: "top",
+            name: "AskMeTop",
+            meta: {
+                title: "置顶",
+            },
+            components: {
+                default: AskMeMul,
+                sidebar: Sidebar,
+            },
+            props: {
+                default: { type: "top" },
+            },
+        },
+    ],
+};

@@ -12,7 +12,11 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item v-for="(item, index) in sortText" :key="index" @click="changeSort(index)">
+                        <el-dropdown-item
+                            v-for="(item, index) in sortText"
+                            :key="index"
+                            @click="changeSort(index)"
+                        >
                             {{ item }}
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -20,13 +24,27 @@
             </el-dropdown>
             <div v-if="props.search" class="header-item">
                 <div class="search">
-                    <el-autocomplete v-if="showInput" v-model="searchText" placeholder="搜索问题"
-                        :fetch-suggestions="querySearch" :debounce="100" :trigger-on-focus="false"
-                        clearable></el-autocomplete>
+                    <el-autocomplete
+                        v-if="showInput"
+                        v-model="searchText"
+                        placeholder="搜索问题"
+                        :fetch-suggestions="querySearch"
+                        :debounce="100"
+                        :trigger-on-focus="false"
+                        clearable
+                    ></el-autocomplete>
                     <div class="search-icon" @click.stop="search">
-                        <svg-icon icon="search" :color="showInput ? '#71B6FF' : '#808080'" size="22px" />
+                        <svg-icon
+                            icon="search"
+                            :color="showInput ? '#71B6FF' : '#808080'"
+                            size="22px"
+                        />
                     </div>
-                    <div v-if="showInput" class="cancel-btn" @click.stop="cancelSearch">
+                    <div
+                        v-if="showInput"
+                        class="cancel-btn"
+                        @click.stop="cancelSearch"
+                    >
                         取消
                     </div>
                 </div>
@@ -52,10 +70,17 @@ const props = defineProps<{
 }>();
 
 // 排序组件
-const sortTextCommon = ref(["按时间降序", "按时间升序", "按热度降序", "按热度升序"]);
+const sortTextCommon = ref([
+    "按时间降序",
+    "按时间升序",
+    "按热度降序",
+    "按热度升序",
+]);
 const sortTextWithoutUpvote = ref(["按时间降序", "按时间升序"]);
 const sortText = computed(() => {
-    return props.has_sort_upvote ? sortTextCommon.value : sortTextWithoutUpvote.value;
+    return props.has_sort_upvote
+        ? sortTextCommon.value
+        : sortTextWithoutUpvote.value;
 });
 const sortIndex = ref(0);
 function changeSort(index: number) {
@@ -76,6 +101,7 @@ async function querySearch(queryString: string, cb: any) {
         sort_type: sortIndex.value,
         teacher_id: props.teacher_id,
     });
+    // console.log(results);
     if (results) {
         // console.log(results.words);
         cb(results.words);
@@ -103,17 +129,20 @@ const cancelSearch = () => {
 };
 
 async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
-    console.log(data);
+    // console.log(data);
 
     if (!props.get_keywords_url) {
         return Promise.reject("url is not defined");
     }
-    return request.get(props.get_keywords_url, { params: data })
+    return request
+        .get(props.get_keywords_url, { params: data })
         .then((res) => {
+            // console.log(res);
             if (res) {
                 return res.data;
             }
-        }).catch((err) => {
+        })
+        .catch((err) => {
             return Promise.reject(err);
         });
 }
@@ -150,7 +179,6 @@ async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
     .header-item {
         display: flex;
         align-items: center;
-
 
         .dropdown {
             cursor: pointer;

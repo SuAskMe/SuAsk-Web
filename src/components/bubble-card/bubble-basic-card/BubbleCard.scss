@@ -4,7 +4,7 @@
   transform: translateY(0);
   margin-left: 24px;
   margin-bottom: 24px;
-  border-radius: 16px;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition-property: all;
   background-color: #fff;
@@ -128,8 +128,16 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  // user-select: none;
+  user-select: none;
   gap: 16px;
+
+  .tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    padding: 0px 4px 1px 4px;
+  }
 
   .looks {
     display: flex;
