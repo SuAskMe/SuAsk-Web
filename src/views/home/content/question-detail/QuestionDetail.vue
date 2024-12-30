@@ -164,7 +164,38 @@ onMounted(async () => {
     document.title = "加载中...";
     await getAnswerList();
     document.title = question.value.title;
+    if (route.hash) {
+        console.log(parseInt(route.hash.replace("#", "")));
+        scrollToAnswer(parseInt(route.hash.replace("#", "")));
+    }
 });
+
+const observe = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.animate(
+                    [{ background: "#80808050" }, { background: "#80808000" }],
+                    { duration: 1500, easing: "ease-in-out", iterations: 1 }
+                )
+            }
+        });
+    },
+    { threshold: 1.0 }
+);
+
+function scrollToAnswer(id: number) {
+    nextTick(() => {
+        const el = document.getElementById(`answer-${id}`);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            observe.observe(el);
+            setTimeout(() => {
+                observe.unobserve(el);
+            }, 2000);
+        }
+    })
+}
 
 const showDialog = ref(false);
 

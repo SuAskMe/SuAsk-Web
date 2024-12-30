@@ -1,3 +1,4 @@
+import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
@@ -31,7 +32,7 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: TeacherQuestionBox,
-                sidebar: Sidebar,
+                left_side: LeftSidebar,
             },
         },
         {
@@ -42,7 +43,7 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskTeacher,
-                sidebar: Sidebar,
+                left_side: LeftSidebar,
             },
         },
     ]

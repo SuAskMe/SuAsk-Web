@@ -1,3 +1,4 @@
+import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
@@ -29,7 +30,7 @@ export const AskHistoryRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskHistory,
-                sidebar: Sidebar,
+                left_side: LeftSidebar,
             },
         },
     ]

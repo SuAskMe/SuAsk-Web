@@ -1,3 +1,4 @@
+import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
@@ -27,7 +28,7 @@ export const QuestionDetailRoute: AppRouteRecordRaw = {
             meta: {},
             components: {
                 default: QuestionDetail,
-                sidebar: Sidebar,
+                left_side: LeftSidebar,
             },
         },
     ]
