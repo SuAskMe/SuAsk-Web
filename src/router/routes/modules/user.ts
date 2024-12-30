@@ -1,3 +1,4 @@
+import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
@@ -28,7 +29,7 @@ export const UserRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: User,
-                sidebar: Sidebar,
+                left_side: LeftSidebar,
             },
         },
     ]
