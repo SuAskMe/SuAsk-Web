@@ -3,11 +3,9 @@
         <el-header style="height: auto">
             <QuestionHeader
                 @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                search
-                get_keywords_url="/favorites/keywords"
-                :return_btn="false"
+                :title="title"
+                return_btn
+                has_sort_upvote
             />
         </el-header>
         <el-main class="main-container">
@@ -17,45 +15,63 @@
                 ref="scrollBar"
                 @scroll="handleScroll"
             >
-                <BubbleQuestion
+                <BubbleCard
                     v-for="(question, index) in questionList"
                     :key="question.id"
                     :title="question.title"
-                    :id="'question-' + question.id"
                     :text="question.contents"
                     :views="question.views"
                     :time-stamp="question.created_at"
                     :image-urls="question.image_urls"
-                    :is-favorite="question.is_favorite"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
+                    :is-pinned="question.is_pinned"
                     :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favorite="favorite"
-                    width="45vw"
+                    :tag="question.tag"
+                    show-pin
                     :style="{
                         marginTop: index === 0 ? '24px' : '0',
                     }"
-                />
+                    width="45vw"
+                    :click-card="navigateTo"
+                    :click-pin="pin"
+                ></BubbleCard>
             </el-scrollbar>
         </el-main>
     </el-container>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
-import QuestionHeader from "@/components/question-header";
+import { computed, nextTick, onMounted, reactive, ref } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
-import { BubbleQuestion } from "@/components/bubble-card";
+import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { Favorite, getNextQuestions } from "./myFavorite";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
-import type { FavoriteItem } from "@/model/favorite.model";
+import QuestionHeader from "@/components/question-header";
+import { getNextQuestions, Pin, setAnsweredOrNot } from "./askMeMul";
+import type { QFMItem } from "@/model/teacher-self.model";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const bg_img_index = getUserInfo().themeId;
+interface AskMeAnsProps {
+    type: string;
+}
+
+const props = defineProps<AskMeAnsProps>();
+setAnsweredOrNot(props.type);
+const title = computed(() => {
+    switch (props.type) {
+        case "unanswered":
+            return "未回答";
+        case "answered":
+            return "已回答";
+        case "top":
+            return "置顶";
+    }
+});
+
+const userInfo = getUserInfo();
+const bg_img_index = userInfo ? userInfo.themeId : 1;
+console.log(bg_img_index);
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -91,33 +107,20 @@ const changeSort = async (sortType: number) => {
     loading.value = false;
 };
 
-const search = async (keyword: string) => {
-    loading.value = true;
-    questionList.length = 0;
-    questionList.push(...(await getNextQuestions(undefined, keyword)));
-    loading.value = false;
-};
+const questionList: QFMItem[] = reactive([]);
 
-const cancelSearch = async () => {
-    loading.value = true;
-    questionList.length = 0;
-    questionList.push(...(await getNextQuestions(undefined, undefined, true)));
-    loading.value = false;
-};
-
-const questionList: FavoriteItem[] = reactive([]);
-
-const favorite = async (key: number) => {
+const pin = async (key: number) => {
     key = Number(key);
-    let res = await Favorite(questionList[key].id);
+    let res = await Pin(questionList[key].id);
     if (res == null) {
         ElMessage.error("用户未登录");
         return;
     }
-    questionList[key].is_favorite = res;
+    questionList[key].is_pinned = res;
 };
 
 const navigateTo = (key: number) => {
+    key = Number(key);
     router.push({
         path: `/question-detail/${questionList[key].id}`,
     });
@@ -128,21 +131,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
-.container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    .main-container {
-        position: relative;
-        border-top: solid 1px $su-border;
-        padding: 0;
-    }
-}
-
-.background-img {
-    position: absolute;
-    //   top: 0;
-}
-</style>
+<style scoped src="./AskMeMul.scss"></style>

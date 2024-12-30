@@ -1,22 +1,47 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" search
-                has_sort_upvote get_keywords_url="/questions/public/keywords" />
+            <QuestionHeader
+                @change-sort="changeSort"
+                @search="search"
+                @cancel-search="cancelSearch"
+                search
+                has_sort_upvote
+                get_keywords_url="/questions/public/keywords"
+            />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-                <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
-                    :id="'question-' + question.id" :text="question.contents" :views="question.views"
-                    :time-stamp="question.created_at" :image-urls="question.image_urls"
-                    :is-favorite="question.is_favorite" :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo"
-                    :click-favorite="favorite" width="45vw" :style="{
+            <el-scrollbar
+                v-loading="loading"
+                ref="scrollBar"
+                @scroll="handleScroll"
+            >
+                <BubbleQuestion
+                    v-for="(question, index) in questionList"
+                    :key="question.id"
+                    :title="question.title"
+                    :id="'question-' + question.id"
+                    :text="question.contents"
+                    :views="question.views"
+                    :time-stamp="question.created_at"
+                    :image-urls="question.image_urls"
+                    :is-favorite="question.is_favorite"
+                    :answer-num="question.answer_num"
+                    :avatars="question.answer_avatars"
+                    :bubble-key="index"
+                    :click-card="navigateTo"
+                    :click-favorite="favorite"
+                    width="45vw"
+                    :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }" />
+                    }"
+                />
             </el-scrollbar>
-            <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted" />
+            <AskDialog
+                v-model:visible="showDialog"
+                @question-posted="handleAnswerPosted"
+            />
             <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">
                     <Plus />
@@ -41,9 +66,9 @@ const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const bg_img_index = getUserInfo().themeId
+const userInfo = getUserInfo();
+const bg_img_index = userInfo ? userInfo.themeId : 1;
 // console.log(bg_img_index);
-
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -96,10 +121,11 @@ const cancelSearch = async () => {
 const questionList: QuestionItem[] = reactive([]);
 
 const favorite = async (key: number) => {
+    key = Number(key);
     let res = await Favorite(questionList[key].id);
     if (res == null) {
         ElMessage.error("用户未登录");
-        return
+        return;
     }
     questionList[key].is_favorite = res;
 };

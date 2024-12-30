@@ -1,18 +1,31 @@
 import { ElMessage } from "element-plus";
 import type { GetQuestionRes, QuestionItem } from "@/model/question.model";
 import { favoriteApi } from "@/api/question/favorite.api";
-import { getQuestionPublicApi, searchQuestionPublicApi } from "@/api/question/question.api";
+import {
+    getQuestionPublicApi,
+    searchQuestionPublicApi,
+} from "@/api/question/question.api";
 
 let isEnd = false;
 let currentPage = 1;
 let sortType = -1;
 let keyword = "";
+let alock = false;
 
 export async function getNextQuestions(
     sortType_?: number,
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<QuestionItem[]> {
+    if (alock) {
+        return new Promise<QuestionItem[]>((resolve) => {
+            resolve([]);
+        });
+    }
+    alock = true;
+    setTimeout(() => {
+        alock = false;
+    }, 2000);
     if (sortType_ !== undefined && sortType_ !== sortType) {
         currentPage = 1;
         sortType = sortType_;

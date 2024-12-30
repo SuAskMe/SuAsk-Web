@@ -24,10 +24,13 @@ function handleClose(done: () => void) {
             deleteMod.value = false;
         }, 300);
         clearQuestionContent();
-    } else if (questionContent.value.title == "" && questionContent.value.content == "" && questionContent.value.fileList.length == 0) {
+    } else if (
+        questionContent.value.title == "" &&
+        questionContent.value.content == "" &&
+        questionContent.value.fileList.length == 0
+    ) {
         done();
-    }
-    else {
+    } else {
         innerVisible.value = true;
     }
 }
@@ -53,7 +56,7 @@ function cancelSaveDraft() {
 
 const props = defineProps<{
     fullscreen?: boolean;
-    teacher?: Teacher
+    teacher?: Teacher;
 }>();
 
 interface Img {
@@ -62,12 +65,12 @@ interface Img {
 }
 
 interface Ask {
-    draftId?: number,
-    title: string,
-    content: string,
-    isPrivate: boolean
-    fileList: File[]
-    imageList: Img[]
+    draftId?: number;
+    title: string;
+    content: string;
+    isPrivate: boolean;
+    fileList: File[];
+    imageList: Img[];
 }
 
 const questionContent = ref<Ask>({
@@ -76,12 +79,13 @@ const questionContent = ref<Ask>({
     content: "",
     isPrivate: false,
     fileList: [],
-    imageList: []
-})
+    imageList: [],
+});
 
-const avatarURL = getUserInfo().avatar;
+const userInfo = getUserInfo();
+const avatarURL = userInfo ? userInfo.avatar : "@/assets/default-avatar.png";
 
-const hoverColor = ref('#000000');
+const hoverColor = ref("#000000");
 
 const imgPicker = ref<HTMLInputElement>();
 const pickImage = () => {
@@ -105,7 +109,10 @@ const pickImageImpl = (event: any) => {
             });
         }
         if (imgPicker.value) imgPicker.value.value = "";
-        console.log(questionContent.value.fileList, questionContent.value.imageList);
+        console.log(
+            questionContent.value.fileList,
+            questionContent.value.imageList
+        );
     }
 };
 
@@ -135,18 +142,16 @@ const isSelectAll = ref(true);
 
 function handleCheckAllChange() {
     if (isSelectAll.value) {
-        deleteDrafts.value = drafts.value.map(draft => draft.id);
+        deleteDrafts.value = drafts.value.map((draft) => draft.id);
     } else {
         deleteDrafts.value = [];
     }
     isSelectAll.value = !isSelectAll.value;
     console.log(deleteDrafts.value);
-
 }
 
 function useDraft(draft: Question) {
-    if (deleteMod.value)
-        return;
+    if (deleteMod.value) return;
     questionContent.value.title = draft.title;
     questionContent.value.content = draft.content;
     questionContent.value.fileList = [];
@@ -157,7 +162,9 @@ function useDraft(draft: Question) {
             url: URL.createObjectURL(img),
         });
         const file = img as File;
-        questionContent.value.fileList.push(new File([file], file.name, { type: file.type }));
+        questionContent.value.fileList.push(
+            new File([file], file.name, { type: file.type })
+        );
     }
     questionContent.value.draftId = draft.id;
     isDraft.value = false;
@@ -192,7 +199,7 @@ async function getDrafts() {
 
 async function deleteDraft(id: number | number[]) {
     try {
-        if (typeof id === 'number') {
+        if (typeof id === "number") {
             await db.questions.delete(id);
             console.log("Draft deleted with id", id);
         } else {
@@ -207,7 +214,7 @@ async function deleteDraft(id: number | number[]) {
     }
 }
 
-const emit = defineEmits(['questionPosted'])
+const emit = defineEmits(["questionPosted"]);
 
 async function postQuestion() {
     let userId = getUserInfo().id ? getUserInfo().id : null;
@@ -215,7 +222,7 @@ async function postQuestion() {
 
     let formData = new FormData();
     questionContent.value.fileList.forEach((file: File) => {
-        formData.append('files', file);
+        formData.append("files", file);
     });
 
     let req: QuestionBase = {
@@ -226,41 +233,53 @@ async function postQuestion() {
         is_private: questionContent.value.isPrivate,
     };
 
-    formData.append('src_user_id', req.src_user_id?.toString() || '');
-    formData.append('dst_user_id', req.dst_user_id?.toString() || '');
-    formData.append('title', req.title);
-    formData.append('content', req.content);
-    formData.append('is_private', req.is_private.toString());
+    formData.append("src_user_id", req.src_user_id?.toString() || "");
+    formData.append("dst_user_id", req.dst_user_id?.toString() || "");
+    formData.append("title", req.title);
+    formData.append("content", req.content);
+    formData.append("is_private", req.is_private.toString());
 
-    await addQuestionApi(formData).then(res => {
+    await addQuestionApi(formData).then((res) => {
         if (res) {
             ElMessage.success("提问成功");
             visible.value = false;
             if (questionContent.value.draftId) {
                 deleteDraft(questionContent.value.draftId);
             }
-            emit('questionPosted', res.data.id);
+            emit("questionPosted", res.data.id);
             clearQuestionContent();
         } else {
             ElMessage.error("提问失败");
         }
     });
 }
-
 </script>
 
 <template>
     <div class="dialog">
-        <el-dialog v-model="visible" :fullscreen="fullscreen" width="600px" :show-close="false"
-            :before-close="handleClose" align-center>
+        <el-dialog
+            v-model="visible"
+            :fullscreen="fullscreen"
+            width="600px"
+            :show-close="false"
+            :before-close="handleClose"
+            align-center
+        >
             <!-- 正文 -->
             <template v-if="!isDraft" #header="{ close }">
                 <div class="header">
-                    <el-icon @click="close" size="20px" :color="hoverColor" @mouseover="hoverColor = '#71b6ff'"
-                        @mouseleave="hoverColor = '#000000'">
+                    <el-icon
+                        @click="close"
+                        size="20px"
+                        :color="hoverColor"
+                        @mouseover="hoverColor = '#71b6ff'"
+                        @mouseleave="hoverColor = '#000000'"
+                    >
                         <Close />
                     </el-icon>
-                    <el-button @click="openDraft" type="primary" round text>草稿</el-button>
+                    <el-button @click="openDraft" type="primary" round text
+                        >草稿</el-button
+                    >
                 </div>
             </template>
             <div v-if="!isDraft">
@@ -268,81 +287,189 @@ async function postQuestion() {
                     <el-avatar :src="avatarURL" :size="40">
                         <img src="@/assets/default-avatar.png" />
                     </el-avatar>
-                    <el-input v-model="questionContent.title" placeholder="问题标题" style="width: 87%;"
-                        :input-attrs="{ style: 'font-size: 16px;' }" />
+                    <el-input
+                        v-model="questionContent.title"
+                        placeholder="问题标题"
+                        style="width: 87%"
+                        :input-attrs="{ style: 'font-size: 16px;' }"
+                    />
                 </div>
                 <div class="content">
-                    <el-input v-model="questionContent.content" :autosize="{ minRows: 6, maxRows: 8 }" type="textarea"
-                        placeholder="问题内容" />
+                    <el-input
+                        v-model="questionContent.content"
+                        :autosize="{ minRows: 6, maxRows: 8 }"
+                        type="textarea"
+                        placeholder="问题内容"
+                    />
                 </div>
-                <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
-                    <div class="picked-image" v-for="(img, index) in questionContent.imageList" :key="img.id"
-                        :id="'image-' + img.id">
-                        <el-image @click.stop :src="img.url" :preview-src-list="[img.url]" class="image" fit="cover"
-                            preview-teleported></el-image>
-                        <div class="delete-btn" @click.stop="deleteImage(index)">
-                            <SvgIcon icon="delete-round" color="#FF5F96" size="16px"></SvgIcon>
+                <transition-group
+                    class="image-container"
+                    tag="div"
+                    name="fade-list"
+                    move-class="fade-list-move"
+                >
+                    <div
+                        class="picked-image"
+                        v-for="(img, index) in questionContent.imageList"
+                        :key="img.id"
+                        :id="'image-' + img.id"
+                    >
+                        <el-image
+                            @click.stop
+                            :src="img.url"
+                            :preview-src-list="[img.url]"
+                            class="image"
+                            fit="cover"
+                            preview-teleported
+                        ></el-image>
+                        <div
+                            class="delete-btn"
+                            @click.stop="deleteImage(index)"
+                        >
+                            <SvgIcon
+                                icon="delete-round"
+                                color="#FF5F96"
+                                size="16px"
+                            ></SvgIcon>
                         </div>
                     </div>
                 </transition-group>
                 <hr class="line" />
                 <div class="footer">
-                    <SvgIcon @click.stop="pickImage" icon="image" size="24px" color="#71b6ff" style="cursor: pointer" />
-                    <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
-                        @change="pickImageImpl" multiple />
-                    <el-button @click="postQuestion" type="primary" round color="#71b6ff"
-                        style="color: white;">发布</el-button>
+                    <SvgIcon
+                        @click.stop="pickImage"
+                        icon="image"
+                        size="24px"
+                        color="#71b6ff"
+                        style="cursor: pointer"
+                    />
+                    <input
+                        type="file"
+                        ref="imgPicker"
+                        accept="image/png,image/jpeg,image/jpg"
+                        style="display: none"
+                        @change="pickImageImpl"
+                        multiple
+                    />
+                    <el-button
+                        @click="postQuestion"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >发布</el-button
+                    >
                 </div>
             </div>
             <!-- 草稿 -->
             <template v-if="isDraft" #header>
                 <div class="header">
-                    <div style="display: flex; align-items: center; font-weight: bold; font-size: 20px;">
-                        <el-icon @click="isDraft = false" size="20px" :color="hoverColor"
-                            @mouseover="hoverColor = '#71b6ff'" @mouseleave="hoverColor = '#000000'">
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            font-weight: bold;
+                            font-size: 20px;
+                        "
+                    >
+                        <el-icon
+                            @click="isDraft = false"
+                            size="20px"
+                            :color="hoverColor"
+                            @mouseover="hoverColor = '#71b6ff'"
+                            @mouseleave="hoverColor = '#000000'"
+                        >
                             <ArrowLeft />
                         </el-icon>
                         <p>草稿</p>
                     </div>
-                    <el-button v-if="!deleteMod" @click="handleDeleteMod" type="primary" round color="#71b6ff"
-                        style="color: white;">编辑</el-button>
-                    <el-button v-if="deleteMod" @click="handleDeleteMod" type="primary" round color="#71b6ff"
-                        style="color: white;">完成</el-button>
+                    <el-button
+                        v-if="!deleteMod"
+                        @click="handleDeleteMod"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >编辑</el-button
+                    >
+                    <el-button
+                        v-if="deleteMod"
+                        @click="handleDeleteMod"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >完成</el-button
+                    >
                 </div>
             </template>
             <div v-if="isDraft">
-                <el-checkbox-group v-model="deleteDrafts" class="draft" v-if="drafts.length != 0">
+                <el-checkbox-group
+                    v-model="deleteDrafts"
+                    class="draft"
+                    v-if="drafts.length != 0"
+                >
                     <div v-for="draft in drafts" :key="draft.id" class="border">
                         <div @click="useDraft(draft)" class="draft-card">
                             <div class="text-space">
                                 <p class="title">{{ draft.title }}</p>
                                 <p class="content">{{ draft.content }}</p>
                             </div>
-                            <img-list v-if="draft.imgList.length != 0" :img-list="draft.imgList"></img-list>
+                            <img-list
+                                v-if="draft.imgList.length != 0"
+                                :img-list="draft.imgList"
+                            ></img-list>
                         </div>
                         <el-checkbox v-if="deleteMod" :value="draft.id" />
                     </div>
                 </el-checkbox-group>
                 <div v-if="deleteMod" class="footer">
-                    <el-button @click="handleCheckAllChange" type="primary" size="small" round color="#71b6ff"
-                        style="color: white;">全选</el-button>
-                    <el-button @click="deleteDraft(deleteDrafts)" type="danger" size="small" round
-                        :disabled="deleteDrafts.length == 0">删除</el-button>
+                    <el-button
+                        @click="handleCheckAllChange"
+                        type="primary"
+                        size="small"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >全选</el-button
+                    >
+                    <el-button
+                        @click="deleteDraft(deleteDrafts)"
+                        type="danger"
+                        size="small"
+                        round
+                        :disabled="deleteDrafts.length == 0"
+                        >删除</el-button
+                    >
                 </div>
                 <div v-if="drafts.length == 0">
                     <p>暂无草稿</p>
                 </div>
             </div>
         </el-dialog>
-        <el-dialog v-model="innerVisible" width="300px" :show-close="false" align-center>
-            <template #header style="padding: 0;">
-                <p style="margin: 0; font-size: 20px; padding: 0 20px;">保存为草稿?</p>
+        <el-dialog
+            v-model="innerVisible"
+            width="300px"
+            :show-close="false"
+            align-center
+        >
+            <template #header style="padding: 0">
+                <p style="margin: 0; font-size: 20px; padding: 0 20px">
+                    保存为草稿?
+                </p>
             </template>
             <div class="inner-dialog">
                 <p>你可以保存此内容，以便之后从草稿发布</p>
-                <el-button @click="saveDraft" type="primary" round>保存</el-button>
-                <el-button @click="cancelSaveDraft" style="margin: 0; margin-top: 10px;" type="default"
-                    round>取消</el-button>
+                <el-button @click="saveDraft" type="primary" round
+                    >保存</el-button
+                >
+                <el-button
+                    @click="cancelSaveDraft"
+                    style="margin: 0; margin-top: 10px"
+                    type="default"
+                    round
+                    >取消</el-button
+                >
             </div>
         </el-dialog>
     </div>
