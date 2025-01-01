@@ -9,6 +9,33 @@
     padding: 0;
     width: 100%;
 
+    .answer-move,
+    .answer-enter-active,
+    .answer-leave-active {
+      transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    }
+
+    .answer-enter-from,
+    .answer-leave-to {
+      opacity: 0;
+      transform: scaleY(0.01) translate(30px, 0);
+    }
+
+    .answer-leave-active {
+      position: absolute;
+    }
+
+    .question-enter-active,
+    .question-leave-active {
+      transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    }
+
+    .question-enter-from,
+    .question-leave-to {
+      opacity: 0;
+      transform: scaleY(0.01) translate(30px, 0);
+    }
+
     .background-img {
       position: absolute;
     }

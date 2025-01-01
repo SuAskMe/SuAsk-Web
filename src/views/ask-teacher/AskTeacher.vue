@@ -1,47 +1,29 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                @return="navigateBack"
-                search
-                return_btn
-                get_keywords_url="/questions/teacher/keywords"
-                has_sort_upvote
-                :teacher_id="teacher_id"
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch"
+                @return="navigateBack" search return_btn get_keywords_url="/questions/teacher/keywords" has_sort_upvote
+                :teacher_id="teacher_id" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleQuestion
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-favorite="question.is_favorite"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favorite="favorite"
-                    width="45vw"
-                    :style="{
-                        marginTop: index === 0 ? '24px' : '0',
-                    }"
-                />
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <TransitionGroup name="question">
+                    <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                        :text="question.contents" :views="question.views" :time-stamp="question.created_at"
+                        :image-urls="question.image_urls" :show-favorite="false" :answer-num="question.answer_num"
+                        :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo" width="45vw"
+                        :style="{
+                            marginTop: index === 0 ? '24px' : '0',
+                        }" />
+                </TransitionGroup>
             </el-scrollbar>
             <AskDialog v-model:visible="showDialog" />
-            <div class="ask-btn" @click.stop="showDialog = true">+</div>
+            <div class="ask-btn" @click.stop="showDialog = true">
+                <el-icon size="30" color="#fff">
+                    <Plus />
+                </el-icon>
+            </div>
         </el-main>
     </el-container>
 </template>
@@ -119,16 +101,6 @@ const cancelSearch = async () => {
 };
 
 const questionList: QuestionItem[] = reactive([]);
-
-const favorite = async (key: number) => {
-    key = Number(key);
-    let res = await Favorite(questionList[key].id);
-    if (res == null) {
-        ElMessage.error("用户未登录");
-        return;
-    }
-    questionList[key].is_favorite = res;
-};
 
 const navigateTo = (key: number) => {
     key = Number(key);

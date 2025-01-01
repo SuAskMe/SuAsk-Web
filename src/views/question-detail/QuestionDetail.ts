@@ -1,6 +1,9 @@
+import { favoriteApi } from "@/api/question/favorite.api";
+import { ElMessage } from "element-plus";
+
 let skipLock = false;
 
-const obersever = new IntersectionObserver(
+const observer = new IntersectionObserver(
     (entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -23,9 +26,9 @@ export const scrollToQuote = (key: {
     if (el && !skipLock) {
         skipLock = true;
         el.scrollIntoView({ behavior: "smooth", block: "center" });
-        obersever.observe(el);
+        observer.observe(el);
         setTimeout(() => {
-            obersever.unobserve(el);
+            observer.unobserve(el);
             skipLock = false;
         }, 2000);
     }
@@ -57,24 +60,11 @@ export interface AnswerItem {
     imageUrls: string[];
 }
 
-// interface BubbleAnswerProps {
-//     isMine: boolean;
-//     avatar: string;
-//     nickName: string;
-//     text: string;
-//     likeCount: number;
-//     timeStamp: number;
-//     width?: string;
-//     isLiked?: boolean;
-//     quote?: {
-//         text: string;
-//         author: string;
-//     };
-//     isTeacher?: boolean;
-//     teacherName?: string;
-//     imageUrls?: string[];
-//     bubbleKey?: any;
-//     clickAvatar?: (key: any) => void;
-//     clickLike?: (key: any) => void;
-//     clickQuote?: (key: any) => void;
-// }
+export async function Favorite(question_id: number): Promise<boolean | null> {
+    var res = await favoriteApi({ question_id });
+    if (res) {
+        return res.is_favorite;
+    }
+    ElMessage.error("请求失败");
+    return null;
+}

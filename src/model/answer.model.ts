@@ -7,6 +7,7 @@ export interface Question {
     views: number;
     created_at: number;
     image_urls: string[];
+    is_favorite: boolean;
 }
 
 export interface Answer {

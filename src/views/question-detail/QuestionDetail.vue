@@ -1,96 +1,47 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <Header
-                :title="'Ask All Detail'"
-                @change-sort="changeSort"
-                @return="navigateBack"
-            ></Header>
+            <QuestionHeader @change-sort="changeSort" @return="navigateBack" :return_btn="true" has_sort_upvote />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar>
-                <BubbleCard
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    width="45vw"
-                    style="margin-top: 24px"
-                    :click-card="() => {}"
-                >
-                </BubbleCard>
-                <BubbleAnswer
-                    v-for="(item, index) in answerList"
-                    :key="item.id"
-                    class="answer-card"
-                    :id="'answer-' + item.id"
-                    :is-mine="item.user_id == userId"
-                    :avatar="item.user_avatar"
-                    :nick-name="item.nickname"
-                    :text="item.contents"
-                    :like-count="item.upvotes"
-                    :is-liked="item.is_upvoted"
-                    :time-stamp="item.created_at"
-                    :quote="getQuote(item.in_reply_to)"
-                    :image-urls="item.image_urls"
-                    :is-teacher="item.teacher_name != ''"
-                    :teacher-name="item.teacher_name"
-                    :bubble-key="{
-                        idx: index,
-                        quoteId: item.in_reply_to,
-                        userId: item.user_id,
-                        answerId: item.id,
-                    }"
-                    width="35vw"
-                    :click-quote="scrollToQuote"
-                    :click-like="upVote"
-                    :click-card="openDialog"
-                >
-                </BubbleAnswer>
+                <Transition name="question" appear>
+                    <BubbleCard :title="question.title" :text="question.contents" :views="question.views"
+                        :time-stamp="question.created_at" :image-urls="question.image_urls" :show-favorite="true"
+                        :is-favorite="question.is_favorite" width="45vw" style="margin-top: 24px"
+                        :click-card="() => { }" :click-favorite="favorite">
+                    </BubbleCard>
+                </Transition>
+                <TransitionGroup name="answer" tag="div">
+                    <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
+                        :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"
+                        :nick-name="item.nickname" :text="item.contents" :like-count="item.upvotes"
+                        :is-liked="item.is_upvoted" :time-stamp="item.created_at" :quote="getQuote(item.in_reply_to)"
+                        :image-urls="item.image_urls" :is-teacher="item.teacher_name != ''"
+                        :teacher-name="item.teacher_name" :bubble-key="{
+                            idx: index,
+                            quoteId: item.in_reply_to,
+                            userId: item.user_id,
+                            answerId: item.id,
+                        }" width="35vw" :click-quote="scrollToQuote" :click-like="upVote" :click-card="openDialog"
+                        :click-avatar="navigateToUser">
+                    </BubbleAnswer>
+                </TransitionGroup>
             </el-scrollbar>
-            <transition-group
-                class="image-container"
-                tag="div"
-                name="fade-list"
-                move-class="fade-list-move"
-            >
-                <div
-                    class="picked-image"
-                    v-for="(img, index) in imageList"
-                    :key="img.id"
-                    :id="'image-' + img.id"
-                >
-                    <el-image
-                        @click.stop
-                        :src="img.url"
-                        :preview-src-list="[img.url]"
-                        class="image"
-                        fit="cover"
-                        preview-teleported
-                    ></el-image>
+            <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
+                <div class="picked-image" v-for="(img, index) in imageList" :key="img.id" :id="'image-' + img.id">
+                    <el-image @click.stop :src="img.url" :preview-src-list="[img.url]" class="image" fit="cover"
+                        preview-teleported></el-image>
                     <div class="delete-btn" @click.stop="deleteImage(index)">
-                        <SvgIcon
-                            icon="delete-round"
-                            color="#FF5F96"
-                            size="16px"
-                        ></SvgIcon>
+                        <SvgIcon icon="delete-round" color="#FF5F96" size="16px"></SvgIcon>
                     </div>
                 </div>
             </transition-group>
         </el-main>
-        <answer-dialog
-            v-model:visible="showDialog"
-            :question-id="question.id"
-            :quote="quote"
-            @answer-posted="handleAnswerPosted"
-        ></answer-dialog>
-        <div
-            v-if="canReply"
-            class="ask-btn"
-            @click.stop="openDialog(undefined)"
-        >
+        <answer-dialog v-model:visible="showDialog" :question-id="question.id" :quote="quote"
+            @answer-posted="handleAnswerPosted"></answer-dialog>
+        <div v-if="canReply" class="ask-btn" @click.stop="openDialog(undefined)">
             <el-icon size="30" color="#fff">
                 <Plus />
             </el-icon>
@@ -103,9 +54,9 @@
 
 <script setup lang="ts">
 import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
-import Header from "./Header.vue";
+import QuestionHeader from "@/components/question-header"
 import BackgroundImg from "@/components/backgroud-img";
-import { scrollToQuote } from "./QuestionDetail";
+import { Favorite, scrollToQuote } from "./QuestionDetail";
 import { nextTick, onMounted, ref } from "vue";
 import SvgIcon from "@/components/svg-icon";
 import { useRoute } from "vue-router";
@@ -120,6 +71,7 @@ import type {
 } from "@/model/answer.model";
 import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
+import { favoriteApi } from "@/api/question/favorite.api";
 const userInfo = getUserInfo();
 const bg_img_index = userInfo ? userInfo.themeId : 1;
 
@@ -159,6 +111,10 @@ const changeSort = (index: number) => {
 const navigateBack = () => {
     router.go(-1);
 };
+
+function navigateToUser(key: { userId: number }) {
+    router.push('/user/' + key.userId);
+}
 
 onMounted(async () => {
     document.title = "加载中...";
@@ -200,14 +156,11 @@ function scrollToAnswer(id: number) {
 const showDialog = ref(false);
 
 async function getAnswerList() {
-    // console.log(parseInt(route.params.id as string));
-
     await getAnswerApi(parseInt(route.params.id as string))
         .then((res) => {
             answerList.value = res.data.answer_list;
             question.value = res.data.question;
             canReply.value = res.data.can_reply;
-            // console.log(answerList.value);
         })
         .catch((err) => {
             console.log(err);
@@ -297,6 +250,17 @@ async function upVote(key: { answerId: number }) {
         });
 }
 
+async function favorite(key: number) {
+    key = Number(key);
+    // let res = await Favorite(question.value.id);
+    let res = await favoriteApi({ question_id: question.value.id });
+    if (res == null) {
+        ElMessage.error("用户未登录");
+        return;
+    }
+    question.value.is_favorite = res.is_favorite;
+}
+
 const answerList = ref<Answer[]>([]);
 const question = ref<Question>({
     id: 0,
@@ -305,6 +269,7 @@ const question = ref<Question>({
     views: 0,
     created_at: 0,
     image_urls: [],
+    is_favorite: false,
 });
 const canReply = ref<boolean>(false);
 const userId = userInfo ? userInfo.id : 0;
