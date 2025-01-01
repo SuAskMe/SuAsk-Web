@@ -4,7 +4,7 @@ import {
     getFavoriteApi,
     searchFavoriteApi,
 } from "@/api/question/favorite.api";
-import type { FavoriteItem, GetFavoriteRes } from "@/model/favorite.model";
+import type { FavoriteItem, FavoriteRes, GetFavoriteRes } from "@/model/favorite.model";
 
 let isEnd = false;
 let currentPage = 1;
@@ -76,10 +76,10 @@ async function getQuestionsByPage(
     }
 }
 
-export async function Favorite(question_id: number): Promise<boolean | null> {
+export async function Favorite(question_id: number): Promise<FavoriteRes | null> {
     var res = await favoriteApi({ question_id });
     if (res) {
-        return res.is_favorite;
+        return res
     }
     ElMessage.error("请求失败");
     return null;

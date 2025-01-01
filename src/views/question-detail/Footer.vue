@@ -17,7 +17,7 @@ import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 import { GenId } from "./QuestionDetail";
 import type { AddAnswer, Answer } from "@/model/answer.model";
-import { addAnswer } from "@/api/answer/answer.api";
+import { addAnswerApi } from "@/api/answer/answer.api";
 
 interface ReplyProps {
     question_id: number;
@@ -49,7 +49,7 @@ const handleEnter = async () => {
     }
     formData.append('question_id', req.question_id.toString());
     formData.append('content', req.content);
-    await addAnswer(formData).then((res) => {
+    await addAnswerApi(formData).then((res) => {
         console.log(res);
         fileList.value = [];
         imageList.value = [];

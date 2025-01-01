@@ -31,6 +31,17 @@
     .ask-btn:hover {
       transform: translateY(-10px);
     }
+
+    .question-enter-active,
+    .question-leave-active {
+      transition: all 0.5s ease;
+    }
+
+    .question-enter-from,
+    .question-leave-to {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
   }
 }
 

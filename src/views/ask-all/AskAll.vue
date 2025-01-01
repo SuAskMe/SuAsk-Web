@@ -1,47 +1,24 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                search
-                has_sort_upvote
-                get_keywords_url="/questions/public/keywords"
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" search
+                has_sort_upvote get_keywords_url="/questions/public/keywords" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleQuestion
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :id="'question-' + question.id"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-favorite="question.is_favorite"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favorite="favorite"
-                    width="45vw"
-                    :style="{
-                        marginTop: index === 0 ? '24px' : '0',
-                    }"
-                />
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <TransitionGroup name="question">
+                    <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                        :id="'question-' + question.id" :text="question.contents" :views="question.views"
+                        :time-stamp="question.created_at" :image-urls="question.image_urls"
+                        :is-favorite="question.is_favorite" :answer-num="question.answer_num"
+                        :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo"
+                        :show-favorite="false" :click-favorite="favorite" width="45vw" :style="{
+                            marginTop: index === 0 ? '24px' : '0',
+                        }" />
+                </TransitionGroup>
             </el-scrollbar>
-            <AskDialog
-                v-model:visible="showDialog"
-                @question-posted="handleAnswerPosted"
-            />
+            <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted" />
             <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">
                     <Plus />
@@ -52,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, onUpdated, reactive, ref } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
-import { BubbleQuestion } from "@/components/bubble-card";
+import { BubbleCard, BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { router } from "@/router";

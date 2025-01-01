@@ -7,7 +7,7 @@ const WebHome = () => import("@/layout/home/WebHome.vue");
 const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
 
 const QuestionDetail = () =>
-    import("@/views/home/content/question-detail/QuestionDetail.vue");
+    import("@/views/question-detail/QuestionDetail.vue");
 
 export const QuestionDetailRoute: AppRouteRecordRaw = {
 

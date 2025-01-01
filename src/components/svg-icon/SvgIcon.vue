@@ -1,21 +1,12 @@
 <template>
-    <svg
-        :width="size"
-        :height="size"
-        aria-hidden="true"
-        v-bind="$attrs"
-        :color="color_"
-        :fill="color_"
-        ref="icon"
-        @mouseover="color_ = hoverColor || color"
-        @mouseout="color_ = color"
-    >
+    <svg :key="color_" :width="size" :height="size" aria-hidden="true" v-bind="$attrs" :color="color_" :fill="color_"
+        ref="icon" @mouseover="color_ = hoverColor || color" @mouseout="color_ = color">
         <use :href="`#icon-${iconName}`"></use>
     </svg>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface SvgIconProps {
     icon: string; // 图标名称
@@ -29,7 +20,11 @@ const props = defineProps<SvgIconProps>();
 const iconName = computed(() =>
     props.filled ? `${props.icon}-fill` : props.icon
 );
-const color_ = ref(props.color || "");
+const color_ = ref(props.color);
+
+watch(() => props.color, (newColor) => {
+    color_.value = newColor
+});
 </script>
 
 <style scoped>
