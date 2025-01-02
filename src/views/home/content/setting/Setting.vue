@@ -18,20 +18,18 @@
                 </div>
                 <div class="avatar-and-id">
                     <div style="position: relative;">
-                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar">
+                        <el-avatar @click.stop="pickImage" :size="deviceType == 'desktop' ? 200 : 150"
+                            :src="basicInfo.avatar">
                             <img src="@/assets/default-avatar.png" />
                         </el-avatar>
-                        <el-upload action="http://127.0.0.1:8080/files" :show-file-list="false"
-                            :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload"
-                            :data="{ token: getToken() }">
-
-                            <el-button type="default" size="small">
-                                <template #icon>
-                                    <svg-icon icon="edit" color="#808080" />
-                                </template>
-                                编辑
-                            </el-button>
-                        </el-upload>
+                        <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
+                            multiple @change="pickImageImpl">
+                        <el-button type="default" size="small">
+                            <template #icon>
+                                <svg-icon icon="edit" color="#808080" />
+                            </template>
+                            编辑
+                        </el-button>
                     </div>
                     <p> @{{ basicInfo.name }} </p>
                 </div>
@@ -65,21 +63,44 @@
 </template>
 
 <script setup lang='ts'>
-import { inject, onMounted, reactive, ref, watch } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import BioPanel from '@/components/bio-panel';
 import ThemeImage from './ThemeImage.vue';
 import SvgIcon from '@/components/svg-icon';
-import { ElMessage, type UploadProps } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import ResetPasswordDialog from './ResetPasswordDialog.vue';
 import LogoutDialog from './LogoutDialog.vue';
-import { updateUserInfoApi } from '@/api/user/user.api';
-import type { UpdateAvatar, UpdateUser, User } from '@/model/user.model';
+import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api';
+import type { User } from '@/model/user.model';
+import { getUserInfo, setUserInfo } from '@/utils/userInfo';
+import { UserInfoStore } from '@/store/modules/sidebar';
+import { storeToRefs } from 'pinia';
+import { resetPasswordApi } from '@/api/user/reset_password.api';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
 imgList.value = Object.values(images).map((module) => (module as any).default);
 
 const deviceType = inject('deviceType', 'desktop');
+
+const imgPicker = ref<HTMLInputElement>();
+
+function pickImage() {
+    if (imgPicker.value) {
+        imgPicker.value.click()
+    }
+}
+
+function pickImageImpl(event: any) {
+    const file = event.target.files
+    if (file.length > 1) {
+        ElMessage.error('最多上传一张头像')
+        return
+    }
+    avatarFile.value = file[0]
+}
+
+const avatarFile = ref<File | null>(null)
 
 
 const basicInfo = ref<User>({
