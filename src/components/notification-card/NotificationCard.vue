@@ -152,7 +152,7 @@ const dialogVisible = ref(false);
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 10px 0;
     border-top: 1px solid $su-border;
     border-bottom: 1px solid $su-border;
 
@@ -230,6 +230,7 @@ const dialogVisible = ref(false);
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
+        width: 100%;
 
 
         .question-title {
@@ -255,6 +256,7 @@ const dialogVisible = ref(false);
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
+        width: 100%;
 
         .answer-content {
             font-size: 14px;
@@ -269,6 +271,7 @@ const dialogVisible = ref(false);
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
+        width: 100%;
 
         .reply-content {
             display: flex;

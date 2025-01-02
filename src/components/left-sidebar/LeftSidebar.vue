@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="title">
-            <svg-icon icon="qr-code" color="#808080" size="24px" />
+            <svg-icon class="qr-code" icon="qr-code" color="#808080" size="24px" />
             <div class="message">
                 <svg-icon @click="openDrawer" icon="communicate_message_emoji" color="#808080" size="24px" />
                 <div class="red-dot" />
@@ -25,63 +25,7 @@
         </div>
     </div>
     <el-drawer class="drawer" v-model="drawer" :with-header="false" size="400" destroy-on-close>
-        <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">消息</div>
-        <el-tabs class="demo-tabs" stretch>
-            <el-tab-pane>
-                <template #label>
-                    <div class="custom-tabs-label">
-                        <span style="vertical-align: middle; margin-left: 4px;">提问我的</span>
-                    </div>
-                </template>
-                <el-scrollbar>
-                    <div v-for="item in newQuestion" :key="item.id" style="width: 340px;">
-                        <NotificationCard type="question" :created_at="item.created_at" :id="item.id"
-                            :is_read="item.is_read" :question_id="item.question_id"
-                            :question_title="item.question_title" :question_content="item.question_content"
-                            :user_avatar="item.user_avatar" :user_name="item.user_name" :user_id="item.user_id"
-                            @reply="closeDrawer" @delete="deleteNotification" @read="readNotification" />
-                    </div>
-                </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane>
-                <template #label>
-                    <div class="custom-tabs-label">
-                        <span style="vertical-align: middle; margin-left: 4px;">回答我的</span>
-                    </div>
-                </template>
-                <el-scrollbar>
-                    <div v-for="item in newAnswer" :key="item.id" style="width: 340px;">
-                        <NotificationCard type="answer" :created_at="item.created_at" :id="item.id"
-                            :is_read="item.is_read" :question_id="item.question_id"
-                            :question_title="item.question_title" :question_content="item.question_content"
-                            :answer_id="item.answer_id" :answer_content="item.answer_content"
-                            :respondent_avatar="item.respondent_avatar" :respondent_name="item.respondent_name"
-                            :respondent_id="item.respondent_id" @reply="closeDrawer" @delete="deleteNotification"
-                            @read="readNotification" />
-                    </div>
-                </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane>
-                <template #label>
-                    <div class="custom-tabs-label">
-                        <span style="vertical-align: middle; margin-left: 4px;">回复我的</span>
-                    </div>
-                </template>
-                <el-scrollbar>
-                    <div v-for="item in newReply" :key="item.id" style="width: 340px;">
-                        <NotificationCard type="reply" :created_at="item.created_at" :id="item.id"
-                            :is_read="item.is_read" :question_id="item.question_id"
-                            :question_title="item.question_title" :question_content="item.question_content"
-                            :answer_id="item.answer_id" :answer_content="item.answer_content"
-                            :respondent_avatar="item.respondent_avatar" :respondent_name="item.respondent_name"
-                            :respondent_id="item.respondent_id" :reply_id="item.reply_id"
-                            :reply_content="item.reply_content" @reply="closeDrawer" @delete="deleteNotification"
-                            @read="readNotification" />
-                    </div>
-                </el-scrollbar>
-
-            </el-tab-pane>
-        </el-tabs>
+        <Notification @close-drawer="closeDrawer"></Notification>
     </el-drawer>
 </template>
 
@@ -116,46 +60,7 @@ function closeDrawer() {
     drawer.value = false;
 }
 async function openDrawer() {
-    await loadNotification();
-    console.log(newAnswer.value);
     drawer.value = true;
-}
-
-const newQuestion = ref<NewQuestion[]>([])
-const newAnswer = ref<NewAnswer[]>([])
-const newReply = ref<NewReply[]>([])
-
-async function loadNotification() {
-    await getNotificationApi(2).then((res) => {
-        newQuestion.value = res.new_question
-        newAnswer.value = res.new_answer
-        newReply.value = res.new_reply
-        console.log(newQuestion);
-
-    }).catch((err) => {
-        console.log(err)
-    })
-}
-
-enum NotificationType {
-    QUESTION = 'question',
-    ANSWER = 'answer',
-    REPLY = 'reply'
-}
-
-function deleteNotification(id: number, type: string) {
-    console.log(id, type);
-    if (type == NotificationType.QUESTION) {
-        newQuestion.value = newQuestion.value.filter((item) => item.id !== id)
-    } else if (type == NotificationType.ANSWER) {
-        newAnswer.value = newAnswer.value.filter((item) => item.id !== id)
-    } else if (type == NotificationType.REPLY) {
-        newReply.value = newReply.value.filter((item) => item.id !== id)
-    }
-}
-
-function readNotification(id: number, type: string, is_read: boolean) {
-    console.log(id, type, is_read);
 }
 
 const newQuestionCount = ref(0)
@@ -169,14 +74,12 @@ async function getNotificationCount() {
             newAnswerCount.value = res.new_answer_count
             newReplyCount.value = res.new_reply_count
         }
-        console.log(res);
+        // console.log(res);
 
     }).catch((err) => {
         console.log(err);
     })
 }
-
-
 
 function toUserInfo() {
     if (userInfo) {
@@ -206,10 +109,25 @@ const isStudent = getUserInfo()?.role === 'student';
         display: flex;
         justify-content: space-between;
 
+        .qr-code {
+            cursor: pointer;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.1);
+        }
+
+        .message:hover {
+            transform: scale(1.1);
+        }
+
         .message {
             position: relative;
             cursor: pointer;
             padding: 5px;
+            transition: transform 0.3s ease;
 
             .red-dot {
                 width: 10px;
@@ -275,6 +193,7 @@ const isStudent = getUserInfo()?.role === 'student';
 
     .drawer {
         display: flex;
+        height: 100%;
 
         .title {
             font-size: 20px;
@@ -283,6 +202,15 @@ const isStudent = getUserInfo()?.role === 'student';
         }
     }
 
+    .notification-enter-active,
+    .notification-leave-active {
+        transition: opacity 0.5s;
+    }
 
+    .notification-enter-from,
+    .notification-leave-to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
 }
 </style>
