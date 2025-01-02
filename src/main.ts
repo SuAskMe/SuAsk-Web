@@ -8,6 +8,7 @@ import { config } from 'md-editor-v3'
 import { isMobile } from './utils/device'
 import { setupStore } from './store'
 import ElementPlus from 'element-plus'
+import 'animate.css'
 import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
@@ -32,6 +33,7 @@ config({
 
 
 const app = createApp(App)
+const pinia = createPinia()
 
 const deviceType = isMobile() ? 'mobile' : 'desktop';
 app.provide('deviceType', deviceType);
@@ -43,5 +45,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 setupRouter(app);
 setupStore(app);
 app.use(ElementPlus)
+app.use(pinia)
 app.component("svg-icon", SvgIcon)
 app.mount('#app')
