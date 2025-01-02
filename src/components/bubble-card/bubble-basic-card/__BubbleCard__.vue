@@ -2,8 +2,8 @@
 import { computed, ref } from "vue";
 import { getImgStyle, getTimeStr } from "../bubble-card";
 import { MdPreview } from "md-editor-v3";
+import SvgIcon from "@/components/svg-icon";
 import "md-editor-v3/lib/preview.css";
-import { sv } from "element-plus/es/locales.mjs";
 interface BubbleCardProps {
     title: string;
     text: string;
@@ -18,7 +18,7 @@ interface BubbleCardProps {
     bubbleKey?: any;
     imageUrls?: string[];
     showFavorite?: boolean;
-    isFavorited?: boolean;
+    isFavorite?: boolean;
     tag?: string;
     clickCard?: (key: any) => void;
     clickPin?: (key: any) => void;
@@ -48,17 +48,8 @@ const tagStyle = computed(() => {
 </script>
 
 <template>
-    <div
-        class="card-container"
-        @click.stop="clickCard(key)"
-        :style="containerStyle"
-    >
-        <div
-            v-if="showPin"
-            @click.stop="clickPin(key)"
-            class="pin"
-            :data-tips="isPinned ? '取消置顶' : '置顶'"
-        >
+    <div class="card-container" @click.stop="clickCard(key)" :style="containerStyle">
+        <div v-if="showPin" @click.stop="clickPin(key)" class="pin" :data-tips="isPinned ? '取消置顶' : '置顶'">
             <!-- <svg-icon
                 icon="pushpin"
                 size="20"
@@ -66,12 +57,8 @@ const tagStyle = computed(() => {
                 :hover-color="isPinned ? '#FFC107' : '#818181'"
                 :filled="isPinned"
             /> -->
-            <svg
-                :width="20"
-                :height="20"
-                :color="isPinned ? '#FFC107' : '#808080'"
-                :fill="isPinned ? '#FFC107' : '#808080'"
-            >
+            <svg :width="20" :height="20" :color="isPinned ? '#FFC107' : '#808080'"
+                :fill="isPinned ? '#FFC107' : '#808080'">
                 <use :href="`#icon-pushpin${isPinned ? '-fill' : ''}`"></use>
             </svg>
         </div>
@@ -80,42 +67,20 @@ const tagStyle = computed(() => {
             <div class="q-title">{{ title }}</div>
             <div class="q-body">
                 <div v-if="!isMarkdown" class="text">{{ text }}</div>
-                <div
-                    v-else
-                    :class="'md-container' + (showAllMarkdown ? '-all' : '')"
-                >
-                    <MdPreview
-                        id="preview-only"
-                        :model-value="text"
-                        class="md-preview"
-                    />
+                <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
+                    <MdPreview id="preview-only" :model-value="text" class="md-preview" />
                 </div>
                 <div v-if="imageContainer.hasImages" class="photos-container">
-                    <div
-                        class="preview-group"
-                        :style="{
-                            width: imageContainer.containerWidth,
-                            gap: imageContainer.gap + ' ' + imageContainer.gap,
-                        }"
-                    >
-                        <el-image
-                            @click.stop
-                            v-for="(img, index) in imageUrls"
-                            :key="img"
-                            :src="img"
-                            :style="{
-                                width: imageContainer.size,
-                                height: imageContainer.size,
-                                borderRadius: '6px',
-                            }"
-                            :preview-src-list="imageUrls"
-                            :initial-index="index"
-                            fit="cover"
-                            lazy
-                            infinite
-                            preview-teleported
-                            style="cursor: zoom-in"
-                        ></el-image>
+                    <div class="preview-group" :style="{
+                        width: imageContainer.containerWidth,
+                        gap: imageContainer.gap + ' ' + imageContainer.gap,
+                    }">
+                        <el-image @click.stop v-for="(img, index) in imageUrls" :key="img" :src="img" :style="{
+                            width: imageContainer.size,
+                            height: imageContainer.size,
+                            borderRadius: '6px',
+                        }" :preview-src-list="imageUrls" :initial-index="index" fit="cover" lazy infinite
+                            preview-teleported style="cursor: zoom-in"></el-image>
                     </div>
                 </div>
             </div>
@@ -128,16 +93,9 @@ const tagStyle = computed(() => {
                     <span class="counts">{{ views }}</span>
                 </div>
                 <div class="time">{{ timeStr }}</div>
-                <svg-icon
-                    v-if="showFavorite"
-                    icon="bookmark"
-                    size="18"
-                    :color="isFavorited ? '#ffc107' : '#818181'"
-                    :hover-color="isFavorited ? '#ffc107' : '#71b6ff'"
-                    :filled="isFavorited"
-                    style="cursor: pointer"
-                    @click.stop="clickFavorite(key)"
-                />
+                <svg-icon v-if="showFavorite" icon="bookmark" size="18" :color="isFavorite ? '#ffc107' : '#818181'"
+                    :hover-color="isFavorite ? '#ffc107' : '#71b6ff'" :filled="isFavorite" style="cursor: pointer"
+                    @click.stop="clickFavorite(key)" />
             </div>
         </div>
     </div>

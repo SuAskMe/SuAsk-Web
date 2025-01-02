@@ -1,48 +1,25 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                search
-                has_sort_upvote
-                get_keywords_url="/teacher/question/keywords"
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" search
+                has_sort_upvote get_keywords_url="/teacher/question/keywords" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-pinned="question.is_pinned"
-                    :bubble-key="index"
-                    :tag="question.tag"
-                    show-pin
-                    :style="{
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <BubbleCard v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                    :text="question.contents" :views="question.views" :time-stamp="question.created_at"
+                    :image-urls="question.image_urls" :is-pinned="question.is_pinned" :bubble-key="index"
+                    :tag="question.tag" show-pin :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }"
-                    width="45vw"
-                    :click-card="navigateTo"
-                    :click-pin="pin"
-                ></BubbleCard>
+                    }" width="45vw" :click-card="navigateTo" :click-pin="pin"></BubbleCard>
             </el-scrollbar>
         </el-main>
     </el-container>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
@@ -52,13 +29,20 @@ import QuestionHeader from "@/components/question-header";
 import { getNextQuestions, Pin } from "./askMe";
 import type { QFMItem, PinQFMReq } from "@/model/teacher-self.model";
 import { pinQFMApi } from "@/api/question/teacher-self.api";
+import { storeToRefs } from "pinia";
+import { UserInfoStore } from "@/store/modules/sidebar";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const userInfo = getUserInfo();
-const bg_img_index = userInfo ? userInfo.themeId : 1;
-console.log(bg_img_index);
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
 
 const Init = async () => {
     if (questionList.length === 0) {

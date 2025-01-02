@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
@@ -39,12 +39,20 @@ import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
+import { UserInfoStore } from "@/store/modules/sidebar";
+import { storeToRefs } from "pinia";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const userInfo = getUserInfo();
-const bg_img_index = userInfo ? userInfo.themeId : 1;
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
 
 const teacher_id = router.currentRoute.value.params.id as unknown as number;
 

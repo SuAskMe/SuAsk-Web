@@ -1,4 +1,4 @@
-import type { UpdateAvatar, UpdateUser } from "@/model/user.model";
+import type { UpdateAvatar, UpdateUser, User } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
@@ -12,12 +12,20 @@ export async function updatePasswordApi(password: string) {
     return request.post(Api.UPDATE_PASSWORD, password);
 }
 
-export async function updateUserInfoApi(userInfo: UpdateUser | UpdateAvatar) {
-    return request.put(Api.UPDATE_USER_INFO, userInfo);
+export async function updateUserInfoApi(userInfo: FormData) {
+    return request.put(Api.UPDATE_USER_INFO, userInfo).then((res) => {
+        if (res) {
+            return res.data
+        }
+    });
 }
 
-export async function getUserInfoApi() {
-    return request.get(Api.GET_USER_INFO);
+export async function getUserInfoApi(): Promise<User> {
+    return request.get(Api.GET_USER_INFO).then((res) => {
+        if (res) {
+            return res.data
+        }
+    });
 }
 
 export async function getUserByIdApi(id: string) {

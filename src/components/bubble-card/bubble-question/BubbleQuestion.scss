@@ -140,7 +140,7 @@
     color: #66b0ff;
   }
 
-  .favourite {
+  .favorite {
     position: relative;
     margin-left: auto;
     margin-right: 16px;
@@ -148,7 +148,7 @@
     cursor: pointer;
   }
 
-  .favourite:hover::after {
+  .favorite:hover::after {
     content: attr(data-tips);
     position: absolute;
     font-size: 12px;

@@ -19,8 +19,8 @@ export interface ForgetPasswordForm {
 export interface UpdateUser {
     nickname: string | null;
     introduction: string | null;
-    avatarId: number | null;
     themeId: number | null;
+    // avatarFile: File | null;
 }
 
 export interface UpdateAvatar {
