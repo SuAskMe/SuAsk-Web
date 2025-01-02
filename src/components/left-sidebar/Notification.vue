@@ -1,18 +1,18 @@
 <template>
     <div class="notification">
-        <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">消息</div>
+        <div class="title">消息</div>
         <div class="choose-notification">
             <el-radio-group v-model="radio" style="width: 100%;">
-                <el-radio-button label="提问我的" value="提问我的" />
-                <el-radio-button label="回答我的" value="回答我的" />
-                <el-radio-button label="回复我的" value="回复我的" />
+                <el-radio-button label="提问我的" value="new-question" />
+                <el-radio-button label="回答我的" value="new-answer" />
+                <el-radio-button label="回复我的" value="new-reply" />
             </el-radio-group>
         </div>
         <div class="notification-container">
-            <div v-if="radio == '提问我的'">
-                <el-scrollbar>
+            <el-scrollbar>
+                <div v-if="radio == 'new-question'">
                     <transition-group name="notification">
-                        <div v-for="item in newQuestion" :key="item.id" style="width: 340px;">
+                        <div v-for="item in newQuestion" :key="item.id">
                             <NotificationCard type="question" :created_at="item.created_at" :id="item.id"
                                 :is_read="item.is_read" :question_id="item.question_id"
                                 :question_title="item.question_title" :question_content="item.question_content"
@@ -20,13 +20,11 @@
                                 @reply="closeDrawer" @delete="deleteNotification" @read="readNotification" />
                         </div>
                     </transition-group>
-                </el-scrollbar>
-                <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
-            </div>
-            <div v-if="radio == '回答我的'">
-                <el-scrollbar>
+                    <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
+                </div>
+                <div v-if="radio == 'new-answer'">
                     <transition-group name="notification">
-                        <div v-for="item in newAnswer" :key="item.id" style="width: 340px;">
+                        <div v-for="item in newAnswer" :key="item.id">
                             <NotificationCard type="answer" :created_at="item.created_at" :id="item.id"
                                 :is_read="item.is_read" :question_id="item.question_id"
                                 :question_title="item.question_title" :question_content="item.question_content"
@@ -36,14 +34,12 @@
                                 @read="readNotification" />
                         </div>
                     </transition-group>
-                </el-scrollbar>
-                <div v-if="newAnswer.length == 0" class="text">暂无回答
+                    <div v-if="newAnswer.length == 0" class="text">暂无回答
+                    </div>
                 </div>
-            </div>
-            <div v-if="radio == '回复我的'">
-                <el-scrollbar>
+                <div v-if="radio == 'new-reply'">
                     <transition-group name="notification">
-                        <div v-for="item in newReply" :key="item.id" style="width: 340px;">
+                        <div v-for="item in newReply" :key="item.id">
                             <NotificationCard type="reply" :created_at="item.created_at" :id="item.id"
                                 :is_read="item.is_read" :question_id="item.question_id"
                                 :question_title="item.question_title" :question_content="item.question_content"
@@ -54,9 +50,9 @@
                                 @read="readNotification" />
                         </div>
                     </transition-group>
-                </el-scrollbar>
-                <div v-if="newReply.length == 0" class="text">暂无回复</div>
-            </div>
+                    <div v-if="newReply.length == 0" class="text">暂无回复</div>
+                </div>
+            </el-scrollbar>
         </div>
     </div>
 </template>
@@ -67,7 +63,7 @@ import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.mode
 import { NotificationCard } from '@/components/notification-card';
 import { onMounted, ref } from 'vue';
 
-const radio = ref('New York');
+const radio = ref('new-question');
 
 enum NotificationType {
     QUESTION = 'question',
@@ -122,11 +118,23 @@ onMounted(async () => {
     height: 100%;
     flex-direction: column;
 
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .choose-notification {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
     .notification-container {
         display: flex;
         flex-direction: column;
-        height: 100px;
-        padding: 10px;
+        height: 90%;
+        width: 360px;
+        margin-top: 10px;
 
         .text {
             text-align: center;
