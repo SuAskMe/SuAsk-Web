@@ -95,7 +95,7 @@ const favorite = async (key: number) => {
         return;
     }
     questionList[key].is_favorite = res.is_favorite;
-    questionList = questionList.filter((item) => item.id !== res.question_id);
+    questionList.splice(key, 1);
 };
 
 const navigateTo = (key: number) => {

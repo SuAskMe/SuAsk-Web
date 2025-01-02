@@ -50,5 +50,4 @@ export interface FavoriteReq {
 
 export interface FavoriteRes {
     is_favorite: boolean;
-    question_id: number;
 }
