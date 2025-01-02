@@ -18,13 +18,12 @@
                 </div>
                 <div class="avatar-and-id">
                     <div style="position: relative;">
-                        <el-avatar @click.stop="pickImage" :size="deviceType == 'desktop' ? 200 : 150"
-                            :src="basicInfo.avatar">
+                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar">
                             <img src="@/assets/default-avatar.png" />
                         </el-avatar>
                         <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
                             multiple @change="pickImageImpl">
-                        <el-button type="default" size="small">
+                        <el-button @click.stop="pickImage" class="upload-btn" type="default" size="small">
                             <template #icon>
                                 <svg-icon icon="edit" color="#808080" />
                             </template>
@@ -98,6 +97,7 @@ function pickImageImpl(event: any) {
         return
     }
     avatarFile.value = file[0]
+    basicInfo.value.avatar = URL.createObjectURL(file[0])
 }
 
 const avatarFile = ref<File | null>(null)
