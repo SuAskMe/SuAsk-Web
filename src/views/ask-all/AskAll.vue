@@ -29,23 +29,31 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onUpdated, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
-import { BubbleCard, BubbleQuestion } from "@/components/bubble-card";
+import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { router } from "@/router";
-import { getUserInfo } from "@/utils/userInfo";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions } from "./askAll";
+import { UserInfoStore } from "@/store/modules/sidebar";
+import { storeToRefs } from "pinia";
+import { getUserInfo } from "@/utils/userInfo";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const userInfo = getUserInfo();
-const bg_img_index = userInfo ? userInfo.themeId : 1;
-// console.log(bg_img_index);
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
+
 
 const Init = async () => {
     if (questionList.length === 0) {

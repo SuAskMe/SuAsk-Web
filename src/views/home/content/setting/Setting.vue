@@ -92,116 +92,44 @@ const basicInfo = ref<User>({
     themeId: 0
 })
 
-const userInfo: User | null = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) as User : null
-let avatarId = 0
+const userStore = UserInfoStore()
+const { userInfo } = storeToRefs(userStore)
 
-function getUserInfo() {
-    if (userInfo) {
-        basicInfo.value.id = userInfo.id
-        basicInfo.value.role = userInfo.role
-        basicInfo.value.avatar = userInfo.avatar
-        basicInfo.value.name = userInfo.name
-        basicInfo.value.nickname = userInfo.nickname
-        basicInfo.value.introduction = userInfo.introduction
-        basicInfo.value.themeId = userInfo.themeId - 1
-    } else {
-        ElMessage.error('获取用户信息失败')
-    }
+function loadUserInfo() {
+    basicInfo.value = userInfo.value
 }
 
 async function updateUserInfo() {
-    // localStorage.setItem('userInfo', JSON.stringify(userInfo))
-    const updateUserInfo: UpdateUser = {
-        avatarId: avatarId === 0 ? null : avatarId,
-        nickname: basicInfo.value.nickname,
-        introduction: basicInfo.value.introduction,
-        themeId: basicInfo.value.themeId + 1
-    }
-    await updateUserInfoApi(updateUserInfo).then(res => {
-        if (!(res instanceof String)) {
+    let formData = new FormData()
+    formData.append('nickname', basicInfo.value.nickname)
+    formData.append('introduction', basicInfo.value.introduction)
+    formData.append('themeId', (basicInfo.value.themeId).toString())
+
+    formData.append('avatar', avatarFile.value!)
+
+    await updateUserInfoApi(formData).then(async res => {
+        if (res) {
             ElMessage.success('保存成功')
-            console.log(basicInfo.value);
-            updateLocalUserInfo(null, basicInfo.value.nickname, basicInfo.value.introduction, basicInfo.value.themeId + 1)
-            location.reload()
+            await getUserInfoApi().then(res => {
+                if (res) {
+                    userStore.changeUserInfo(res)
+                    basicInfo.value = res
+                } else {
+                    ElMessage.error('保存失败1')
+                }
+            })
         } else {
-            ElMessage.error('保存失败')
+            ElMessage.error('保存失败2')
         }
     }).catch(err => {
         console.log(err)
-        ElMessage.error('保存失败')
+        ElMessage.error('保存失败3')
         return
     })
 }
-
-
-function updateLocalUserInfo(avatarURL: string | null, nickname: string | null, introduction: string | null, themeId: number | null) {
-    const userInfo: User = JSON.parse(localStorage.getItem('userInfo')!) as User
-    if (userInfo) {
-        if (nickname) {
-            userInfo.nickname = nickname
-        }
-        if (introduction) {
-            userInfo.introduction = introduction
-        }
-        if (themeId != null) {
-            userInfo.themeId = themeId
-        }
-        if (avatarURL) {
-            userInfo.avatar = avatarURL
-        }
-        console.log(userInfo);
-        localStorage.setItem('userInfo', JSON.stringify(userInfo))
-    }
-}
 onMounted(() => {
-    getUserInfo()
+    loadUserInfo()
 })
-
-const handleAvatarSuccess: UploadProps['onSuccess'] = async (
-    response,
-    uploadFile
-) => {
-    if (response.code != 0) {
-        ElMessage.error('上传失败')
-        return
-    } else {
-        avatarId = response.data.id
-        const updateUserInfo: UpdateAvatar = {
-            avatarId: avatarId,
-        }
-        await updateUserInfoApi(updateUserInfo).then(res => {
-            if (!(res instanceof String)) {
-                ElMessage.success('保存成功')
-                updateLocalUserInfo(response.data.url, null, null, null)
-                location.reload()
-            } else {
-                ElMessage.error('保存失败')
-            }
-        }).catch(err => {
-            console.log(err)
-            ElMessage.error('保存失败')
-            return
-        })
-    }
-
-    basicInfo.value.avatar = URL.createObjectURL(uploadFile.raw!)
-}
-
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-    if (!rawFile.type.match('image/jpeg|image/png')) {
-        ElMessage.error('头像图片格式需要为jpg或png格式!')
-        return false
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error('头像图片大小不能超过2MB!')
-        return false
-    }
-    return true
-}
-
-function getToken() {
-    return localStorage.getItem('token')
-}
-
 
 const showResetPassword = ref(false);
 

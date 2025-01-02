@@ -9,14 +9,14 @@
 
         </div>
         <div class="avatar-and-id" @click="toUserInfo">
-            <el-avatar :size="120" :src="basicInfo.avatar">
+            <el-avatar :size="120" :src="userInfo.avatar">
                 <img src="@/assets/default-avatar.png" />
             </el-avatar>
             <div class="user-name">
-                <span>{{ basicInfo.name }}</span>
+                <span>{{ userInfo.name }}</span>
             </div>
             <div class="user-id">
-                <span>@{{ basicInfo.nickname }}</span>
+                <span>@{{ userInfo.nickname }}</span>
             </div>
         </div>
         <div class="control-panel">
@@ -86,47 +86,29 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
-import type { User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
 import { router } from '@/router';
 import { getUserInfo } from '@/utils/userInfo';
-import { getNotificationApi, getNotificationCountApi } from '@/api/notification/notification.api';
-import type { NewAnswer, NewQuestion, NewReply } from '@/model/notification.model';
-import { NotificationCard } from '@/components/notification-card';
+import { getNotificationCountApi } from '@/api/notification/notification.api';
+import Notification from './Notification.vue';
+import type { User } from '@/model/user.model';
+import type { UserInput } from 'element-plus/lib/components/index.js';
+import { UserInfoStore } from '@/store/modules/sidebar';
+import { storeToRefs } from 'pinia';
 
 const drawer = ref(false);
 
-const userInfo = getUserInfo();
-
-interface basicInfo {
-    id: number;
-    avatar: string;
-    name: string;
-    nickname: string;
-}
-
 // 用户信息
 
-const basicInfo = ref<basicInfo>({
-    id: 0,
-    avatar: '',
-    name: '',
-    nickname: '',
-});
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
 
 function loadUserInfo() {
-    if (userInfo) {
-        const parsedUserInfo = userInfo
-        basicInfo.value.avatar = parsedUserInfo.avatar?.toString() || ''
-        basicInfo.value.name = parsedUserInfo.name
-        basicInfo.value.nickname = parsedUserInfo.nickname
-    } else {
-        ElMessage.error('获取用户信息失败')
-    }
+    userInfo.value = getUserInfo();
 }
 
 function closeDrawer() {
@@ -198,7 +180,7 @@ async function getNotificationCount() {
 
 function toUserInfo() {
     if (userInfo) {
-        router.push(`/user/${userInfo.id}`)
+        router.push(`/user/${userInfo.value.id}`)
     } else {
         ElMessage.error('获取用户信息失败')
     }
@@ -209,11 +191,7 @@ onMounted(() => {
     getNotificationCount();
 });
 
-const props = defineProps({
-    userType: String
-});
-
-const isStudent = computed(() => props.userType === 'student');
+const isStudent = getUserInfo()?.role === 'student';
 </script>
 
 <style scoped lang="scss">

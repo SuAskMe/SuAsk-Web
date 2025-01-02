@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import QuestionHeader from "@/components/question-header";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
@@ -32,10 +32,19 @@ import { Favorite, getNextQuestions } from "./myFavorite";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import type { FavoriteItem } from "@/model/favorite.model";
+import { UserInfoStore } from "@/store/modules/sidebar";
+import { storeToRefs } from "pinia";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const bg_img_index = getUserInfo().themeId;
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
 
 const Init = async () => {
     if (questionList.length === 0) {

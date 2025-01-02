@@ -1,49 +1,27 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                search
-                get_keywords_url="/favorites/keywords"
-                :return_btn="false"
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" search
+                get_keywords_url="/favorites/keywords" :return_btn="false" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleQuestion
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :id="'question-' + question.id"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-favorite="question.is_favorite"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favorite="favorite"
-                    width="45vw"
-                    :style="{
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                    :id="'question-' + question.id" :text="question.contents" :views="question.views"
+                    :time-stamp="question.created_at" :image-urls="question.image_urls"
+                    :is-favorite="question.is_favorite" :answer-num="question.answer_num"
+                    :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo"
+                    :click-favorite="favorite" width="45vw" :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }"
-                />
+                    }" />
             </el-scrollbar>
         </el-main>
     </el-container>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import QuestionHeader from "@/components/question-header";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
@@ -52,11 +30,19 @@ import { Favorite, getNextQuestions } from "./askHistory";
 import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import type { FavoriteItem } from "@/model/favorite.model";
+import { UserInfoStore } from "@/store/modules/sidebar";
+import { storeToRefs } from "pinia";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
-const userInfo = getUserInfo();
-const bg_img_index = userInfo ? userInfo.themeId : 1;
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
 
 const Init = async () => {
     if (questionList.length === 0) {

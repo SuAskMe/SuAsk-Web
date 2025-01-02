@@ -57,7 +57,7 @@ import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import QuestionHeader from "@/components/question-header"
 import BackgroundImg from "@/components/backgroud-img";
 import { Favorite, scrollToQuote } from "./QuestionDetail";
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import SvgIcon from "@/components/svg-icon";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
@@ -72,8 +72,17 @@ import type {
 import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
 import { favoriteApi } from "@/api/question/favorite.api";
-const userInfo = getUserInfo();
-const bg_img_index = userInfo ? userInfo.themeId : 1;
+import { UserInfoStore } from "@/store/modules/sidebar";
+import { storeToRefs } from "pinia";
+
+// 背景图片
+let bg_img_index = ref(getUserInfo().themeId);
+const userStore = UserInfoStore();
+const { userInfo } = storeToRefs(userStore);
+
+watch(userInfo, () => {
+    bg_img_index.value = userInfo.value.themeId;
+});
 
 interface Img {
     id: number;
@@ -272,7 +281,7 @@ const question = ref<Question>({
     is_favorite: false,
 });
 const canReply = ref<boolean>(false);
-const userId = userInfo ? userInfo.id : 0;
+const userId = userInfo ? userInfo.value.id : 0;
 </script>
 
 <style scoped src="./QuestionDetail.scss"></style>
