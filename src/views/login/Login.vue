@@ -27,10 +27,8 @@
                 <span @click="register" style="color: #71B6FF;">注册账号</span>
             </div>
         </div>
-        <forget-password-page :closed="showForgetPassword" v-model:visible="showForgetPassword" />
-        <el-dialog v-model="showRegister" width="400px" align-center>
-            <register-page :closed="showRegister" />
-        </el-dialog>
+        <forget-password-page v-model:visible="showForgetPassword" />
+        <register-page v-model:visible="showRegister" />
     </div>
 </template>
 

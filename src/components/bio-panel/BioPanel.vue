@@ -1,6 +1,6 @@
 <template>
     <MdEditor :footers="[]" placeholder="问题内容，支持 Markdown，点击左上角图标预览" :preview="false" :toolbars="toolbars"
-        v-model="contents" :style="{ height: fullscreen ? '100%' : '350px' }" />
+        v-model="contents" :style="{ height: fullscreen ? '100%' : '350px' }" class="md" />
 </template>
 
 <script setup lang='ts'>
@@ -19,4 +19,8 @@ const toolbars: ToolbarNames[] = [
 const contents = ref('');
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.md {
+    border-radius: 10px;
+}
+</style>

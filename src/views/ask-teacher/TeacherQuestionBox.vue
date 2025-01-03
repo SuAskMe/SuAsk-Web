@@ -33,13 +33,13 @@ import { router } from "@/router";
 
 async function getTeacherList() {
     await getTeacherApi().then((res) => {
-        teacherList.value = res.data.teachers;
-        console.log(teacherList.value);
+        if (res) {
+            teacherList.value = res.teachers;
+            console.log(teacherList.value);
+        }
+
     }).then(() => {
         let teachersObj = teacherList.value
-        // teachersObj.for((teacher) => {
-        //     teacher.value = teacher.name;
-        // });
         for (let i = 0; i < teachersObj.length; i++) {
             teachersObj[i].value = teachersObj[i].name;
         }

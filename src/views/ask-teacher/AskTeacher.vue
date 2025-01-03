@@ -3,7 +3,7 @@
         <el-header style="height: auto">
             <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch"
                 @return="navigateBack" search return_btn get_keywords_url="/questions/teacher/keywords" has_sort_upvote
-                :teacher_id="teacher_id" />
+                :teacher_id="teacher_id" sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
