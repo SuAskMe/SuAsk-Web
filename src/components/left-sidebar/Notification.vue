@@ -1,16 +1,24 @@
 <template>
     <div class="notification">
-        <div class="title">消息</div>
+        <div class="title">
+            <div class="message">
+                消息
+                <div class="count">{{ props.answerCount + props.questionCount + props.replyCount }}</div>
+            </div>
+
+
+        </div>
+
         <div class="choose-notification">
             <el-radio-group v-model="radio" style="width: 100%;">
-                <el-radio-button label="提问我的" value="new-question" />
-                <el-radio-button label="回答我的" value="new-answer" />
-                <el-radio-button label="回复我的" value="new-reply" />
+                <el-radio-button label="提问我的" :value="NotificationType.QUESTION" />
+                <el-radio-button label="回答我的" :value="NotificationType.ANSWER" />
+                <el-radio-button label="回复我的" :value="NotificationType.REPLY" />
             </el-radio-group>
         </div>
         <div class="notification-container">
             <el-scrollbar>
-                <div v-if="radio == 'new-question'">
+                <div v-if="radio == NotificationType.QUESTION">
                     <transition-group name="notification">
                         <div v-for="item in newQuestion" :key="item.id">
                             <NotificationCard type="question" :created_at="item.created_at" :id="item.id"
@@ -22,7 +30,7 @@
                     </transition-group>
                     <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
                 </div>
-                <div v-if="radio == 'new-answer'">
+                <div v-if="radio == NotificationType.ANSWER">
                     <transition-group name="notification">
                         <div v-for="item in newAnswer" :key="item.id">
                             <NotificationCard type="answer" :created_at="item.created_at" :id="item.id"
@@ -37,7 +45,7 @@
                     <div v-if="newAnswer.length == 0" class="text">暂无回答
                     </div>
                 </div>
-                <div v-if="radio == 'new-reply'">
+                <div v-if="radio == NotificationType.REPLY">
                     <transition-group name="notification">
                         <div v-for="item in newReply" :key="item.id">
                             <NotificationCard type="reply" :created_at="item.created_at" :id="item.id"
@@ -63,13 +71,22 @@ import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.mode
 import { NotificationCard } from '@/components/notification-card';
 import { onMounted, ref } from 'vue';
 
-const radio = ref('new-question');
+
 
 enum NotificationType {
     QUESTION = 'question',
     ANSWER = 'answer',
     REPLY = 'reply'
 }
+
+const props = defineProps<{
+    questionCount: number;
+    answerCount: number;
+    replyCount: number;
+    user_id: number;
+}>();
+
+const radio = ref(NotificationType.QUESTION);
 
 const emit = defineEmits(['closeDrawer']);
 
@@ -119,8 +136,29 @@ onMounted(async () => {
     flex-direction: column;
 
     .title {
-        font-size: 20px;
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+
+
+        .message {
+            position: relative;
+            padding-right: 15px;
+            padding-top: 3px;
+
+            .count {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-left: 10px;
+                padding: 0 3px;
+                font-size: 10px;
+                color: white;
+                border-radius: 5px;
+                background-color: $su-red;
+            }
+        }
+
+
     }
 
     .choose-notification {

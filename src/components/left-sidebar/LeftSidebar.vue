@@ -25,7 +25,8 @@
         </div>
     </div>
     <el-drawer class="drawer" v-model="drawer" :with-header="false" size="400" destroy-on-close>
-        <Notification @close-drawer="closeDrawer"></Notification>
+        <Notification @close-drawer="closeDrawer" :question-count="newQuestionCount" :answer-count="newAnswerCount"
+            :reply-count="newReplyCount" :user_id="userInfo.id"></Notification>
     </el-drawer>
 </template>
 
