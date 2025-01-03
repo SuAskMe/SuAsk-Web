@@ -4,7 +4,7 @@
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
         <div v-if="props.title" class="title">{{ props.title }}</div>
-        <div class="sort-and-search">
+        <div v-if="props.sort_and_search" class="sort-and-search">
             <el-dropdown v-if="!showInput" class="header-item">
                 <span class="dropdown">
                     {{ sortText[sortIndex] }}
@@ -12,11 +12,7 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item
-                            v-for="(item, index) in sortText"
-                            :key="index"
-                            @click="changeSort(index)"
-                        >
+                        <el-dropdown-item v-for="(item, index) in sortText" :key="index" @click="changeSort(index)">
                             {{ item }}
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -24,27 +20,13 @@
             </el-dropdown>
             <div v-if="props.search" class="header-item">
                 <div class="search">
-                    <el-autocomplete
-                        v-if="showInput"
-                        v-model="searchText"
-                        placeholder="搜索问题"
-                        :fetch-suggestions="querySearch"
-                        :debounce="100"
-                        :trigger-on-focus="false"
-                        clearable
-                    ></el-autocomplete>
+                    <el-autocomplete v-if="showInput" v-model="searchText" placeholder="搜索问题"
+                        :fetch-suggestions="querySearch" :debounce="100" :trigger-on-focus="false"
+                        clearable></el-autocomplete>
                     <div class="search-icon" @click.stop="search">
-                        <svg-icon
-                            icon="search"
-                            :color="showInput ? '#71B6FF' : '#808080'"
-                            size="22px"
-                        />
+                        <svg-icon icon="search" :color="showInput ? '#71B6FF' : '#808080'" size="22px" />
                     </div>
-                    <div
-                        v-if="showInput"
-                        class="cancel-btn"
-                        @click.stop="cancelSearch"
-                    >
+                    <div v-if="showInput" class="cancel-btn" @click.stop="cancelSearch">
                         取消
                     </div>
                 </div>
@@ -66,6 +48,7 @@ const props = defineProps<{
     return_btn?: boolean;
     search?: boolean;
     has_sort_upvote?: boolean;
+    sort_and_search?: boolean;
     teacher_id?: number;
 }>();
 

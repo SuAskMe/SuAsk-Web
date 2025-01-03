@@ -1,7 +1,8 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader @change-sort="changeSort" @return="navigateBack" :return_btn="true" has_sort_upvote />
+            <QuestionHeader @change-sort="changeSort" @return="navigateBack" :return_btn="true" has_sort_upvote
+                sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />

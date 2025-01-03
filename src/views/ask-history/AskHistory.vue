@@ -2,7 +2,7 @@
     <el-container class="container">
         <el-header style="height: auto">
             <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" search
-                get_keywords_url="/favorites/keywords" :return_btn="false" />
+                get_keywords_url="/favorites/keywords" :return_btn="false" sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />

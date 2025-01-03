@@ -1,39 +1,17 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                :title="title"
-                return_btn
-                has_sort_upvote
-            />
+            <QuestionHeader @change-sort="changeSort" :title="title" return_btn has_sort_upvote sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-pinned="question.is_pinned"
-                    :bubble-key="index"
-                    :tag="question.tag"
-                    show-pin
-                    :style="{
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <BubbleCard v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                    :text="question.contents" :views="question.views" :time-stamp="question.created_at"
+                    :image-urls="question.image_urls" :is-pinned="question.is_pinned" :bubble-key="index"
+                    :tag="question.tag" show-pin :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }"
-                    width="45vw"
-                    :click-card="navigateTo"
-                    :click-pin="pin"
-                ></BubbleCard>
+                    }" width="45vw" :click-card="navigateTo" :click-pin="pin"></BubbleCard>
             </el-scrollbar>
         </el-main>
     </el-container>
