@@ -49,14 +49,10 @@
             </div>
             <div class="danger-place">
                 <p class="danger-option" @click="resetPassword">重置密码</p>
-                <p class="danger-option" @click="showLogoutDialog">账户注销</p>
+                <p class="danger-option" @click="showLogoutDialog">退出登录</p>
             </div>
-            <el-dialog v-model="showResetPassword" width="400px" align-center>
-                <reset-password-dialog />
-            </el-dialog>
-            <el-dialog v-model="showLogout" width="400px" align-center :modal="false" title="你确定要注销吗?">
-                <logout-dialog />
-            </el-dialog>
+            <reset-password-dialog v-model:visible="showResetPassword" />
+            <logout-dialog v-model:visible="showLogout" />
         </div>
     </el-scrollbar>
 </template>
@@ -109,6 +105,7 @@ const basicInfo = ref<User>({
     avatar: '',
     name: '',
     nickname: '',
+    email: '',
     introduction: '',
     themeId: 0
 })

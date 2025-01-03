@@ -8,3 +8,8 @@ export function getUserInfo(): User {
 export function setUserInfo(userInfo: User): void {
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
 }
+
+export function removeUserInfo(): void {
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('token');
+}
