@@ -1,15 +1,32 @@
-import type { ResetPassword, CheckOldPassword } from "@/model/user.model";
+import type { ForgetPassword, ResetPassword, SendCodeReq } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
+    FORGET_PASSWORD = '/user/forget-password',
     RESET_PASSWORD = '/user/password',
-    CHECK_OLD_PASSWORD = '/user/check-old-password',
+    SEND_CODE = '/user/send-code'
 }
 
-export async function resetPasswordApi(resetPasswordForm: ResetPassword) {
-    return request.post(Api.RESET_PASSWORD, resetPasswordForm);
+export async function sendCodeApi(req: SendCodeReq) {
+    return request.post(Api.SEND_CODE, req).then((res) => {
+        if (res) {
+            return res.data;
+        }
+    });
 }
 
-export async function checkOldPasswordApi(checkOldPasswordForm: CheckOldPassword) {
-    return request.post(Api.CHECK_OLD_PASSWORD, checkOldPasswordForm);
+export async function resetPasswordApi(req: ResetPassword) {
+    return request.put(Api.RESET_PASSWORD, req).then((res) => {
+        if (res) {
+            return res.data;
+        }
+    });
+}
+
+export async function forgetPasswordApi(req: ForgetPassword) {
+    return request.post(Api.FORGET_PASSWORD, req).then((res) => {
+        if (res) {
+            return res.data;
+        }
+    });
 }

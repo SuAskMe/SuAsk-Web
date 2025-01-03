@@ -27,9 +27,7 @@
                 <span @click="register" style="color: #71B6FF;">注册账号</span>
             </div>
         </div>
-        <el-dialog v-model="showForgetPassword" width="400px" align-center>
-            <forget-password-page :closed="showForgetPassword" />
-        </el-dialog>
+        <forget-password-page :closed="showForgetPassword" v-model:visible="showForgetPassword" />
         <el-dialog v-model="showRegister" width="400px" align-center>
             <register-page :closed="showRegister" />
         </el-dialog>
@@ -41,9 +39,8 @@ import { ref } from 'vue';
 import ForgetPasswordPage from './ForgetPasswordPage.vue';
 import RegisterPage from './RegisterPage.vue';
 import { loginApi } from '@/api/user/login.api';
-import { getUserInfoApi } from '@/api/user/user.api';
 import { mailCheck } from '@/utils/login/register';
-import type { LoginReq, LoginRes, User } from '@/model/user.model';
+import type { LoginReq, User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
 import { router } from '@/router';
 
@@ -74,6 +71,7 @@ async function login() {
             role: res.data.role,
             introduction: res.data.introduction,
             avatar: res.data.avatar,
+            email: res.data.email,
             themeId: res.data.themeId
         }
         const token = res.data.token;
@@ -85,12 +83,6 @@ async function login() {
     }).catch(err => {
         console.log(err);
     });
-}
-
-async function getUserInfo() {
-    const res = await getUserInfoApi()
-    const userInfo = res.data;
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
 }
 
 const showForgetPassword = ref(false);

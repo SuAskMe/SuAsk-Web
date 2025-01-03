@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang='ts'>
-import { registerApi, sendVerificationCodeApi, verifyVerificationCodeApi } from '@/api/user/register_and_forget.api';
+import { registerApi, sendVerificationCodeApi, verifyVerificationCodeApi } from '@/api/user/register.api';
 import { Role, type RegisterForm } from '@/model/user.model';
 import { router } from '@/router';
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register';
