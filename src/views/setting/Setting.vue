@@ -166,4 +166,8 @@ function showLogoutDialog() {
 :deep(.el-dialog) {
     border-radius: 15px;
 }
+
+:deep(.el-input__wrapper) {
+    border-radius: 10px;
+}
 </style>
