@@ -4,9 +4,8 @@ import { isMobile } from "@/utils/device";
 
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const WebHome = () => import("@/layout/home/WebHome.vue");
-const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
 
-const Setting = () => import("@/views/home/content/setting/Setting.vue");
+const Setting = () => import("@/views/setting");
 
 export const SettingRoute: AppRouteRecordRaw = {
 

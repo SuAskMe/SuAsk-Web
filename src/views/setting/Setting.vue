@@ -18,13 +18,12 @@
                 </div>
                 <div class="avatar-and-id">
                     <div style="position: relative;">
-                        <el-avatar @click.stop="pickImage" :size="deviceType == 'desktop' ? 200 : 150"
-                            :src="basicInfo.avatar">
+                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar">
                             <img src="@/assets/default-avatar.png" />
                         </el-avatar>
                         <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
                             multiple @change="pickImageImpl">
-                        <el-button type="default" size="small">
+                        <el-button @click.stop="pickImage" class="upload-btn" type="default" size="small">
                             <template #icon>
                                 <svg-icon icon="edit" color="#808080" />
                             </template>
@@ -50,14 +49,10 @@
             </div>
             <div class="danger-place">
                 <p class="danger-option" @click="resetPassword">重置密码</p>
-                <p class="danger-option" @click="showLogoutDialog">账户注销</p>
+                <p class="danger-option" @click="showLogoutDialog">退出登录</p>
             </div>
-            <el-dialog v-model="showResetPassword" width="400px" align-center>
-                <reset-password-dialog />
-            </el-dialog>
-            <el-dialog v-model="showLogout" width="400px" align-center :modal="false" title="你确定要注销吗?">
-                <logout-dialog />
-            </el-dialog>
+            <reset-password-dialog v-model:visible="showResetPassword" />
+            <logout-dialog v-model:visible="showLogout" />
         </div>
     </el-scrollbar>
 </template>
@@ -98,6 +93,7 @@ function pickImageImpl(event: any) {
         return
     }
     avatarFile.value = file[0]
+    basicInfo.value.avatar = URL.createObjectURL(file[0])
 }
 
 const avatarFile = ref<File | null>(null)
@@ -109,6 +105,7 @@ const basicInfo = ref<User>({
     avatar: '',
     name: '',
     nickname: '',
+    email: '',
     introduction: '',
     themeId: 0
 })

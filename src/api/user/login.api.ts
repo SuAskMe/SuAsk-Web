@@ -11,5 +11,9 @@ export async function loginApi(loginForm: LoginReq) {
 }
 
 export async function logoutApi() {
-    return request.post(Api.LOGOUT);
+    return request.post(Api.LOGOUT).then((res) => {
+        if (res) {
+            return res.data;
+        }
+    });
 }

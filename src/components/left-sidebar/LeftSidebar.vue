@@ -13,10 +13,10 @@
                 <img src="@/assets/default-avatar.png" />
             </el-avatar>
             <div class="user-name">
-                <span>{{ userInfo.name }}</span>
+                <span>{{ userInfo.nickname }}</span>
             </div>
             <div class="user-id">
-                <span>@{{ userInfo.nickname }}</span>
+                <span>@{{ userInfo.name }}</span>
             </div>
         </div>
         <div class="control-panel">
@@ -25,12 +25,13 @@
         </div>
     </div>
     <el-drawer class="drawer" v-model="drawer" :with-header="false" size="400" destroy-on-close>
-        <Notification @close-drawer="closeDrawer"></Notification>
+        <Notification @close-drawer="closeDrawer" :question-count="newQuestionCount" :answer-count="newAnswerCount"
+            :reply-count="newReplyCount" :user_id="userInfo.id"></Notification>
     </el-drawer>
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
@@ -39,8 +40,6 @@ import { router } from '@/router';
 import { getUserInfo } from '@/utils/userInfo';
 import { getNotificationCountApi } from '@/api/notification/notification.api';
 import Notification from './Notification.vue';
-import type { User } from '@/model/user.model';
-import type { UserInput } from 'element-plus/lib/components/index.js';
 import { UserInfoStore } from '@/store/modules/sidebar';
 import { storeToRefs } from 'pinia';
 

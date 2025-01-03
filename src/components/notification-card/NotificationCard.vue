@@ -51,7 +51,7 @@
                 </el-icon>
             </div>
         </div>
-        <el-dialog v-model="dialogVisible" :width="300" :show-close="false" align-center>
+        <el-dialog v-model="dialogVisible" width="20%" :show-close="false" align-center>
             <template #header>
                 <p style="margin: 0;">删除</p>
             </template>

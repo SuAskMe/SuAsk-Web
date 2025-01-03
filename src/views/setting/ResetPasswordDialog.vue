@@ -1,9 +1,9 @@
 <template>
     <div class="dialog">
-        <el-dialog v-model="visible" :show-close="false" align-center width="400px">
+        <el-dialog v-model="visible" :show-close="false" align-center width="300px">
             <div class="title">重置密码</div>
             <div class="send-code">
-                <el-input v-model="mail" style="height: 40px;" placeholder="请输入注册邮箱">
+                <el-input v-model="mail" style="height: 40px;" placeholder="请输入注册邮箱" disabled>
                     <template #prefix>
                         <svg-icon icon="mail" color="#71B6FF" size="20px" />
                     </template>
@@ -28,24 +28,21 @@
 </template>
 
 <script setup lang='ts'>
-import { sendCodeApi, resetPasswordApi, forgetPasswordApi } from '@/api/user/reset_password.api';
-import type { ResetPassword } from '@/model/user.model';
+import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api';
+import type { ResetPassword, User } from '@/model/user.model';
 import { getUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const visible = defineModel('visible', {
-    type: Boolean,
-    default: false
-});
+const visible = defineModel("visible", { type: Boolean, default: true });
 
-const mail = ref('');
+const mail = ref(getUserInfo().email);
 const code = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
 
 function getCode() {
-    sendCodeApi({ email: mail.value, type: 'forget_password' }).then(res => {
+    sendCodeApi({ email: mail.value, type: 'reset_password' }).then(res => {
         if (res) {
             ElMessage.success('验证码已发送');
             console.log(res);
@@ -79,7 +76,7 @@ function resetPassword() {
         code: code.value,
         password: newPassword.value
     }
-    forgetPasswordApi(data).then(res => {
+    resetPasswordApi(data).then(res => {
         if (res) {
             ElMessage.success('重置成功');
             visible.value = false;

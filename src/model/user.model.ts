@@ -11,11 +11,6 @@ export interface RegisterForm {
     token: string, // 搭载 Email 和过期时间
 }
 
-export interface ForgetPasswordForm {
-    email: string;
-    password: string;
-}
-
 export interface UpdateUser {
     nickname: string | null;
     introduction: string | null;
@@ -31,34 +26,37 @@ export interface User {
     id: number;
     name: string;
     nickname: string;
+    email: string;
     role: string;
     introduction: string;
     avatar: string | null;
     themeId: number;
 }
 
-export interface ResetPassword {
-    id: number;
-    newPassword: string;
+export interface SendCodeReq {
+    email: string;
+    type: string;
 }
 
-export interface CheckOldPassword {
-    id: number;
-    oldPassword: string;
+export interface SendCodeRes {
+    code: string;
 }
+
+export interface ResetPassword {
+    email: string;
+    code: string;
+    password: string;
+}
+
+export interface ForgetPassword {
+    email: string;
+    code: string;
+    password: string;
+}
+
 
 export interface LoginReq {
     name: string;
     email: string;
     password: string;
-}
-export interface LoginRes {
-    name: string;
-    nickname: string;
-    role: string;
-    introduction: string;
-    email: string;
-    avatar: string;
-    themeId: number;
-    type: string;
 }
