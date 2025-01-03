@@ -1,4 +1,4 @@
-import type { UpdateAvatar, UpdateUser, User } from "@/model/user.model";
+import type { User, UserInfo } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
@@ -28,6 +28,10 @@ export async function getUserInfoApi(): Promise<User> {
     });
 }
 
-export async function getUserByIdApi(id: string) {
-    return request.get(Api.GET_USER_BY_ID, { params: { id } });
+export async function getUserByIdApi(id: string): Promise<UserInfo> {
+    return request.get(Api.GET_USER_BY_ID, { params: { id } }).then((res) => {
+        if (res) {
+            return res.data
+        }
+    });
 }

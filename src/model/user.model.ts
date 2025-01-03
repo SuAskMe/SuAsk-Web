@@ -23,6 +23,15 @@ export interface User {
     themeId: number;
 }
 
+export interface UserInfo {
+    id: number;
+    name: string;
+    nickname: string;
+    role: string;
+    introduction: string;
+    avatar: string | null;
+}
+
 export interface SendCodeReq {
     email: string;
     type: string;

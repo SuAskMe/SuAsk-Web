@@ -9,3 +9,16 @@ export interface TeacherItem {
     value: string;
 }
 
+export interface TeacherPinItem {
+    id: number;
+    title: string;
+    contents: string;
+    views: number;
+    created_at: number;
+    image_urls: string[];
+}
+
+export interface TeacherPinRes {
+    question_list: TeacherPinItem[];
+}
+
