@@ -1,4 +1,4 @@
-import type { RegisterForm } from '@/model/user.model';
+import type { RegisterReq, SendVerificationCodeReq, VerifyVerificationCodeReq, VerifyVerificationCodeRes } from '@/model/register.model';
 import request from '@/utils/http/request';
 
 
@@ -9,14 +9,26 @@ enum Api {
 }
 
 
-export async function sendVerificationCodeApi(email: string, name: string) {
-    return request.post(Api.SEND_VERIFICATION_CODE, { email, name });
+export async function sendVerificationCodeApi(req: SendVerificationCodeReq) {
+    return request.post(Api.SEND_VERIFICATION_CODE, req).then(res => {
+        if (res) {
+            return res.data;
+        }
+    })
 }
 
-export async function verifyVerificationCodeApi(email: string, code: string) {
-    return request.post(Api.VERIFY_VERIFICATION_CODE, { email, code });
+export async function verifyVerificationCodeApi(req: VerifyVerificationCodeReq): Promise<VerifyVerificationCodeRes> {
+    return await request.post(Api.VERIFY_VERIFICATION_CODE, req).then(res => {
+        if (res) {
+            return res.data;
+        }
+    });
 }
 
-export async function registerApi(registerForm: RegisterForm) {
-    return request.post(Api.REGISTER, registerForm);
+export async function registerApi(req: RegisterReq) {
+    return request.post(Api.REGISTER, req).then(res => {
+        if (res) {
+            return res.data;
+        }
+    });
 }

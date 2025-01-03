@@ -1,7 +1,11 @@
 <template>
     <div class="dialog">
         <el-dialog v-model="visible" :show-close="false" align-center width="400px">
-            <div class="title">重置密码</div>
+            <div class="title">
+                <p>
+                    忘记密码
+                </p>
+            </div>
             <div class="send-code">
                 <el-input v-model="mail" style="height: 40px;" placeholder="请输入注册邮箱">
                     <template #prefix>
@@ -102,6 +106,7 @@ function resetPassword() {
         font-size: 20px;
         font-weight: bold;
         margin-bottom: 20px;
+        text-align: center;
     }
 
     .send-code {
