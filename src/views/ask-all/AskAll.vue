@@ -34,7 +34,6 @@ import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { router } from "@/router";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions } from "./askAll";
@@ -42,6 +41,7 @@ import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
 import { getUserInfo } from "@/utils/userInfo";
 import { UserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
@@ -111,6 +111,8 @@ const favorite = async (key: number) => {
     }
     questionList[key].is_favorite = res;
 };
+
+const router = useRouter();
 
 const navigateTo = (key: number) => {
     router.push({
