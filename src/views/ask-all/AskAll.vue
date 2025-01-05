@@ -56,12 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { router } from "@/router";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions } from "./askAll";
@@ -69,18 +68,16 @@ import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
 import { getUserInfo } from "@/utils/userInfo";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { UserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
 const showDialog = ref(false);
 const loading = ref(false);
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
 
 // 背景图片
-let bg_img_index = ref(getUserInfo().themeId);
-const userStore = UserInfoStore();
-const { userInfo } = storeToRefs(userStore);
+const userStore = UserStore();
+const bg_img_index = computed(() => userStore.getUser().themeId)
 
-watch(userInfo, () => {
-    bg_img_index.value = userInfo.value.themeId;
-});
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -142,6 +139,7 @@ const favorite = async (key: number) => {
     questionList[key].is_favorite = res;
 };
 
+
 let record = 0;
 const ErrorMsg = UseQDMessageStore();
 const { HasError } = storeToRefs(ErrorMsg);
@@ -152,6 +150,8 @@ watch(HasError, (newVal) => {
         ErrorMsg.clearErr();
     }
 });
+
+const router = useRouter();
 
 const navigateTo = (key: number) => {
     record = key;

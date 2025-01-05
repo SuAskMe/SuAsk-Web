@@ -1,6 +1,6 @@
 <template>
-    <el-card @click.stop="clickCard(teacher.id)" shadow="hover" class="teacher-card"
-        :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
+    <el-card @click.stop="clickCard({ teacherId: teacher.id, teacherName: teacher.name })" shadow="hover"
+        class="teacher-card" :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
         <div class="card-left">
             <img :src="teacher.avatarUrl" class="teacher-avatar" />
             <el-button class="teacher-btn" round>Ta的主页</el-button>

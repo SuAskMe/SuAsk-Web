@@ -1,4 +1,4 @@
-import type { LoginReq } from "@/model/user.model";
+import type { LoginReq, LoginRes } from "@/model/user.model";
 import request from "@/utils/http/request";
 
 enum Api {
@@ -6,8 +6,12 @@ enum Api {
     LOGOUT = '/user/logout',
 }
 
-export async function loginApi(loginForm: LoginReq) {
-    return request.post(Api.LOGIN, loginForm);
+export async function loginApi(req: LoginReq): Promise<LoginRes> {
+    return request.post(Api.LOGIN, req).then((res) => {
+        if (res) {
+            return res.data;
+        }
+    });
 }
 
 export async function logoutApi() {

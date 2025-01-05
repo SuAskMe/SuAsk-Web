@@ -8,7 +8,7 @@ const props = defineProps<{
     img_index: number;
 }>();
 
-console.log('img_index:', props.img_index); // 调试代码
+// console.log('img_index:', props.img_index); // 调试代码
 
 const imgURL = computed(() => {
     if (props.img_index !== undefined) {

@@ -1,19 +1,18 @@
+import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const WebHome = () => import("@/layout/home/WebHome.vue");
 
-const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
+const Home = () => import("@/views/home");
 
-const Setting = () => import("@/views/setting");
+export const HomeRoute: AppRouteRecordRaw = {
 
-export const SettingRoute: AppRouteRecordRaw = {
-
-    path: "/setting",
-    name: "SettingRoot",
+    path: "/home",
+    name: "HomeRoot",
     meta: {
-        title: "设置",
+        title: "主页",
     },
     props: {
         userType: "student",
@@ -23,13 +22,13 @@ export const SettingRoute: AppRouteRecordRaw = {
     children: [
         {
             path: "",
-            name: "Setting",
+            name: "Home",
             meta: {
-                title: "设置",
+                title: "主页",
             },
             components: {
-                default: Setting,
-                left_side: LeftSidebar,
+                default: Home,
+                // left_side: LeftSidebar,
             },
         },
     ]

@@ -57,6 +57,7 @@ function cancelSaveDraft() {
 const props = defineProps<{
     fullscreen?: boolean;
     teacher?: Teacher;
+    has_private?: boolean;
 }>();
 
 interface Img {
@@ -123,11 +124,7 @@ const deleteImage = (index: number) => {
 
 // 草稿
 import { db, type Question } from "./db";
-import type {
-    QuestionBase,
-    QuestionItem,
-    Teacher,
-} from "@/model/question.model";
+import type { AddQuestionReq, Teacher } from "@/model/question.model";
 import { addQuestionApi } from "@/api/question/question.api";
 import { de } from "element-plus/es/locales.mjs";
 
@@ -221,8 +218,13 @@ async function deleteDraft(id: number | number[]) {
 const emit = defineEmits(["questionPosted"]);
 
 async function postQuestion() {
-    let userId = getUserInfo().id ? getUserInfo().id : null;
-    console.log(questionContent.value.fileList);
+    if (questionContent.value.content == "") {
+        ElMessage.error("问题内容不能为空");
+        return;
+    } else if (questionContent.value.title == "") {
+        ElMessage.error("问题标题不能为空");
+        return;
+    }
 
     let formData = new FormData();
     let imgList: string[] = [];
@@ -231,15 +233,13 @@ async function postQuestion() {
         imgList.push(URL.createObjectURL(file));
     });
 
-    let req: QuestionBase = {
-        src_user_id: userId,
+    let req: AddQuestionReq = {
         dst_user_id: props.teacher ? props.teacher.teacherId : null,
         title: questionContent.value.title,
         content: questionContent.value.content,
         is_private: questionContent.value.isPrivate,
     };
 
-    formData.append("src_user_id", req.src_user_id?.toString() || "");
     formData.append("dst_user_id", req.dst_user_id?.toString() || "");
     formData.append("title", req.title);
     formData.append("content", req.content);
@@ -297,6 +297,8 @@ async function postQuestion() {
                     <el-button @click="openDraft" type="primary" round text
                         >草稿</el-button
                     >
+                    <p v-if="props.teacher" class="ask-teacher">问 <span>{{ props.teacher?.teacherName }}</span> 老师</p>
+                    <el-button @click="openDraft" type="primary" round text>草稿</el-button>
                 </div>
             </template>
             <div v-if="!isDraft">
@@ -376,6 +378,19 @@ async function postQuestion() {
                         style="color: white"
                         >发布</el-button
                     >
+
+                    <div style="display: flex; align-items: center; gap: 10px">
+                        <SvgIcon @click.stop="pickImage" icon="image" size="24px" color="#71b6ff"
+                            style="cursor: pointer" />
+                        <el-checkbox v-model="questionContent.isPrivate">
+                            <p>匿名</p>
+                        </el-checkbox>
+                    </div>
+                    <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
+                        @change="pickImageImpl" multiple />
+                    <el-button @click="postQuestion" type="primary" round color="#71b6ff"
+                        style="color: white">发布</el-button>
+
                 </div>
             </div>
             <!-- 草稿 -->
@@ -506,9 +521,19 @@ async function postQuestion() {
         padding-bottom: 10px;
         justify-content: space-between;
 
-        p {
+        .ask-teacher {
             margin: 0;
             margin-left: 8px;
+            margin-right: auto;
+
+            span {
+                font-weight: bold;
+            }
+
+            span:hover {
+                cursor: pointer;
+                color: $su-blue;
+            }
         }
     }
 

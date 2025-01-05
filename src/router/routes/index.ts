@@ -10,6 +10,7 @@ import { UserRoute } from "./modules/user";
 import { AskHistoryRoute } from "./modules/student-page";
 import { QuestionDetailRoute } from "./modules/questionDetail";
 import { AskMeRoute } from "./modules/teacher-page";
+import { HomeRoute } from "./modules/home";
 
 // 根路由
 export const RootRoot: AppRouteRecordRaw = {
@@ -41,7 +42,7 @@ export const TestRoute: AppRouteRecordRaw = {
 };
 
 export const basicRoutes = [
-    // HomeRoute,
+    HomeRoute,
     LoginRoute,
     TestRoute,
     RootRoot,

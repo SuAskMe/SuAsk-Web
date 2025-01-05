@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang='ts'>
-import { inject, onMounted, ref } from 'vue';
+import { computed, inject, onMounted, ref } from 'vue';
 import BioPanel from '@/components/bio-panel';
 import ThemeImage from './ThemeImage.vue';
 import SvgIcon from '@/components/svg-icon';
@@ -71,6 +71,7 @@ import { getUserInfo, setUserInfo } from '@/utils/userInfo';
 import { UserInfoStore } from '@/store/modules/sidebar';
 import { storeToRefs } from 'pinia';
 import { resetPasswordApi } from '@/api/user/reset_password.api';
+import { UserStore } from '@/store/modules/user';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
@@ -99,23 +100,21 @@ function pickImageImpl(event: any) {
 const avatarFile = ref<File | null>(null)
 
 
-const basicInfo = ref<User>({
-    id: 0,
-    role: '',
-    avatar: '',
-    name: '',
-    nickname: '',
-    email: '',
-    introduction: '',
-    themeId: 0
-})
+// const basicInfo = ref<User>({
+//     id: 0,
+//     role: '',
+//     avatar: '',
+//     name: '',
+//     nickname: '',
+//     email: '',
+//     introduction: '',
+//     themeId: 0
+// })
 
-const userStore = UserInfoStore()
-const { userInfo } = storeToRefs(userStore)
+const userStore = UserStore();
+const { userInfo } = storeToRefs(userStore);
 
-function loadUserInfo() {
-    basicInfo.value = userInfo.value
-}
+const basicInfo = computed(() => userStore.getUser())
 
 async function updateUserInfo() {
     let formData = new FormData()
@@ -130,8 +129,7 @@ async function updateUserInfo() {
             ElMessage.success('保存成功')
             await getUserInfoApi().then(res => {
                 if (res) {
-                    userStore.changeUserInfo(res)
-                    basicInfo.value = res
+                    userStore.setUser(res)
                 } else {
                     ElMessage.error('保存失败1')
                 }
@@ -146,7 +144,6 @@ async function updateUserInfo() {
     })
 }
 onMounted(() => {
-    loadUserInfo()
 })
 
 const showResetPassword = ref(false);

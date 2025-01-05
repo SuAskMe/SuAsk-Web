@@ -97,7 +97,7 @@ import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import QuestionHeader from "@/components/question-header";
 import BackgroundImg from "@/components/backgroud-img";
 import { Favorite, scrollToQuote } from "./QuestionDetail";
-import { nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import SvgIcon from "@/components/svg-icon";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
@@ -114,19 +114,18 @@ import { ElMessage } from "element-plus";
 import { favoriteApi } from "@/api/question/favorite.api";
 import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
-import { el } from "element-plus/es/locales.mjs";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 
+import { UserStore } from "@/store/modules/user";
+
 // 背景图片
-let bg_img_index = ref(1);
-const userStore = UserInfoStore();
+// let bg_img_index = ref(getUserInfo().themeId);
+// const userStore = UserInfoStore();
+
+// 背景图片
+const userStore = UserStore();
+const bg_img_index = computed(() => userStore.getUser().themeId)
 const { userInfo } = storeToRefs(userStore);
-
-let sort_type = 1;
-
-watch(userInfo, () => {
-    bg_img_index.value = userInfo.value.themeId;
-});
 
 // interface Img {
 //     id: number;
@@ -338,7 +337,7 @@ const question = ref<Question>({
     is_favorite: false,
 });
 const canReply = ref<boolean>(false);
-const userId = userInfo ? userInfo.value.id : 0;
+const userId = userInfo.value ? userInfo.value.id : 0;
 </script>
 
 <style scoped src="./QuestionDetail.scss"></style>

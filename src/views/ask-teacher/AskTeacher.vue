@@ -18,7 +18,7 @@
                         }" />
                 </TransitionGroup>
             </el-scrollbar>
-            <AskDialog v-model:visible="showDialog" />
+            <AskDialog v-model:visible="showDialog" :teacher="{ teacherId: teacher_id, teacherName: teacher_name }" />
             <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">
                     <Plus />
@@ -29,32 +29,32 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
-import { ElMessage, ElScrollbar } from "element-plus";
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { Favorite, getNextQuestions } from "./askTeacher";
-import { router } from "@/router";
+import { getNextQuestions } from "./askTeacher";
 import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { UserStore } from "@/store/modules/user";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 // 背景图片
-let bg_img_index = ref(getUserInfo().themeId);
-const userStore = UserInfoStore();
-const { userInfo } = storeToRefs(userStore);
+const userStore = UserStore();
+const bg_img_index = computed(() => userStore.getUser().themeId)
 
-watch(userInfo, () => {
-    bg_img_index.value = userInfo.value.themeId;
-});
+const router = useRouter();
 
-const teacher_id = router.currentRoute.value.params.id as unknown as number;
+const teacher_id = router.currentRoute.value.query.teacher_id as unknown as number;
+const teacher_name = router.currentRoute.value.query.teacher_name as unknown as string;
+
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -109,6 +109,8 @@ const cancelSearch = async () => {
 };
 
 const questionList: QuestionItem[] = reactive([]);
+
+
 
 const navigateTo = (key: number) => {
     key = Number(key);
