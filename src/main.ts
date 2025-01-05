@@ -31,9 +31,7 @@ config({
 });
 
 
-
 const app = createApp(App)
-const pinia = createPinia()
 
 const deviceType = isMobile() ? 'mobile' : 'desktop';
 app.provide('deviceType', deviceType);
@@ -42,9 +40,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+
 setupRouter(app);
 setupStore(app);
 app.use(ElementPlus)
-app.use(pinia)
 app.component("svg-icon", SvgIcon)
 app.mount('#app')

@@ -30,13 +30,17 @@
 <script setup lang='ts'>
 import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api';
 import type { ResetPassword, User } from '@/model/user.model';
+import { UserStore } from '@/store/modules/user';
 import { getUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const visible = defineModel("visible", { type: Boolean, default: true });
 
-const mail = ref(getUserInfo().email);
+const userStore = UserStore();
+const basicInfo = computed(() => userStore.getUser())
+
+const mail = computed(() => userStore.getUser().email)
 const code = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');

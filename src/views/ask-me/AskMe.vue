@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
@@ -31,18 +31,14 @@ import type { QFMItem, PinQFMReq } from "@/model/teacher-self.model";
 import { pinQFMApi } from "@/api/question/teacher-self.api";
 import { storeToRefs } from "pinia";
 import { UserInfoStore } from "@/store/modules/sidebar";
+import { UserStore } from "@/store/modules/user";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 // 背景图片
-let bg_img_index = ref(getUserInfo().themeId);
-const userStore = UserInfoStore();
-const { userInfo } = storeToRefs(userStore);
-
-watch(userInfo, () => {
-    bg_img_index.value = userInfo.value.themeId;
-});
+const userStore = UserStore();
+const bg_img_index = computed(() => userStore.getUser().themeId)
 
 const Init = async () => {
     if (questionList.length === 0) {

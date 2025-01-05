@@ -1,5 +1,4 @@
-export interface QuestionBase {
-    src_user_id: number | null;
+export interface AddQuestionReq {
     dst_user_id: number | null;
     title: string;
     content: string;

@@ -40,47 +40,43 @@ import { loginApi } from '@/api/user/login.api';
 import { mailCheck } from '@/utils/login/register';
 import type { LoginReq, User } from '@/model/user.model';
 import { ElMessage } from 'element-plus';
-import { router } from '@/router';
+import { UserStore } from '@/store/modules/user';
+import { useRouter } from 'vue-router';
 
 const userNameOrEmail = ref('');
 const password = ref('');
+
+const router = useRouter();
+const userStore = UserStore();
 
 async function login() {
     if (userNameOrEmail.value == '' || password.value == '') {
         ElMessage.error('用户名或密码不能为空');
         return;
     }
-    const loginData: LoginReq = {
+    const loginReq: LoginReq = {
         name: '',
         email: '',
         password: password.value
     }
-    console.log(userNameOrEmail.value, password.value);
     if (mailCheck(userNameOrEmail.value)) {
-        loginData.email = userNameOrEmail.value;
+        loginReq.email = userNameOrEmail.value;
     } else {
-        loginData.name = userNameOrEmail.value;
+        loginReq.name = userNameOrEmail.value;
     }
-    await loginApi(loginData).then(res => {
-        const user: User = {
-            id: res.data.id,
-            name: res.data.name,
-            nickname: res.data.nickname,
-            role: res.data.role,
-            introduction: res.data.introduction,
-            avatar: res.data.avatar,
-            email: res.data.email,
-            themeId: res.data.themeId
+    try {
+        const userInfo = await userStore.login(loginReq);
+        if (userInfo) {
+            ElMessage.success('登录成功');
+            router.push({ name: 'AskAll' });
+            console.log(userStore.getUser);
+
+        } else {
+            ElMessage.error('登录失败');
         }
-        const token = res.data.token;
-        console.log(user);
-        localStorage.setItem('token', token);
-        localStorage.setItem('userInfo', JSON.stringify(user));
-        ElMessage.success('登录成功');
-        router.push('ask-all');
-    }).catch(err => {
-        console.log(err);
-    });
+    } catch (e) {
+        ElMessage.error((e as unknown as Error).message);
+    }
 }
 
 const showForgetPassword = ref(false);
