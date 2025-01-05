@@ -93,9 +93,10 @@ const searchBtn = () => {
     teacherList.value = results;
 };
 
-const navigateTo = (key: number) => {
+const navigateTo = (key: any) => {
     router.push({
-        path: `/ask-teacher/${key}`,
+        path: `/ask-teacher/${key.teacherId}`,
+        query: { teacher_id: key.teacherId, teacher_name: key.teacherName },
     });
 };
 
