@@ -14,14 +14,16 @@
 
 <script setup lang='ts'>
 import { logoutApi } from '@/api/user/login.api';
-import { router } from '@/router';
 import { UserStore } from '@/store/modules/user';
 import { removeUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 const visible = defineModel("visible", { type: Boolean, default: true });
 
 const userStore = UserStore();
+
+const router = useRouter();
 
 async function logout() {
     try {

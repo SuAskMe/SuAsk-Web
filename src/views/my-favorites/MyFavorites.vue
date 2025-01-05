@@ -29,12 +29,12 @@ import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { Favorite, getNextQuestions } from "./myFavorite";
-import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import type { FavoriteItem } from "@/model/favorite.model";
 import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
 import { UserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -102,6 +102,8 @@ const favorite = async (key: number) => {
     questionList[key].is_favorite = res.is_favorite;
     questionList.splice(key, 1);
 };
+
+const router = useRouter();
 
 const navigateTo = (key: number) => {
     router.push({

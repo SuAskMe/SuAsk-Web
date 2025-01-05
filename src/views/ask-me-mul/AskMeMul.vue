@@ -22,12 +22,12 @@ import { computed, nextTick, onMounted, reactive, ref } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header";
 import { getNextQuestions, Pin, setAnsweredOrNot } from "./askMeMul";
 import type { QFMItem } from "@/model/teacher-self.model";
 import { UserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -97,6 +97,8 @@ const pin = async (key: number) => {
     }
     questionList[key].is_pinned = res;
 };
+
+const router = useRouter();
 
 const navigateTo = (key: number) => {
     key = Number(key);

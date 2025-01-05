@@ -23,7 +23,6 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { router } from "@/router";
 import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header";
 import { getNextQuestions, Pin } from "./askMe";
@@ -32,6 +31,7 @@ import { pinQFMApi } from "@/api/question/teacher-self.api";
 import { storeToRefs } from "pinia";
 import { UserInfoStore } from "@/store/modules/sidebar";
 import { UserStore } from "@/store/modules/user";
+import { useRouter } from "vue-router";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
@@ -99,6 +99,8 @@ const pin = async (key: number) => {
     }
     questionList[key].is_pinned = res;
 };
+
+const router = useRouter();
 
 const navigateTo = (key: number) => {
     router.push({
