@@ -3,12 +3,10 @@
         <div class="title">
             <div class="message">
                 消息
-                <div class="count">{{ props.answerCount + props.questionCount + props.replyCount }}</div>
+                <div v-if="(props.answerCount + props.questionCount + props.replyCount) > 0" class="count">{{
+                    props.answerCount + props.questionCount + props.replyCount }}</div>
             </div>
-
-
         </div>
-
         <div class="choose-notification">
             <el-radio-group v-model="radio" style="width: 100%;">
                 <el-radio-button label="提问我的" :value="NotificationType.QUESTION" />
@@ -71,8 +69,6 @@ import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.mode
 import { NotificationCard } from '@/components/notification-card';
 import { onMounted, ref } from 'vue';
 
-
-
 enum NotificationType {
     QUESTION = 'question',
     ANSWER = 'answer',
@@ -110,7 +106,7 @@ const newAnswer = ref<NewAnswer[]>([])
 const newReply = ref<NewReply[]>([])
 
 async function loadNotification() {
-    await getNotificationApi(2).then((res) => {
+    await getNotificationApi(props.user_id).then((res) => {
         newQuestion.value = res.new_question
         newAnswer.value = res.new_answer
         newReply.value = res.new_reply
