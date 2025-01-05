@@ -54,11 +54,18 @@ const containerStyle = computed(() => {
 const imageContainer = computed(() =>
     getImgStyle(props.imageUrls, props.width)
 );
-const _avatar = ref(props.avatar);
+
+const _avatar = ref(
+    props.avatar ? props.avatar : "/src/assets/default-avatar.png"
+);
+
+const showDefaultAvatar = () => {
+    console.log("showDefaultAvatar");
+    _avatar.value = "/src/assets/default-avatar.png";
+};
 </script>
 <template>
     <div
-        @click.stop="clickCard(key)"
         class="bubble-answer"
         :style="isMine ? 'flex-direction: row-reverse;' : ''"
     >
@@ -74,10 +81,14 @@ const _avatar = ref(props.avatar);
             :src="_avatar"
             class="avatar"
             :size="40"
-            :style="isMine ? 'margin-right: 24px;' : 'margin-left: 24px;'"
-            @error="_avatar = '/src/assets/default-avatar.png'"
+            :style="isMine ? 'margin-right: 30px;' : 'margin-left: 24px;'"
+            @error="showDefaultAvatar"
         ></el-avatar>
-        <div class="card-container" :style="containerStyle">
+        <div
+            class="card-container"
+            :style="containerStyle"
+            @click.stop="clickCard(key)"
+        >
             <div class="ans-title">
                 <div class="nickname">{{ nickName }}</div>
                 <div v-if="isTeacher" class="suffixed-text">

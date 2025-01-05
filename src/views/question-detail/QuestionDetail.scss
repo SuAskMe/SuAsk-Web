@@ -18,7 +18,7 @@
     .answer-enter-from,
     .answer-leave-to {
       opacity: 0;
-      transform: scaleY(0.01) translate(30px, 0);
+      transform: scaleY(0.01) translateY(30px, 0);
     }
 
     .answer-leave-active {
@@ -33,7 +33,7 @@
     .question-enter-from,
     .question-leave-to {
       opacity: 0;
-      transform: scaleY(0.01) translate(30px, 0);
+      transform: scaleY(0.01) translateY(30px, 0);
     }
 
     .background-img {
@@ -84,6 +84,7 @@
       }
     }
   }
+
   .ask-btn {
     position: absolute;
     bottom: 56px;
@@ -91,6 +92,7 @@
     width: 56px;
     height: 56px;
     background-color: $su-blue-dark;
+    opacity: 0.5;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 50%;
     display: flex;
@@ -102,6 +104,7 @@
   }
 
   .ask-btn:hover {
+    opacity: 1;
     transform: translateY(-10px);
   }
 }

@@ -10,7 +10,7 @@ export interface Question {
     is_favorite: boolean;
 }
 
-export interface Answer {
+export interface AnswerItem {
     id: number;
     user_id: number;
     user_avatar: string;
@@ -26,7 +26,7 @@ export interface Answer {
 
 export interface QuestionDetailRes {
     question: Question;
-    answer_list: Answer[];
+    answer_list: AnswerItem[];
     can_reply: boolean;
 }
 
