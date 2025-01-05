@@ -2,6 +2,7 @@ export enum Role {
     ADMIN = 'admin',
     TEACHER = 'teacher',
     STUDENT = 'student',
+    DEFAULT = 'default',
 }
 
 
@@ -58,4 +59,11 @@ export interface LoginReq {
     name: string;
     email: string;
     password: string;
+}
+
+export interface LoginRes {
+    id: number;
+    role: string;
+    token: string;
+    type: string;
 }

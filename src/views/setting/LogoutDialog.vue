@@ -15,23 +15,28 @@
 <script setup lang='ts'>
 import { logoutApi } from '@/api/user/login.api';
 import { router } from '@/router';
+import { UserStore } from '@/store/modules/user';
 import { removeUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
 
 const visible = defineModel("visible", { type: Boolean, default: true });
 
-function logout() {
-    logoutApi().then(res => {
+const userStore = UserStore();
+
+async function logout() {
+    try {
+        const res = await userStore.logout();
+        console.log(res);
         if (res) {
-            ElMessage.success('注销成功');
-            removeUserInfo();
-            router.push('/login');
+            ElMessage.success('退出登录成功');
+            console.log(res);
+            router.push({ name: 'Login' });
         } else {
-            ElMessage.error('注销失败');
+            ElMessage.error('退出登录失败');
         }
-    }).catch(err => {
-        console.log(err);
-    })
+    } catch (e) {
+        ElMessage.error((e as unknown as Error).message);
+    }
 }
 </script>
 

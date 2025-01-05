@@ -4,9 +4,8 @@
             <svg-icon class="qr-code" icon="qr-code" color="#808080" size="24px" />
             <div class="message">
                 <svg-icon @click="openDrawer" icon="communicate_message_emoji" color="#808080" size="24px" />
-                <div class="red-dot" />
+                <div v-if="(newQuestionCount + newAnswerCount + newReplyCount) > 0" class="red-dot" />
             </div>
-
         </div>
         <div class="avatar-and-id" @click="toUserInfo">
             <el-avatar :size="120" :src="userInfo.avatar">
@@ -31,7 +30,7 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
@@ -40,19 +39,18 @@ import { router } from '@/router';
 import { getUserInfo } from '@/utils/userInfo';
 import { getNotificationCountApi } from '@/api/notification/notification.api';
 import Notification from './Notification.vue';
-import { UserInfoStore } from '@/store/modules/sidebar';
 import { storeToRefs } from 'pinia';
+import { UserStore } from '@/store/modules/user';
+import type { User } from '@/model/user.model';
 
 const drawer = ref(false);
 
 // 用户信息
 
-const userStore = UserInfoStore();
-const { userInfo } = storeToRefs(userStore);
+const userStore = UserStore();
+// const { userInfo } = storeToRefs(userStore);
+const userInfo = computed(() => userStore.getUser())
 
-function loadUserInfo() {
-    userInfo.value = getUserInfo();
-}
 
 function closeDrawer() {
     console.log('closeDrawer');
@@ -67,7 +65,7 @@ const newAnswerCount = ref(0)
 const newReplyCount = ref(0)
 
 async function getNotificationCount() {
-    await getNotificationCountApi(2).then((res) => {
+    await getNotificationCountApi(userInfo.value.id).then((res) => {
         if (res != null) {
             newQuestionCount.value = res.new_question_count
             newAnswerCount.value = res.new_answer_count
@@ -89,11 +87,10 @@ function toUserInfo() {
 }
 
 onMounted(() => {
-    loadUserInfo();
     getNotificationCount();
 });
 
-const isStudent = getUserInfo()?.role === 'student';
+const isStudent = userInfo.value.role === 'student';
 </script>
 
 <style scoped lang="scss">
