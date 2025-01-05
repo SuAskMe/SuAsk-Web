@@ -12,7 +12,11 @@
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item v-for="(item, index) in sortText" :key="index" @click="changeSort(index)">
+                        <el-dropdown-item
+                            v-for="(item, index) in sortText"
+                            :key="index"
+                            @click="changeSort(index)"
+                        >
                             {{ item }}
                         </el-dropdown-item>
                     </el-dropdown-menu>
@@ -20,13 +24,27 @@
             </el-dropdown>
             <div v-if="props.search" class="header-item">
                 <div class="search">
-                    <el-autocomplete v-if="showInput" v-model="searchText" placeholder="搜索问题"
-                        :fetch-suggestions="querySearch" :debounce="100" :trigger-on-focus="false"
-                        clearable></el-autocomplete>
+                    <el-autocomplete
+                        v-if="showInput"
+                        v-model="searchText"
+                        placeholder="搜索问题"
+                        :fetch-suggestions="querySearch"
+                        :debounce="100"
+                        :trigger-on-focus="false"
+                        clearable
+                    ></el-autocomplete>
                     <div class="search-icon" @click.stop="search">
-                        <svg-icon icon="search" :color="showInput ? '#71B6FF' : '#808080'" size="22px" />
+                        <svg-icon
+                            icon="search"
+                            :color="showInput ? '#71B6FF' : '#808080'"
+                            size="22px"
+                        />
                     </div>
-                    <div v-if="showInput" class="cancel-btn" @click.stop="cancelSearch">
+                    <div
+                        v-if="showInput"
+                        class="cancel-btn"
+                        @click.stop="cancelSearch"
+                    >
                         取消
                     </div>
                 </div>
@@ -42,15 +60,21 @@ import { da } from "element-plus/es/locales.mjs";
 import { computed, ref } from "vue";
 const emit = defineEmits(["changeSort", "search", "cancelSearch", "return"]);
 
-const props = defineProps<{
-    title?: string;
-    get_keywords_url?: string;
-    return_btn?: boolean;
-    search?: boolean;
-    has_sort_upvote?: boolean;
-    sort_and_search?: boolean;
-    teacher_id?: number;
-}>();
+const props = withDefaults(
+    defineProps<{
+        title?: string;
+        get_keywords_url?: string;
+        return_btn?: boolean;
+        search?: boolean;
+        has_sort_upvote?: boolean;
+        defualt_sort_type?: number;
+        sort_and_search?: boolean;
+        teacher_id?: number;
+    }>(),
+    {
+        defualt_sort_type: 0,
+    }
+);
 
 // 排序组件
 const sortTextCommon = ref([
@@ -65,7 +89,7 @@ const sortText = computed(() => {
         ? sortTextCommon.value
         : sortTextWithoutUpvote.value;
 });
-const sortIndex = ref(0);
+const sortIndex = ref(props.defualt_sort_type);
 function changeSort(index: number) {
     sortIndex.value = index;
     emit("changeSort", index);
