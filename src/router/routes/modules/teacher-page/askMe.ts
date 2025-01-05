@@ -1,10 +1,9 @@
-import { LeftSidebar } from "@/components/left-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
 const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const WebHome = () => import("@/layout/home/WebHome.vue");
-const Sidebar = () => import("@/views/home/sidebar/Sidebar.vue");
+const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
 
 const AskMe = () => import("@/views/ask-me/AskMe.vue");
 const AskMeMul = () => import("@/views/ask-me-mul/AskMeMul.vue");
@@ -40,7 +39,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: Sidebar,
+                sidebar: LeftSidebar,
             },
             props: {
                 default: { type: "answered" },
@@ -54,7 +53,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: Sidebar,
+                sidebar: LeftSidebar,
             },
             props: {
                 default: { type: "unanswered" },
@@ -68,7 +67,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: Sidebar,
+                sidebar: LeftSidebar,
             },
             props: {
                 default: { type: "top" },
