@@ -29,7 +29,7 @@ import { onMounted, reactive, ref } from "vue";
 import TeacherCard from "@/components/teacher-card";
 import { getTeacherApi } from "@/api/teacher/teacher.api";
 import type { TeacherItem } from "@/model/teacher.model";
-import { router } from "@/router";
+import { useRouter } from "vue-router";
 
 async function getTeacherList() {
     await getTeacherApi().then((res) => {
@@ -92,6 +92,8 @@ const searchBtn = () => {
         : teachersObj;
     teacherList.value = results;
 };
+
+const router = useRouter();
 
 const navigateTo = (key: any) => {
     router.push({

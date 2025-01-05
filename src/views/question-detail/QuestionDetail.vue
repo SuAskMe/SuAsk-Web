@@ -14,7 +14,7 @@
                         :click-card="() => { }" :click-favorite="favorite">
                     </BubbleCard>
                 </Transition>
-                <TransitionGroup name="answer" tag="div">
+                <TransitionGroup name="answer" tag="div" style="width: 100%;">
                     <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
                         :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"
                         :nick-name="item.nickname" :text="item.contents" :like-count="item.upvotes"
