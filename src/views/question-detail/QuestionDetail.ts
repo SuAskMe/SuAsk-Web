@@ -40,26 +40,6 @@ export const GenId = (): number => {
     return idSeed;
 };
 
-export interface AnswerItem {
-    id: number;
-    userId: number;
-    isMine?: boolean;
-    avatar: string;
-    nickName: string;
-    content: string;
-    upvotesCount: number;
-    createdAt: number;
-    isLiked: boolean;
-    quote: {
-        id: number;
-        text: string;
-        author: string;
-    };
-    isTeacher?: boolean;
-    teacherName?: string;
-    imageUrls: string[];
-}
-
 export async function Favorite(question_id: number): Promise<boolean | null> {
     var res = await favoriteApi({ question_id });
     if (res) {
