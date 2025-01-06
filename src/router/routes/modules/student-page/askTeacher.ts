@@ -6,18 +6,14 @@ const WebHome = () => import("@/layout/home/WebHome.vue");
 
 const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
 
-const AskTeacher = () =>
-    import("@/views/ask-teacher/AskTeacher.vue");
+const AskTeacher = () => import("@/views/ask-teacher/AskTeacher.vue");
 const TeacherQuestionBox = () =>
     import("@/views/ask-teacher/TeacherQuestionBox.vue");
 
 export const AskTeacherRoute: AppRouteRecordRaw = {
-
     path: "/ask-teacher",
     name: "AskTeacherRoot",
-    meta: {
-        title: "问老师",
-    },
+    meta: {},
     props: {
         userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
@@ -36,15 +32,15 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: ":id",
+            path: ":teacher_id/:teacher_name",
             name: "AskTeacherDetail",
             meta: {
-                title: "问老师",
+                NoAlive: true,
             },
             components: {
                 default: AskTeacher,
                 left_side: LeftSidebar,
             },
         },
-    ]
-}
+    ],
+};

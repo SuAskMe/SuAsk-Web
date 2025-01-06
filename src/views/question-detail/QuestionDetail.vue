@@ -124,7 +124,7 @@ import { UserStore } from "@/store/modules/user";
 
 // 背景图片
 const userStore = UserStore();
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => userStore.getUser().themeId);
 const { userInfo } = storeToRefs(userStore);
 
 // interface Img {
@@ -140,6 +140,7 @@ const route = useRoute();
 //     fileList.value.splice(index, 1);
 //     imageList.value.splice(index, 1);
 // };
+let sort_type = 1;
 
 const changeSort = (index: number) => {
     sort_type = index;
