@@ -100,7 +100,7 @@ const showInput = ref(false);
 const searchText = ref(""); // 搜索内容
 
 async function querySearch(queryString: string, cb: any) {
-    if (queryString.length === 0) {
+    if (queryString.length < 2) {
         return;
     }
     const results = await getKeyWords({

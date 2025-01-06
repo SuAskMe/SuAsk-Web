@@ -1,24 +1,53 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch"
-                @return="navigateBack" search return_btn get_keywords_url="/questions/teacher/keywords" has_sort_upvote
-                :teacher_id="teacher_id" sort_and_search />
+            <QuestionHeader
+                @change-sort="changeSort"
+                @search="search"
+                @cancel-search="cancelSearch"
+                @return="navigateBack"
+                :title="teacherName + '的提问箱'"
+                search
+                return_btn
+                get_keywords_url="/questions/teacher/keywords"
+                has_sort_upvote
+                :teacher_id="teacherId"
+                sort_and_search
+            />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+            <el-scrollbar
+                v-loading="loading"
+                ref="scrollBar"
+                @scroll="handleScroll"
+            >
                 <TransitionGroup name="question">
-                    <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
-                        :text="question.contents" :views="question.views" :time-stamp="question.created_at"
-                        :image-urls="question.image_urls" :show-favorite="false" :answer-num="question.answer_num"
-                        :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo" width="45vw"
+                    <BubbleQuestion
+                        v-for="(question, index) in questionList"
+                        :key="question.id"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :show-favorite="false"
+                        :answer-num="question.answer_num"
+                        :avatars="question.answer_avatars"
+                        :bubble-key="index"
+                        :click-card="navigateTo"
+                        width="45vw"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
-                        }" />
+                        }"
+                    />
                 </TransitionGroup>
             </el-scrollbar>
-            <AskDialog v-model:visible="showDialog" :teacher="{ teacherId: teacher_id, teacherName: teacher_name }" />
+            <AskDialog
+                v-model:visible="showDialog"
+                :teacher="{ teacherId: teacherId, teacherName: teacherName }"
+                @question-posted="handleQuestionPosted"
+            />
             <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">
                     <Plus />
@@ -29,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
@@ -40,26 +69,26 @@ import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { UserStore } from "@/store/modules/user";
+import { router } from "@/router";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 // 背景图片
 const userStore = UserStore();
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => userStore.getUser().themeId);
 
-const router = useRouter();
+const route = useRoute();
 
-const teacher_id = router.currentRoute.value.query.teacher_id as unknown as number;
-const teacher_name = router.currentRoute.value.query.teacher_name as unknown as string;
-
+const teacherName = ref("");
+const teacherId = ref(0);
 
 const Init = async () => {
     if (questionList.length === 0) {
         loading.value = true;
-        questionList.push(...(await getNextQuestions(teacher_id, 0)));
+        questionList.push(...(await getNextQuestions(teacherId.value, 0)));
         loading.value = false;
     }
 };
@@ -77,7 +106,7 @@ const handleScroll = async () => {
             loading.value === false
         ) {
             loading.value = true;
-            questionList.push(...(await getNextQuestions(teacher_id)));
+            questionList.push(...(await getNextQuestions(teacherId.value)));
             loading.value = false;
         }
     }
@@ -86,7 +115,7 @@ const handleScroll = async () => {
 const changeSort = async (sortType: number) => {
     loading.value = true;
     questionList.length = 0;
-    questionList.push(...(await getNextQuestions(teacher_id, sortType)));
+    questionList.push(...(await getNextQuestions(teacherId.value, sortType)));
     loading.value = false;
 };
 
@@ -94,7 +123,7 @@ const search = async (keyword: string) => {
     loading.value = true;
     questionList.length = 0;
     questionList.push(
-        ...(await getNextQuestions(teacher_id, undefined, keyword))
+        ...(await getNextQuestions(teacherId.value, undefined, keyword))
     );
     loading.value = false;
 };
@@ -103,14 +132,12 @@ const cancelSearch = async () => {
     loading.value = true;
     questionList.length = 0;
     questionList.push(
-        ...(await getNextQuestions(teacher_id, undefined, undefined, true))
+        ...(await getNextQuestions(teacherId.value, undefined, undefined, true))
     );
     loading.value = false;
 };
 
 const questionList: QuestionItem[] = reactive([]);
-
-
 
 const navigateTo = (key: number) => {
     key = Number(key);
@@ -123,7 +150,47 @@ const navigateBack = () => {
     router.back();
 };
 
+const observe = new IntersectionObserver(
+    (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.animate(
+                    [{ background: "#80808050" }, { background: "#80808000" }],
+                    { duration: 1500, easing: "ease-in-out", iterations: 1 }
+                );
+            }
+        });
+    },
+    { threshold: 1.0 }
+);
+
+const handleQuestionPosted = (question: QuestionItem) => {
+    questionList.unshift(question);
+    nextTick(() => {
+        const el = document.getElementById(`question-${question.id}`);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            observe.observe(el);
+            setTimeout(() => {
+                observe.unobserve(el);
+            }, 2000);
+        }
+    });
+};
+
+watch(
+    () => route.path,
+    () => {
+        teacherId.value = Number(route.params.teacher_id);
+        teacherName.value = String(route.params.teacher_name);
+        questionList.length = 0;
+        Init();
+    }
+);
+
 onMounted(() => {
+    teacherId.value = Number(route.params.teacher_id);
+    teacherName.value = String(route.params.teacher_name);
     Init();
 });
 </script>
