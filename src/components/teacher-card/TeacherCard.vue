@@ -1,9 +1,22 @@
 <template>
-    <el-card @click.stop="clickCard({ teacherId: teacher.id, teacherName: teacher.name })" shadow="hover"
-        class="teacher-card" :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''">
+    <el-card
+        @click.stop="clickCard(teacherKey)"
+        shadow="hover"
+        class="teacher-card"
+        :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''"
+    >
         <div class="card-left">
-            <img :src="teacher.avatarUrl" class="teacher-avatar" />
-            <el-button class="teacher-btn" round>Ta的主页</el-button>
+            <img
+                :src="teacher.avatarUrl"
+                class="teacher-avatar"
+                loading="lazy"
+            />
+            <el-button
+                class="teacher-btn"
+                @click.stop="clickBtn(teacherKey)"
+                round
+                >Ta的主页</el-button
+            >
         </div>
         <div class="card-right">
             <div class="teacher-info">
@@ -26,14 +39,20 @@
 </template>
 
 <script setup lang="ts">
-import type { TeacherItem } from '@/model/teacher.model';
+import type { TeacherItem } from "@/model/teacher.model";
+import { preview } from "vite";
 
 interface CardProps {
     teacher: TeacherItem;
     clickCard?: (key: any) => void;
+    clickBtn?: (key: any) => void;
+    teacherKey?: any;
 }
-const props = defineProps<CardProps>();
-
+const props = withDefaults(defineProps<CardProps>(), {
+    clickCard: () => {},
+    clickBtn: () => {},
+});
+// console.log(props.teacher.avatarUrl);
 </script>
 <style scoped lang="scss">
 .teacher-card {

@@ -4,7 +4,11 @@ import {
     getFavoriteApi,
     searchFavoriteApi,
 } from "@/api/question/favorite.api";
-import type { FavoriteItem, FavoriteRes, GetFavoriteRes } from "@/model/favorite.model";
+import type {
+    FavoriteItem,
+    FavoriteRes,
+    GetFavoriteRes,
+} from "@/model/favorite.model";
 
 let isEnd = false;
 let currentPage = 1;
@@ -17,15 +21,6 @@ export async function getNextQuestions(
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<FavoriteItem[]> {
-    if (alock) {
-        return new Promise<FavoriteItem[]>((resolve) => {
-            resolve([]);
-        });
-    }
-    alock = true;
-    setTimeout(() => {
-        alock = false;
-    }, 2000);
     if (sortType_ !== undefined && sortType_ !== sortType) {
         currentPage = 1;
         sortType = sortType_;
@@ -43,7 +38,13 @@ export async function getNextQuestions(
         isEnd = false;
     }
     if (isEnd) {
-        ElMessage.success("没有更多了");
+        if (!alock) {
+            alock = true;
+            ElMessage.success("没有更多了");
+        }
+        setTimeout(() => {
+            alock = false;
+        }, 2000);
         return new Promise<FavoriteItem[]>((resolve) => {
             resolve([]);
         });
@@ -76,10 +77,12 @@ async function getQuestionsByPage(
     }
 }
 
-export async function Favorite(question_id: number): Promise<FavoriteRes | null> {
+export async function Favorite(
+    question_id: number
+): Promise<FavoriteRes | null> {
     var res = await favoriteApi({ question_id });
     if (res) {
-        return res
+        return res;
     }
     ElMessage.error("请求失败");
     return null;

@@ -4,18 +4,36 @@
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
                     <div class="header-content">
-                        <el-autocomplete v-model="searchInput" placeholder="请输入想要搜索的老师姓名"
-                            :fetch-suggestions="querySearch" :debounce="100" @input="resetList"
-                            clearable></el-autocomplete>
+                        <el-autocomplete
+                            v-model="searchInput"
+                            placeholder="请输入想要搜索的老师姓名"
+                            :fetch-suggestions="querySearch"
+                            :debounce="100"
+                            @input="resetList"
+                            clearable
+                        ></el-autocomplete>
                         <div class="search-teacher-btn" @click.stop="searchBtn">
-                            <SvgIcon icon="search" size="calc(1em + 10px)" color="#71b6ff" />
+                            <SvgIcon
+                                icon="search"
+                                size="calc(1em + 10px)"
+                                color="#71b6ff"
+                            />
                         </div>
                         <div :class="{ 'bottom-line': isAtTop }"></div>
                     </div>
                 </div>
                 <div class="teacher-list">
-                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher"
-                        :click-card="navigateTo">
+                    <TeacherCard
+                        v-for="(teacher, index) in teacherList"
+                        :key="index"
+                        :teacher="teacher"
+                        :teacher-key="{
+                            teacherId: teacher.id,
+                            teacherName: teacher.name,
+                        }"
+                        :click-card="navigateTo"
+                        :click-btn="navigateToTeacherIndex"
+                    >
                     </TeacherCard>
                 </div>
             </el-scrollbar>
@@ -32,19 +50,20 @@ import type { TeacherItem } from "@/model/teacher.model";
 import { useRouter } from "vue-router";
 
 async function getTeacherList() {
-    await getTeacherApi().then((res) => {
-        if (res) {
-            teacherList.value = res.teachers;
-            console.log(teacherList.value);
-        }
-
-    }).then(() => {
-        let teachersObj = teacherList.value
-        for (let i = 0; i < teachersObj.length; i++) {
-            teachersObj[i].value = teachersObj[i].name;
-        }
-        teachersStr = JSON.stringify(teachersObj);
-    });
+    await getTeacherApi()
+        .then((res) => {
+            if (res) {
+                teacherList.value = res.teachers;
+                console.log(teacherList.value);
+            }
+        })
+        .then(() => {
+            let teachersObj = teacherList.value;
+            for (let i = 0; i < teachersObj.length; i++) {
+                teachersObj[i].value = teachersObj[i].name;
+            }
+            teachersStr = JSON.stringify(teachersObj);
+        });
 }
 
 let teacherList = ref<TeacherItem[]>([]);
@@ -97,14 +116,20 @@ const router = useRouter();
 
 const navigateTo = (key: any) => {
     router.push({
-        path: `/ask-teacher/${key.teacherId}`,
-        query: { teacher_id: key.teacherId, teacher_name: key.teacherName },
+        path: `/ask-teacher/${key.teacherId}/${key.teacherName}`,
     });
+};
+
+const navigateToTeacherIndex = (key: any) => {
+    // router.push({
+    //     path: `/teacher-index/${key.teacherId}`,
+    //     query: { teacher_id: key.teacherId, teacher_name: key.teacherName },
+    // });
+    console.log(key);
 };
 
 onMounted(() => {
     getTeacherList();
-
 });
 </script>
 
