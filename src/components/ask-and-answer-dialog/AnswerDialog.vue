@@ -4,7 +4,6 @@ import "md-editor-v3/lib/style.css";
 import SvgIcon from "@/components/svg-icon";
 import { ElMessage } from "element-plus";
 import { GenId } from "@/views/question-detail/QuestionDetail";
-import { getUserInfo } from "@/utils/userInfo";
 import ImgList from "./ImgList.vue";
 
 const visible = defineModel("visible", { default: false });
