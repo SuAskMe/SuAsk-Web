@@ -22,3 +22,9 @@ export interface TeacherPinRes {
     question_list: TeacherPinItem[];
 }
 
+export enum TeacherPerm {
+    Private = "private",
+    Public = "public",
+    Protected = "protected",
+}
+
