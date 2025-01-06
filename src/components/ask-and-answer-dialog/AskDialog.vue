@@ -4,7 +4,6 @@ import "md-editor-v3/lib/style.css";
 import SvgIcon from "@/components/svg-icon";
 import { ElMessage } from "element-plus";
 import { GenId } from "@/views/question-detail/QuestionDetail";
-import { getUserInfo } from "@/utils/userInfo";
 import ImgList from "./ImgList.vue";
 
 const visible = defineModel("visible", { default: false });
@@ -83,8 +82,11 @@ const questionContent = ref<Ask>({
     imageList: [],
 });
 
-const userInfo = getUserInfo();
-const avatarURL = userInfo ? userInfo.avatar : "@/assets/default-avatar.png";
+// const userInfo = getUserInfo();
+// const avatarURL = userInfo ? userInfo.avatar : "@/assets/default-avatar.png";
+
+const userStore = UserStore();
+const avatarURL = userStore.getUser().avatar
 
 const hoverColor = ref("#000000");
 
@@ -127,6 +129,7 @@ import { db, type Question } from "./db";
 import type { AddQuestionReq, QuestionItem, Teacher } from "@/model/question.model";
 import { addQuestionApi } from "@/api/question/question.api";
 import { de } from "element-plus/es/locales.mjs";
+import { UserStore } from "@/store/modules/user";
 
 const deleteDrafts = ref<number[]>([]);
 const deleteMod = ref(false);

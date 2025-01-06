@@ -68,8 +68,8 @@
 <script setup lang='ts'>
 import { deleteNotificationApi, readNotificationApi } from '@/api/notification/notification.api';
 import { router } from '@/router';
+import { UserStore } from '@/store/modules/user';
 import { getTimeStr } from '@/utils/time';
-import { getUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
@@ -100,7 +100,10 @@ interface NotificationCardProps {
 
 }
 const props = defineProps<NotificationCardProps>();
-const userName = getUserInfo().nickname;
+
+const userStore = UserStore();
+
+const userName = userStore.getUser().name
 
 const emit = defineEmits(['reply', 'delete', 'read']);
 
