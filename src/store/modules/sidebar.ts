@@ -1,19 +1,20 @@
-import type { User } from "@/model/user.model";
-import { getUserInfo, setUserInfo } from "@/utils/userInfo";
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
-export const UserInfoStore = defineStore('user-info', () => {
-    const storedUserInfo: User = getUserInfo()
-    const userInfo = ref<User>(storedUserInfo)
+export const ControlPanelStore = defineStore("controlPanel",
+    () => {
+        const Item = ref<string>()
 
-    function changeUserInfo(user: User) {
-        userInfo.value = user
-    }
+        function setSelectedItem(item: string) {
+            Item.value = item
+        }
 
-    watch(userInfo, (newUserInfo) => {
-        setUserInfo(newUserInfo)
-    })
+        function getSelectedItem(): string {
+            return Item.value || ''
+        }
 
-    return { userInfo, changeUserInfo }
+        return { Item, setSelectedItem, getSelectedItem }
+    }, {
+    persist: true
 })
+

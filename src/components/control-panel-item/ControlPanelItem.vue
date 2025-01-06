@@ -7,23 +7,27 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { ControlPanelStore } from '@/store/modules/sidebar';
+import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
+
+const controlPanelStore = ControlPanelStore();
 
 const props = defineProps<{
     id: string; // 控制面板的id
     icon?: string; // 图标 可选
     size?: string; // 图标大小 可选
     text?: string; // 内容 可选
-    clicked?: boolean; // 是否被选中 可选
     jumpToPath: string; // 跳转路径
 }>();
 
 const emit = defineEmits(['updateSelected']);
 const router = useRouter();
 
+const clicked = computed(() => controlPanelStore.getSelectedItem() == props.id);
+
 const handleClick = () => {
-    emit('updateSelected', props.id);
+    controlPanelStore.setSelectedItem(props.id);
     router.push(props.jumpToPath);
 };
 </script>
