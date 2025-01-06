@@ -101,6 +101,7 @@ const searchText = ref(""); // 搜索内容
 
 async function querySearch(queryString: string, cb: any) {
     if (queryString.length < 2) {
+        cb([]);
         return;
     }
     const results = await getKeyWords({
@@ -117,12 +118,12 @@ async function querySearch(queryString: string, cb: any) {
     }
 }
 
+let searchRecord = false;
+
 const search = () => {
-    if (
-        showInput.value &&
-        searchText.value.length > 0 &&
-        searchText.value.trim() !== ""
-    ) {
+    searchText.value = searchText.value.trim();
+    if (showInput.value && searchText.value.length >= 2) {
+        searchRecord = true;
         emit("search", searchText.value);
     } else {
         showInput.value = true;
@@ -132,7 +133,10 @@ const search = () => {
 const cancelSearch = () => {
     showInput.value = false;
     searchText.value = "";
-    emit("cancelSearch");
+    if (searchRecord) {
+        searchRecord = false;
+        emit("cancelSearch");
+    }
 };
 
 async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {

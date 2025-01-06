@@ -64,11 +64,8 @@ import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { getNextQuestions } from "./askTeacher";
-import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
-import { UserInfoStore } from "@/store/modules/sidebar";
-import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { UserStore } from "@/store/modules/user";
 import { router } from "@/router";
@@ -178,9 +175,15 @@ const handleQuestionPosted = (question: QuestionItem) => {
     });
 };
 
+let pathRecord = "";
+
 watch(
     () => route.path,
     () => {
+        if (pathRecord === route.path) {
+            return;
+        }
+        pathRecord = route.path;
         teacherId.value = Number(route.params.teacher_id);
         teacherName.value = String(route.params.teacher_name);
         questionList.length = 0;
