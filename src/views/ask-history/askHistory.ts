@@ -14,15 +14,6 @@ export async function getNextQuestions(
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<HistoryItem[]> {
-    if (alock) {
-        return new Promise<HistoryItem[]>((resolve) => {
-            resolve([]);
-        });
-    }
-    alock = true;
-    setTimeout(() => {
-        alock = false;
-    }, 2000);
     if (sortType_ !== undefined && sortType_ !== sortType) {
         currentPage = 1;
         sortType = sortType_;
@@ -40,7 +31,13 @@ export async function getNextQuestions(
         isEnd = false;
     }
     if (isEnd) {
-        ElMessage.success("没有更多了");
+        if (!alock) {
+            alock = true;
+            ElMessage.success("没有更多了");
+        }
+        setTimeout(() => {
+            alock = false;
+        }, 2000);
         return new Promise<HistoryItem[]>((resolve) => {
             resolve([]);
         });

@@ -19,15 +19,7 @@ export async function getNextQuestions(
     cancelSearch?: boolean
 ): Promise<QuestionItem[]> {
     console.log("sortType_", sortType_);
-    if (alock) {
-        return new Promise<QuestionItem[]>((resolve) => {
-            resolve([]);
-        });
-    }
-    alock = true;
-    setTimeout(() => {
-        alock = false;
-    }, 2000);
+
     if (sortType_ !== undefined && sortType_ !== sortType) {
         currentPage = 1;
         sortType = sortType_;
@@ -45,7 +37,13 @@ export async function getNextQuestions(
         isEnd = false;
     }
     if (isEnd) {
-        ElMessage({ message: "没有更多了", type: "success" });
+        if (!alock) {
+            alock = true;
+            ElMessage({ message: "没有更多了", type: "success" });
+        }
+        setTimeout(() => {
+            alock = false;
+        }, 2000);
         return new Promise<QuestionItem[]>((resolve) => {
             resolve([]);
         });
