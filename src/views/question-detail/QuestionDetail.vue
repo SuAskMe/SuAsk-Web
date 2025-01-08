@@ -101,7 +101,6 @@ import { computed, nextTick, onMounted, ref, watch } from "vue";
 import SvgIcon from "@/components/svg-icon";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
-import { getUserInfo } from "@/utils/userInfo";
 import { getAnswerApi, upvoteAnswerApi } from "@/api/answer/answer.api";
 import type {
     AnswerItem,
@@ -112,7 +111,6 @@ import type {
 import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
 import { favoriteApi } from "@/api/question/favorite.api";
-import { UserInfoStore } from "@/store/modules/sidebar";
 import { storeToRefs } from "pinia";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 

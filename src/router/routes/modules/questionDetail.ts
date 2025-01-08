@@ -10,11 +10,10 @@ const QuestionDetail = () =>
     import("@/views/question-detail/QuestionDetail.vue");
 
 export const QuestionDetailRoute: AppRouteRecordRaw = {
-
     path: "/question-detail",
     name: "QuestionDetailRoot",
     meta: {
-        title: "问大家",
+        title: "加载中...",
     },
     props: {
         userType: "student",
@@ -31,5 +30,5 @@ export const QuestionDetailRoute: AppRouteRecordRaw = {
                 left_side: LeftSidebar,
             },
         },
-    ]
-}
+    ],
+};

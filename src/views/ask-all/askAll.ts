@@ -6,47 +6,55 @@ import {
     searchQuestionPublicApi,
 } from "@/api/question/question.api";
 
-let isEnd = false;
-let currentPage = 1;
-let sortType = -1;
-let keyword = "";
-let alock = false;
+let isEnd_aa = false;
+let currentPage_aa = 1;
+let sortType_aa = -1;
+let keyword_aa = "";
+let alock_aa = false;
+
+export function InitStatus() {
+    isEnd_aa = false;
+    currentPage_aa = 1;
+    sortType_aa = -1;
+    keyword_aa = "";
+    alock_aa = false;
+}
 
 export async function getNextQuestions(
     sortType_?: number,
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<QuestionItem[]> {
-    if (sortType_ !== undefined && sortType_ !== sortType) {
-        currentPage = 1;
-        sortType = sortType_;
-        isEnd = false;
-    } else if (keyword_ !== undefined && keyword_ !== keyword) {
-        currentPage = 1;
-        keyword = keyword_;
-        isEnd = false;
+    if (sortType_ !== undefined && sortType_ !== sortType_aa) {
+        currentPage_aa = 1;
+        sortType_aa = sortType_;
+        isEnd_aa = false;
+    } else if (keyword_ !== undefined && keyword_ !== keyword_aa) {
+        currentPage_aa = 1;
+        keyword_aa = keyword_;
+        isEnd_aa = false;
     } else {
-        currentPage++;
+        currentPage_aa++;
     }
     if (cancelSearch) {
-        keyword = "";
-        currentPage = 1;
-        isEnd = false;
+        keyword_aa = "";
+        currentPage_aa = 1;
+        isEnd_aa = false;
     }
-    if (isEnd) {
-        if (!alock) {
-            alock = true;
+    if (isEnd_aa) {
+        if (!alock_aa) {
+            alock_aa = true;
             ElMessage({ message: "没有更多了", type: "success" });
         }
         setTimeout(() => {
-            alock = false;
+            alock_aa = false;
         }, 2000);
         return new Promise<QuestionItem[]>((resolve) => {
             resolve([]);
         });
     }
     // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType, currentPage, keyword);
+    return getQuestionsByPage(sortType_aa, currentPage_aa, keyword_aa);
 }
 
 async function getQuestionsByPage(
@@ -68,7 +76,7 @@ async function getQuestionsByPage(
         });
     }
     if (res.remain_page <= 0) {
-        isEnd = true;
+        isEnd_aa = true;
     }
     if (res.question_list) {
         return res.question_list;

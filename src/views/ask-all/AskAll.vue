@@ -63,24 +63,22 @@ import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
-import { Favorite, getNextQuestions } from "./askAll";
-import { UserInfoStore } from "@/store/modules/sidebar";
+import { Favorite, getNextQuestions, InitStatus } from "./askAll";
 import { storeToRefs } from "pinia";
-import { getUserInfo } from "@/utils/userInfo";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 const showDialog = ref(false);
 const loading = ref(false);
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 // 背景图片
 const userStore = UserStore();
-const bg_img_index = computed(() => userStore.getUser().themeId)
-
+const bg_img_index = computed(() => userStore.getUser().themeId);
 
 const Init = async () => {
     if (questionList.length === 0) {
+        InitStatus();
         loading.value = true;
         questionList.push(...(await getNextQuestions(0)));
         loading.value = false;
@@ -106,7 +104,13 @@ const handleScroll = async () => {
     }
 };
 
+let sort_type = 0;
+
 const changeSort = async (sortType: number) => {
+    if (sortType === sort_type) {
+        return;
+    }
+    sort_type = sortType;
     loading.value = true;
     questionList.length = 0;
     questionList.push(...(await getNextQuestions(sortType)));
@@ -139,7 +143,6 @@ const favorite = async (key: number) => {
     questionList[key].is_favorite = res;
 };
 
-
 let record = 0;
 const ErrorMsg = UseQDMessageStore();
 const { HasError } = storeToRefs(ErrorMsg);
@@ -154,6 +157,7 @@ watch(HasError, (newVal) => {
 const router = useRouter();
 
 const navigateTo = (key: number) => {
+    key = Number(key);
     record = key;
     questionList[key].views += 1;
     router.push({

@@ -6,11 +6,19 @@ import {
 import type { GetQuestionRes, QuestionItem } from "@/model/question.model";
 import { ElMessage } from "element-plus";
 
-let isEnd = false;
-let currentPage = 1;
-let sortType = -1;
-let keyword = "";
-let alock = false;
+let isEnd_at = false;
+let currentPage_at = 1;
+let sortType_at = -1;
+let keyword_at = "";
+let alock_at = false;
+
+export function InitStatus() {
+    isEnd_at = false;
+    currentPage_at = 1;
+    sortType_at = -1;
+    keyword_at = "";
+    alock_at = false;
+}
 
 export async function getNextQuestions(
     teacher_id: number,
@@ -18,38 +26,41 @@ export async function getNextQuestions(
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<QuestionItem[]> {
-    console.log("sortType_", sortType_);
-
-    if (sortType_ !== undefined && sortType_ !== sortType) {
-        currentPage = 1;
-        sortType = sortType_;
-        isEnd = false;
-    } else if (keyword_ !== undefined && keyword_ !== keyword) {
-        currentPage = 1;
-        keyword = keyword_;
-        isEnd = false;
+    if (sortType_ !== undefined && sortType_ !== sortType_at) {
+        currentPage_at = 1;
+        sortType_at = sortType_;
+        isEnd_at = false;
+    } else if (keyword_ !== undefined && keyword_ !== keyword_at) {
+        currentPage_at = 1;
+        keyword_at = keyword_;
+        isEnd_at = false;
     } else {
-        currentPage++;
+        currentPage_at++;
     }
     if (cancelSearch) {
-        keyword = "";
-        currentPage = 1;
-        isEnd = false;
+        keyword_at = "";
+        currentPage_at = 1;
+        isEnd_at = false;
     }
-    if (isEnd) {
-        if (!alock) {
-            alock = true;
+    if (isEnd_at) {
+        if (!alock_at) {
+            alock_at = true;
             ElMessage({ message: "没有更多了", type: "success" });
         }
         setTimeout(() => {
-            alock = false;
+            alock_at = false;
         }, 2000);
         return new Promise<QuestionItem[]>((resolve) => {
             resolve([]);
         });
     }
     // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType, currentPage, keyword, teacher_id);
+    return getQuestionsByPage(
+        sortType_at,
+        currentPage_at,
+        keyword_at,
+        teacher_id
+    );
 }
 
 async function getQuestionsByPage(
@@ -67,8 +78,6 @@ async function getQuestionsByPage(
             page: page,
         });
     } else {
-        console.log("teacher_id", teacher_id);
-
         res = await getQuestionTeacherApi({
             sort_type: sortType,
             page: page,
@@ -76,9 +85,10 @@ async function getQuestionsByPage(
         });
     }
     if (res.remain_page <= 0) {
-        isEnd = true;
+        isEnd_at = true;
     }
     if (res.question_list) {
+        // console.log(res);
         return res.question_list;
     } else {
         return [];
