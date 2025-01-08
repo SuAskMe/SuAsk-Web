@@ -39,7 +39,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: LeftSidebar,
+                left_side: LeftSidebar,
             },
             props: {
                 default: { type: "answered" },
@@ -53,7 +53,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: LeftSidebar,
+                left_side: LeftSidebar,
             },
             props: {
                 default: { type: "unanswered" },
@@ -67,7 +67,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
             components: {
                 default: AskMeMul,
-                sidebar: LeftSidebar,
+                left_side: LeftSidebar,
             },
             props: {
                 default: { type: "top" },
