@@ -22,7 +22,6 @@ import { computed, nextTick, onMounted, reactive, ref } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { getUserInfo } from "@/utils/userInfo";
 import QuestionHeader from "@/components/question-header";
 import { getNextQuestions, Pin, setAnsweredOrNot } from "./askMeMul";
 import type { QFMItem } from "@/model/teacher-self.model";
