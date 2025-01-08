@@ -10,46 +10,54 @@ import type {
     GetFavoriteRes,
 } from "@/model/favorite.model";
 
-let isEnd = false;
-let currentPage = 1;
-let sortType = -1;
-let keyword = "";
-let alock = false;
+let isEnd_mf = false;
+let currentPage_mf = 1;
+let sortType_mf = -1;
+let keyword_mf = "";
+let alock_mf = false;
+
+export function InitStatus() {
+    isEnd_mf = false;
+    currentPage_mf = 1;
+    sortType_mf = -1;
+    keyword_mf = "";
+    alock_mf = false;
+}
 
 export async function getNextQuestions(
     sortType_?: number,
     keyword_?: string,
     cancelSearch?: boolean
 ): Promise<FavoriteItem[]> {
-    if (sortType_ !== undefined && sortType_ !== sortType) {
-        currentPage = 1;
-        sortType = sortType_;
-        isEnd = false;
-    } else if (keyword_ !== undefined && keyword_ !== keyword) {
-        currentPage = 1;
-        keyword = keyword_;
-        isEnd = false;
+    if (sortType_ !== undefined && sortType_ !== sortType_mf) {
+        currentPage_mf = 1;
+        sortType_mf = sortType_;
+        isEnd_mf = false;
+    } else if (keyword_ !== undefined && keyword_ !== keyword_mf) {
+        currentPage_mf = 1;
+        keyword_mf = keyword_;
+        isEnd_mf = false;
     } else {
-        currentPage++;
+        currentPage_mf++;
     }
     if (cancelSearch) {
-        keyword = "";
-        currentPage = 1;
-        isEnd = false;
+        keyword_mf = "";
+        currentPage_mf = 1;
+        isEnd_mf = false;
     }
-    if (isEnd) {
-        if (!alock) {
-            alock = true;
+    if (isEnd_mf) {
+        if (!alock_mf) {
+            alock_mf = true;
             ElMessage.success("没有更多了");
         }
         setTimeout(() => {
-            alock = false;
+            alock_mf = false;
         }, 2000);
         return new Promise<FavoriteItem[]>((resolve) => {
             resolve([]);
         });
     }
-    return await getQuestionsByPage(sortType, currentPage, keyword);
+    return await getQuestionsByPage(sortType_mf, currentPage_mf, keyword_mf);
 }
 
 async function getQuestionsByPage(
@@ -68,7 +76,7 @@ async function getQuestionsByPage(
         res = await getFavoriteApi({ sort_type: sortType, page: page });
     }
     if (res.remain_page <= 0) {
-        isEnd = true;
+        isEnd_mf = true;
     }
     if (res.favorite_list) {
         return res.favorite_list;

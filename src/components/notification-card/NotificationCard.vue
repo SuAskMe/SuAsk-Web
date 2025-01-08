@@ -33,7 +33,6 @@
                     <span class="name">{{ userName }}:</span>
                     <span class="content">{{ reply_content }}</span>
                 </div>
-
             </div>
         </div>
         <div class="footer">
@@ -51,32 +50,51 @@
                 </el-icon>
             </div>
         </div>
-        <el-dialog v-model="dialogVisible" width="20%" :show-close="false" align-center>
+        <el-dialog
+            v-model="dialogVisible"
+            width="20%"
+            :show-close="false"
+            align-center
+        >
             <template #header>
-                <p style="margin: 0;">删除</p>
+                <p style="margin: 0">删除</p>
             </template>
             <p>确定删除这条通知吗？</p>
             <div class="dialog">
-                <el-button @click="deleteNotification" type="danger" round size="small">删除</el-button>
-                <el-button @click="cancelDelete" type="default" round size="small">取消</el-button>
+                <el-button
+                    @click="deleteNotification"
+                    type="danger"
+                    round
+                    size="small"
+                    >删除</el-button
+                >
+                <el-button
+                    @click="cancelDelete"
+                    type="default"
+                    round
+                    size="small"
+                    >取消</el-button
+                >
             </div>
         </el-dialog>
     </div>
-
 </template>
 
-<script setup lang='ts'>
-import { deleteNotificationApi, readNotificationApi } from '@/api/notification/notification.api';
-import { router } from '@/router';
-import { UserStore } from '@/store/modules/user';
-import { getTimeStr } from '@/utils/time';
-import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+<script setup lang="ts">
+import {
+    deleteNotificationApi,
+    readNotificationApi,
+} from "@/api/notification/notification.api";
+import { router } from "@/router";
+import { UserStore } from "@/store/modules/user";
+import { getTimeStr } from "@/utils/time";
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
 
 enum NotificationType {
-    QUESTION = 'question',
-    ANSWER = 'answer',
-    REPLY = 'reply'
+    QUESTION = "question",
+    ANSWER = "answer",
+    REPLY = "reply",
 }
 
 interface NotificationCardProps {
@@ -97,19 +115,18 @@ interface NotificationCardProps {
     respondent_id?: number; // 回复者id
     reply_id?: number; // 回复id
     reply_content?: string; // 回复内容
-
 }
 const props = defineProps<NotificationCardProps>();
 
 const userStore = UserStore();
 
-const userName = userStore.getUser().name
+const userName = userStore.getUser().name;
 
-const emit = defineEmits(['reply', 'delete', 'read']);
+const emit = defineEmits(["reply", "delete", "read"]);
 
 async function clickReply() {
-    emit('reply');
-    let path = '';
+    emit("reply");
+    let path = "";
     if (props.type == NotificationType.QUESTION) {
         path = `/question-detail/${props.question_id}`;
     } else if (props.type == NotificationType.ANSWER) {
@@ -119,12 +136,12 @@ async function clickReply() {
     }
     await readNotificationApi(props.id).then((res) => {
         if (res != null) {
-            emit('read', props.id, props.type, res.is_read);
+            emit("read", props.id, props.type, res.is_read);
         }
     });
     router.push(path).then(() => {
-        router.go(0)
-    })
+        router.go(0);
+    });
 }
 
 function clickDelete() {
@@ -132,15 +149,14 @@ function clickDelete() {
 }
 
 async function deleteNotification() {
-    console.log('delete');
+    console.log("delete");
     dialogVisible.value = false;
     await deleteNotificationApi(props.id).then((res) => {
         if (res != null) {
-            ElMessage.success('删除成功');
-            emit('delete', props.id, props.type);
+            ElMessage.success("删除成功");
+            emit("delete", props.id, props.type);
         }
     });
-
 }
 
 function cancelDelete() {
@@ -168,6 +184,7 @@ const dialogVisible = ref(false);
             font-size: 16px;
             font-weight: bold;
             margin-right: 10px;
+            color: $su-blue;
         }
 
         .topic {
@@ -187,7 +204,6 @@ const dialogVisible = ref(false);
             font-size: 12px;
             line-height: 16px;
             color: $su-grey;
-
         }
 
         .reply-btn {
@@ -234,7 +250,6 @@ const dialogVisible = ref(false);
         flex-direction: column;
         margin-bottom: 10px;
         width: 100%;
-
 
         .question-title {
             font-size: 16px;
@@ -350,8 +365,6 @@ const dialogVisible = ref(false);
         margin-top: 10px;
     }
 }
-
-
 
 :deep(.el-dialog) {
     border-radius: 20px;

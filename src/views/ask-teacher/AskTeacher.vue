@@ -23,17 +23,15 @@
                 @scroll="handleScroll"
             >
                 <TransitionGroup name="question">
-                    <BubbleQuestion
+                    <BubbleCard
                         v-for="(question, index) in questionList"
+                        :id="`question-${question.id}`"
                         :key="question.id"
                         :title="question.title"
                         :text="question.contents"
                         :views="question.views"
                         :time-stamp="question.created_at"
                         :image-urls="question.image_urls"
-                        :show-favorite="false"
-                        :answer-num="question.answer_num"
-                        :avatars="question.answer_avatars"
                         :bubble-key="index"
                         :click-card="navigateTo"
                         width="45vw"
@@ -60,15 +58,17 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElScrollbar } from "element-plus";
-import { BubbleQuestion } from "@/components/bubble-card";
+import { BubbleCard, BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { getNextQuestions } from "./askTeacher";
+import { getNextQuestions, InitStatus } from "./askTeacher";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { useRoute } from "vue-router";
 import { UserStore } from "@/store/modules/user";
 import { router } from "@/router";
+import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { storeToRefs } from "pinia";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
@@ -84,6 +84,7 @@ const teacherId = ref(0);
 
 const Init = async () => {
     if (questionList.length === 0) {
+        InitStatus();
         loading.value = true;
         questionList.push(...(await getNextQuestions(teacherId.value, 0)));
         loading.value = false;
@@ -109,7 +110,13 @@ const handleScroll = async () => {
     }
 };
 
+let sort_type = 0;
+
 const changeSort = async (sortType: number) => {
+    if (sortType === sort_type) {
+        return;
+    }
+    sort_type = sortType;
     loading.value = true;
     questionList.length = 0;
     questionList.push(...(await getNextQuestions(teacherId.value, sortType)));
@@ -136,8 +143,21 @@ const cancelSearch = async () => {
 
 const questionList: QuestionItem[] = reactive([]);
 
+let record = 0;
+const ErrorMsg = UseQDMessageStore();
+const { HasError } = storeToRefs(ErrorMsg);
+
+watch(HasError, (newVal) => {
+    if (newVal) {
+        questionList[record].views -= 1;
+        ErrorMsg.clearErr();
+    }
+});
+
 const navigateTo = (key: number) => {
     key = Number(key);
+    record = key;
+    questionList[key].views += 1;
     router.push({
         path: `/question-detail/${questionList[key].id}`,
     });
@@ -166,6 +186,8 @@ const handleQuestionPosted = (question: QuestionItem) => {
     nextTick(() => {
         const el = document.getElementById(`question-${question.id}`);
         if (el) {
+            el.style["opacity"] = "0.8";
+            // console.log(el.style);
             el.scrollIntoView({ behavior: "smooth", block: "center" });
             observe.observe(el);
             setTimeout(() => {
@@ -175,17 +197,23 @@ const handleQuestionPosted = (question: QuestionItem) => {
     });
 };
 
-let pathRecord = "";
+let nameRecord = "";
 
 watch(
     () => route.path,
     () => {
-        if (pathRecord === route.path) {
+        if (route.name !== "AskTeacherDetail") {
             return;
         }
-        pathRecord = route.path;
-        teacherId.value = Number(route.params.teacher_id);
-        teacherName.value = String(route.params.teacher_name);
+        let tid = Number(route.params.teacher_id);
+        let tname = String(route.params.teacher_name);
+        document.title = `${teacherName.value}的提问箱`;
+        if (tname === nameRecord) {
+            return;
+        }
+        nameRecord = tname;
+        teacherId.value = tid;
+        teacherName.value = tname;
         questionList.length = 0;
         Init();
     }
@@ -194,6 +222,7 @@ watch(
 onMounted(() => {
     teacherId.value = Number(route.params.teacher_id);
     teacherName.value = String(route.params.teacher_name);
+    document.title = `${teacherName.value}的提问箱`;
     Init();
 });
 </script>

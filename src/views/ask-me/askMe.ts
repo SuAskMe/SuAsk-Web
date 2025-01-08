@@ -7,11 +7,19 @@ import {
     searchQFMApi,
 } from "@/api/question/teacher-self.api";
 
-let isEnd = false;
-let currentPage = 1;
-let sortType = -1;
-let keyword = "";
-let alock = false;
+let isEnd_am = false;
+let currentPage_am = 1;
+let sortType_am = -1;
+let keyword_am = "";
+let alock_am = false;
+
+export function InitStatus() {
+    isEnd_am = false;
+    currentPage_am = 1;
+    sortType_am = -1;
+    keyword_am = "";
+    alock_am = false;
+}
 
 export async function getNextQuestions(
     sortType_?: number,
@@ -20,36 +28,36 @@ export async function getNextQuestions(
 ): Promise<QFMItem[]> {
     // let mock = mockQuestions();
     // return mock.question_list;
-    if (sortType_ !== undefined && sortType_ !== sortType) {
-        currentPage = 1;
-        sortType = sortType_;
-        isEnd = false;
-    } else if (keyword_ !== undefined && keyword_ !== keyword) {
-        currentPage = 1;
-        keyword = keyword_;
-        isEnd = false;
+    if (sortType_ !== undefined && sortType_ !== sortType_am) {
+        currentPage_am = 1;
+        sortType_am = sortType_;
+        isEnd_am = false;
+    } else if (keyword_ !== undefined && keyword_ !== keyword_am) {
+        currentPage_am = 1;
+        keyword_am = keyword_;
+        isEnd_am = false;
     } else {
-        currentPage++;
+        currentPage_am++;
     }
     if (cancelSearch) {
-        keyword = "";
-        currentPage = 1;
-        isEnd = false;
+        keyword_am = "";
+        currentPage_am = 1;
+        isEnd_am = false;
     }
-    if (isEnd) {
-        if (!alock) {
-            alock = true;
+    if (isEnd_am) {
+        if (!alock_am) {
+            alock_am = true;
             ElMessage({ message: "没有更多了", type: "success" });
         }
         setTimeout(() => {
-            alock = false;
+            alock_am = false;
         }, 2000);
         return new Promise<QFMItem[]>((resolve) => {
             resolve([]);
         });
     }
     // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType, currentPage, keyword);
+    return getQuestionsByPage(sortType_am, currentPage_am, keyword_am);
 }
 
 async function getQuestionsByPage(
@@ -70,8 +78,9 @@ async function getQuestionsByPage(
             page: page,
         });
     }
+    console.log(res);
     if (res.remain_page <= 0) {
-        isEnd = true;
+        isEnd_am = true;
     }
     if (res.question_list) {
         return res.question_list;

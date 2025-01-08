@@ -37,9 +37,9 @@ const tagStyle = computed(() => {
     switch (props.tag) {
         case "置顶":
             return { border: "solid 1px #ffc107", color: "#ffc107" };
-        case "未回复":
+        case "未回答":
             return { border: "solid 1px #808080", color: "#808080" };
-        case "已回复":
+        case "已回答":
             return { border: "solid 1px #71b6ff", color: "#71b6ff" };
         default:
             return { border: "solid 1px #808080", color: "#808080" };
@@ -129,6 +129,7 @@ const tagStyle = computed(() => {
                 </div>
                 <div class="time">{{ timeStr }}</div>
                 <svg
+                    v-if="showFavorite"
                     :width="18"
                     :height="18"
                     :fill="isFavorite ? '#FFC107' : '#808080'"
