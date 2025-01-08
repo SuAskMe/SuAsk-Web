@@ -5,8 +5,8 @@
                 @change-sort="changeSort"
                 :title="title"
                 return_btn
-                has_sort_upvote
-                sort_and_search
+                :has_sort_upvote="title !== '置顶'"
+                :sort_and_search="title !== '置顶'"
             />
         </el-header>
         <el-main class="main-container">
