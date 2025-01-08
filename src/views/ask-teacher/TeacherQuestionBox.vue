@@ -4,21 +4,37 @@
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
                     <div class="header-content">
-                        <el-autocomplete v-model="searchInput" placeholder="请输入想要搜索的老师姓名"
-                            :fetch-suggestions="querySearch" :debounce="100" @input="resetList"
-                            clearable></el-autocomplete>
+                        <el-autocomplete
+                            v-model="searchInput"
+                            placeholder="请输入想要搜索的老师姓名"
+                            :fetch-suggestions="querySearch"
+                            :debounce="100"
+                            @input="resetList"
+                            clearable
+                        ></el-autocomplete>
                         <div class="search-teacher-btn" @click.stop="searchBtn">
-                            <SvgIcon icon="search" size="calc(1em + 10px)" color="#71b6ff" />
+                            <SvgIcon
+                                icon="search"
+                                size="calc(1em + 10px)"
+                                color="#71b6ff"
+                            />
                         </div>
                         <div :class="{ 'bottom-line': isAtTop }"></div>
                     </div>
                 </div>
                 <div class="teacher-list">
-                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher" :teacher-key="{
-                        teacherId: teacher.id,
-                        teacherName: teacher.name,
-                        perm: teacher.perm,
-                    }" :click-card="navigateTo" :click-btn="navigateToTeacherIndex">
+                    <TeacherCard
+                        v-for="(teacher, index) in teacherList"
+                        :key="index"
+                        :teacher="teacher"
+                        :teacher-key="{
+                            teacherId: teacher.id,
+                            teacherName: teacher.name,
+                            perm: teacher.perm,
+                        }"
+                        :click-card="navigateTo"
+                        :click-btn="navigateToTeacherIndex"
+                    >
                     </TeacherCard>
                 </div>
             </el-scrollbar>
@@ -35,6 +51,7 @@ import { TeacherPerm, type TeacherItem } from "@/model/teacher.model";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { UserStore } from "@/store/modules/user";
+import { Role } from "@/model/user.model";
 
 const userStore = UserStore();
 
@@ -107,22 +124,25 @@ const navigateTo = (key: any) => {
     if (key.perm == TeacherPerm.Private) {
         ElMessage({
             showClose: true,
-            message: '该老师暂未开启提问箱，您可以邀请老师来加入提问箱',
-            type: 'success',
+            message: "该老师暂未开启提问箱，您可以邀请老师来加入提问箱",
+            type: "success",
             plain: true,
             duration: 4000,
             grouping: true,
-        })
+        });
         return;
-    } else if (key.perm == TeacherPerm.Protected && userStore.getUser().id == 1) {
+    } else if (
+        key.perm == TeacherPerm.Protected &&
+        userStore.role == Role.DEFAULT
+    ) {
         ElMessage({
             showClose: true,
-            message: '该老师提问箱需要您登录之后才能进入',
-            type: 'success',
+            message: "该老师提问箱需要您登录之后才能进入",
+            type: "success",
             plain: true,
             duration: 4000,
             grouping: true,
-        })
+        });
         return;
     } else {
         router.push({
