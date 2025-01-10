@@ -13,21 +13,23 @@
 </template>
 
 <script setup lang='ts'>
-import { logoutApi } from '@/api/user/login.api';
+import { ControlPanelStore } from '@/store/modules/sidebar';
 import { UserStore } from '@/store/modules/user';
-import { removeUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 const visible = defineModel("visible", { type: Boolean, default: true });
 
 const userStore = UserStore();
+const sidebarStore = ControlPanelStore();
 
 const router = useRouter();
 
 async function logout() {
     try {
         const res = await userStore.logout();
+        sidebarStore.clearSelectedItem();
+
         console.log(res);
         if (res) {
             ElMessage.success('退出登录成功');

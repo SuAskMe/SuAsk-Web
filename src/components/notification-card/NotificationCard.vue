@@ -85,11 +85,11 @@ import {
     deleteNotificationApi,
     readNotificationApi,
 } from "@/api/notification/notification.api";
-import { router } from "@/router";
 import { UserStore } from "@/store/modules/user";
 import { getTimeStr } from "@/utils/time";
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 enum NotificationType {
     QUESTION = "question",
@@ -124,6 +124,8 @@ const userName = userStore.getUser().name;
 
 const emit = defineEmits(["reply", "delete", "read"]);
 
+const router = useRouter();
+
 async function clickReply() {
     emit("reply");
     let path = "";
@@ -139,9 +141,7 @@ async function clickReply() {
             emit("read", props.id, props.type, res.is_read);
         }
     });
-    router.push(path).then(() => {
-        router.go(0);
-    });
+    router.push(path)
 }
 
 function clickDelete() {

@@ -64,9 +64,8 @@ import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { getNextQuestions, InitStatus } from "./askTeacher";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { UserStore } from "@/store/modules/user";
-import { router } from "@/router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
 const showDialog = ref(false);
@@ -146,6 +145,8 @@ const questionList: QuestionItem[] = reactive([]);
 let record = 0;
 const ErrorMsg = UseQDMessageStore();
 const { HasError } = storeToRefs(ErrorMsg);
+
+const router = useRouter();
 
 watch(HasError, (newVal) => {
     if (newVal) {

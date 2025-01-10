@@ -1,16 +1,19 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
-import { basicRoutes } from "./routes";
+import { basicRoutes, studentRoutes, teacherRoutes } from "./routes";
 import type { App } from "vue";
+import type { AppRouteRecordRaw } from "./types";
+import { createGuard } from "./gurad";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: basicRoutes as unknown as RouteRecordRaw[],
+    routes: [...basicRoutes, ...studentRoutes, ...teacherRoutes] as unknown as RouteRecordRaw[],
     strict: true,
     scrollBehavior: () => ({ left: 0, top: 0 }),
 })
 
 export function setupRouter(app: App<Element>) {
     app.use(router);
+    createGuard(router);
 }
 
 router.beforeEach((to, from, next) => {

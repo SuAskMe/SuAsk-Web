@@ -43,7 +43,19 @@
                     <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
                 </div>
             </div>
-
+            <div class="title">
+                <hr />
+            </div>
+            <div v-if="userStore.getRole() == 'teacher'" class="change-perm">
+                <p>提问箱可见性</p>
+                <div>
+                    <el-radio-group v-model="questionVisible" size="large">
+                        <el-radio-button label="公开" value="public" />
+                        <el-radio-button label="需登录" value="protected" />
+                        <el-radio-button label="关闭" value="private" />
+                    </el-radio-group>
+                </div>
+            </div>
             <div class="title">
                 <hr />
             </div>
@@ -58,7 +70,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, inject, onMounted, ref } from 'vue';
+import { computed, inject, onMounted, ref, watch } from 'vue';
 import BioPanel from '@/components/bio-panel';
 import ThemeImage from './ThemeImage.vue';
 import SvgIcon from '@/components/svg-icon';
@@ -66,12 +78,8 @@ import { ElMessage } from 'element-plus';
 import ResetPasswordDialog from './ResetPasswordDialog.vue';
 import LogoutDialog from './LogoutDialog.vue';
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api';
-import type { User } from '@/model/user.model';
-import { getUserInfo, setUserInfo } from '@/utils/userInfo';
-import { UserInfoStore } from '@/store/modules/sidebar';
-import { storeToRefs } from 'pinia';
-import { resetPasswordApi } from '@/api/user/reset_password.api';
 import { UserStore } from '@/store/modules/user';
+import { updateTeacherPermApi } from '@/api/teacher/teacher.api';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
@@ -99,20 +107,7 @@ function pickImageImpl(event: any) {
 
 const avatarFile = ref<File | null>(null)
 
-
-// const basicInfo = ref<User>({
-//     id: 0,
-//     role: '',
-//     avatar: '',
-//     name: '',
-//     nickname: '',
-//     email: '',
-//     introduction: '',
-//     themeId: 0
-// })
-
 const userStore = UserStore();
-const { userInfo } = storeToRefs(userStore);
 
 const basicInfo = computed(() => userStore.getUser())
 
@@ -157,6 +152,22 @@ const showLogout = ref(false);
 function showLogoutDialog() {
     showLogout.value = true;
 }
+
+const questionVisible = ref(userStore.getUser().question_box_perm) 
+
+watch(() => questionVisible.value, async (newVal) => {
+    await updateTeacherPermApi(questionVisible.value).then(async res =>{
+        if(res) {
+            ElMessage.success('保存成功')
+            let user = userStore.getUser()
+            user.question_box_perm = questionVisible.value
+            userStore.setUser(user)
+        } else {
+            ElMessage.error('保存失败')
+        }
+    })
+})
+
 </script>
 
 <style lang="scss" scoped src="./desktop.scss">

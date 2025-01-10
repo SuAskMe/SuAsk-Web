@@ -1,6 +1,6 @@
 <template>
     <div class="control-panel-e">
-        <control-panel-item class="control-panel-item" id="stu-ask-all" icon="group" text="问大家"
+        <control-panel-item class="control-panel-item" id="ask-all" icon="group" text="问大家"
             jump-to-path="/ask-all" />
         <control-panel-item class="control-panel-item" id="stu-ask-teacher" icon="graduation-cap" text="问老师"
             jump-to-path="/ask-teacher" />

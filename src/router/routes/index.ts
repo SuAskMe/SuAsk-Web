@@ -47,13 +47,20 @@ export const basicRoutes = [
     TestRoute,
     RootRoot,
     PageNotFound,
+    HelpRoute,
+    UserRoute,
+    AskTeacherRoute,
+    QuestionDetailRoute,
+];
+
+export const studentRoutes = [
+    SettingRoute,
     AskAllRoute,
     AskHistoryRoute,
-    AskTeacherRoute,
-    HelpRoute,
     MyFavoriteRoute,
+]
+
+export const teacherRoutes = [
     SettingRoute,
-    UserRoute,
-    QuestionDetailRoute,
     AskMeRoute,
-];
+]

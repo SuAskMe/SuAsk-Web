@@ -1,6 +1,6 @@
 <template>
     <div class="control-panel-item">
-        <control-panel-item id="tea-see-all" icon="camera-lens" text="看看大家" jumpToPath="/ask-all" />
+        <control-panel-item id="ask-all" icon="camera-lens" text="看看大家" jumpToPath="/ask-all" />
         <div>
             <div @click="toggleOpen" style="display: flex; align-items: center;">
                 <control-panel-item id="tea-question" icon="message" text="我的提问箱" jumpToPath="/ask-me" />

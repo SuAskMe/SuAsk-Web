@@ -36,7 +36,6 @@ import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
 import { ElMessage } from 'element-plus';
 import { router } from '@/router';
-import { getUserInfo } from '@/utils/userInfo';
 import { getNotificationCountApi } from '@/api/notification/notification.api';
 import Notification from './Notification.vue';
 import { storeToRefs } from 'pinia';
