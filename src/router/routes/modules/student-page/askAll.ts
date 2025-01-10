@@ -15,9 +15,9 @@ export const AskAllRoute: AppRouteRecordRaw = {
     name: "AskAllRoot",
     meta: {
         title: "问大家",
+        permission: "student"
     },
     props: {
-        userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
     },
     component: isMobile() ? PhoneHome : WebHome,

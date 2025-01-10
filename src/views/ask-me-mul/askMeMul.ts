@@ -8,10 +8,10 @@ import {
 } from "@/api/question/teacher-self.api";
 
 let Api = getQFMAnsweredApi;
-let isEnd = false;
-let currentPage = 1;
-let sortType = -1;
-let alock = false;
+let isEnd_amm = false;
+let currentPage_amm = 1;
+let sortType_amm = -1;
+let alock_amm = false;
 
 export function setAnsweredOrNot(type: string): void {
     switch (type) {
@@ -27,23 +27,33 @@ export function setAnsweredOrNot(type: string): void {
     }
 }
 
+export function InitStatus(type: string): void {
+    isEnd_amm = false;
+    currentPage_amm = 1;
+    sortType_amm = -1;
+    alock_amm = false;
+    setAnsweredOrNot(type);
+}
+
+
+
 export async function getNextQuestions(sortType_?: number): Promise<QFMItem[]> {
     // let mock = mockQuestions();
     // return mock.question_list;
-    if (sortType_ !== undefined && sortType_ !== sortType) {
-        currentPage = 1;
-        sortType = sortType_;
-        isEnd = false;
+    if (sortType_ !== undefined && sortType_ !== sortType_amm) {
+        currentPage_amm = 1;
+        sortType_amm = sortType_;
+        isEnd_amm = false;
     } else {
-        currentPage++;
+        currentPage_amm++;
     }
-    if (isEnd) {
-        if (!alock) {
-            alock = true;
+    if (isEnd_amm) {
+        if (!alock_amm) {
+            alock_amm = true;
             ElMessage({ message: "没有更多了", type: "success" });
         }
         setTimeout(() => {
-            alock = false;
+            alock_amm = false;
         }, 2000);
 
         return new Promise<QFMItem[]>((resolve) => {
@@ -51,7 +61,7 @@ export async function getNextQuestions(sortType_?: number): Promise<QFMItem[]> {
         });
     }
     // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType, currentPage);
+    return getQuestionsByPage(sortType_amm, currentPage_amm);
 }
 
 async function getQuestionsByPage(
@@ -64,7 +74,7 @@ async function getQuestionsByPage(
         page: page,
     });
     if (res.remain_page <= 0) {
-        isEnd = true;
+        isEnd_amm = true;
     }
     if (res.question_list) {
         return res.question_list;

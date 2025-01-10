@@ -50,6 +50,7 @@
                 </div>
             </div>
         </div>
+        <div v-else class="sort-and-search"></div>
     </div>
 </template>
 

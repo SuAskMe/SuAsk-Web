@@ -22,6 +22,7 @@ export interface User {
     introduction: string;
     avatar: string | null;
     themeId: number;
+    question_box_perm: string;
 }
 
 export interface UserInfo {

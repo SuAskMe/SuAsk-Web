@@ -54,7 +54,6 @@ import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
-import { s } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 

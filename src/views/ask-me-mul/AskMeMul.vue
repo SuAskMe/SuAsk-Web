@@ -1,40 +1,18 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                :title="title"
-                return_btn
-                :has_sort_upvote="title !== '置顶'"
-                :sort_and_search="title !== '置顶'"
-            />
+            <QuestionHeader @change-sort="changeSort" :title="title" return_btn :has_sort_upvote="title !== '置顶'"
+                :sort_and_search="title !== '置顶'" @return="navigateBack" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-pinned="question.is_pinned"
-                    :bubble-key="index"
-                    :tag="question.tag"
-                    show-pin
-                    :style="{
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <BubbleCard v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                    :text="question.contents" :views="question.views" :time-stamp="question.created_at"
+                    :image-urls="question.image_urls" :is-pinned="question.is_pinned" :bubble-key="index"
+                    :tag="question.tag" show-pin :style="{
                         marginTop: index === 0 ? '24px' : '0',
-                    }"
-                    width="45vw"
-                    :click-card="navigateTo"
-                    :click-pin="pin"
-                ></BubbleCard>
+                    }" width="45vw" :click-card="navigateTo" :click-pin="pin"></BubbleCard>
             </el-scrollbar>
         </el-main>
     </el-container>
@@ -46,12 +24,13 @@ import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import QuestionHeader from "@/components/question-header";
-import { getNextQuestions, Pin, setAnsweredOrNot } from "./askMeMul";
+import { getNextQuestions, InitStatus, Pin, setAnsweredOrNot } from "./askMeMul";
 import type { QFMItem } from "@/model/teacher-self.model";
 import { UserStore } from "@/store/modules/user";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
+import { log } from "console";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -78,6 +57,7 @@ const bg_img_index = computed(() => userStore.getUser().themeId);
 
 const Init = async () => {
     if (questionList.length === 0) {
+        InitStatus(props.type);
         loading.value = true;
         questionList.push(...(await getNextQuestions(0)));
         loading.value = false;
@@ -130,6 +110,24 @@ const pin = async (key: number) => {
 
 const router = useRouter();
 
+let nameRecord = "";
+const route = useRoute();
+
+watch(
+    () => route.name,
+    () => {
+        (route.name);
+        if (route.name === "AskMeAnswered" || route.name === "AskMeUnanswered" || route.name === "AskMeTop") {
+            if (nameRecord !== route.name) {
+                
+                nameRecord = route.name;
+                questionList.length = 0;
+                Init();
+            }
+        }
+    }
+);
+
 let record = 0;
 const ErrorMsg = UseQDMessageStore();
 const { HasError } = storeToRefs(ErrorMsg);
@@ -153,6 +151,10 @@ const navigateTo = (key: number) => {
 onMounted(() => {
     Init();
 });
+
+function navigateBack() {
+    router.push('/ask-me')
+}
 </script>
 
 <style scoped src="./AskMeMul.scss"></style>

@@ -14,6 +14,7 @@ export const HelpRoute: AppRouteRecordRaw = {
     name: "HelpRoot",
     meta: {
         title: "帮助",
+        
     },
     props: {
         userType: "student",
