@@ -30,10 +30,7 @@
                     </template>
                 </el-input>
             </div>
-            <div style="display: flex; justify-content: space-between">
-                <el-button type="info" text bg @click="() => {}"
-                    >暂不登录</el-button
-                >
+            <div>
                 <el-button
                     type="primary"
                     style="width: 25%"
@@ -53,6 +50,12 @@
                     >注册账号</span
                 >
             </div>
+        </div>
+        <div style="margin-top: 15px">
+            <el-button type="info" text @click="() => {}"
+                >暂不登录
+                <el-icon><ArrowRightBold /></el-icon>
+            </el-button>
         </div>
         <forget-password-page v-model:visible="showForgetPassword" />
         <register-page v-model:visible="showRegister" />
@@ -120,6 +123,7 @@ function register() {
 <style scoped lang="scss">
 .main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
