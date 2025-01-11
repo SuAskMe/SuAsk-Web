@@ -1,27 +1,48 @@
 import { UserStore } from "@/store/modules/user";
 import type { Router } from "vue-router";
-import { basicRoutes, studentRoutes, teacherRoutes } from "../routes";
+import {
+    basicRoutes,
+    defaultRoutes,
+    studentRoutes,
+    teacherRoutes,
+} from "../routes";
+import type { AppRouteRecordRaw } from "../types";
 
-export function createGuard(router: Router) {
-  router.beforeEach(async (to, from, next) => {
-    let name = to.name?.toString() + 'Root';
-    console.log(name);
-    const userStore = UserStore();
-    for(let i = 0; i< studentRoutes.length; i++) {
-        if(name == studentRoutes[i].name && userStore.getRole() != "student") {
-            
-            next({ name: "Login" });
-            return;   
+export let routeMap = new Map<string, string[]>();
+
+export function createRouterGuard(router: Router) {
+    createRoleMap();
+    createRoleGuard(router);
+}
+
+export function createRoleMap() {
+  const addRoutesToMap = (routes: AppRouteRecordRaw[], role: string) => {
+      routes.forEach(route => {
+          if (routeMap.has(route.name)) {
+              routeMap.get(route.name)!.push(role);
+          } else {
+              routeMap.set(route.name, [role]);
+          }
+      });
+  };
+
+  addRoutesToMap(basicRoutes, "basic");
+  addRoutesToMap(defaultRoutes, "default");
+  addRoutesToMap(studentRoutes, "student");
+  addRoutesToMap(teacherRoutes, "teacher");
+}
+
+export function createRoleGuard(router: Router) {
+    router.beforeEach(async (to, from, next) => {
+        let name = to.name?.toString() + "Root";
+        const userStore = UserStore();
+        const roles = routeMap.get(name);
+        if (roles) {
+            if (!roles.includes(userStore.getRole())) {
+                next({ name: "NotFound" });
+                return;
+            }
         }
-    }
-    for(let i = 0; i< teacherRoutes.length; i++) {
-        console.log(teacherRoutes[i].name);
-        if(name == teacherRoutes[i].name && userStore.getRole() != "teacher") { 
-            next({name: "NotFound"});
-            return;   
-        }
-    }
-    console.log(to.name, from.name);
-    next();
-  })
+        next();
+    });
 }

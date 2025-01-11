@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 import { basicRoutes, studentRoutes, teacherRoutes } from "./routes";
 import type { App } from "vue";
 import type { AppRouteRecordRaw } from "./types";
-import { createGuard } from "./gurad";
+import { createRouterGuard } from "./gurad";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +13,7 @@ export const router = createRouter({
 
 export function setupRouter(app: App<Element>) {
     app.use(router);
-    createGuard(router);
+    createRouterGuard(router);
 }
 
 router.beforeEach((to, from, next) => {
