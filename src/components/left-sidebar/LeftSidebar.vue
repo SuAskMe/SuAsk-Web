@@ -97,7 +97,9 @@ function navigateToLogin() {
 }
 
 onMounted(() => {
-    getNotificationCount();
+    if (role.value != 'default'){
+        getNotificationCount();
+    }
 });
 </script>
 

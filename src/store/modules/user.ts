@@ -47,17 +47,23 @@ export const UserStore = defineStore(
         async function login(req: LoginReq): Promise<User | null> {
             try {
                 const res = await loginApi(req)
+                if (!res) {
+                    return null
+                }
                 setToken(res.token)
                 setRole(res.role)
                 const user = await getUserInfo()
                 return user
             } catch (e) {
-                return Promise.reject(e)
+                return null
             }
         }
 
         async function getUserInfo(): Promise<User | null> {
             const user = await getUserInfoApi()
+            if (!user) {
+                return null
+            }
             setUser(user)
             return user
         }

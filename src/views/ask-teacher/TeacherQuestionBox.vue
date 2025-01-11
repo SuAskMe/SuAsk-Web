@@ -60,7 +60,7 @@ async function getTeacherList() {
         .then((res) => {
             if (res) {
                 teacherList.value = res.teachers;
-                console.log(teacherList.value);
+                // console.log(teacherList.value);
             }
         })
         .then(() => {
