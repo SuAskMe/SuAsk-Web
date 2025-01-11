@@ -43,7 +43,7 @@
                     <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
                 </div>
             </div>
-            <div class="title">
+            <div v-if="userStore.getRole() == 'teacher'" class="title">
                 <hr />
             </div>
             <div v-if="userStore.getRole() == 'teacher'" class="change-perm">
