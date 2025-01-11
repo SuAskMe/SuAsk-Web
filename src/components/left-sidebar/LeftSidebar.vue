@@ -1,8 +1,8 @@
 <template>
     <div class="sidebar">
         <div class="title">
-            <svg-icon class="qr-code" icon="qr-code" color="#808080" size="24px" />
-            <div class="message">
+            <svg-icon  class="qr-code" icon="qr-code" color="#808080" size="24px" />
+            <div v-if="role != 'default'" class="message">
                 <svg-icon @click="openDrawer" icon="communicate_message_emoji" color="#808080" size="24px" />
                 <div v-if="(newQuestionCount + newAnswerCount + newReplyCount) > 0" class="red-dot" />
             </div>
@@ -19,8 +19,12 @@
             </div>
         </div>
         <div class="control-panel">
-            <student-item v-if="isStudent" />
-            <teacher-item v-if="!isStudent" />
+            <el-button v-if="role == 'default'" type="info" text class="login" @click="navigateToLogin">
+                登录以获取更多功能
+            </el-button>
+            <student-item v-if="role == 'student'" />
+            <teacher-item v-else-if="role == 'teacher'" />
+            <default-item v-else-if="role == 'default'"/>
         </div>
     </div>
     <el-drawer class="drawer" v-model="drawer" :with-header="false" size="400" destroy-on-close>
@@ -35,12 +39,11 @@ import { computed, onMounted, ref } from 'vue';
 import StudentItem from './StudentItem.vue';
 import TeacherItem from './TeacherItem.vue';
 import { ElMessage } from 'element-plus';
-import { router } from '@/router';
 import { getNotificationCountApi } from '@/api/notification/notification.api';
 import Notification from './Notification.vue';
-import { storeToRefs } from 'pinia';
 import { UserStore } from '@/store/modules/user';
-import type { User } from '@/model/user.model';
+import DefaultItem from './DefaultItem.vue';
+import { useRouter } from 'vue-router';
 
 const drawer = ref(false);
 
@@ -49,6 +52,8 @@ const drawer = ref(false);
 const userStore = UserStore();
 // const { userInfo } = storeToRefs(userStore);
 const userInfo = computed(() => userStore.getUser())
+
+const role = ref(userStore.getRole())
 
 
 function closeDrawer() {
@@ -77,6 +82,8 @@ async function getNotificationCount() {
     })
 }
 
+const router = useRouter();
+
 function toUserInfo() {
     if (userInfo) {
         router.push(`/user/${userInfo.value.id}`)
@@ -85,11 +92,13 @@ function toUserInfo() {
     }
 }
 
+function navigateToLogin() {
+    router.push('/login')
+}
+
 onMounted(() => {
     getNotificationCount();
 });
-
-const isStudent = userInfo.value.role === 'student';
 </script>
 
 <style scoped lang="scss">
@@ -184,6 +193,13 @@ const isStudent = userInfo.value.role === 'student';
 
     .control-panel {
         padding: 0 10%;
+
+        .login {
+            margin-top: 20px;
+            cursor: pointer;
+            height: 40px;
+            border-radius: 20px;
+        }
     }
 
     .drawer {

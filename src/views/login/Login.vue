@@ -52,7 +52,7 @@
             </div>
         </div>
         <div style="margin-top: 15px">
-            <el-button type="info" text @click="() => {}"
+            <el-button type="info" text @click="navigateToAskAll"
                 >暂不登录
                 <el-icon><ArrowRightBold /></el-icon>
             </el-button>
@@ -71,12 +71,13 @@ import { mailCheck } from "@/utils/login/register";
 import type { LoginReq, User } from "@/model/user.model";
 import { ElMessage } from "element-plus";
 import { UserStore } from "@/store/modules/user";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const userNameOrEmail = ref("");
 const password = ref("");
 
 const router = useRouter();
+const route = useRoute();
 const userStore = UserStore();
 
 async function login() {
@@ -118,6 +119,24 @@ function forgetPassword() {
 function register() {
     showRegister.value = true;
 }
+
+function navigateToAskAll() {
+    const user: User = {
+        id: 0,
+        name: "susu",
+        nickname: "susu",
+        email: "",
+        role: "",
+        introduction: "",
+        avatar: null,
+        themeId: 1,
+        question_box_perm: ""
+    }
+    userStore.setUser(user);
+    router.push({ name: "AskTeacher" });
+}
+
+
 </script>
 
 <style scoped lang="scss">

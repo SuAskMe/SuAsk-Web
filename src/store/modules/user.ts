@@ -6,25 +6,13 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { pinia } from "..";
 
-interface UserState {
-    userInfo: Nullable<User>
-    token?: string
-    role: string
-}
-
 export const UserStore = defineStore(
     'user',
     () => {
-        // const state = ref<UserState>({
-        //     userInfo: null,
-        //     role: Role.DEFAULT
-        // })
 
         const userInfo = ref<Nullable<User>>(null)
         const token = ref<Nullable<string>>(null)
         const role = ref<string>(Role.DEFAULT)
-
-        // const getUser = computed(() => state.value.userInfo || {} as User)
 
         function getUser(): User {
             return userInfo.value || {} as User
@@ -39,7 +27,6 @@ export const UserStore = defineStore(
         }
 
         function setToken(_token: string) {
-            localStorage.setItem('token', _token)
             token.value = _token
         }
 

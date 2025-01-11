@@ -41,26 +41,43 @@ export const TestRoute: AppRouteRecordRaw = {
     },
 };
 
+// 最基础的路由
 export const basicRoutes = [
-    HomeRoute,
     LoginRoute,
     TestRoute,
     RootRoot,
     PageNotFound,
+];
+
+// 无登录状态下的路由
+export const defaultRoutes = [
     HelpRoute,
     UserRoute,
     AskTeacherRoute,
     QuestionDetailRoute,
-];
+]
 
+// 学生路由
 export const studentRoutes = [
-    SettingRoute,
+    HelpRoute,
+    UserRoute,
+    AskTeacherRoute,
+    QuestionDetailRoute,
     AskAllRoute,
+    SettingRoute,
     AskHistoryRoute,
     MyFavoriteRoute,
 ]
 
+// 教师路由
 export const teacherRoutes = [
+    HelpRoute,
+    UserRoute,
+    AskTeacherRoute,
+    QuestionDetailRoute,
+    AskAllRoute,
     SettingRoute,
+    AskHistoryRoute,
+    MyFavoriteRoute,
     AskMeRoute,
 ]
