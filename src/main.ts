@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import '../mock/index.js'
+// import '../mock/index.js'
 import 'virtual:svg-icons-register';
 import SvgIcon from "@/components/svg-icon"
 import { setupRouter } from './router'
