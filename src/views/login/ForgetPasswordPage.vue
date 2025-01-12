@@ -34,7 +34,6 @@
 <script setup lang='ts'>
 import { sendCodeApi, resetPasswordApi, forgetPasswordApi } from '@/api/user/reset_password.api';
 import type { ResetPassword } from '@/model/user.model';
-import { getUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 

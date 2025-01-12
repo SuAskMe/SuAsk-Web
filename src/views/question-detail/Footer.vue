@@ -14,9 +14,9 @@
 <script setup lang="ts">
 import SvgIcon from "@/components/svg-icon";
 import { ElMessage } from "element-plus";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { GenId } from "./QuestionDetail";
-import type { AddAnswer, Answer } from "@/model/answer.model";
+import type { AddAnswer } from "@/model/answer.model";
 import { addAnswerApi } from "@/api/answer/answer.api";
 
 interface ReplyProps {

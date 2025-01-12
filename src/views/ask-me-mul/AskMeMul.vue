@@ -24,13 +24,12 @@ import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import QuestionHeader from "@/components/question-header";
-import { getNextQuestions, InitStatus, Pin, setAnsweredOrNot } from "./askMeMul";
+import { getNextQuestions, InitStatus, Pin, setAnsweredOrNot } from "./AskMeMul";
 import type { QFMItem } from "@/model/teacher-self.model";
 import { UserStore } from "@/store/modules/user";
 import { useRoute, useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
-import { log } from "console";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 

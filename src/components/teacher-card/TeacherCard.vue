@@ -40,7 +40,6 @@
 
 <script setup lang="ts">
 import type { TeacherItem } from "@/model/teacher.model";
-import { preview } from "vite";
 
 interface CardProps {
     teacher: TeacherItem;

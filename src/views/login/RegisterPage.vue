@@ -46,7 +46,7 @@
 
 <script setup lang='ts'>
 import { registerApi, sendVerificationCodeApi, verifyVerificationCodeApi } from '@/api/user/register.api';
-import { type RegisterForm } from '@/model/user.model';
+import type { RegisterReq } from '@/model/register.model';
 import { router } from '@/router';
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register';
 import { ElMessage } from 'element-plus';
@@ -121,7 +121,7 @@ async function register() {
         ElMessage.error('两次输入的密码不一致');
         return;
     } else {
-        const registerData: RegisterForm = {
+        const registerData: RegisterReq = {
             name: registerForm.value.userName,
             password: registerForm.value.confirmPassword,
             email: registerForm.value.mail,
