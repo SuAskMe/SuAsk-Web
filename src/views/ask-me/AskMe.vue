@@ -48,7 +48,7 @@ import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import QuestionHeader from "@/components/question-header";
-import { getNextQuestions, InitStatus, Pin } from "./askMe";
+import { getNextQuestions, InitStatus, Pin } from "./AskMe";
 import type { QFMItem } from "@/model/teacher-self.model";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";

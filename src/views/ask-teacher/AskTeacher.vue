@@ -61,7 +61,7 @@ import { ElScrollbar } from "element-plus";
 import { BubbleCard, BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { getNextQuestions, InitStatus } from "./askTeacher";
+import { getNextQuestions, InitStatus } from "./AskTeacher";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { useRoute, useRouter } from "vue-router";

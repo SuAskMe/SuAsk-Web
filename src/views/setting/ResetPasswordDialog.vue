@@ -31,7 +31,6 @@
 import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api';
 import type { ResetPassword, User } from '@/model/user.model';
 import { UserStore } from '@/store/modules/user';
-import { getUserInfo } from '@/utils/userInfo';
 import { ElMessage } from 'element-plus';
 import { computed, onMounted, ref } from 'vue';
 

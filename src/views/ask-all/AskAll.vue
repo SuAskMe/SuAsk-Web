@@ -63,7 +63,7 @@ import BackgroundImg from "@/components/backgroud-img";
 import { AskDialog } from "@/components/ask-and-answer-dialog";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
-import { Favorite, getNextQuestions, InitStatus } from "./askAll";
+import { Favorite, getNextQuestions, InitStatus } from "./AskAll";
 import { storeToRefs } from "pinia";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
