@@ -114,7 +114,9 @@ const showDefaultAvatar = (index: number) => {
                     }"
                     class="avatar"
                     @error="showDefaultAvatar(index)"
-                />
+                >
+                    <img src="/src/assets/default-avatar.png" />
+                </el-avatar>
                 <div class="text">{{ answerNum }} 个回答</div>
                 <div
                     v-if="showFavorite"
