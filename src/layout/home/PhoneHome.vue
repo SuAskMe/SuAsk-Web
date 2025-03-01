@@ -1,16 +1,18 @@
 <template>
     <el-container>
-        <el-header style="height: auto;">
+        <!-- <el-header style="height: auto;">
             <router-view name="header" />
-        </el-header>
+        </el-header> -->
         <el-main>
-            <el-scrollbar>
-                <router-view />
-            </el-scrollbar>
+            <router-view v-slot="{ Component }">
+                <keep-alive :exclude="['QuestionDetail']">
+                    <component :is="Component" />
+                </keep-alive>
+            </router-view>
         </el-main>
-        <el-footer style="height: auto;">
+        <!-- <el-footer style="height: auto;">
             <router-view name="footer" />
-        </el-footer>
+        </el-footer> -->
     </el-container>
 </template>
 

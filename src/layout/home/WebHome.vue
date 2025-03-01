@@ -1,26 +1,24 @@
 <script lang="ts" setup>
+import { SidebarStore } from '@/store/modules/sidebar';
+
+const sidebarStore = SidebarStore();
 </script>
 
 <template>
-    <el-container>
-        <el-aside width="auto">
-            <router-view name="left_side" />
-        </el-aside>
-        <el-container>
-            <el-header style="height: auto">
-                <router-view name="header" />
-            </el-header>
-            <el-main>
-                <router-view v-slot="{ Component }">
-                    <keep-alive :exclude="['QuestionDetail']">
-                        <component :is="Component" />
-                    </keep-alive>
+    <el-container class="container" :class="{ 'sidebar-open': sidebarStore.IsOpen }">
+        <Transition name="sidebar_anime" appear>
+            <el-aside class="sidebar-aside" width="auto" v-show="sidebarStore.IsOpen">
+                <router-view key="$route.fullPath" name="left_side">
                 </router-view>
-            </el-main>
-            <el-footer style="height: auto">
-                <router-view name="footer" />
-            </el-footer>
-        </el-container>
+            </el-aside>
+        </Transition>
+        <el-main class="main-content">
+            <router-view v-slot="{ Component }">
+                <keep-alive :exclude="['QuestionDetail']">
+                    <component :is="Component" />
+                </keep-alive>
+            </router-view>
+        </el-main>
         <el-aside width="auto">
             <router-view name="right_side" />
         </el-aside>
@@ -28,17 +26,61 @@
 </template>
 
 <style scoped lang="scss">
+.sidebar_anime-enter-active,
+.sidebar_anime-leave-active {
+    transition: all 0.5s ease, opacity 0.5s ease;
+}
+
+.sidebar_anime-enter-from,
+.sidebar_anime-leave-to {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.sidebar_anime-enter-to,
+.sidebar_anime-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.sidebar-aside {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 10;
+    background: white;
+}
+
+.container {
+    height: 100vh;
+    position: relative;
+    transition: margin-left 0.5s ease;
+}
+
+.main-content {
+    margin-left: 300px;
+    transition: margin-left 0.5s ease, filter 0.5s ease;
+}
+
+.container:not(.sidebar-open) .main-content {
+    margin-left: 0;
+    filter: none;
+}
+
+@media (max-width: 768px) {
+    .container.sidebar-open .main-content {
+        filter: blur(100px);
+    }
+}
+
+
 .el-container {
     height: 100vh;
 
     .el-main {
         --el-main-padding: 0 !important;
     }
-
-    // .el-aside {
-    //     border-right: 1px solid $su-border;
-    //     height: 100%;
-    // }
 
     .el-header {
         border-bottom: 1px solid $su-border;

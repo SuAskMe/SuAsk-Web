@@ -3,6 +3,9 @@
         <div v-if="return_btn" class="return-btn" @click.stop="$emit('return')">
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
+        <div v-if="sidebar_btn" style="display: flex; justify-content: center;" @click.stop="$emit('sidebar')">
+            <svg-icon icon="sidebar" color="#71B6FF" size="25px" :filled="sidebarStore.IsOpen"/>
+        </div>
         <div v-if="props.title" class="title">{{ props.title }}</div>
         <div v-if="props.sort_and_search" class="sort-and-search">
             <el-dropdown v-if="!showInput" class="header-item">
@@ -56,24 +59,28 @@
 
 <script setup lang="ts">
 import type { GetKeywordReq, GetKeywordRes } from "@/model/question.model";
+import { SidebarStore } from "@/store/modules/sidebar";
 import request from "@/utils/http/request";
 import { da } from "element-plus/es/locales.mjs";
 import { computed, ref } from "vue";
-const emit = defineEmits(["changeSort", "search", "cancelSearch", "return"]);
+const emit = defineEmits(["changeSort", "search", "cancelSearch", "return", "sidebar"]);
+
+const sidebarStore = SidebarStore();
 
 const props = withDefaults(
     defineProps<{
         title?: string;
         get_keywords_url?: string;
         return_btn?: boolean;
+        sidebar_btn?: boolean;
         search?: boolean;
         has_sort_upvote?: boolean;
-        defualt_sort_type?: number;
+        default_sort_type?: number;
         sort_and_search?: boolean;
         teacher_id?: number;
     }>(),
     {
-        defualt_sort_type: 0,
+        default_sort_type: 0,
     }
 );
 
@@ -90,7 +97,7 @@ const sortText = computed(() => {
         ? sortTextCommon.value
         : sortTextWithoutUpvote.value;
 });
-const sortIndex = ref(props.defualt_sort_type);
+const sortIndex = ref(props.default_sort_type);
 function changeSort(index: number) {
     sortIndex.value = index;
     emit("changeSort", index);

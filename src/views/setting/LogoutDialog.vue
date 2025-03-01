@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang='ts'>
-import { ControlPanelStore } from '@/store/modules/sidebar';
+import { ControlPanelStore } from '@/store/modules/control-panel';
 import { UserStore } from '@/store/modules/user';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';

@@ -5,7 +5,9 @@
                 @change-sort="changeSort"
                 @search="search"
                 @cancel-search="cancelSearch"
+                @sidebar="sidebar"
                 search
+                sidebar_btn
                 get_keywords_url="/history/keywords"
                 :return_btn="false"
                 sort_and_search
@@ -55,6 +57,7 @@ import { storeToRefs } from "pinia";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SidebarStore } from "@/store/modules/sidebar";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -87,6 +90,13 @@ const handleScroll = async () => {
             loading.value = false;
         }
     }
+};
+
+const sidebarStore = SidebarStore();
+
+const sidebar = () => {
+    console.log("sidebar");
+    sidebarStore.toggle();
 };
 
 let sort_type = 0;

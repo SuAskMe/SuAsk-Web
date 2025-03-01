@@ -6,6 +6,8 @@
   .main-container {
     position: relative;
     border-top: solid 1px $su-border;
+    max-height: 100%;
+    overflow-y: auto;
     padding: 0;
 
     .ask-btn {

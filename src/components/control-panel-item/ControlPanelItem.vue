@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ControlPanelStore } from '@/store/modules/sidebar';
+import { ControlPanelStore } from '@/store/modules/control-panel';
 import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
