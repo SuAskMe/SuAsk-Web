@@ -3,7 +3,7 @@
         @click.stop="clickCard(teacherKey)"
         shadow="hover"
         class="teacher-card"
-        :style="teacher.perm == 'private' ? 'opacity: 0.5' : ''"
+        :style="style"
     >
         <div class="card-left">
             <img
@@ -26,6 +26,7 @@
                 <div class="teacher-introduction">
                     {{ teacher.introduction }}
                 </div>
+
                 <div class="teacher-title">教师邮箱：</div>
                 <div class="teacher-email">{{ teacher.email }}</div>
             </div>
@@ -40,9 +41,11 @@
 
 <script setup lang="ts">
 import type { TeacherItem } from "@/model/teacher.model";
+import { computed } from "vue";
 
 interface CardProps {
     teacher: TeacherItem;
+    width: string;
     clickCard?: (key: any) => void;
     clickBtn?: (key: any) => void;
     teacherKey?: any;
@@ -51,12 +54,18 @@ const props = withDefaults(defineProps<CardProps>(), {
     clickCard: () => {},
     clickBtn: () => {},
 });
+
+const style = computed(() => {
+    return {
+        opacity: props.teacher.perm == "private" ? "0.5" : "1",
+        width: props.width,
+    };
+});
 // console.log(props.teacher.avatarUrl);
 </script>
 <style scoped lang="scss">
 .teacher-card {
     position: relative;
-    width: 40%;
     height: 240px;
     border-radius: 8px;
     padding: 0;
@@ -71,7 +80,7 @@ const props = withDefaults(defineProps<CardProps>(), {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 35%;
+    width: 30%;
     height: 100%;
     background-color: $su-blue-light;
     gap: 30px;
@@ -103,13 +112,14 @@ const props = withDefaults(defineProps<CardProps>(), {
     display: flex;
     right: 0;
     top: 0;
-    width: 65%;
+    width: 70%;
     height: 100%;
 
     .teacher-info {
         display: flex;
+        width: calc(100% - 24px);
         flex-direction: column;
-        padding: 12px;
+        margin-left: 12px;
 
         .teacher-name {
             font-size: 1.2em;
@@ -130,6 +140,8 @@ const props = withDefaults(defineProps<CardProps>(), {
             font-size: 1em;
             line-height: 1.25;
             margin-bottom: 10px;
+            word-wrap: break-word;
+            word-break: break-all;
             color: $su-grey;
         }
 
@@ -142,8 +154,8 @@ const props = withDefaults(defineProps<CardProps>(), {
             line-height: 1.25;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 10px;
             color: $su-grey;
+            margin-bottom: 10px;
         }
     }
 }
