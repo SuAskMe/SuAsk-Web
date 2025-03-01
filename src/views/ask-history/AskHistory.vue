@@ -20,26 +20,41 @@
                 ref="scrollBar"
                 @scroll="handleScroll"
             >
-                <BubbleQuestion
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :id="'question-' + question.id"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :answer-num="question.answer_num"
-                    :avatars="question.answer_avatars"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :click-favorite="favorite"
-                    width="45vw"
-                    :style="{
-                        marginTop: index === 0 ? '24px' : '0',
-                    }"
-                    :show-favorite="false"
-                />
+                <TransitionGroup
+                    name="question"
+                    tag="div"
+                    :style="
+                        deviceType.isMobile
+                            ? {
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                              }
+                            : {}
+                    "
+                >
+                    <BubbleQuestion
+                        v-for="(question, index) in questionList"
+                        :key="question.id"
+                        :title="question.title"
+                        :id="'question-' + question.id"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :answer-num="question.answer_num"
+                        :avatars="question.answer_avatars"
+                        :bubble-key="index"
+                        :click-card="navigateTo"
+                        :click-favorite="favorite"
+                        width="45vw"
+                        :style="{
+                            marginTop: index === 0 ? '24px' : '0',
+                            marginLeft: deviceType.isMobile ? '0' : '24px',
+                        }"
+                        :show-favorite="false"
+                    />
+                </TransitionGroup>
             </el-scrollbar>
         </el-main>
     </el-container>
@@ -58,8 +73,11 @@ import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { SidebarStore } from "@/store/modules/sidebar";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+
+const deviceType = DeviceTypeStore();
 
 // 背景图片
 const userStore = UserStore();
@@ -166,6 +184,17 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.question-enter-active,
+.question-leave-active {
+    transition: all 0.5s ease;
+}
+
+.question-enter-from,
+.question-leave-to {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
 .container {
     position: relative;
     width: 100%;

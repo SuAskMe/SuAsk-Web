@@ -4,6 +4,7 @@ import { getImgStyle, getTimeStr } from "../bubble-card";
 import { MdPreview } from "md-editor-v3";
 import SvgIcon from "@/components/svg-icon";
 import "md-editor-v3/lib/preview.css";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 interface BubbleCardProps {
     title: string;
     text: string;
@@ -24,11 +25,19 @@ interface BubbleCardProps {
     clickPin?: (key: any) => void;
     clickFavorite?: (key: any) => void;
 }
-const props = defineProps<BubbleCardProps>();
+const props = withDefaults(defineProps<BubbleCardProps>(), {
+    clickCard: () => {},
+    clickPin: () => {},
+    clickFavorite: () => {},
+});
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => (props.bubbleKey ? props.bubbleKey : null));
+const deviceType = DeviceTypeStore();
 const containerStyle = computed(() => {
-    return { width: props.width ? props.width : "450px" };
+    return {
+        width: props.width ? props.width : "450px",
+        marginLeft: deviceType.isMobile ? "0" : "24px",
+    };
 });
 const imageContainer = computed(() =>
     getImgStyle(props.imageUrls, props.width)
@@ -48,7 +57,18 @@ const tagStyle = computed(() => {
 </script>
 
 <template>
-    <div class="bubble-card">
+    <div
+        class="bubble-card"
+        :style="
+            deviceType.isMobile
+                ? {
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                  }
+                : {}
+        "
+    >
         <div
             class="card-container"
             @click.stop="clickCard(key)"

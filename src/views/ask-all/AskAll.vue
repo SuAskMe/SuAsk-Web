@@ -20,7 +20,19 @@
                 ref="scrollBar"
                 @scroll="handleScroll"
             >
-                <TransitionGroup name="question">
+                <TransitionGroup
+                    name="question"
+                    tag="div"
+                    :style="
+                        deviceType.isMobile
+                            ? {
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                              }
+                            : {}
+                    "
+                >
                     <BubbleQuestion
                         v-for="(question, index) in questionList"
                         :key="question.id"
@@ -37,9 +49,10 @@
                         :click-card="navigateTo"
                         :show-favorite="false"
                         :click-favorite="favorite"
-                        width="80vw"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
+                            marginLeft: deviceType.isMobile ? '0' : '24px',
                         }"
                     />
                 </TransitionGroup>
@@ -70,13 +83,15 @@ import { storeToRefs } from "pinia";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
-import { sliderButtonEmits } from "element-plus/lib/components/slider/src/button.js";
 import { SidebarStore } from "@/store/modules/sidebar";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
 // 背景图片
+const deviceType = DeviceTypeStore();
+
 const userStore = UserStore();
 const bg_img_index = computed(() => userStore.getUser().themeId);
 
