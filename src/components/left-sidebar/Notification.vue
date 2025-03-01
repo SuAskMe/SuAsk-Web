@@ -1,6 +1,9 @@
 <template>
     <div class="notification">
         <div class="title">
+            <el-icon @click="closeDrawer" class="back-btn" size="24px" color="#71B6FF">
+                <ArrowLeft />
+            </el-icon>
             <div class="message">
                 消息
                 <div v-if="(props.answerCount + props.questionCount + props.replyCount) > 0" class="count">{{
@@ -135,11 +138,18 @@ onMounted(async () => {
         display: flex;
         align-items: center;
 
+        .back-btn {
+            cursor: pointer;
+            padding: 5px;
+            align-items: center;
+        }
 
         .message {
             position: relative;
             padding-right: 15px;
             padding-top: 3px;
+            font-size: 20px;
+            align-items: center;
 
             .count {
                 position: absolute;

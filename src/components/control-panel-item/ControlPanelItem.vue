@@ -8,10 +8,16 @@
 
 <script lang="ts" setup>
 import { ControlPanelStore } from '@/store/modules/control-panel';
+import { DeviceTypeStore } from '@/store/modules/device-type';
+import { SidebarStore } from '@/store/modules/sidebar';
 import { computed, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const controlPanelStore = ControlPanelStore();
+
+const sidebarStore = SidebarStore();
+
+const deviceTypeStore = DeviceTypeStore();
 
 const props = defineProps<{
     id: string; // 控制面板的id
@@ -28,6 +34,9 @@ const clicked = computed(() => controlPanelStore.getSelectedItem() == props.id);
 
 const handleClick = () => {
     controlPanelStore.setSelectedItem(props.id);
+    if (deviceTypeStore.isMobile) {
+        sidebarStore.close();
+    }
     router.push(props.jumpToPath);
 };
 </script>

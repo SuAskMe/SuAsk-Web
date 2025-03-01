@@ -3,38 +3,26 @@
         <div class="main-container" ref="mainContainer">
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
-                    <div class="header-content">
-                        <el-autocomplete
-                            v-model="searchInput"
-                            placeholder="请输入想要搜索的老师姓名"
-                            :fetch-suggestions="querySearch"
-                            :debounce="100"
-                            @input="resetList"
-                            clearable
-                        ></el-autocomplete>
+                    <div class="header-content" :style="{ marginTop: deviceTypeStore.isMobile ? 0 : '20vh' }">
+                        <div v-if="true" class="search-teacher-btn" style="display: flex; justify-content: center;"
+                        @click.stop="sidebar">
+                        <svg-icon icon="sidebar" color="#71B6FF" size="calc(1em + 10px)" :filled="sidebarStore.IsOpen" />
+                    </div>
+                        <el-autocomplete v-model="searchInput" placeholder="请输入想要搜索的老师姓名"
+                            :fetch-suggestions="querySearch" :debounce="100" @input="resetList"
+                            clearable></el-autocomplete>
                         <div class="search-teacher-btn" @click.stop="searchBtn">
-                            <SvgIcon
-                                icon="search"
-                                size="calc(1em + 10px)"
-                                color="#71b6ff"
-                            />
+                            <SvgIcon icon="search" size="calc(1em + 10px)" color="#71b6ff" />
                         </div>
                     </div>
                 </div>
                 <div class="teacher-list">
-                    <TeacherCard
-                        v-for="(teacher, index) in teacherList"
-                        :key="index"
-                        :teacher="teacher"
-                        :width="isMobile() ? '85%' : '40%'"
-                        :teacher-key="{
+                    <TeacherCard v-for="(teacher, index) in teacherList" :key="index" :teacher="teacher"
+                        :width="deviceTypeStore.isMobile ? '85%' : '40%'" :teacher-key="{
                             teacherId: teacher.id,
                             teacherName: teacher.name,
                             perm: teacher.perm,
-                        }"
-                        :click-card="navigateTo"
-                        :click-btn="navigateToTeacherIndex"
-                    >
+                        }" :click-card="navigateTo" :click-btn="navigateToTeacherIndex">
                     </TeacherCard>
                 </div>
             </el-scrollbar>
@@ -52,9 +40,19 @@ import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { UserStore } from "@/store/modules/user";
 import { Role } from "@/model/user.model";
-import { isMobile } from "@/utils/device";
+import { DeviceTypeStore } from "@/store/modules/device-type";
+import { SidebarStore } from "@/store/modules/sidebar";
+// import { isMobile } from "@/utils/device";
+
+const deviceTypeStore = DeviceTypeStore();
+
+const sidebarStore = SidebarStore();
 
 const userStore = UserStore();
+
+function sidebar() {
+    sidebarStore.toggle();
+}
 
 async function getTeacherList() {
     await getTeacherApi()
