@@ -19,7 +19,6 @@
                                 color="#71b6ff"
                             />
                         </div>
-                        <div :class="{ 'bottom-line': isAtTop }"></div>
                     </div>
                 </div>
                 <div class="teacher-list">
@@ -27,6 +26,7 @@
                         v-for="(teacher, index) in teacherList"
                         :key="index"
                         :teacher="teacher"
+                        :width="isMobile() ? '85%' : '40%'"
                         :teacher-key="{
                             teacherId: teacher.id,
                             teacherName: teacher.name,
@@ -52,6 +52,7 @@ import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { UserStore } from "@/store/modules/user";
 import { Role } from "@/model/user.model";
+import { isMobile } from "@/utils/device";
 
 const userStore = UserStore();
 
