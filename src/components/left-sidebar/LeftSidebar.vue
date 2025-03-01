@@ -1,11 +1,11 @@
 <template>
     <div class="sidebar">
         <div class="title">
-            <svg-icon  class="qr-code" icon="qr-code" color="#808080" size="24px" />
             <div v-if="role != 'default'" class="message">
-                <svg-icon @click="openDrawer" icon="communicate_message_emoji" color="#808080" size="24px" />
+                <svg-icon @click="openDrawer" class="message" icon="message-1" color="#71B6FF" size="24px" />
                 <div v-if="(newQuestionCount + newAnswerCount + newReplyCount) > 0" class="red-dot" />
             </div>
+            <svg-icon v-if="deviceTypeStore.isMobile" @click="toggleSidebar" class="sidebar-btn" icon="sidebar" color="#71B6FF" size="24px" :filled="sidebarStore.IsOpen"/>
         </div>
         <div class="avatar-and-id" @click="toUserInfo">
             <el-avatar :size="120" :src="userInfo.avatar">
@@ -24,9 +24,10 @@
             </el-button>
             <student-item v-if="role == 'student'" />
             <teacher-item v-else-if="role == 'teacher'" />
-            <default-item v-else-if="role == 'default'"/>
+            <default-item v-else-if="role == 'default'" />
         </div>
     </div>
+
     <el-drawer class="drawer" v-model="drawer" :with-header="false" size="400" destroy-on-close>
         <Notification @close-drawer="closeDrawer" :question-count="newQuestionCount" :answer-count="newAnswerCount"
             :reply-count="newReplyCount" :user_id="userInfo.id"></Notification>
@@ -44,6 +45,9 @@ import Notification from './Notification.vue';
 import { UserStore } from '@/store/modules/user';
 import DefaultItem from './DefaultItem.vue';
 import { useRouter } from 'vue-router';
+import { SidebarStore } from '@/store/modules/sidebar';
+import { isMobile } from '@/utils/device';
+import { DeviceTypeStore } from '@/store/modules/device-type';
 
 const drawer = ref(false);
 
@@ -54,6 +58,14 @@ const userStore = UserStore();
 const userInfo = computed(() => userStore.getUser())
 
 const role = ref(userStore.getRole())
+
+const sidebarStore = SidebarStore();
+
+function toggleSidebar() {
+    sidebarStore.toggle();
+}
+
+const deviceTypeStore = DeviceTypeStore();
 
 
 function closeDrawer() {
@@ -97,7 +109,7 @@ function navigateToLogin() {
 }
 
 onMounted(() => {
-    if (role.value != 'default'){
+    if (role.value != 'default') {
         getNotificationCount();
     }
 });
@@ -107,21 +119,25 @@ onMounted(() => {
 .sidebar {
     height: 100%;
     width: 300px;
+    // width: 100%;
     border-right: 1px solid $su-border;
 
     .title {
-        height: 80px;
-        padding: 20px 10% 0 10%;
+        height: 60px;
+        // padding: 20px 10% 0 10%;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        padding: 0 10%;
+        margin-bottom: 25px;
 
-        .qr-code {
+        .sidebar-btn {
             cursor: pointer;
             padding: 5px;
             transition: transform 0.3s ease;
         }
 
-        .qr-code:hover {
+        .sidebar-btn:hover {
             transform: scale(1.1);
         }
 
@@ -161,7 +177,7 @@ onMounted(() => {
     }
 
     .avatar-and-id {
-        padding: 0 10%;
+        padding: 0 15%;
 
         .el-avatar {
             cursor: pointer;
@@ -194,7 +210,7 @@ onMounted(() => {
     }
 
     .control-panel {
-        padding: 0 10%;
+        padding: 0 15%;
 
         .login {
             margin-top: 20px;

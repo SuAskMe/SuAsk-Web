@@ -4,7 +4,8 @@
             <QuestionHeader
                 @change-sort="changeSort"
                 get_keywords_url="/favorites/keywords"
-                :return_btn="false"
+                sidebar_btn
+                @sidebar="sidebar"
                 sort_and_search
             />
         </el-header>
@@ -54,6 +55,7 @@ import { storeToRefs } from "pinia";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SidebarStore } from "@/store/modules/sidebar";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -87,6 +89,13 @@ const handleScroll = async () => {
             loading.value = false;
         }
     }
+};
+
+const sidebarStore = SidebarStore();
+
+const sidebar = () => {
+    console.log("sidebar");
+    sidebarStore.toggle();
 };
 
 let sort_type = 0;

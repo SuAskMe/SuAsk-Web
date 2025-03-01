@@ -5,8 +5,10 @@
                 @change-sort="changeSort"
                 @search="search"
                 @cancel-search="cancelSearch"
+                @sidebar="sidebar"
                 search
                 has_sort_upvote
+                sidebar_btn
                 sort_and_search
                 get_keywords_url="/questions/public/keywords"
             />
@@ -35,7 +37,7 @@
                         :click-card="navigateTo"
                         :show-favorite="false"
                         :click-favorite="favorite"
-                        width="45vw"
+                        width="80vw"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
                         }"
@@ -68,6 +70,8 @@ import { storeToRefs } from "pinia";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
+import { sliderButtonEmits } from "element-plus/lib/components/slider/src/button.js";
+import { SidebarStore } from "@/store/modules/sidebar";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
@@ -102,6 +106,13 @@ const handleScroll = async () => {
             loading.value = false;
         }
     }
+};
+
+const sidebarStore = SidebarStore();
+
+const sidebar = () => {
+    console.log("sidebar");
+    sidebarStore.toggle();
 };
 
 let sort_type = 0;
