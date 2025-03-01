@@ -3,8 +3,17 @@
         <div v-if="return_btn" class="return-btn" @click.stop="$emit('return')">
             <svg-icon icon="arrow-left" color="#71B6FF" size="30px" />
         </div>
-        <div v-if="sidebar_btn" style="display: flex; justify-content: center;" @click.stop="$emit('sidebar')">
-            <svg-icon icon="sidebar" color="#71B6FF" size="25px" :filled="sidebarStore.IsOpen"/>
+        <div
+            v-if="sidebar_btn"
+            style="display: flex; justify-content: center"
+            @click.stop="$emit('sidebar')"
+        >
+            <svg-icon
+                icon="sidebar"
+                color="#71B6FF"
+                size="25px"
+                :filled="sidebarStore.IsOpen"
+            />
         </div>
         <div v-if="props.title" class="title">{{ props.title }}</div>
         <div v-if="props.sort_and_search" class="sort-and-search">
@@ -34,6 +43,9 @@
                         :fetch-suggestions="querySearch"
                         :debounce="100"
                         :trigger-on-focus="false"
+                        :style="
+                            deviceType.isMobile ? 'width: 65vw' : 'width: 300px'
+                        "
                         clearable
                     ></el-autocomplete>
                     <div class="search-icon" @click.stop="search">
@@ -59,13 +71,20 @@
 
 <script setup lang="ts">
 import type { GetKeywordReq, GetKeywordRes } from "@/model/question.model";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 import { SidebarStore } from "@/store/modules/sidebar";
 import request from "@/utils/http/request";
-import { da } from "element-plus/es/locales.mjs";
 import { computed, ref } from "vue";
-const emit = defineEmits(["changeSort", "search", "cancelSearch", "return", "sidebar"]);
+const emit = defineEmits([
+    "changeSort",
+    "search",
+    "cancelSearch",
+    "return",
+    "sidebar",
+]);
 
 const sidebarStore = SidebarStore();
+const deviceType = DeviceTypeStore();
 
 const props = withDefaults(
     defineProps<{
@@ -237,6 +256,7 @@ async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
                 justify-content: center;
                 align-items: center;
                 font-size: small;
+                word-break: keep-all;
                 cursor: pointer;
                 color: $su-grey;
 
@@ -251,8 +271,6 @@ async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
 
 <style lang="scss">
 .header-item .search .el-autocomplete {
-    width: 300px;
-
     .el-input {
         --el-input-border-radius: var(--el-border-radius-round);
 

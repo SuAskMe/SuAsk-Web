@@ -22,7 +22,7 @@
                         :image-urls="question.image_urls"
                         :show-favorite="true"
                         :is-favorite="question.is_favorite"
-                        width="45vw"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
                         style="margin-top: 24px"
                         :click-card="() => {}"
                         :click-favorite="favorite"
@@ -52,7 +52,7 @@
                             userId: item.user_id,
                             answerId: item.id,
                         }"
-                        width="35vw"
+                        :width="deviceType.isMobile ? '70vw' : '35vw'"
                         :click-quote="scrollToQuote"
                         :click-like="upvote"
                         :click-card="openDialog"
@@ -115,6 +115,7 @@ import { storeToRefs } from "pinia";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 
 import { UserStore } from "@/store/modules/user";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 
 // 背景图片
 // let bg_img_index = ref(getUserInfo().themeId);
@@ -138,6 +139,8 @@ const route = useRoute();
 //     fileList.value.splice(index, 1);
 //     imageList.value.splice(index, 1);
 // };
+const deviceType = DeviceTypeStore();
+
 let sort_type = 1;
 
 const changeSort = (index: number) => {

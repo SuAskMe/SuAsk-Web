@@ -35,7 +35,7 @@
                     :style="{
                         marginTop: index === 0 ? '24px' : '0',
                     }"
-                    width="45vw"
+                    :width="deviceType.isMobile ? '80vw' : '45vw'"
                     :click-card="navigateTo"
                     :click-pin="pin"
                 ></BubbleCard>
@@ -57,9 +57,11 @@ import { useRouter } from "vue-router";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
 import { SidebarStore } from "@/store/modules/sidebar";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
+const deviceType = DeviceTypeStore();
 // 背景图片
 const userStore = UserStore();
 const bg_img_index = computed(() => userStore.getUser().themeId);
