@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const SidebarStore = defineStore("sidebar", () => {
-    const IsOpen = ref(false);
+    const IsOpen = ref(true);
     function toggle() {
         IsOpen.value = !IsOpen.value;
     }
