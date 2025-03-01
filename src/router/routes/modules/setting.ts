@@ -19,7 +19,7 @@ export const SettingRoute: AppRouteRecordRaw = {
         userType: "student",
         deviceType: isMobile() ? "phone" : "desktop",
     },
-    component: isMobile() ? PhoneHome : WebHome,
+    component: WebHome,
     children: [
         {
             path: "",

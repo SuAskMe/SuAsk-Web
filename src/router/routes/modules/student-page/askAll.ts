@@ -20,7 +20,7 @@ export const AskAllRoute: AppRouteRecordRaw = {
     props: {
         deviceType: isMobile() ? "phone" : "desktop",
     },
-    component: isMobile() ? PhoneHome : WebHome,
+    component: WebHome,
     children: [
         {
             path: "",
