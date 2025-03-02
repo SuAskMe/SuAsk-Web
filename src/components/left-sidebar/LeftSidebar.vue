@@ -154,17 +154,21 @@ onMounted(() => {
 .sidebar {
     height: 100%;
     width: 300px;
+    border-right: 1px solid $su-border;
     @media (max-width: 768px) and (min-width: 300px) {
         width: 80vw;
     }
     @media (max-width: 300px) {
         width: 100vw;
     }
-    border-right: 1px solid $su-border;
+    
 
     .title {
         height: 60px;
         display: flex;
+        align-items: center;
+        padding: 0 10%;
+        margin-bottom: 25px;
 
         @media (max-width: 768px) {
             justify-content: space-between;
@@ -174,9 +178,7 @@ onMounted(() => {
             
         }
 
-        align-items: center;
-        padding: 0 10%;
-        margin-bottom: 25px;
+
 
         .sidebar-btn {
             cursor: pointer;
