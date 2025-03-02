@@ -34,7 +34,7 @@
                         :image-urls="question.image_urls"
                         :bubble-key="index"
                         :click-card="navigateTo"
-                        width="45vw"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
                         }"
@@ -68,13 +68,17 @@ import { useRoute, useRouter } from "vue-router";
 import { UserStore } from "@/store/modules/user";
 import { UseQDMessageStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
+import { DeviceTypeStore } from "@/store/modules/device-type";
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
+const deviceType = DeviceTypeStore();
 // 背景图片
 const userStore = UserStore();
-const bg_img_index = computed(() => userStore.getUser().themeId? userStore.getUser().themeId : 1);
+const bg_img_index = computed(() =>
+    userStore.getUser().themeId ? userStore.getUser().themeId : 1
+);
 
 const route = useRoute();
 

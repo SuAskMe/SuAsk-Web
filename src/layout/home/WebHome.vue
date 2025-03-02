@@ -1,13 +1,20 @@
 <script lang="ts" setup>
-import { SidebarStore } from '@/store/modules/sidebar';
+import { SidebarStore } from "@/store/modules/sidebar";
 
 const sidebarStore = SidebarStore();
 </script>
 
 <template>
-    <el-container class="container" :class="{ 'sidebar-open': sidebarStore.IsOpen }">
+    <el-container
+        class="container"
+        :class="{ 'sidebar-open': sidebarStore.IsOpen }"
+    >
         <Transition name="sidebar_anime" appear>
-            <el-aside class="sidebar-aside" width="auto" v-show="sidebarStore.IsOpen">
+            <el-aside
+                class="sidebar-aside"
+                width="auto"
+                v-show="sidebarStore.IsOpen"
+            >
                 <router-view key="$route.fullPath" name="left_side">
                 </router-view>
             </el-aside>
@@ -71,9 +78,9 @@ const sidebarStore = SidebarStore();
 @media (max-width: 768px) {
     .container.sidebar-open .main-content {
         filter: blur(100px);
+        pointer-events: none;
     }
 }
-
 
 .el-container {
     height: 100vh;

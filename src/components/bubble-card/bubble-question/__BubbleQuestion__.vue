@@ -22,6 +22,8 @@ interface BubbleQuestionProps {
 }
 const props = withDefaults(defineProps<BubbleQuestionProps>(), {
     showFavorite: true,
+    clickCard: () => {},
+    clickFavorite: () => {},
 });
 const timeStr = computed(() => getTimeStr(props.timeStamp));
 const key = computed(() => {
