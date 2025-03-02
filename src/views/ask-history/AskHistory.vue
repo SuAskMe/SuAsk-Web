@@ -47,7 +47,7 @@
                         :bubble-key="index"
                         :click-card="navigateTo"
                         :click-favorite="favorite"
-                        width="45vw"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
                             marginLeft: deviceType.isMobile ? '0' : '24px',
