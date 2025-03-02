@@ -2,7 +2,6 @@ import { RightSidebar } from "@/components/right-sidebar";
 import type { AppRouteRecordRaw } from "@/router/types";
 import { isMobile } from "@/utils/device";
 
-const PhoneHome = () => import("@/layout/home/PhoneHome.vue");
 const WebHome = () => import("@/layout/home/WebHome.vue");
 
 const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
