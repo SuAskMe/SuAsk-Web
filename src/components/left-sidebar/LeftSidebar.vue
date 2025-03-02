@@ -24,7 +24,7 @@
                 :filled="sidebarStore.IsOpen"
             />
         </div>
-        <div class="avatar-and-id" @click="navigateToLogin">
+        <div class="avatar-and-id" @click="navigateToUserInfo">
             <el-avatar :size="120" :src="userInfo.avatar">
                 <img src="@/assets/default-avatar.png" />
             </el-avatar>
@@ -80,7 +80,6 @@ import { UserStore } from "@/store/modules/user";
 import DefaultItem from "./DefaultItem.vue";
 import { useRouter } from "vue-router";
 import { SidebarStore } from "@/store/modules/sidebar";
-import { isMobile } from "@/utils/device";
 import { DeviceTypeStore } from "@/store/modules/device-type";
 
 const drawer = ref(false);
@@ -130,7 +129,7 @@ async function getNotificationCount() {
 
 const router = useRouter();
 
-function toUserInfo() {
+function navigateToUserInfo() {
     if (userInfo) {
         router.push(`/user/${userInfo.value.id}`);
     } else {
@@ -160,7 +159,16 @@ onMounted(() => {
         height: 60px;
         // padding: 20px 10% 0 10%;
         display: flex;
-        justify-content: flex-end;
+        // justify-content: space-between;
+
+        @media (max-width: 768px) {
+            justify-content: space-between;
+        }
+        @media (min-width: 768px) {
+            justify-content: flex-end;
+            
+        }
+
         align-items: center;
         padding: 0 10%;
         margin-bottom: 25px;

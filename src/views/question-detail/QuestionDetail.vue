@@ -76,6 +76,7 @@
             :question-id="question.id"
             :quote="quote"
             @answer-posted="handleAnswerPosted"
+            :fullscreen="deviceType.isMobile"
         ></answer-dialog>
         <div
             v-if="canReply"
