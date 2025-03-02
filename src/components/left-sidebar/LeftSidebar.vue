@@ -87,7 +87,6 @@ const drawer = ref(false);
 // 用户信息
 
 const userStore = UserStore();
-// const { userInfo } = storeToRefs(userStore);
 const userInfo = computed(() => userStore.getUser());
 
 const role = ref(userStore.getRole());
@@ -131,6 +130,9 @@ const router = useRouter();
 
 function navigateToUserInfo() {
     if (userInfo) {
+        if(deviceTypeStore.isMobile) {
+            sidebarStore.toggle();
+        }
         router.push(`/user/${userInfo.value.id}`);
     } else {
         ElMessage.error("获取用户信息失败");
@@ -152,14 +154,11 @@ onMounted(() => {
 .sidebar {
     height: 100%;
     width: 300px;
-    // width: 100%;
     border-right: 1px solid $su-border;
 
     .title {
         height: 60px;
-        // padding: 20px 10% 0 10%;
         display: flex;
-        // justify-content: space-between;
 
         @media (max-width: 768px) {
             justify-content: space-between;
