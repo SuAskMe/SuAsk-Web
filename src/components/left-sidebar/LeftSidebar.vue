@@ -4,7 +4,7 @@
             <div v-if="role != 'default'" class="message">
                 <svg-icon
                     @click="openDrawer"
-                    class="message"
+                    class="message-icon"
                     icon="message-1"
                     color="#71B6FF"
                     size="24px"
@@ -154,6 +154,12 @@ onMounted(() => {
 .sidebar {
     height: 100%;
     width: 300px;
+    @media (max-width: 768px) and (min-width: 300px) {
+        width: 80vw;
+    }
+    @media (max-width: 300px) {
+        width: 100vw;
+    }
     border-right: 1px solid $su-border;
 
     .title {
@@ -198,7 +204,7 @@ onMounted(() => {
                 background-color: red;
                 border-radius: 50%;
                 position: absolute;
-                top: 2px;
+                top: 0;
                 right: 0;
                 animation: scale-in-center 0.5s
                     cubic-bezier(0.165, 0.84, 0.44, 1) both;

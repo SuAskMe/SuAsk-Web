@@ -202,7 +202,7 @@ onMounted(async () => {
         display: flex;
         flex-direction: column;
         height: 90%;
-        width: 360px;
+        width: auto;
         margin-top: 10px;
 
         .text {
