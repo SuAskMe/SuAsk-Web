@@ -1,147 +1,82 @@
 <template>
-    <!-- <el-scrollbar height="100vh">
-        <div class="main">
-            <div class="title">
-                <p>基础信息</p>
-                <hr />
-            </div>
-            <div class="basic-info">
-                <div class="name-and-bio">
-                    <p>昵称</p>
-                    <div>
-                        <el-input v-model="basicInfo.nickname" placeholder="Please input" />
-                    </div>
-                    <p>简介</p>
-                    <div>
-                        <bio-panel v-model="basicInfo.introduction" />
-                    </div>
-                </div>
-                <div class="avatar-and-id">
-                    <div style="position: relative;">
-                        <el-avatar :size="deviceType == 'desktop' ? 200 : 150" :src="basicInfo.avatar">
-                            <img src="@/assets/default-avatar.png" />
-                        </el-avatar>
-                        <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
-                            multiple @change="pickImageImpl">
-                        <el-button @click.stop="pickImage" class="upload-btn" type="default" size="small">
-                            <template #icon>
-                                <svg-icon icon="edit" color="#808080" />
-                            </template>
-编辑
-</el-button>
-</div>
-<p> @{{ basicInfo.name }} </p>
-</div>
-</div>
-<div class="theme-and-button">
-    <p>主题</p>
-    <div class="theme">
-        <theme-image v-model="basicInfo.themeId" :src="imgList" :width="deviceType == 'desktop' ? '100px' : '70px'" />
-    </div>
-    <div class="button" v-if="deviceType == 'desktop'">
-        <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
-    </div>
-</div>
-<div v-if="userStore.getRole() == 'teacher'" class="title">
-    <hr />
-</div>
-<div v-if="userStore.getRole() == 'teacher'" class="change-perm">
-    <p>提问箱可见性</p>
-    <div>
-        <el-radio-group v-model="questionVisible" size="large">
-            <el-radio-button label="公开" value="public" />
-            <el-radio-button label="需登录" value="protected" />
-            <el-radio-button label="关闭" value="private" />
-        </el-radio-group>
-    </div>
-</div>
-<div class="title">
-    <hr />
-</div>
-<div class="danger-place">
-    <p class="danger-option" @click="resetPassword">重置密码</p>
-    <p class="danger-option" @click="showLogoutDialog">退出登录</p>
-</div>
-<reset-password-dialog v-model:visible="showResetPassword" />
-<logout-dialog v-model:visible="showLogout" />
-</div>
-</el-scrollbar> -->
     <el-container class="container">
-        <el-header>
+        <el-header class="header">
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
         </el-header>
-        <el-main class="main-container">
-            <div class="title">
-                <p>基础信息</p>
-                <hr />
-            </div>
-            <div class="name-bio-avatar">
-                <div class="name-bio">
-                    <p>昵称</p>
+        <el-scrollbar>
+            <el-main class="main-container">
+                <div class="title">
+                    <p>基础信息</p>
+                    <hr />
+                </div>
+                <div class="name-bio-avatar">
+                    <div class="name-bio">
+                        <p>昵称</p>
+                        <div>
+                            <el-input v-model="basicInfo.nickname" placeholder="Please input" />
+                        </div>
+                        <p>简介</p>
+                        <div>
+                            <bio-panel v-model="basicInfo.introduction" />
+                        </div>
+                    </div>
+                    <div class="avatar-id">
+                        <div class="avatar">
+                            <el-avatar :size="150" :src="basicInfo.avatar">
+                                <img src="@/assets/default-avatar.png" />
+                            </el-avatar>
+                            <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg"
+                                style="display: none" multiple @change="pickImageImpl">
+                            <el-button @click.stop="pickImage" class="upload-btn" type="default" size="small">
+                                <template #icon>
+                                    <svg-icon icon="edit" color="#808080" />
+                                </template>
+                                编辑
+                            </el-button>
+                        </div>
+                        <p class="id"> @{{ basicInfo.name }} </p>
+                    </div>
+                </div>
+                <div class="title">
+                    <p>主题</p>
+                    <hr />
+                </div>
+                <div class="theme-picker">
+                    <div class="theme">
+                        <theme-image v-model="basicInfo.themeId" :src="imgList"
+                            :width="deviceTypeStore.isMobile ? '75px' : '100px'" />
+                    </div>
+                </div>
+                <div class="title">
+                    <hr />
+                </div>
+                <div class="button">
+                    <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
+                </div>
+                <div v-if="userStore.getRole() == 'teacher'" class="title">
+                    <p>提问箱可见性</p>
+                    <hr />
+                </div>
+                <div v-if="userStore.getRole() == 'teacher'" class="change-perm">
                     <div>
-                        <el-input v-model="basicInfo.nickname" placeholder="Please input" />
-                    </div>
-                    <p>简介</p>
-                    <div>
-                        <bio-panel v-model="basicInfo.introduction" />
+                        <el-radio-group v-model="questionVisible" size="large">
+                            <el-radio-button label="公开" value="public" />
+                            <el-radio-button label="需登录" value="protected" />
+                            <el-radio-button label="关闭" value="private" />
+                        </el-radio-group>
                     </div>
                 </div>
-                <div class="avatar-id">
-                    <div class="avatar">
-                        <el-avatar :size="150" :src="basicInfo.avatar">
-                            <img src="@/assets/default-avatar.png" />
-                        </el-avatar>
-                        <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
-                            multiple @change="pickImageImpl">
-                        <el-button @click.stop="pickImage" class="upload-btn" type="default" size="small">
-                            <template #icon>
-                                <svg-icon icon="edit" color="#808080" />
-                            </template>
-                            编辑
-                        </el-button>
-                    </div>
-                    <p class="id"> @{{ basicInfo.name }} </p>
+                <div class="title">
+                    <hr />
                 </div>
-            </div>
-            <div class="title">
-                <p>主题</p>
-                <hr />
-            </div>
-            <div class="theme">
-                <div class="theme">
-                    <theme-image v-model="basicInfo.themeId" :src="imgList"
-                        :width="deviceTypeStore.isMobile ? '75px' : '100px'" />
+                <div class="password-logout">
+                    <p class="danger-option" @click="resetPassword">重置密码</p>
+                    <p class="danger-option" @click="showLogoutDialog">退出登录</p>
                 </div>
-            </div>
-            <div class="title">
-                <hr />
-            </div>
-            <div class="button">
-                <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
-            </div>
-            <div v-if="userStore.getRole() == 'teacher'" class="title">
-                <p>提问箱可见性</p>
-                <hr />
-            </div>
-            <div v-if="userStore.getRole() == 'teacher'" class="change-perm">
+                <div style="height: 50px;"></div>
 
-                <div>
-                    <el-radio-group v-model="questionVisible" size="large">
-                        <el-radio-button label="公开" value="public" />
-                        <el-radio-button label="需登录" value="protected" />
-                        <el-radio-button label="关闭" value="private" />
-                    </el-radio-group>
-                </div>
-            </div>
-            <div class="title">
-                <hr />
-            </div>
-            <div class="password-logout">
-                <p class="danger-option" @click="resetPassword">重置密码</p>
-                <p class="danger-option" @click="showLogoutDialog">退出登录</p>
-            </div>
-            <div style="height: 50px;"></div>
-        </el-main>
+            </el-main>
+        </el-scrollbar>
     </el-container>
 </template>
 
