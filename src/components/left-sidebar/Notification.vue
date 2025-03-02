@@ -10,12 +10,19 @@
                     props.answerCount + props.questionCount + props.replyCount }}</div>
             </div>
         </div>
-        <div class="choose-notification">
-            <el-radio-group v-model="radio" style="width: 100%;">
-                <el-radio-button label="提问我的" :value="NotificationType.QUESTION" />
-                <el-radio-button label="回答我的" :value="NotificationType.ANSWER" />
-                <el-radio-button label="回复我的" :value="NotificationType.REPLY" />
-            </el-radio-group>
+        <div class="notification-tabs">
+            <div class="notification-tab" :class="{ active: radio == NotificationType.QUESTION }"
+                @click="radio = NotificationType.QUESTION">
+                提问我的
+            </div>
+            <div class="notification-tab" :class="{ active: radio === NotificationType.ANSWER }"
+                @click="radio = NotificationType.ANSWER">
+                回答我的
+            </div>
+            <div class="notification-tab" :class="{ active: radio === NotificationType.REPLY }"
+                @click="radio = NotificationType.REPLY">
+                回复我的
+            </div>
         </div>
         <div class="notification-container">
             <el-scrollbar>
@@ -163,21 +170,39 @@ onMounted(async () => {
                 background-color: $su-red;
             }
         }
-
-
     }
 
-    .choose-notification {
-        margin-top: 10px;
+    .notification-tabs {
         display: flex;
-        justify-content: center;
+        border-bottom: 1px solid $su-border;
+        margin-bottom: 10px;
+
+        .notification-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #606266;
+            transition: all 0.3s ease;
+
+            &:hover {
+                color: $su-blue;
+            }
+            &.active {
+                color: $su-blue;
+                border-bottom: 2px solid $su-blue;
+                font-weight: bold;
+            }
+        }
     }
+
 
     .notification-container {
         display: flex;
         flex-direction: column;
         height: 90%;
-        width: 360px;
+        width: auto;
         margin-top: 10px;
 
         .text {

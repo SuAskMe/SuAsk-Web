@@ -4,7 +4,7 @@
             <div v-if="role != 'default'" class="message">
                 <svg-icon
                     @click="openDrawer"
-                    class="message"
+                    class="message-icon"
                     icon="message-1"
                     color="#71B6FF"
                     size="24px"
@@ -87,7 +87,6 @@ const drawer = ref(false);
 // 用户信息
 
 const userStore = UserStore();
-// const { userInfo } = storeToRefs(userStore);
 const userInfo = computed(() => userStore.getUser());
 
 const role = ref(userStore.getRole());
@@ -131,6 +130,9 @@ const router = useRouter();
 
 function navigateToUserInfo() {
     if (userInfo) {
+        if(deviceTypeStore.isMobile) {
+            sidebarStore.toggle();
+        }
         router.push(`/user/${userInfo.value.id}`);
     } else {
         ElMessage.error("获取用户信息失败");
@@ -152,14 +154,17 @@ onMounted(() => {
 .sidebar {
     height: 100%;
     width: 300px;
-    // width: 100%;
+    @media (max-width: 768px) and (min-width: 300px) {
+        width: 80vw;
+    }
+    @media (max-width: 300px) {
+        width: 100vw;
+    }
     border-right: 1px solid $su-border;
 
     .title {
         height: 60px;
-        // padding: 20px 10% 0 10%;
         display: flex;
-        // justify-content: space-between;
 
         @media (max-width: 768px) {
             justify-content: space-between;
@@ -199,7 +204,7 @@ onMounted(() => {
                 background-color: red;
                 border-radius: 50%;
                 position: absolute;
-                top: 2px;
+                top: 0;
                 right: 0;
                 animation: scale-in-center 0.5s
                     cubic-bezier(0.165, 0.84, 0.44, 1) both;
