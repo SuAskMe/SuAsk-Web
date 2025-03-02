@@ -1,5 +1,26 @@
-.main {
+.help-container {
+  width: 100%;
+  height: 100%;
+}
+
+.help-header {
+  position: relative;
+
+  .help-title {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: -1;
+  }
+}
+
+.help-main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  // background-color: aqua;
 }
