@@ -5,6 +5,8 @@
 
 .help-header {
   position: relative;
+  border-bottom: 1px solid $su-border;
+  height: 60px;
 
   .help-title {
     position: absolute;
@@ -22,5 +24,20 @@
 .help-main {
   display: flex;
   justify-content: center;
+  margin: 0 auto;   /* 居中显示 */
+  padding: 0;
+  font-size: 14px;  /* 调整字体大小 */
+  line-height: 1.6;
   // background-color: aqua;
+}
+
+.help-main h1,
+.help-main h2,
+.help-main h3 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+}
+
+.help-main p {
+  margin: 0.5em 0;
 }
