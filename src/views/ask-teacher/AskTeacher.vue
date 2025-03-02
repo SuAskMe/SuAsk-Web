@@ -45,6 +45,7 @@
                 v-model:visible="showDialog"
                 :teacher="{ teacherId: teacherId, teacherName: teacherName }"
                 @question-posted="handleQuestionPosted"
+                :fullscreen="deviceType.isMobile"
             />
             <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">

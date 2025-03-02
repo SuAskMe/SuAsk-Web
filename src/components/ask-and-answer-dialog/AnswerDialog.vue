@@ -311,7 +311,7 @@ async function postAnswer() {
                         </el-avatar>
                     </div>
                     <div class="content">
-                        <el-input v-model="answerContent.content" :autosize="{ minRows: 6, maxRows: 8 }" type="textarea"
+                        <el-input v-model="answerContent.content" :autosize="{ minRows: 6, maxRows: 18 }" type="textarea"
                             placeholder="发表新回复..." />
                     </div>
                 </div>
@@ -610,6 +610,12 @@ async function postAnswer() {
 
 :deep(.el-dialog) {
     border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+    :deep(.el-dialog) {
+        border-radius: 0px;
+    }
 }
 
 :deep(.el-dialog__header) {
