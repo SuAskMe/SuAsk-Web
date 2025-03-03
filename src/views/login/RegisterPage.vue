@@ -1,6 +1,8 @@
 <template>
-    <div class="dialog">
-        <el-dialog v-model="visible" width="400px" align-center @closed="closed" :show-close="false">
+
+    <el-dialog v-model="visible" width="400px" align-center @closed="closed" :show-close="deviceTypeStore.isMobile"
+        :fullscreen="deviceTypeStore.isMobile">
+        <div class="dialog">
             <div v-if="isBasicInfo" class="modal">
                 <p>注册账号</p>
                 <el-input v-model="registerForm.userName" style="height: 40px;" placeholder="请输入注册用户名" clearable>
@@ -40,17 +42,20 @@
                     <el-button @click="register" type="primary">注册</el-button>
                 </div>
             </div>
-        </el-dialog>
-    </div>
+        </div>
+    </el-dialog>
 </template>
 
 <script setup lang='ts'>
 import { registerApi, sendVerificationCodeApi, verifyVerificationCodeApi } from '@/api/user/register.api';
 import type { RegisterReq } from '@/model/register.model';
 import { router } from '@/router';
+import { DeviceTypeStore } from '@/store/modules/device-type';
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
+
+const deviceTypeStore = DeviceTypeStore();
 
 const visible = defineModel('visible', {
     type: Boolean,
@@ -158,6 +163,10 @@ async function getVerificationCode() {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width: 768px) {
+        margin-top: 25vh;
+    }
 
     .modal {
         display: flex;
