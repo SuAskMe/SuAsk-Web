@@ -74,9 +74,10 @@
                     <p class="danger-option" @click="showLogoutDialog">退出登录</p>
                 </div>
                 <div style="height: 50px;"></div>
-
             </el-main>
         </el-scrollbar>
+        <reset-password-dialog v-model:visible="showResetPassword" />
+        <logout-dialog v-model:visible="showLogout" />
     </el-container>
 </template>
 
@@ -91,6 +92,8 @@ import { SidebarStore } from '@/store/modules/sidebar';
 import BioPanel from '@/components/bio-panel/BioPanel.vue';
 import { DeviceTypeStore } from '@/store/modules/device-type';
 import ThemeImage from './ThemeImage.vue';
+import ResetPasswordDialog from './ResetPasswordDialog.vue';
+import LogoutDialog from './LogoutDialog.vue';
 
 const imgList = ref<string[]>([]);
 const images = import.meta.glob('@/assets/bg_imgs/*.png', { eager: true });
