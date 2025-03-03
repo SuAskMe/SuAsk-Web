@@ -1,6 +1,6 @@
 <template>
-    <div class="dialog">
-        <el-dialog v-model="visible" :show-close="false" align-center width="400px">
+    <el-dialog v-model="visible" :show-close="deviceTypeStore.isMobile" align-center width="400px" :fullscreen="deviceTypeStore.isMobile">
+        <div class="dialog">
             <div class="title">
                 <p>
                     忘记密码
@@ -27,15 +27,18 @@
                     <el-button @click="resetPassword" type="primary">重置</el-button>
                 </div>
             </div>
-        </el-dialog>
-    </div>
+        </div>
+    </el-dialog>
 </template>
 
 <script setup lang='ts'>
 import { sendCodeApi, resetPasswordApi, forgetPasswordApi } from '@/api/user/reset_password.api';
 import type { ResetPassword } from '@/model/user.model';
+import { DeviceTypeStore } from '@/store/modules/device-type';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
+
+const deviceTypeStore = DeviceTypeStore();
 
 const visible = defineModel('visible', {
     type: Boolean,
@@ -100,6 +103,9 @@ function resetPassword() {
 .dialog {
     display: flex;
     flex-direction: column;
+    @media (max-width: 768px) {
+        margin-top: 25vh;
+    }
 
     .title {
         font-size: 20px;
@@ -143,9 +149,6 @@ function resetPassword() {
 
 }
 
-:deep(.el-dialog) {
-    border-radius: 20px;
-}
 
 :deep(.el-dialog__header) {
     padding: 0;
