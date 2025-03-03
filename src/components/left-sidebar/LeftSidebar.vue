@@ -129,13 +129,14 @@ async function getNotificationCount() {
 const router = useRouter();
 
 function navigateToUserInfo() {
-    if (userInfo) {
+    if (userStore.getRole() != "default") {
         if(deviceTypeStore.isMobile) {
             sidebarStore.toggle();
         }
         router.push(`/user/${userInfo.value.id}`);
     } else {
-        ElMessage.error("获取用户信息失败");
+        ElMessage.info("请登录");
+        router.push("/login");
     }
 }
 
