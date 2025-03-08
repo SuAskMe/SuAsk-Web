@@ -84,7 +84,7 @@ async function getUserInfo() {
         .then((res) => {
             if (res) {
                 userInfo.value = res;
-                console.log(userInfo.value);
+                // console.log(userInfo.value);
             } else {
                 ElMessage.error("获取用户信息失败");
             }
@@ -99,7 +99,7 @@ function navigateBack() {
 }
 
 const navigateTo = (key: number) => {
-    console.log(key);
+    // console.log(key);
     router.push({
         path: `/question-detail/${key}`,
     });

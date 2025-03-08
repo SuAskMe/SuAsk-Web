@@ -72,7 +72,7 @@ const _avatar = ref(
     props.avatar ? props.avatar : "/src/assets/default-avatar.png"
 );
 const showDefaultAvatar = () => {
-    console.log("showDefaultAvatar");
+    // console.log("showDefaultAvatar");
     _avatar.value = "/src/assets/default-avatar.png";
 };
 </script>

@@ -6,31 +6,54 @@
                 <svg-icon icon="qr-code" color="#808080" size="20px" />
             </div>
             <div>
-                <el-input v-model="userNameOrEmail" style="height: 40px" placeholder="请输入用户名或邮箱" clearable>
+                <el-input
+                    v-model="userNameOrEmail"
+                    style="height: 40px"
+                    placeholder="请输入用户名或邮箱"
+                    clearable
+                >
                     <template #prefix>
                         <svg-icon icon="user" color="#71B6FF" size="20px" />
                     </template>
                 </el-input>
             </div>
             <div>
-                <el-input v-model="password" style="height: 40px" placeholder="请输入密码" clearable show-password>
+                <el-input
+                    v-model="password"
+                    style="height: 40px"
+                    placeholder="请输入密码"
+                    clearable
+                    show-password
+                >
                     <template #prefix>
                         <svg-icon icon="key" color="#71B6FF" size="20px" />
                     </template>
                 </el-input>
             </div>
             <div>
-                <el-button type="primary" style="width: 25%" @click="login" shouldAddSpace>
+                <el-button
+                    type="primary"
+                    style="width: 25%"
+                    @click="login"
+                    shouldAddSpace
+                >
                     登 录
                 </el-button>
             </div>
             <div class="footer">
-                <span @click="forgetPassword" style="color: #808080; cursor: pointer">忘记密码</span>
-                <span @click="register" style="color: #71b6ff; cursor: pointer">注册账号</span>
+                <span
+                    @click="forgetPassword"
+                    style="color: #808080; cursor: pointer"
+                    >忘记密码</span
+                >
+                <span @click="register" style="color: #71b6ff; cursor: pointer"
+                    >注册账号</span
+                >
             </div>
         </div>
         <div style="margin-top: 15px">
-            <el-button type="info" text @click="navigateToAskAll">暂不登录
+            <el-button type="info" text @click="navigateToAskAll"
+                >暂不登录
                 <el-icon>
                     <ArrowRightBold />
                 </el-icon>
@@ -79,7 +102,7 @@ async function login() {
         if (userInfo) {
             ElMessage.success("登录成功");
             router.push({ name: "AskAll" });
-            console.log(userStore.getUser);
+            // console.log(userStore.getUser);
         } else {
             ElMessage.error("登录失败");
         }
@@ -109,13 +132,11 @@ function navigateToAskAll() {
         introduction: "",
         avatar: null,
         themeId: 1,
-        question_box_perm: ""
-    }
+        question_box_perm: "",
+    };
     userStore.setUser(user);
     router.push({ name: "AskTeacher" });
 }
-
-
 </script>
 
 <style scoped lang="scss">
