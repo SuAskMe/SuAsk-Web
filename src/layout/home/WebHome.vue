@@ -21,7 +21,16 @@ const sidebarStore = SidebarStore();
         </Transition>
         <el-main class="main-content">
             <router-view v-slot="{ Component }">
-                <keep-alive :exclude="['QuestionDetail']">
+                <keep-alive
+                    :exclude="[
+                        'QuestionDetail',
+                        'UserRoot',
+                        'User',
+                        'AskTeacherRoot',
+                        'AskTeacherDetail',
+                        'AskTeacher',
+                    ]"
+                >
                     <component :is="Component" />
                 </keep-alive>
             </router-view>
