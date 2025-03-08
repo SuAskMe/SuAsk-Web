@@ -202,28 +202,28 @@ const handleQuestionPosted = (question: QuestionItem) => {
         }
     });
 };
+// route.path
+// let nameRecord = "";
 
-let nameRecord = "";
-
-watch(
-    () => route.path,
-    () => {
-        if (route.name !== "AskTeacherDetail") {
-            return;
-        }
-        let tid = Number(route.params.teacher_id);
-        let tname = String(route.params.teacher_name);
-        document.title = `${teacherName.value}的提问箱`;
-        if (tname === nameRecord) {
-            return;
-        }
-        nameRecord = tname;
-        teacherId.value = tid;
-        teacherName.value = tname;
-        questionList.length = 0;
-        Init();
-    }
-);
+// watch(
+//     () => route.path,
+//     () => {
+//         if (route.name !== "AskTeacherDetail") {
+//             return;
+//         }
+//         let tid = Number(route.params.teacher_id);
+//         let tname = String(route.params.teacher_name);
+//         document.title = `${teacherName.value}的提问箱`;
+//         if (tname === nameRecord) {
+//             return;
+//         }
+//         nameRecord = tname;
+//         teacherId.value = tid;
+//         teacherName.value = tname;
+//         questionList.length = 0;
+//         Init();
+//     }
+// );
 
 onMounted(() => {
     teacherId.value = Number(route.params.teacher_id);

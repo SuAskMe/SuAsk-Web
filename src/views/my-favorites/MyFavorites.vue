@@ -109,7 +109,7 @@ const handleScroll = async () => {
 const sidebarStore = SidebarStore();
 
 const sidebar = () => {
-    console.log("sidebar");
+    // console.log("sidebar");
     sidebarStore.toggle();
 };
 

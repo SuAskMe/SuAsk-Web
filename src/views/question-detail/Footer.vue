@@ -1,12 +1,31 @@
 <template>
     <div class="footer-container" @keyup.enter="handleEnter">
-        <el-input v-model="inputText" placeholder="请输入内容" type="textarea" autosize style="width: 60%" maxlength="500"
-            @input="handleInput"></el-input>
+        <el-input
+            v-model="inputText"
+            placeholder="请输入内容"
+            type="textarea"
+            autosize
+            style="width: 60%"
+            maxlength="500"
+            @input="handleInput"
+        ></el-input>
         <div class="svg-container">
-            <SvgIcon icon="image" size="24px" color="#808080" hover-color="#71b6ff" style="cursor: pointer"
-                @click.stop="pickImage" />
-            <input type="file" ref="imgPicker" accept="image/png,image/jpeg,image/jpg" style="display: none"
-                @change="pickImageImpl" multiple />
+            <SvgIcon
+                icon="image"
+                size="24px"
+                color="#808080"
+                hover-color="#71b6ff"
+                style="cursor: pointer"
+                @click.stop="pickImage"
+            />
+            <input
+                type="file"
+                ref="imgPicker"
+                accept="image/png,image/jpeg,image/jpg"
+                style="display: none"
+                @change="pickImageImpl"
+                multiple
+            />
         </div>
     </div>
 </template>
@@ -47,10 +66,10 @@ const handleEnter = async () => {
     for (let i = 0; fileList.value && i < fileList.value.length; i++) {
         formData.append("files", fileList.value[i]);
     }
-    formData.append('question_id', req.question_id.toString());
-    formData.append('content', req.content);
+    formData.append("question_id", req.question_id.toString());
+    formData.append("content", req.content);
     await addAnswerApi(formData).then((res) => {
-        console.log(res);
+        // console.log(res);
         fileList.value = [];
         imageList.value = [];
     });
@@ -80,7 +99,7 @@ const pickImageImpl = (event: any) => {
             });
         }
         if (imgPicker.value) imgPicker.value.value = "";
-        console.log(fileList.value, imageList.value);
+        // console.log(fileList.value, imageList.value);
     }
 };
 </script>

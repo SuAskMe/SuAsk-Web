@@ -139,24 +139,11 @@ const pin = async (key: number) => {
 
 const router = useRouter();
 
-let nameRecord = "";
-const route = useRoute();
-
 watch(
-    () => route.name,
+    () => props.type,
     () => {
-        route.name;
-        if (
-            route.name === "AskMeAnswered" ||
-            route.name === "AskMeUnanswered" ||
-            route.name === "AskMeTop"
-        ) {
-            if (nameRecord !== route.name) {
-                nameRecord = route.name;
-                questionList.length = 0;
-                Init();
-            }
-        }
+        questionList.length = 0;
+        Init();
     }
 );
 

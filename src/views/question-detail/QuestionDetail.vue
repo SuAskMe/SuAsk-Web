@@ -177,7 +177,7 @@ onMounted(async () => {
     await getAnswerList();
     document.title = question.value.title;
     if (route.hash) {
-        console.log(parseInt(route.hash.replace("#", "")));
+        // console.log(parseInt(route.hash.replace("#", "")));
         scrollToAnswer(parseInt(route.hash.replace("#", "")));
     }
 });
