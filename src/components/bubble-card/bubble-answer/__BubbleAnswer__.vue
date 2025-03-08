@@ -2,7 +2,6 @@
 import { DeviceTypeStore } from "@/store/modules/device-type";
 import { getImgStyle, getTimeStr } from "../bubble-card";
 import { computed, ref } from "vue";
-import type { j } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 interface BubbleAnswerProps {
     isMine?: boolean;
     avatar: string;
