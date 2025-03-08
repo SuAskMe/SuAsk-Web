@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, watch } from 'vue';
+import { computed, defineProps, watch } from "vue";
 const props = defineProps<{
     img_index: number;
 }>();
@@ -12,12 +12,14 @@ const props = defineProps<{
 
 const imgURL = computed(() => {
     if (props.img_index !== undefined) {
-        const url = new URL(`../../assets/bg_imgs/${props.img_index}.png`, import.meta.url).href;
+        const url = new URL(
+            `../../assets/bg_imgs/${props.img_index}.jpg`,
+            import.meta.url
+        ).href;
         return url;
     }
-    return '';
+    return "";
 });
-
 </script>
 
 <style scoped>
