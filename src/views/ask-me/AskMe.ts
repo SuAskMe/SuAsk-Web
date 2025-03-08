@@ -78,7 +78,7 @@ async function getQuestionsByPage(
             page: page,
         });
     }
-    console.log(res);
+    // console.log(res);
     if (res.remain_page <= 0) {
         isEnd_am = true;
     }

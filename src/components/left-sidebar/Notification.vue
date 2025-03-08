@@ -1,26 +1,53 @@
 <template>
     <div class="notification">
         <div class="title">
-            <el-icon @click="closeDrawer" class="back-btn" size="24px" color="#71B6FF">
+            <el-icon
+                @click="closeDrawer"
+                class="back-btn"
+                size="24px"
+                color="#71B6FF"
+            >
                 <ArrowLeft />
             </el-icon>
             <div class="message">
                 消息
-                <div v-if="(props.answerCount + props.questionCount + props.replyCount) > 0" class="count">{{
-                    props.answerCount + props.questionCount + props.replyCount }}</div>
+                <div
+                    v-if="
+                        props.answerCount +
+                            props.questionCount +
+                            props.replyCount >
+                        0
+                    "
+                    class="count"
+                >
+                    {{
+                        props.answerCount +
+                        props.questionCount +
+                        props.replyCount
+                    }}
+                </div>
             </div>
         </div>
         <div class="notification-tabs">
-            <div class="notification-tab" :class="{ active: radio == NotificationType.QUESTION }"
-                @click="radio = NotificationType.QUESTION">
+            <div
+                class="notification-tab"
+                :class="{ active: radio == NotificationType.QUESTION }"
+                @click="radio = NotificationType.QUESTION"
+            >
                 提问我的
             </div>
-            <div class="notification-tab" :class="{ active: radio === NotificationType.ANSWER }"
-                @click="radio = NotificationType.ANSWER">
+            <div
+                class="notification-tab"
+                :class="{ active: radio === NotificationType.ANSWER }"
+                @click="radio = NotificationType.ANSWER"
+            >
                 回答我的
             </div>
-            <div class="notification-tab" :class="{ active: radio === NotificationType.REPLY }"
-                @click="radio = NotificationType.REPLY">
+            <div
+                class="notification-tab"
+                :class="{ active: radio === NotificationType.REPLY }"
+                @click="radio = NotificationType.REPLY"
+            >
                 回复我的
             </div>
         </div>
@@ -29,41 +56,75 @@
                 <div v-if="radio == NotificationType.QUESTION">
                     <transition-group name="notification">
                         <div v-for="item in newQuestion" :key="item.id">
-                            <NotificationCard type="question" :created_at="item.created_at" :id="item.id"
-                                :is_read="item.is_read" :question_id="item.question_id"
-                                :question_title="item.question_title" :question_content="item.question_content"
-                                :user_avatar="item.user_avatar" :user_name="item.user_name" :user_id="item.user_id"
-                                @reply="closeDrawer" @delete="deleteNotification" @read="readNotification" />
+                            <NotificationCard
+                                type="question"
+                                :created_at="item.created_at"
+                                :id="item.id"
+                                :is_read="item.is_read"
+                                :question_id="item.question_id"
+                                :question_title="item.question_title"
+                                :question_content="item.question_content"
+                                :user_avatar="item.user_avatar"
+                                :user_name="item.user_name"
+                                :user_id="item.user_id"
+                                @reply="closeDrawer"
+                                @delete="deleteNotification"
+                                @read="readNotification"
+                            />
                         </div>
                     </transition-group>
-                    <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
+                    <div v-if="newQuestion.length == 0" class="text">
+                        暂无提问
+                    </div>
                 </div>
                 <div v-if="radio == NotificationType.ANSWER">
                     <transition-group name="notification">
                         <div v-for="item in newAnswer" :key="item.id">
-                            <NotificationCard type="answer" :created_at="item.created_at" :id="item.id"
-                                :is_read="item.is_read" :question_id="item.question_id"
-                                :question_title="item.question_title" :question_content="item.question_content"
-                                :answer_id="item.answer_id" :answer_content="item.answer_content"
-                                :respondent_avatar="item.respondent_avatar" :respondent_name="item.respondent_name"
-                                :respondent_id="item.respondent_id" @reply="closeDrawer" @delete="deleteNotification"
-                                @read="readNotification" />
+                            <NotificationCard
+                                type="answer"
+                                :created_at="item.created_at"
+                                :id="item.id"
+                                :is_read="item.is_read"
+                                :question_id="item.question_id"
+                                :question_title="item.question_title"
+                                :question_content="item.question_content"
+                                :answer_id="item.answer_id"
+                                :answer_content="item.answer_content"
+                                :respondent_avatar="item.respondent_avatar"
+                                :respondent_name="item.respondent_name"
+                                :respondent_id="item.respondent_id"
+                                @reply="closeDrawer"
+                                @delete="deleteNotification"
+                                @read="readNotification"
+                            />
                         </div>
                     </transition-group>
-                    <div v-if="newAnswer.length == 0" class="text">暂无回答
+                    <div v-if="newAnswer.length == 0" class="text">
+                        暂无回答
                     </div>
                 </div>
                 <div v-if="radio == NotificationType.REPLY">
                     <transition-group name="notification">
                         <div v-for="item in newReply" :key="item.id">
-                            <NotificationCard type="reply" :created_at="item.created_at" :id="item.id"
-                                :is_read="item.is_read" :question_id="item.question_id"
-                                :question_title="item.question_title" :question_content="item.question_content"
-                                :answer_id="item.answer_id" :answer_content="item.answer_content"
-                                :respondent_avatar="item.respondent_avatar" :respondent_name="item.respondent_name"
-                                :respondent_id="item.respondent_id" :reply_id="item.reply_id"
-                                :reply_content="item.reply_content" @reply="closeDrawer" @delete="deleteNotification"
-                                @read="readNotification" />
+                            <NotificationCard
+                                type="reply"
+                                :created_at="item.created_at"
+                                :id="item.id"
+                                :is_read="item.is_read"
+                                :question_id="item.question_id"
+                                :question_title="item.question_title"
+                                :question_content="item.question_content"
+                                :answer_id="item.answer_id"
+                                :answer_content="item.answer_content"
+                                :respondent_avatar="item.respondent_avatar"
+                                :respondent_name="item.respondent_name"
+                                :respondent_id="item.respondent_id"
+                                :reply_id="item.reply_id"
+                                :reply_content="item.reply_content"
+                                @reply="closeDrawer"
+                                @delete="deleteNotification"
+                                @read="readNotification"
+                            />
                         </div>
                     </transition-group>
                     <div v-if="newReply.length == 0" class="text">暂无回复</div>
@@ -73,16 +134,20 @@
     </div>
 </template>
 
-<script setup lang='ts'>
-import { getNotificationApi } from '@/api/notification/notification.api';
-import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model';
-import { NotificationCard } from '@/components/notification-card';
-import { onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { getNotificationApi } from "@/api/notification/notification.api";
+import type {
+    NewQuestion,
+    NewAnswer,
+    NewReply,
+} from "@/model/notification.model";
+import { NotificationCard } from "@/components/notification-card";
+import { onMounted, ref } from "vue";
 
 enum NotificationType {
-    QUESTION = 'question',
-    ANSWER = 'answer',
-    REPLY = 'reply'
+    QUESTION = "question",
+    ANSWER = "answer",
+    REPLY = "reply",
 }
 
 const props = defineProps<{
@@ -94,45 +159,47 @@ const props = defineProps<{
 
 const radio = ref(NotificationType.QUESTION);
 
-const emit = defineEmits(['closeDrawer']);
+const emit = defineEmits(["closeDrawer"]);
 
 function closeDrawer() {
-    emit('closeDrawer');
+    emit("closeDrawer");
 }
 
 function deleteNotification(id: number, type: string) {
-    console.log(id, type);
+    // console.log(id, type);
     if (type == NotificationType.QUESTION) {
-        newQuestion.value = newQuestion.value.filter((item) => item.id !== id)
+        newQuestion.value = newQuestion.value.filter((item) => item.id !== id);
     } else if (type == NotificationType.ANSWER) {
-        newAnswer.value = newAnswer.value.filter((item) => item.id !== id)
+        newAnswer.value = newAnswer.value.filter((item) => item.id !== id);
     } else if (type == NotificationType.REPLY) {
-        newReply.value = newReply.value.filter((item) => item.id !== id)
+        newReply.value = newReply.value.filter((item) => item.id !== id);
     }
 }
 
-const newQuestion = ref<NewQuestion[]>([])
-const newAnswer = ref<NewAnswer[]>([])
-const newReply = ref<NewReply[]>([])
+const newQuestion = ref<NewQuestion[]>([]);
+const newAnswer = ref<NewAnswer[]>([]);
+const newReply = ref<NewReply[]>([]);
 
 async function loadNotification() {
-    await getNotificationApi(props.user_id).then((res) => {
-        newQuestion.value = res.new_question
-        newAnswer.value = res.new_answer
-        newReply.value = res.new_reply
-    }).catch((err) => {
-        console.log(err)
-    })
+    await getNotificationApi(props.user_id)
+        .then((res) => {
+            newQuestion.value = res.new_question;
+            newAnswer.value = res.new_answer;
+            newReply.value = res.new_reply;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
 
 function readNotification(id: number, type: string, is_read: boolean) {
-    console.log(id, type, is_read);
+    // console.log(id, type, is_read);
 }
 
 onMounted(async () => {
-    await loadNotification()
-    console.log(newReply.value);
-})
+    await loadNotification();
+    // console.log(newReply.value);
+});
 </script>
 
 <style scoped lang="scss">
@@ -196,7 +263,6 @@ onMounted(async () => {
             }
         }
     }
-
 
     .notification-container {
         display: flex;
