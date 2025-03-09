@@ -82,6 +82,7 @@ const toggleSidebar = (event: MouseEvent) => {
 
 .container {
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     position: relative;
     transition: margin-left 0.5s ease;
 }
@@ -108,6 +109,7 @@ const toggleSidebar = (event: MouseEvent) => {
 
 .el-container {
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
 
     .el-main {
         --el-main-padding: 0 !important;

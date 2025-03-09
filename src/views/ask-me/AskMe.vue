@@ -147,7 +147,7 @@ let record = {
 const syncStore = SyncStore();
 watch(
     () => {
-        syncStore.Views;
+        return syncStore.Views;
     },
     () => {
         if (

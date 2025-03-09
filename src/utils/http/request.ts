@@ -5,8 +5,8 @@ import { ElMessage } from "element-plus";
 import { containsChineseCharacters } from "../ischinese";
 
 const request = axios.create({
-
-    baseURL: '/api', // 默认向 8080 端口发送请求
+    baseURL: "/api", // 默认向 8080 端口发送请求
+    // baseURL: "http://localhost:8080", // 本地调试时使用
     timeout: 5000,
 });
 
@@ -23,7 +23,7 @@ const returnToLogin = () => {
 request.interceptors.response.use(
     (res) => {
         if (res.status === 200) {
-            console.log(res.data);
+            // console.log(res.data);
             if (res.data.code == 0) {
                 return res.data;
             } else if (res.data.code == 401) {

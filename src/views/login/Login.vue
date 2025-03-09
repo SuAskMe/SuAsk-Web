@@ -166,6 +166,7 @@ onMounted(async () => {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
 
     .main-item {
         display: flex;
