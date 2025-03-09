@@ -50,82 +50,82 @@
 </template>
 
 <script setup lang="ts">
-import { getUserByIdApi } from "@/api/user/user.api";
-import type { UserInfo } from "@/model/user.model";
-import { BubbleCard } from "@/components/bubble-card";
-import { onMounted, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
-import { MdPreview } from "md-editor-v3";
-import "md-editor-v3/lib/preview.css";
-import { ElMessage } from "element-plus";
-import QuestionHeader from "@/components/question-header";
-import { router } from "@/router";
-import { getTeacherPinApi } from "@/api/teacher/teacher.api";
-import type { TeacherPinItem } from "@/model/teacher.model";
+import { getUserByIdApi } from '@/api/user/user.api'
+import type { UserInfo } from '@/model/user.model'
+import { BubbleCard } from '@/components/bubble-card'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/preview.css'
+import { ElMessage } from 'element-plus'
+import QuestionHeader from '@/components/question-header'
+import { router } from '@/router'
+import { getTeacherPinApi } from '@/api/teacher/teacher.api'
+import type { TeacherPinItem } from '@/model/teacher.model'
 
 // md-editor
-const id = "preview-only";
+const id = 'preview-only'
 
 // user info
 const userInfo = ref<UserInfo>({
     id: 0,
-    name: "",
-    nickname: "",
-    role: "",
-    introduction: "",
+    name: '',
+    nickname: '',
+    role: '',
+    introduction: '',
     avatar: null,
-});
+})
 
-const route = useRoute();
+const route = useRoute()
 
 async function getUserInfo() {
-    const userId = route.params.id.toString();
+    const userId = route.params.id.toString()
     await getUserByIdApi(userId)
         .then((res) => {
             if (res) {
-                userInfo.value = res;
+                userInfo.value = res
                 // console.log(userInfo.value);
             } else {
-                ElMessage.error("获取用户信息失败");
+                ElMessage.error('获取用户信息失败')
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 
 function navigateBack() {
-    history.back();
+    history.back()
 }
 
 const navigateTo = (key: number) => {
     // console.log(key);
     router.push({
         path: `/question-detail/${key}`,
-    });
-};
+    })
+}
 
 onMounted(async () => {
-    await getUserInfo();
-    if (userInfo.value.role == "teacher") {
-        await getPinQuestion();
+    await getUserInfo()
+    if (userInfo.value.role == 'teacher') {
+        await getPinQuestion()
     }
-});
+})
 
-const questionList = ref<TeacherPinItem[]>([]);
+const questionList = ref<TeacherPinItem[]>([])
 
 async function getPinQuestion() {
     await getTeacherPinApi(userInfo.value.id)
         .then((res) => {
             if (res) {
-                questionList.value = res.question_list;
+                questionList.value = res.question_list
             } else {
-                ElMessage.error("获取置顶问题失败");
+                ElMessage.error('获取置顶问题失败')
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 </script>
 
@@ -143,6 +143,7 @@ async function getPinQuestion() {
         justify-content: center;
         align-items: center;
         text-align: center;
+        margin-top: 20px;
 
         .nickname {
             font-size: 24px;
