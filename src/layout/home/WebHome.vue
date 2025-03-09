@@ -40,6 +40,7 @@ const toggleSidebar = (event: MouseEvent) => {
                         'AskTeacherRoot',
                         'AskTeacherDetail',
                         'AskTeacher',
+                        'Login',
                     ]"
                 >
                     <component :is="Component" />

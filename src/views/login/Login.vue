@@ -52,7 +52,7 @@
             </div>
         </div>
         <div style="margin-top: 15px">
-            <el-button type="info" text @click="navigateToAskAll"
+            <el-button type="info" text @click="navigateToUnlogin"
                 >暂不登录
                 <el-icon>
                     <ArrowRightBold />
@@ -65,21 +65,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import ForgetPasswordPage from "./ForgetPasswordPage.vue";
 import RegisterPage from "./RegisterPage.vue";
-import { loginApi } from "@/api/user/login.api";
+import { heartbeatApi } from "@/api/user/login.api";
 import { mailCheck } from "@/utils/login/register";
 import type { LoginReq, User } from "@/model/user.model";
 import { ElMessage } from "element-plus";
 import { UserStore } from "@/store/modules/user";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { ControlPanelStore } from "@/store/modules/control-panel";
 
 const userNameOrEmail = ref("");
 const password = ref("");
 
 const router = useRouter();
-const route = useRoute();
 const userStore = UserStore();
 
 async function login() {
@@ -122,7 +122,8 @@ function register() {
     showRegister.value = true;
 }
 
-function navigateToAskAll() {
+function navigateToUnlogin() {
+    userStore.resetState();
     const user: User = {
         id: 0,
         name: "susu",
@@ -135,8 +136,26 @@ function navigateToAskAll() {
         question_box_perm: "",
     };
     userStore.setUser(user);
+    ControlPanelStore().setSelectedItem("ask-teacher");
     router.push({ name: "AskTeacher" });
 }
+
+onMounted(async () => {
+    // console.log("login mounted");
+    // console.log(userStore.getToken());
+    if (userStore.getToken() !== "") {
+        await heartbeatApi().then((res) => {
+            // console.log(res);
+            if (userStore.userInfo?.id === res.id) {
+                router.push({ name: "AskAll" });
+                ControlPanelStore().clearSelectedItem();
+            } else {
+                userStore.resetState();
+                ControlPanelStore().clearSelectedItem();
+            }
+        });
+    }
+});
 </script>
 
 <style scoped lang="scss">
