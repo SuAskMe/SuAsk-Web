@@ -1,29 +1,26 @@
-import type { AppRouteRecordRaw } from "@/router/types";
-import { isMobile } from "@/utils/device";
+import type { AppRouteRecordRaw } from '@/router/types'
+import { isMobile } from '@/utils/device'
 
-const WebHome = () => import("@/layout/home/WebHome.vue");
-
-const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
-
-const AskTeacher = () => import("@/views/ask-teacher/AskTeacher.vue");
-const TeacherQuestionBox = () =>
-    import("@/views/ask-teacher/TeacherQuestionBox.vue");
+const WebHome = () => import('@/layout/home/WebHome.vue')
+const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
+const AskTeacher = () => import('@/views/ask-teacher/AskTeacher.vue')
+const TeacherQuestionBox = () => import('@/views/ask-teacher/TeacherQuestionBox.vue')
 
 export const AskTeacherRoute: AppRouteRecordRaw = {
-    path: "/ask-teacher",
-    name: "AskTeacherRoot",
+    path: '/ask-teacher',
+    name: 'AskTeacherRoot',
     meta: {},
     props: {
-        userType: "student",
-        deviceType: isMobile() ? "phone" : "desktop",
+        userType: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop',
     },
     component: WebHome,
     children: [
         {
-            path: "",
-            name: "AskTeacher",
+            path: '',
+            name: 'AskTeacher',
             meta: {
-                title: "问老师",
+                title: '问老师',
             },
             components: {
                 default: TeacherQuestionBox,
@@ -31,8 +28,8 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: ":teacher_id/:teacher_name",
-            name: "AskTeacherDetail",
+            path: ':teacher_id/:teacher_name',
+            name: 'AskTeacherDetail',
             meta: {
                 NoAlive: true,
             },
@@ -42,4 +39,4 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
         },
     ],
-};
+}

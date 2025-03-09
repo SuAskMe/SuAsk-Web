@@ -1,74 +1,42 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                @sidebar="sidebar"
-                search
-                has_sort_upvote
-                sidebar_btn
-                sort_and_search
-                get_keywords_url="/questions/public/keywords"
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch" @sidebar="sidebar"
+                search has_sort_upvote sidebar_btn sort_and_search get_keywords_url="/questions/public/keywords" />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
-                <TransitionGroup
-                    name="question"
-                    tag="div"
-                    :style="
-                        deviceType.isMobile
-                            ? {
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                              }
-                            : {}
-                    "
-                >
-                    <BubbleQuestion
-                        v-for="(question, index) in questionList"
-                        :key="question.id"
-                        :title="question.title"
-                        :id="'question-' + question.id"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-favorite="question.is_favorite"
-                        :answer-num="question.answer_num"
-                        :avatars="question.answer_avatars"
-                        :bubble-key="index"
-                        :click-card="navigateTo"
-                        :show-favorite="false"
-                        :click-favorite="favorite"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
+                <TransitionGroup name="question" tag="div" :style="deviceType.isMobile
+                    ? {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }
+                    : {}
+                    ">
+                    <BubbleQuestion v-for="(question, index) in questionList" :key="question.id" :title="question.title"
+                        :id="'question-' + question.id" :text="question.contents" :views="question.views"
+                        :time-stamp="question.created_at" :image-urls="question.image_urls"
+                        :is-favorite="question.is_favorite" :answer-num="question.answer_num"
+                        :avatars="question.answer_avatars" :bubble-key="index" :click-card="navigateTo"
+                        :show-favorite="false" :click-favorite="favorite" :width="deviceType.isMobile ? '80vw' : '45vw'"
                         :style="{
                             marginTop: index === 0 ? '24px' : '0',
                             marginLeft: deviceType.isMobile ? '0' : '24px',
-                        }"
-                    />
+                        }" />
                 </TransitionGroup>
             </el-scrollbar>
-            <AskDialog
-                v-model:visible="showDialog"
-                @question-posted="handleAnswerPosted"
-                :fullscreen="deviceType.isMobile"
-            />
-            <div class="ask-btn" @click.stop="showDialog = true">
+            <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted"
+                :fullscreen="deviceType.isMobile" />
+            <div class="ask-btn" @click.stop="openComposeDialog">
                 <el-icon size="30" color="#fff">
                     <Plus />
                 </el-icon>
             </div>
         </el-main>
     </el-container>
+    <compose-dialog />
 </template>
 
 <script setup lang="ts">
@@ -80,15 +48,21 @@ import { AskDialog } from "@/components/ask-and-answer-dialog";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions, InitStatus } from "./AskAll";
-import { storeToRefs } from "pinia";
 import { SyncStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { SidebarStore } from "@/store/modules/sidebar";
 import { DeviceTypeStore } from "@/store/modules/device-type";
+import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+
 const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
+const router = useRouter();
+
+function openComposeDialog() {
+    router.push({ name: 'ComposeQuestion' });
+}
 
 // 背景图片
 const deviceType = DeviceTypeStore();
@@ -162,7 +136,7 @@ const questionList: QuestionItem[] = reactive([]);
 
 const favorite = async (key: number) => {
     key = Number(key);
-    let res = await Favorite(questionList[key].id);
+    const res = await Favorite(questionList[key].id);
     if (res == null) {
         ElMessage.error("用户未登录");
         return;
@@ -191,8 +165,6 @@ watch(
         }
     }
 );
-
-const router = useRouter();
 
 const navigateTo = (key: number) => {
     key = Number(key);

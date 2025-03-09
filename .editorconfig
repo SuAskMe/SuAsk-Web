@@ -1,6 +1,12 @@
-[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue}]
-charset = utf-8
-indent_size = 4
-indent_style = space
-insert_final_newline = true
-trim_trailing_whitespace = true
+[*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,vue,css,scss,sass,less,styl}]
+charset = utf-8 # 文件编码为 utf-8
+indent_size = 4 # 缩进为 4 个空格
+indent_style = space # 缩进风格为 空格
+insert_final_newline = true # 文件末尾插入空行
+trim_trailing_whitespace = true # 删除行尾空格
+
+end_of_line = lf # 换行符为 LF
+max_line_length = 100 # 单行最大长度为 100
+curly_bracket_next_line = false # 大括号不另起一行
+spaces_around_operators = true      # 运算符两遍都有空格
+indent_brace_style = 1tbs           # 条件语句格式是 1tbs

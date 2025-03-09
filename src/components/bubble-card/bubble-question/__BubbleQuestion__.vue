@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { getImgStyle, getTimeStr } from "../bubble-card";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/preview.css";
