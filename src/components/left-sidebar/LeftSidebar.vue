@@ -100,7 +100,7 @@ function toggleSidebar() {
 const deviceTypeStore = DeviceTypeStore();
 
 function closeDrawer() {
-    console.log("closeDrawer");
+    // console.log("closeDrawer");
     drawer.value = false;
 }
 async function openDrawer() {
@@ -130,7 +130,7 @@ const router = useRouter();
 
 function navigateToUserInfo() {
     if (userStore.getRole() != "default") {
-        if(deviceTypeStore.isMobile) {
+        if (deviceTypeStore.isMobile) {
             sidebarStore.toggle();
         }
         router.push(`/user/${userInfo.value.id}`);
@@ -162,7 +162,6 @@ onMounted(() => {
     @media (max-width: 300px) {
         width: 100vw;
     }
-    
 
     .title {
         height: 60px;
@@ -176,10 +175,7 @@ onMounted(() => {
         }
         @media (min-width: 768px) {
             justify-content: flex-end;
-            
         }
-
-
 
         .sidebar-btn {
             cursor: pointer;

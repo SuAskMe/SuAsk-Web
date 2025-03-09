@@ -74,7 +74,7 @@ import type { GetKeywordReq, GetKeywordRes } from "@/model/question.model";
 import { DeviceTypeStore } from "@/store/modules/device-type";
 import { SidebarStore } from "@/store/modules/sidebar";
 import request from "@/utils/http/request";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 const emit = defineEmits([
     "changeSort",
     "search",
@@ -98,9 +98,7 @@ const props = withDefaults(
         sort_and_search?: boolean;
         teacher_id?: number;
     }>(),
-    {
-        default_sort_type: 0,
-    }
+    {}
 );
 
 // 排序组件
@@ -116,7 +114,9 @@ const sortText = computed(() => {
         ? sortTextCommon.value
         : sortTextWithoutUpvote.value;
 });
-const sortIndex = ref(props.default_sort_type);
+
+const sortIndex = ref(props.default_sort_type || 0);
+
 function changeSort(index: number) {
     sortIndex.value = index;
     emit("changeSort", index);

@@ -1,7 +1,18 @@
 <script lang="ts" setup>
+import { DeviceTypeStore } from "@/store/modules/device-type";
 import { SidebarStore } from "@/store/modules/sidebar";
 
 const sidebarStore = SidebarStore();
+const deviceStore = DeviceTypeStore();
+const toggleSidebar = (event: MouseEvent) => {
+    if (
+        event.target === event.currentTarget &&
+        deviceStore.isMobile &&
+        sidebarStore.IsOpen
+    ) {
+        sidebarStore.close();
+    }
+};
 </script>
 
 <template>
@@ -19,9 +30,19 @@ const sidebarStore = SidebarStore();
                 </router-view>
             </el-aside>
         </Transition>
-        <el-main class="main-content">
+        <el-main class="main-content" @click="toggleSidebar">
             <router-view v-slot="{ Component }">
-                <keep-alive :exclude="['QuestionDetail']">
+                <keep-alive
+                    :exclude="[
+                        'QuestionDetail',
+                        'UserRoot',
+                        'User',
+                        'AskTeacherRoot',
+                        'AskTeacherDetail',
+                        'AskTeacher',
+                        'Login',
+                    ]"
+                >
                     <component :is="Component" />
                 </keep-alive>
             </router-view>
@@ -61,6 +82,7 @@ const sidebarStore = SidebarStore();
 
 .container {
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     position: relative;
     transition: margin-left 0.5s ease;
 }
@@ -78,12 +100,16 @@ const sidebarStore = SidebarStore();
 @media (max-width: 768px) {
     .container.sidebar-open .main-content {
         filter: blur(100px);
-        pointer-events: none;
+        // pointer-events: none;
+        > * {
+            pointer-events: none;
+        }
     }
 }
 
 .el-container {
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
 
     .el-main {
         --el-main-padding: 0 !important;

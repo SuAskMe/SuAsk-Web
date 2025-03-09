@@ -81,7 +81,7 @@ import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions, InitStatus } from "./AskAll";
 import { storeToRefs } from "pinia";
-import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SyncStore } from "@/store/modules/question-detail";
 import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { SidebarStore } from "@/store/modules/sidebar";
@@ -127,7 +127,7 @@ const handleScroll = async () => {
 const sidebarStore = SidebarStore();
 
 const sidebar = () => {
-    console.log("sidebar");
+    // console.log("sidebar");
     sidebarStore.toggle();
 };
 
@@ -170,23 +170,38 @@ const favorite = async (key: number) => {
     questionList[key].is_favorite = res;
 };
 
-let record = 0;
-const ErrorMsg = UseQDMessageStore();
-const { HasError } = storeToRefs(ErrorMsg);
-
-watch(HasError, (newVal) => {
-    if (newVal) {
-        questionList[record].views -= 1;
-        ErrorMsg.clearErr();
+let record = {
+    index: -2,
+    id: -2,
+    views: -1,
+};
+const syncStore = SyncStore();
+watch(
+    () => {
+        return syncStore.Views;
+    },
+    () => {
+        if (
+            record.index === syncStore.IndexOf &&
+            record.id === syncStore.QuestionID &&
+            record.views !== syncStore.Views
+        ) {
+            questionList[record.index].views = syncStore.Views;
+            record.views = syncStore.Views;
+        }
     }
-});
+);
 
 const router = useRouter();
 
 const navigateTo = (key: number) => {
     key = Number(key);
-    record = key;
-    questionList[key].views += 1;
+    record = {
+        index: key,
+        id: questionList[key].id,
+        views: questionList[key].views,
+    };
+    syncStore.SetSync(key, questionList[key].id, questionList[key].views);
     router.push({
         path: `/question-detail/${questionList[key].id}`,
     });

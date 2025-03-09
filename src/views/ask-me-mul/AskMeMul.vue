@@ -56,7 +56,7 @@ import {
 import type { QFMItem } from "@/model/teacher-self.model";
 import { UserStore } from "@/store/modules/user";
 import { useRoute, useRouter } from "vue-router";
-import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SyncStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
 import { DeviceTypeStore } from "@/store/modules/device-type";
 const loading = ref(false);
@@ -139,42 +139,44 @@ const pin = async (key: number) => {
 
 const router = useRouter();
 
-let nameRecord = "";
-const route = useRoute();
-
 watch(
-    () => route.name,
+    () => props.type,
     () => {
-        route.name;
+        questionList.length = 0;
+        Init();
+    }
+);
+
+let record = {
+    index: -2,
+    id: -2,
+    views: -1,
+};
+const syncStore = SyncStore();
+watch(
+    () => {
+        return syncStore.Views;
+    },
+    () => {
         if (
-            route.name === "AskMeAnswered" ||
-            route.name === "AskMeUnanswered" ||
-            route.name === "AskMeTop"
+            record.index === syncStore.IndexOf &&
+            record.id === syncStore.QuestionID &&
+            record.views !== syncStore.Views
         ) {
-            if (nameRecord !== route.name) {
-                nameRecord = route.name;
-                questionList.length = 0;
-                Init();
-            }
+            questionList[record.index].views = syncStore.Views;
+            record.views = syncStore.Views;
         }
     }
 );
 
-let record = 0;
-const ErrorMsg = UseQDMessageStore();
-const { HasError } = storeToRefs(ErrorMsg);
-
-watch(HasError, (newVal) => {
-    if (newVal) {
-        questionList[record].views -= 1;
-        ErrorMsg.clearErr();
-    }
-});
-
 const navigateTo = (key: number) => {
     key = Number(key);
-    record = key;
-    questionList[key].views += 1;
+    record = {
+        index: key,
+        id: questionList[key].id,
+        views: questionList[key].views,
+    };
+    syncStore.SetSync(key, questionList[key].id, questionList[key].views);
     router.push({
         path: `/question-detail/${questionList[key].id}`,
     });
