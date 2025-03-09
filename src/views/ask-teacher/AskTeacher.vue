@@ -67,7 +67,7 @@ import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { useRoute, useRouter } from "vue-router";
 import { UserStore } from "@/store/modules/user";
-import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SyncStore } from "@/store/modules/question-detail";
 import { storeToRefs } from "pinia";
 import { DeviceTypeStore } from "@/store/modules/device-type";
 const showDialog = ref(false);
@@ -147,23 +147,38 @@ const cancelSearch = async () => {
 
 const questionList: QuestionItem[] = reactive([]);
 
-let record = 0;
-const ErrorMsg = UseQDMessageStore();
-const { HasError } = storeToRefs(ErrorMsg);
+let record = {
+    index: -2,
+    id: -2,
+    views: -1,
+};
+const syncStore = SyncStore();
+watch(
+    () => {
+        syncStore.Views;
+    },
+    () => {
+        if (
+            record.index === syncStore.IndexOf &&
+            record.id === syncStore.QuestionID &&
+            record.views !== syncStore.Views
+        ) {
+            questionList[record.index].views = syncStore.Views;
+            record.views = syncStore.Views;
+        }
+    }
+);
 
 const router = useRouter();
 
-watch(HasError, (newVal) => {
-    if (newVal) {
-        questionList[record].views -= 1;
-        ErrorMsg.clearErr();
-    }
-});
-
 const navigateTo = (key: number) => {
     key = Number(key);
-    record = key;
-    questionList[key].views += 1;
+    record = {
+        index: key,
+        id: questionList[key].id,
+        views: questionList[key].views,
+    };
+    syncStore.SetSync(key, questionList[key].id, questionList[key].views);
     router.push({
         path: `/question-detail/${questionList[key].id}`,
     });

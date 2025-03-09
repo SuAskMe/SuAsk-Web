@@ -97,9 +97,8 @@
 import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import QuestionHeader from "@/components/question-header";
 import BackgroundImg from "@/components/backgroud-img";
-import { Favorite, scrollToQuote } from "./QuestionDetail";
-import { computed, nextTick, onMounted, ref, watch } from "vue";
-import SvgIcon from "@/components/svg-icon";
+import { scrollToQuote } from "./QuestionDetail";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
 import { getAnswerApi, upvoteAnswerApi } from "@/api/answer/answer.api";
@@ -113,7 +112,7 @@ import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
 import { favoriteApi } from "@/api/question/favorite.api";
 import { storeToRefs } from "pinia";
-import { UseQDMessageStore } from "@/store/modules/question-detail";
+import { SyncStore } from "@/store/modules/question-detail";
 
 import { UserStore } from "@/store/modules/user";
 import { DeviceTypeStore } from "@/store/modules/device-type";
@@ -172,10 +171,18 @@ function navigateToUser(key: { userId: number }) {
     router.push("/user/" + key.userId);
 }
 
+const syncStore = SyncStore();
+
 onMounted(async () => {
     document.title = "加载中...";
     await getAnswerList();
     document.title = question.value.title;
+    if (
+        syncStore.QuestionID == question.value.id &&
+        syncStore.Views !== question.value.views
+    ) {
+        syncStore.ChangViews(question.value.views);
+    }
     if (route.hash) {
         // console.log(parseInt(route.hash.replace("#", "")));
         scrollToAnswer(parseInt(route.hash.replace("#", "")));
@@ -210,7 +217,7 @@ function scrollToAnswer(id: number) {
 }
 
 const showDialog = ref(false);
-const ErrorMsg = UseQDMessageStore();
+
 async function getAnswerList() {
     await getAnswerApi(parseInt(route.params.id as string))
         .then((res) => {
@@ -220,7 +227,6 @@ async function getAnswerList() {
                 canReply.value = res.data.can_reply;
             } else {
                 ElMessage.error("没有权限");
-                ErrorMsg.setErr();
                 navigateBack();
             }
         })
