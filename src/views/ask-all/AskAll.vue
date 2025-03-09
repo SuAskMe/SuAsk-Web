@@ -181,7 +181,6 @@ watch(
         return syncStore.Views;
     },
     () => {
-        // console.log("syncStore.Views", syncStore.Views);
         if (
             record.index === syncStore.IndexOf &&
             record.id === syncStore.QuestionID &&
