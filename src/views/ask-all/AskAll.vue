@@ -36,7 +36,7 @@
             </div>
         </el-main>
     </el-container>
-    <compose-dialog />
+    <!-- <compose-dialog /> -->
 </template>
 
 <script setup lang="ts">
@@ -53,7 +53,7 @@ import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { SidebarStore } from "@/store/modules/sidebar";
 import { DeviceTypeStore } from "@/store/modules/device-type";
-import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+// import ComposeDialog from "@/components/compose/ComposeDialog.vue";
 
 const showDialog = ref(false);
 const loading = ref(false);
