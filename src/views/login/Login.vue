@@ -102,6 +102,7 @@ async function login() {
         if (userInfo) {
             ElMessage.success("登录成功");
             router.push({ name: "AskAll" });
+            ControlPanelStore().clearSelectedItem();
             // console.log(userStore.getUser);
         } else {
             ElMessage.error("登录失败");
