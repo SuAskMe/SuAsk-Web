@@ -16,7 +16,9 @@ export const SyncStore = defineStore("sync", () => {
         Views.value = 0;
     }
     function ChangViews(views: number) {
+        // console.log("views", views, Views.value);
         Views.value = views;
+        // console.log("views", Views.value);
     }
     return {
         IndexOf,
