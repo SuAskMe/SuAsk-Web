@@ -29,7 +29,7 @@
             </el-scrollbar>
             <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted"
                 :fullscreen="deviceType.isMobile" />
-            <div class="ask-btn" @click.stop="openComposeDialog">
+            <div class="ask-btn" @click.stop="showDialog = true">
                 <el-icon size="30" color="#fff">
                     <Plus />
                 </el-icon>
