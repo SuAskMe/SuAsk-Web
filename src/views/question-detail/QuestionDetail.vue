@@ -5,7 +5,7 @@
                 @change-sort="changeSort"
                 @return="navigateBack"
                 :return_btn="true"
-                :defualt_sort_type="1"
+                :default_sort_type="1"
                 has_sort_upvote
                 sort_and_search
             />
