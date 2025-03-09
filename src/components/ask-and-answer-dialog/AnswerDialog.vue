@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import "md-editor-v3/lib/style.css";
 import SvgIcon from "@/components/svg-icon";
 import { ElMessage } from "element-plus";
@@ -172,7 +172,7 @@ function useDraft(draft: Answer) {
 }
 
 async function addDraft() {
-    let imgList: Blob[] = [];
+    const imgList: Blob[] = [];
     for (const file of answerContent.value.fileList) {
         imgList.push(file);
     }
@@ -222,14 +222,14 @@ async function postAnswer() {
     // let userId = getUserInfo().id ? getUserInfo().id : null;
     // console.log(answerContent.value.fileList);
 
-    let formData = new FormData();
-    let imgList: string[] = [];
+    const formData = new FormData();
+    const imgList: string[] = [];
     answerContent.value.fileList.forEach((file: File) => {
         formData.append("files", file);
         imgList.push(URL.createObjectURL(file));
     });
 
-    let req: AddAnswer = {
+    const req: AddAnswer = {
         question_id: props.questionId,
         in_reply_to: props.quote?.in_replay_to,
         content: answerContent.value.content,
@@ -248,7 +248,7 @@ async function postAnswer() {
             if (answerContent.value.draftId) {
                 deleteDraft(answerContent.value.draftId);
             }
-            let ans: AnswerItem = {
+            const ans: AnswerItem = {
                 id: res.data.id,
                 user_id: userInfo.id ? userInfo.id : 1,
                 user_avatar: userInfo.avatar
