@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { DeviceTypeStore } from "./store/modules/device-type";
-// 初始化时设置高度
 const deviceType = DeviceTypeStore();
 function setRealVH() {
     const vh = window.innerHeight * 0.01;
