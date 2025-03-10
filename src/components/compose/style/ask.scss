@@ -1,0 +1,39 @@
+@use '@/styles/colors.scss' as *;
+
+.main {
+    @media screen and (max-width: 768px) {
+        padding: 0 20px;
+    }
+
+    .title {
+        display: flex;
+        width: 100%;
+        padding: 10px 0;
+
+        .el-avatar {
+            margin-right: 10px;
+        }
+
+        .el-input {
+            --el-input-focus-border-color: white !important;
+            --el-input-hover-border-color: white !important;
+            --el-input-border-color: white !important;
+        }
+    }
+
+    .content {
+        margin-top: 10px;
+        width: 100%;
+        height: auto;
+
+        :deep(.el-textarea__inner) {
+            resize: none !important;
+        }
+
+        .el-textarea {
+            --el-input-focus-border-color: white !important;
+            --el-input-hover-border-color: white !important;
+            --el-input-border-color: white !important;
+        }
+    }
+}

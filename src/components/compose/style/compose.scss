@@ -1,0 +1,93 @@
+@use './ask.scss';
+@use './answer.scss';
+@use '@/styles/colors.scss' as *;
+
+.compose {
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        @media screen and (max-width: 768px) {
+            padding: 0 20px;
+            margin-top: 5%;
+        }
+
+        .ask-teacher {
+            margin: 0;
+            margin-left: 8px;
+            margin-right: auto;
+
+            span {
+                font-weight: bold;
+            }
+
+            span:hover {
+                cursor: pointer;
+                color: $su-blue;
+            }
+        }
+    }
+
+    .line {
+        border-top: 1px solid $su-blue;
+        margin-top: 10px;
+        width: 100%;
+
+        @media screen and (max-width: 768px) {
+            width: auto;
+            margin: 0 20px;
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+
+        @media screen and (max-width: 768px) {
+            padding: 0 20px;
+        }
+    }
+    .image-container {
+        bottom: 0;
+        padding: 8px 0px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+        pointer-events: none;
+
+        .picked-image {
+            width: 15%;
+            pointer-events: all;
+            display: flex;
+            justify-content: flex-end;
+
+            .delete-btn {
+                margin-top: -7px;
+                margin-left: -12px;
+                background-color: #fff;
+                border-radius: 50%;
+                width: 16px;
+                height: 16px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                padding: 2px;
+                z-index: 1;
+            }
+
+            .image {
+                width: 100%;
+                aspect-ratio: 1/1;
+                border-radius: 6px;
+                border: solid 2px #fff;
+                cursor: pointer;
+            }
+        }
+    }
+}
