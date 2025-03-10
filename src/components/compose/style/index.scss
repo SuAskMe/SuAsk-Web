@@ -1,0 +1,15 @@
+@use './compose.scss';
+@use './draft.scss';
+
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.inner-dialog {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}

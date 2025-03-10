@@ -27,16 +27,6 @@ export const AskAllRoute: AppRouteRecordRaw = {
                 default: AskAll,
                 left_side: LeftSidebar,
             },
-            children: [
-                {
-                    path: 'compose',
-                    name: 'ComposeQuestion',
-                    meta: {
-                        title: '提问',
-                    },
-                    component: () => import('@/components/compose/PostCompose.vue'),
-                },
-            ],
         },
     ],
 }

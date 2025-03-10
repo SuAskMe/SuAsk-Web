@@ -24,6 +24,7 @@ const URL = window.URL || window.webkitURL;
     flex-direction: row;
     height: 100px;
     position: relative;
+    width: 100%;
 
     .img {
         position: absolute;

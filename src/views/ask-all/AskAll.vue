@@ -27,16 +27,16 @@
                         }" />
                 </TransitionGroup>
             </el-scrollbar>
-            <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted"
-                :fullscreen="deviceType.isMobile" />
-            <div class="ask-btn" @click.stop="showDialog = true">
+            <!-- <AskDialog v-model:visible="showDialog" @question-posted="handleAnswerPosted"
+                :fullscreen="deviceType.isMobile" /> -->
+            <div class="ask-btn" @click.stop="composeDialogStore.open()">
                 <el-icon size="30" color="#fff">
                     <Plus />
                 </el-icon>
             </div>
         </el-main>
     </el-container>
-    <!-- <compose-dialog /> -->
+    <compose-dialog type="ask" @question-posted="handleAnswerPosted" />
 </template>
 
 <script setup lang="ts">
@@ -44,7 +44,6 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElMessage, ElScrollbar } from "element-plus";
 import { BubbleQuestion } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { AskDialog } from "@/components/ask-and-answer-dialog";
 import type { QuestionItem } from "@/model/question.model";
 import QuestionHeader from "@/components/question-header";
 import { Favorite, getNextQuestions, InitStatus } from "./AskAll";
@@ -53,22 +52,23 @@ import { UserStore } from "@/store/modules/user";
 import { useRouter } from "vue-router";
 import { SidebarStore } from "@/store/modules/sidebar";
 import { DeviceTypeStore } from "@/store/modules/device-type";
-// import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+import { ComposeDialogStore } from "@/store/modules/compose-dialog";
 
-const showDialog = ref(false);
+// const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 const router = useRouter();
 
-function openComposeDialog() {
-    router.push({ name: 'ComposeQuestion' });
-}
-
 // 背景图片
 const deviceType = DeviceTypeStore();
 
+const composeDialogStore = ComposeDialogStore();
+
 const userStore = UserStore();
 const bg_img_index = computed(() => userStore.getUser().themeId);
+
+
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -194,6 +194,7 @@ const observe = new IntersectionObserver(
 );
 
 async function handleAnswerPosted(question: QuestionItem) {
+    console.log("handleAnswerPosted", question);
     questionList.unshift(question);
     nextTick(() => {
         const el = document.getElementById(`question-${question.id}`);

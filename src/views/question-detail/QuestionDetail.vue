@@ -1,96 +1,45 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @return="navigateBack"
-                :return_btn="true"
-                :default_sort_type="1"
-                has_sort_upvote
-                sort_and_search
-            />
+            <QuestionHeader @change-sort="changeSort" @return="navigateBack" :return_btn="true" :default_sort_type="1"
+                has_sort_upvote sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar>
                 <Transition name="question" appear>
-                    <BubbleCard
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :show-favorite="true"
-                        :is-favorite="question.is_favorite"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        style="margin-top: 24px"
-                        :click-card="() => {}"
-                        :click-favorite="favorite"
-                    >
+                    <BubbleCard :title="question.title" :text="question.contents" :views="question.views"
+                        :time-stamp="question.created_at" :image-urls="question.image_urls" :show-favorite="true"
+                        :is-favorite="question.is_favorite" :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        style="margin-top: 24px" :click-card="() => { }" :click-favorite="favorite">
                     </BubbleCard>
                 </Transition>
                 <TransitionGroup name="answer" tag="div">
-                    <BubbleAnswer
-                        v-for="(item, index) in answerList"
-                        :key="item.id"
-                        class="answer-card"
-                        :id="'answer-' + item.id"
-                        :is-mine="item.user_id == userId"
-                        :avatar="item.user_avatar"
-                        :nick-name="item.nickname"
-                        :text="item.contents"
-                        :like-count="item.upvotes"
-                        :is-liked="item.is_upvoted"
-                        :time-stamp="item.created_at"
-                        :quote="getQuote(item.in_reply_to)"
-                        :image-urls="item.image_urls"
-                        :is-teacher="item.teacher_name != ''"
-                        :teacher-name="item.teacher_name"
-                        :bubble-key="{
+                    <BubbleAnswer v-for="(item, index) in answerList" :key="item.id" class="answer-card"
+                        :id="'answer-' + item.id" :is-mine="item.user_id == userId" :avatar="item.user_avatar"
+                        :nick-name="item.nickname" :text="item.contents" :like-count="item.upvotes"
+                        :is-liked="item.is_upvoted" :time-stamp="item.created_at" :quote="getQuote(item.in_reply_to)"
+                        :image-urls="item.image_urls" :is-teacher="item.teacher_name != ''"
+                        :teacher-name="item.teacher_name" :bubble-key="{
                             idx: index,
                             quoteId: item.in_reply_to,
                             userId: item.user_id,
                             answerId: item.id,
-                        }"
-                        :width="deviceType.isMobile ? '70vw' : '35vw'"
-                        :click-quote="scrollToQuote"
-                        :click-like="upvote"
-                        :click-card="openDialog"
-                        :click-avatar="navigateToUser"
-                    >
+                        }" :width="deviceType.isMobile ? '70vw' : '35vw'" :click-quote="scrollToQuote"
+                        :click-like="upvote" :click-card="openDialog" :click-avatar="navigateToUser">
                     </BubbleAnswer>
                 </TransitionGroup>
             </el-scrollbar>
-            <!-- <transition-group class="image-container" tag="div" name="fade-list" move-class="fade-list-move">
-                <div class="picked-image" v-for="(img, index) in imageList" :key="img.id" :id="'image-' + img.id">
-                    <el-image @click.stop :src="img.url" :preview-src-list="[img.url]" class="image" fit="cover"
-                        preview-teleported></el-image>
-                    <div class="delete-btn" @click.stop="deleteImage(index)">
-                        <SvgIcon icon="delete-round" color="#FF5F96" size="16px"></SvgIcon>
-                    </div>
-                </div>
-            </transition-group> -->
         </el-main>
-        <answer-dialog
-            v-model:visible="showDialog"
-            :question-id="question.id"
-            :quote="quote"
-            @answer-posted="handleAnswerPosted"
-            :fullscreen="deviceType.isMobile"
-        ></answer-dialog>
-        <div
-            v-if="canReply"
-            class="ask-btn"
-            @click.stop="openDialog(undefined)"
-        >
+        <!-- <answer-dialog v-model:visible="showDialog" :question-id="question.id" :quote="quote"
+            @answer-posted="handleAnswerPosted" :fullscreen="deviceType.isMobile"></answer-dialog> -->
+        <div v-if="canReply" class="ask-btn" @click.stop="openDialog(undefined)">
             <el-icon size="30" color="#fff">
                 <Plus />
             </el-icon>
         </div>
-        <!-- <el-footer v-if="canReply" style="height: auto">
-            <Footer :question_id="question.id" v-model:file-list="fileList" v-model:image-list="imageList"></Footer>
-        </el-footer> -->
     </el-container>
+    <compose-dialog type="answer" :question-id="question.id" :quote="quote" @answer-posted="handleAnswerPosted" />
 </template>
 
 <script setup lang="ts">
@@ -98,7 +47,7 @@ import { BubbleAnswer, BubbleCard } from "@/components/bubble-card";
 import QuestionHeader from "@/components/question-header";
 import BackgroundImg from "@/components/backgroud-img";
 import { scrollToQuote } from "./QuestionDetail";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, provide, ref } from "vue";
 import { useRoute } from "vue-router";
 import { router } from "@/router";
 import { getAnswerApi, upvoteAnswerApi } from "@/api/answer/answer.api";
@@ -108,7 +57,7 @@ import type {
     UpvoteAnswerReq,
     UpvoteAnswerRes,
 } from "@/model/answer.model";
-import { AnswerDialog } from "@/components/ask-and-answer-dialog";
+// import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from "element-plus";
 import { favoriteApi } from "@/api/question/favorite.api";
 import { storeToRefs } from "pinia";
@@ -116,15 +65,17 @@ import { SyncStore } from "@/store/modules/question-detail";
 
 import { UserStore } from "@/store/modules/user";
 import { DeviceTypeStore } from "@/store/modules/device-type";
+import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+import { ComposeDialogStore } from "@/store/modules/compose-dialog";
 
-// 背景图片
-// let bg_img_index = ref(getUserInfo().themeId);
-// const userStore = UserInfoStore();
+
 
 // 背景图片
 const userStore = UserStore();
 const bg_img_index = computed(() => userStore.getUser().themeId);
 const { userInfo } = storeToRefs(userStore);
+
+const composeDialogStore = ComposeDialogStore();
 
 // interface Img {
 //     id: number;
@@ -216,7 +167,7 @@ function scrollToAnswer(id: number) {
     });
 }
 
-const showDialog = ref(false);
+// const showDialog = ref(false);
 
 async function getAnswerList() {
     await getAnswerApi(parseInt(route.params.id as string))
@@ -236,7 +187,7 @@ async function getAnswerList() {
 }
 
 function getQuote(in_reply_to: number) {
-    let answer = answerList.value.find((item) => item.id === in_reply_to);
+    const answer = answerList.value.find((item) => item.id === in_reply_to);
     if (!answer) return undefined;
     return {
         text: answer.contents,
@@ -262,7 +213,7 @@ const quote = ref<Quote>({
 function openDialog(key?: { answerId: number }) {
     if (key) {
         quote.value.in_replay_to = key.answerId;
-        let tmp = getQuote(key.answerId);
+        const tmp = getQuote(key.answerId);
         if (tmp) {
             quote.value.author = tmp.author;
             quote.value.avatar = tmp.avatar;
@@ -274,7 +225,8 @@ function openDialog(key?: { answerId: number }) {
         quote.value.avatar = "";
         quote.value.text = "";
     }
-    showDialog.value = true;
+    // showDialog.value = true;
+    composeDialogStore.open();
 }
 
 async function handleAnswerPosted(answer: AnswerItem) {
@@ -295,7 +247,7 @@ async function handleAnswerPosted(answer: AnswerItem) {
 }
 
 async function upvote(key: { answerId: number }) {
-    let req: UpvoteAnswerReq = {
+    const req: UpvoteAnswerReq = {
         question_id: question.value.id,
         answer_id: key.answerId,
     };
@@ -324,10 +276,8 @@ async function upvote(key: { answerId: number }) {
         });
 }
 
-async function favorite(key: number) {
-    key = Number(key);
-    // let res = await Favorite(question.value.id);
-    let res = await favoriteApi({ question_id: question.value.id });
+async function favorite() {
+    const res = await favoriteApi({ question_id: question.value.id });
     if (res == null) {
         ElMessage.error("用户未登录");
         return;
@@ -347,6 +297,9 @@ const question = ref<Question>({
 });
 const canReply = ref<boolean>(false);
 const userId = userInfo.value ? userInfo.value.id : 0;
+
+provide("question", question);
+provide("quote", quote);
 </script>
 
 <style scoped src="./QuestionDetail.scss"></style>

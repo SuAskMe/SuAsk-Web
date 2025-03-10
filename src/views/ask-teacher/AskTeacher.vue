@@ -1,76 +1,56 @@
 <template>
     <el-container class="container">
         <el-header style="height: auto">
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                @return="navigateBack"
-                :title="teacherName + '的提问箱'"
-                search
-                return_btn
-                get_keywords_url="/questions/teacher/keywords"
-                has_sort_upvote
-                :teacher_id="teacherId"
-                sort_and_search
-            />
+            <QuestionHeader @change-sort="changeSort" @search="search" @cancel-search="cancelSearch"
+                @return="navigateBack" :title="teacherName + '的提问箱'" search return_btn
+                get_keywords_url="/questions/teacher/keywords" has_sort_upvote :teacher_id="teacherId"
+                sort_and_search />
         </el-header>
         <el-main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar
-                v-loading="loading"
-                ref="scrollBar"
-                @scroll="handleScroll"
-            >
+            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
                 <TransitionGroup name="question">
-                    <BubbleCard
-                        v-for="(question, index) in questionList"
-                        :id="`question-${question.id}`"
-                        :key="question.id"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :bubble-key="index"
-                        :click-card="navigateTo"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :style="{
+                    <BubbleCard v-for="(question, index) in questionList" :id="`question-${question.id}`"
+                        :key="question.id" :title="question.title" :text="question.contents" :views="question.views"
+                        :time-stamp="question.created_at" :image-urls="question.image_urls" :bubble-key="index"
+                        :click-card="navigateTo" :width="deviceType.isMobile ? '80vw' : '45vw'" :style="{
                             marginTop: index === 0 ? '24px' : '0',
-                        }"
-                    />
+                        }" />
                 </TransitionGroup>
             </el-scrollbar>
-            <AskDialog
+            <!-- <AskDialog
                 v-model:visible="showDialog"
                 :teacher="{ teacherId: teacherId, teacherName: teacherName }"
                 @question-posted="handleQuestionPosted"
                 :fullscreen="deviceType.isMobile"
-            />
-            <div class="ask-btn" @click.stop="showDialog = true">
+            /> -->
+            <div class="ask-btn" @click.stop="composeDialogStore.open()">
                 <el-icon size="30" color="#fff">
                     <Plus />
                 </el-icon>
             </div>
         </el-main>
     </el-container>
+    <compose-dialog type="ask" @question-posted="handleQuestionPosted" />
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, provide, reactive, ref, watch } from "vue";
 import { ElScrollbar } from "element-plus";
-import { BubbleCard, BubbleQuestion } from "@/components/bubble-card";
+import { BubbleCard } from "@/components/bubble-card";
 import BackgroundImg from "@/components/backgroud-img";
-import { AskDialog } from "@/components/ask-and-answer-dialog";
+// import { AskDialog } from "@/components/ask-and-answer-dialog";
 import { getNextQuestions, InitStatus } from "./AskTeacher";
 import QuestionHeader from "@/components/question-header/QuestionHeader.vue";
 import type { QuestionItem } from "@/model/question.model";
 import { useRoute, useRouter } from "vue-router";
 import { UserStore } from "@/store/modules/user";
 import { SyncStore } from "@/store/modules/question-detail";
-import { storeToRefs } from "pinia";
 import { DeviceTypeStore } from "@/store/modules/device-type";
-const showDialog = ref(false);
+import { ComposeDialogStore } from "@/store/modules/compose-dialog";
+import ComposeDialog from "@/components/compose/ComposeDialog.vue";
+
+// const showDialog = ref(false);
 const loading = ref(false);
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>();
 
@@ -81,10 +61,17 @@ const bg_img_index = computed(() =>
     userStore.getUser().themeId ? userStore.getUser().themeId : 1
 );
 
+const composeDialogStore = ComposeDialogStore();
+
 const route = useRoute();
 
 const teacherName = ref("");
 const teacherId = ref(0);
+
+provide("teacher", {
+    teacherId,
+    teacherName,
+});
 
 const Init = async () => {
     if (questionList.length === 0) {
