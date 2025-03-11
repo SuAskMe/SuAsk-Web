@@ -32,10 +32,7 @@
                             <div class="title">
                                 <p>置顶问题</p>
                             </div>
-                            <div v-if="questionList.length == 0">
-                                <p class="no-pin-question">暂无置顶问题</p>
-                            </div>
-                            <div v-if="questionList.length != 0" class="question">
+                            <div class="question">
                                 <BubbleCard
                                     class="question-item"
                                     v-for="(question, index) in questionList"
