@@ -8,12 +8,7 @@
             style="display: flex; justify-content: center"
             @click.stop="$emit('sidebar')"
         >
-            <svg-icon
-                icon="sidebar"
-                color="#71B6FF"
-                size="25px"
-                :filled="sidebarStore.IsOpen"
-            />
+            <svg-icon icon="sidebar" color="#71B6FF" size="25px" :filled="sidebarStore.IsOpen" />
         </div>
         <div v-if="props.title" class="title">{{ props.title }}</div>
         <div v-if="props.sort_and_search" class="sort-and-search">
@@ -43,9 +38,7 @@
                         :fetch-suggestions="querySearch"
                         :debounce="100"
                         :trigger-on-focus="false"
-                        :style="
-                            deviceType.isMobile ? 'width: 65vw' : 'width: 300px'
-                        "
+                        :style="deviceType.isMobile ? 'width: 65vw' : 'width: 300px'"
                         clearable
                     ></el-autocomplete>
                     <div class="search-icon" @click.stop="search">
@@ -55,13 +48,7 @@
                             size="22px"
                         />
                     </div>
-                    <div
-                        v-if="showInput"
-                        class="cancel-btn"
-                        @click.stop="cancelSearch"
-                    >
-                        取消
-                    </div>
+                    <div v-if="showInput" class="cancel-btn" @click.stop="cancelSearch">取消</div>
                 </div>
             </div>
         </div>
@@ -70,119 +57,106 @@
 </template>
 
 <script setup lang="ts">
-import type { GetKeywordReq, GetKeywordRes } from "@/model/question.model";
-import { DeviceTypeStore } from "@/store/modules/device-type";
-import { SidebarStore } from "@/store/modules/sidebar";
-import request from "@/utils/http/request";
-import { computed, onMounted, ref } from "vue";
-const emit = defineEmits([
-    "changeSort",
-    "search",
-    "cancelSearch",
-    "return",
-    "sidebar",
-]);
+import type { GetKeywordReq, GetKeywordRes } from '@/model/question.model'
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/store/modules/sidebar'
+import request from '@/utils/http/request'
+import { computed, onMounted, ref } from 'vue'
+const emit = defineEmits(['changeSort', 'search', 'cancelSearch', 'return', 'sidebar'])
 
-const sidebarStore = SidebarStore();
-const deviceType = DeviceTypeStore();
+const sidebarStore = SidebarStore()
+const deviceType = DeviceTypeStore()
 
 const props = withDefaults(
     defineProps<{
-        title?: string;
-        get_keywords_url?: string;
-        return_btn?: boolean;
-        sidebar_btn?: boolean;
-        search?: boolean;
-        has_sort_upvote?: boolean;
-        default_sort_type?: number;
-        sort_and_search?: boolean;
-        teacher_id?: number;
+        title?: string
+        get_keywords_url?: string
+        return_btn?: boolean
+        sidebar_btn?: boolean
+        search?: boolean
+        has_sort_upvote?: boolean
+        default_sort_type?: number
+        sort_and_search?: boolean
+        teacher_id?: number
     }>(),
-    {}
-);
+    {},
+)
 
 // 排序组件
-const sortTextCommon = ref([
-    "按时间降序",
-    "按时间升序",
-    "按热度降序",
-    "按热度升序",
-]);
-const sortTextWithoutUpvote = ref(["按时间降序", "按时间升序"]);
+const sortTextCommon = ref(['按时间降序', '按时间升序', '按热度降序', '按热度升序'])
+const sortTextWithoutUpvote = ref(['按时间降序', '按时间升序'])
 const sortText = computed(() => {
-    return props.has_sort_upvote
-        ? sortTextCommon.value
-        : sortTextWithoutUpvote.value;
-});
+    return props.has_sort_upvote ? sortTextCommon.value : sortTextWithoutUpvote.value
+})
 
-const sortIndex = ref(props.default_sort_type || 0);
+const sortIndex = ref(props.default_sort_type || 0)
 
 function changeSort(index: number) {
-    sortIndex.value = index;
-    emit("changeSort", index);
+    sortIndex.value = index
+    emit('changeSort', index)
 }
 
 // 搜索组件
-const showInput = ref(false);
-const searchText = ref(""); // 搜索内容
+const showInput = ref(false)
+const searchText = ref('') // 搜索内容
 
 async function querySearch(queryString: string, cb: any) {
     if (queryString.length < 2) {
-        cb([]);
-        return;
+        cb([])
+        return
     }
     const results = await getKeyWords({
         keyword: queryString,
         sort_type: sortIndex.value,
         teacher_id: props.teacher_id,
-    });
+    })
     // console.log(results);
     if (results) {
         // console.log(results.words);
-        cb(results.words);
+        cb(results.words)
     } else {
-        cb([]);
+        cb([])
     }
 }
 
-let searchRecord = false;
+let searchRecord = false
 
 const search = () => {
-    searchText.value = searchText.value.trim();
+    searchText.value = searchText.value.trim()
     if (showInput.value && searchText.value.length >= 2) {
-        searchRecord = true;
-        emit("search", searchText.value);
+        searchRecord = true
+        emit('search', searchText.value)
     } else {
-        showInput.value = true;
+        showInput.value = true
     }
-};
+}
 
 const cancelSearch = () => {
-    showInput.value = false;
-    searchText.value = "";
+    showInput.value = false
+    searchText.value = ''
     if (searchRecord) {
-        searchRecord = false;
-        emit("cancelSearch");
+        searchRecord = false
+        emit('cancelSearch')
     }
-};
+}
 
 async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
     // console.log(data);
 
     if (!props.get_keywords_url) {
-        return Promise.reject("url is not defined");
+        return Promise.reject('url is not defined')
     }
     return request
         .get(props.get_keywords_url, { params: data })
         .then((res) => {
             // console.log(res);
             if (res) {
-                return res.data;
+                return res.data
             }
         })
         .catch((err) => {
-            return Promise.reject(err);
-        });
+            return Promise.reject(err)
+        })
 }
 </script>
 

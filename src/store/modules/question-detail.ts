@@ -1,23 +1,23 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const SyncStore = defineStore("sync", () => {
-    const IndexOf = ref(-1);
-    const QuestionID = ref(-1);
-    const Views = ref(0);
+export const SyncStore = defineStore('sync', () => {
+    const IndexOf = ref(-1)
+    const QuestionID = ref(-1)
+    const Views = ref(0)
     function SetSync(index: number, Qid: number, views: number) {
-        IndexOf.value = index;
-        QuestionID.value = Qid;
-        Views.value = views;
+        IndexOf.value = index
+        QuestionID.value = Qid
+        Views.value = views
     }
     function ClearSync() {
-        IndexOf.value = -1;
-        QuestionID.value = -1;
-        Views.value = 0;
+        IndexOf.value = -1
+        QuestionID.value = -1
+        Views.value = 0
     }
     function ChangViews(views: number) {
         // console.log("views", views, Views.value);
-        Views.value = views;
+        Views.value = views
         // console.log("views", Views.value);
     }
     return {
@@ -27,5 +27,5 @@ export const SyncStore = defineStore("sync", () => {
         SetSync,
         ClearSync,
         ChangViews,
-    };
-});
+    }
+})

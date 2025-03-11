@@ -9,10 +9,7 @@
                     color="#71B6FF"
                     size="24px"
                 />
-                <div
-                    v-if="newQuestionCount + newAnswerCount + newReplyCount > 0"
-                    class="red-dot"
-                />
+                <div v-if="newQuestionCount + newAnswerCount + newReplyCount > 0" class="red-dot" />
             </div>
             <svg-icon
                 v-if="deviceTypeStore.isMobile"
@@ -69,86 +66,86 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from 'vue'
 
-import StudentItem from "./StudentItem.vue";
-import TeacherItem from "./TeacherItem.vue";
-import { ElMessage } from "element-plus";
-import { getNotificationCountApi } from "@/api/notification/notification.api";
-import Notification from "./Notification.vue";
-import { UserStore } from "@/store/modules/user";
-import DefaultItem from "./DefaultItem.vue";
-import { useRouter } from "vue-router";
-import { SidebarStore } from "@/store/modules/sidebar";
-import { DeviceTypeStore } from "@/store/modules/device-type";
+import StudentItem from './StudentItem.vue'
+import TeacherItem from './TeacherItem.vue'
+import { ElMessage } from 'element-plus'
+import { getNotificationCountApi } from '@/api/notification/notification.api'
+import Notification from './Notification.vue'
+import { UserStore } from '@/store/modules/user'
+import DefaultItem from './DefaultItem.vue'
+import { useRouter } from 'vue-router'
+import { SidebarStore } from '@/store/modules/sidebar'
+import { DeviceTypeStore } from '@/store/modules/device-type'
 
-const drawer = ref(false);
+const drawer = ref(false)
 
 // 用户信息
 
-const userStore = UserStore();
-const userInfo = computed(() => userStore.getUser());
+const userStore = UserStore()
+const userInfo = computed(() => userStore.getUser())
 
-const role = ref(userStore.getRole());
+const role = ref(userStore.getRole())
 
-const sidebarStore = SidebarStore();
+const sidebarStore = SidebarStore()
 
 function toggleSidebar() {
-    sidebarStore.toggle();
+    sidebarStore.toggle()
 }
 
-const deviceTypeStore = DeviceTypeStore();
+const deviceTypeStore = DeviceTypeStore()
 
 function closeDrawer() {
     // console.log("closeDrawer");
-    drawer.value = false;
+    drawer.value = false
 }
 async function openDrawer() {
-    drawer.value = true;
+    drawer.value = true
 }
 
-const newQuestionCount = ref(0);
-const newAnswerCount = ref(0);
-const newReplyCount = ref(0);
+const newQuestionCount = ref(0)
+const newAnswerCount = ref(0)
+const newReplyCount = ref(0)
 
 async function getNotificationCount() {
     await getNotificationCountApi(userInfo.value.id)
         .then((res) => {
             if (res != null) {
-                newQuestionCount.value = res.new_question_count;
-                newAnswerCount.value = res.new_answer_count;
-                newReplyCount.value = res.new_reply_count;
+                newQuestionCount.value = res.new_question_count
+                newAnswerCount.value = res.new_answer_count
+                newReplyCount.value = res.new_reply_count
             }
             // console.log(res);
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 
-const router = useRouter();
+const router = useRouter()
 
 function navigateToUserInfo() {
-    if (userStore.getRole() != "default") {
+    if (userStore.getRole() != 'default') {
         if (deviceTypeStore.isMobile) {
-            sidebarStore.toggle();
+            sidebarStore.toggle()
         }
-        router.push(`/user/${userInfo.value.id}`);
+        router.push(`/user/${userInfo.value.id}`)
     } else {
-        ElMessage.info("请登录");
-        router.push("/login");
+        ElMessage.info('请登录')
+        router.push('/login')
     }
 }
 
 function navigateToLogin() {
-    router.push("/login");
+    router.push('/login')
 }
 
 onMounted(() => {
-    if (role.value != "default") {
-        getNotificationCount();
+    if (role.value != 'default') {
+        getNotificationCount()
     }
-});
+})
 </script>
 
 <style scoped lang="scss">
@@ -205,8 +202,7 @@ onMounted(() => {
                 position: absolute;
                 top: 0;
                 right: 0;
-                animation: scale-in-center 0.5s
-                    cubic-bezier(0.165, 0.84, 0.44, 1) both;
+                animation: scale-in-center 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) both;
             }
 
             @keyframes scale-in-center {
