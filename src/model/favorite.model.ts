@@ -1,53 +1,53 @@
 export interface GetFavoriteReq {
-    sort_type: number;
-    page: number;
+    sort_type: number
+    page: number
 }
 
 export interface GetFavoriteRes {
-    favorite_list: FavoriteItem[];
-    remain_page: number;
+    favorite_list: FavoriteItem[]
+    remain_page: number
 }
 
 export interface FavoriteItem {
-    id: number;
-    title: string;
-    contents: string;
-    views: number;
-    created_at: number;
-    image_urls: string[];
-    is_favorite: boolean;
-    answer_num: number;
-    answer_avatars: string[];
+    id: number
+    title: string
+    contents: string
+    views: number
+    created_at: number
+    image_urls: string[]
+    is_favorite: boolean
+    answer_num: number
+    answer_avatars: string[]
 }
 
 export interface GetFavoriteByKeywordReq {
-    keyword: string;
-    page: number;
+    keyword: string
+    page: number
 }
 
 export interface GetFavoriteByKeywordRes {
-    words: Word[];
+    words: Word[]
 }
 
 export interface Word {
-    value: string;
+    value: string
 }
 
 export interface SearchFavoriteReq {
-    keyword?: string;
-    sort_type: number;
-    page: number;
+    keyword?: string
+    sort_type: number
+    page: number
 }
 
 export interface SearchFavoriteRes {
-    favorite_list: FavoriteItem[];
-    remain_page: number;
+    favorite_list: FavoriteItem[]
+    remain_page: number
 }
 
 export interface FavoriteReq {
-    question_id: number;
+    question_id: number
 }
 
 export interface FavoriteRes {
-    is_favorite: boolean;
+    is_favorite: boolean
 }

@@ -1,8 +1,8 @@
 export interface RegisterReq {
-    name: string;
-    password: string;
-    email: string;
-    token: string;
+    name: string
+    password: string
+    email: string
+    token: string
 }
 
 // export interface RegisterRes {
@@ -10,15 +10,15 @@ export interface RegisterReq {
 // }
 
 export interface SendVerificationCodeReq {
-    email: string;
-    name: string;
+    email: string
+    name: string
 }
 
 export interface VerifyVerificationCodeReq {
-    email: string;
-    code: string;
+    email: string
+    code: string
 }
 
 export interface VerifyVerificationCodeRes {
-    token: string;
+    token: string
 }
