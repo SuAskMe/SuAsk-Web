@@ -1,46 +1,45 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { computed } from "vue";
-import { getImgStyle, getTimeStr } from "../bubble-card";
-import { MdPreview } from "md-editor-v3";
-import "md-editor-v3/lib/preview.css";
+import { computed } from 'vue'
+import { getImgStyle, getTimeStr } from '../bubble-card'
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/preview.css'
 interface BubbleQuestionProps {
-    title: string;
-    text: string;
-    views: number;
-    timeStamp: number;
-    width?: string;
-    isMarkdown?: boolean;
-    showAllMarkdown?: boolean;
-    bubbleKey?: any;
-    answerNum?: number;
-    imageUrls?: string[];
-    avatars?: string[];
-    isFavorite?: boolean;
-    showFavorite?: boolean;
-    clickCard?: (key: any) => void;
-    clickFavorite?: (key: any) => void;
+    title: string
+    text: string
+    views: number
+    timeStamp: number
+    width?: string
+    isMarkdown?: boolean
+    showAllMarkdown?: boolean
+    bubbleKey?: any
+    answerNum?: number
+    imageUrls?: string[]
+    avatars?: string[]
+    isFavorite?: boolean
+    showFavorite?: boolean
+    clickCard?: (key: any) => void
+    clickFavorite?: (key: any) => void
 }
 const props = withDefaults(defineProps<BubbleQuestionProps>(), {
     showFavorite: true,
     clickCard: () => {},
     clickFavorite: () => {},
-});
-const timeStr = computed(() => getTimeStr(props.timeStamp));
+})
+const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => {
-    return props.bubbleKey !== undefined ? props.bubbleKey : null;
-});
+    return props.bubbleKey !== undefined ? props.bubbleKey : null
+})
 const containerStyle = computed(() => {
-    return { width: props.width ? props.width : "450px" };
-});
-const imageContainer = computed(() =>
-    getImgStyle(props.imageUrls, props.width)
-);
+    return { width: props.width ? props.width : '450px' }
+})
+const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
 
-const showDefaultAvatar = (index: number) => {
-    if (props.avatars && props.avatars[index]) {
-        props.avatars[index] = "/src/assets/default-avatar.png";
-    }
-};
+// const showDefaultAvatar = (index: number) => {
+//     if (props.avatars && props.avatars[index]) {
+//         props.avatars[index] = '/src/assets/default-avatar.png'
+//     }
+// }
 </script>
 
 <template>
@@ -50,30 +49,15 @@ const showDefaultAvatar = (index: number) => {
                 <div class="q-title">{{ title }}</div>
                 <div class="q-body">
                     <div v-if="!isMarkdown" class="text">{{ text }}</div>
-                    <div
-                        v-else
-                        :class="
-                            'md-container' + (showAllMarkdown ? '-all' : '')
-                        "
-                    >
-                        <MdPreview
-                            id="preview-only"
-                            :model-value="text"
-                            class="md-preview"
-                        />
+                    <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
+                        <MdPreview id="preview-only" :model-value="text" class="md-preview" />
                     </div>
-                    <div
-                        v-if="imageContainer.hasImages"
-                        class="photos-container"
-                    >
+                    <div v-if="imageContainer.hasImages" class="photos-container">
                         <div
                             class="preview-group"
                             :style="{
                                 width: imageContainer.containerWidth,
-                                gap:
-                                    imageContainer.gap +
-                                    ' ' +
-                                    imageContainer.gap,
+                                gap: imageContainer.gap + ' ' + imageContainer.gap,
                             }"
                         >
                             <el-image
@@ -115,7 +99,6 @@ const showDefaultAvatar = (index: number) => {
                         zIndex: 10 - index,
                     }"
                     class="avatar"
-                    @error="showDefaultAvatar(index)"
                 >
                     <img src="/src/assets/default-avatar.png" />
                 </el-avatar>
@@ -135,12 +118,7 @@ const showDefaultAvatar = (index: number) => {
                 </div>
             </div>
             <div v-else class="card-footer">
-                <svg-icon
-                    class="msg-icon"
-                    icon="communicate_message"
-                    size="24"
-                    color="#66b0ff"
-                />
+                <svg-icon class="msg-icon" icon="communicate_message" size="24" color="#66b0ff" />
                 <div class="text">发表一个回答...</div>
                 <div
                     v-if="showFavorite"

@@ -1,13 +1,24 @@
 <template>
     <div class="control-panel-e">
-        <control-panel-item class="control-panel-item" id="ask-teacher" icon="graduation-cap" text="问老师"
-            jump-to-path="/ask-teacher" />        
-        <control-panel-item class="control-panel-item" id="help" icon="question" text="帮助" jump-to-path="/help" />
+        <control-panel-item
+            class="control-panel-item"
+            id="ask-teacher"
+            icon="graduation-cap"
+            text="问老师"
+            jump-to-path="/ask-teacher"
+        />
+        <control-panel-item
+            class="control-panel-item"
+            id="help"
+            icon="question"
+            text="帮助"
+            jump-to-path="/help"
+        />
     </div>
 </template>
 
-<script setup lang='ts'>
-import ControlPanelItem from '@/components/control-panel-item';
+<script setup lang="ts">
+import ControlPanelItem from '@/components/control-panel-item'
 </script>
 
 <style scoped lang="scss">
@@ -22,7 +33,7 @@ import ControlPanelItem from '@/components/control-panel-item';
     }
 
     .control-panel-item:hover {
-        transform: translateX(10px)
+        transform: translateX(10px);
     }
 
     @keyframes slide-in-left {
@@ -36,6 +47,5 @@ import ControlPanelItem from '@/components/control-panel-item';
             opacity: 1;
         }
     }
-
 }
 </style>

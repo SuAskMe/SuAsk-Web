@@ -1,30 +1,16 @@
 <template>
     <div class="notification">
         <div class="title">
-            <el-icon
-                @click="closeDrawer"
-                class="back-btn"
-                size="24px"
-                color="#71B6FF"
-            >
+            <el-icon @click="closeDrawer" class="back-btn" size="24px" color="#71B6FF">
                 <ArrowLeft />
             </el-icon>
             <div class="message">
                 消息
                 <div
-                    v-if="
-                        props.answerCount +
-                            props.questionCount +
-                            props.replyCount >
-                        0
-                    "
+                    v-if="props.answerCount + props.questionCount + props.replyCount > 0"
                     class="count"
                 >
-                    {{
-                        props.answerCount +
-                        props.questionCount +
-                        props.replyCount
-                    }}
+                    {{ props.answerCount + props.questionCount + props.replyCount }}
                 </div>
             </div>
         </div>
@@ -73,9 +59,7 @@
                             />
                         </div>
                     </transition-group>
-                    <div v-if="newQuestion.length == 0" class="text">
-                        暂无提问
-                    </div>
+                    <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
                 </div>
                 <div v-if="radio == NotificationType.ANSWER">
                     <transition-group name="notification">
@@ -99,9 +83,7 @@
                             />
                         </div>
                     </transition-group>
-                    <div v-if="newAnswer.length == 0" class="text">
-                        暂无回答
-                    </div>
+                    <div v-if="newAnswer.length == 0" class="text">暂无回答</div>
                 </div>
                 <div v-if="radio == NotificationType.REPLY">
                     <transition-group name="notification">
@@ -135,61 +117,57 @@
 </template>
 
 <script setup lang="ts">
-import { getNotificationApi } from "@/api/notification/notification.api";
-import type {
-    NewQuestion,
-    NewAnswer,
-    NewReply,
-} from "@/model/notification.model";
-import { NotificationCard } from "@/components/notification-card";
-import { onMounted, ref } from "vue";
+import { getNotificationApi } from '@/api/notification/notification.api'
+import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model'
+import { NotificationCard } from '@/components/notification-card'
+import { onMounted, ref } from 'vue'
 
 enum NotificationType {
-    QUESTION = "question",
-    ANSWER = "answer",
-    REPLY = "reply",
+    QUESTION = 'question',
+    ANSWER = 'answer',
+    REPLY = 'reply',
 }
 
 const props = defineProps<{
-    questionCount: number;
-    answerCount: number;
-    replyCount: number;
-    user_id: number;
-}>();
+    questionCount: number
+    answerCount: number
+    replyCount: number
+    user_id: number
+}>()
 
-const radio = ref(NotificationType.QUESTION);
+const radio = ref(NotificationType.QUESTION)
 
-const emit = defineEmits(["closeDrawer"]);
+const emit = defineEmits(['closeDrawer'])
 
 function closeDrawer() {
-    emit("closeDrawer");
+    emit('closeDrawer')
 }
 
 function deleteNotification(id: number, type: string) {
     // console.log(id, type);
     if (type == NotificationType.QUESTION) {
-        newQuestion.value = newQuestion.value.filter((item) => item.id !== id);
+        newQuestion.value = newQuestion.value.filter((item) => item.id !== id)
     } else if (type == NotificationType.ANSWER) {
-        newAnswer.value = newAnswer.value.filter((item) => item.id !== id);
+        newAnswer.value = newAnswer.value.filter((item) => item.id !== id)
     } else if (type == NotificationType.REPLY) {
-        newReply.value = newReply.value.filter((item) => item.id !== id);
+        newReply.value = newReply.value.filter((item) => item.id !== id)
     }
 }
 
-const newQuestion = ref<NewQuestion[]>([]);
-const newAnswer = ref<NewAnswer[]>([]);
-const newReply = ref<NewReply[]>([]);
+const newQuestion = ref<NewQuestion[]>([])
+const newAnswer = ref<NewAnswer[]>([])
+const newReply = ref<NewReply[]>([])
 
 async function loadNotification() {
     await getNotificationApi(props.user_id)
         .then((res) => {
-            newQuestion.value = res.new_question;
-            newAnswer.value = res.new_answer;
-            newReply.value = res.new_reply;
+            newQuestion.value = res.new_question
+            newAnswer.value = res.new_answer
+            newReply.value = res.new_reply
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 
 function readNotification(id: number, type: string, is_read: boolean) {
@@ -197,9 +175,9 @@ function readNotification(id: number, type: string, is_read: boolean) {
 }
 
 onMounted(async () => {
-    await loadNotification();
+    await loadNotification()
     // console.log(newReply.value);
-});
+})
 </script>
 
 <style scoped lang="scss">

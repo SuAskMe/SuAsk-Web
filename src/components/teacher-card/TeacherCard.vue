@@ -1,20 +1,8 @@
 <template>
-    <el-card
-        @click.stop="clickCard(teacherKey)"
-        shadow="hover"
-        class="teacher-card"
-        :style="style"
-    >
+    <el-card @click.stop="clickCard(teacherKey)" shadow="hover" class="teacher-card" :style="style">
         <div class="card-left">
-            <img
-                :src="teacher.avatarUrl"
-                class="teacher-avatar"
-                loading="lazy"
-            />
-            <el-button
-                class="teacher-btn"
-                @click.stop="clickBtn(teacherKey)"
-                round
+            <img :src="teacher.avatarUrl" class="teacher-avatar" loading="lazy" />
+            <el-button class="teacher-btn" @click.stop="clickBtn(teacherKey)" round
                 >Ta的主页</el-button
             >
         </div>
@@ -40,27 +28,27 @@
 </template>
 
 <script setup lang="ts">
-import type { TeacherItem } from "@/model/teacher.model";
-import { computed } from "vue";
+import type { TeacherItem } from '@/model/teacher.model'
+import { computed } from 'vue'
 
 interface CardProps {
-    teacher: TeacherItem;
-    width: string;
-    clickCard?: (key: any) => void;
-    clickBtn?: (key: any) => void;
-    teacherKey?: any;
+    teacher: TeacherItem
+    width: string
+    clickCard?: (key: any) => void
+    clickBtn?: (key: any) => void
+    teacherKey?: any
 }
 const props = withDefaults(defineProps<CardProps>(), {
     clickCard: () => {},
     clickBtn: () => {},
-});
+})
 
 const style = computed(() => {
     return {
-        opacity: props.teacher.perm == "private" ? "0.5" : "1",
+        opacity: props.teacher.perm == 'private' ? '0.5' : '1',
         width: props.width,
-    };
-});
+    }
+})
 // console.log(props.teacher.avatarUrl);
 </script>
 <style scoped lang="scss">

@@ -50,120 +50,102 @@
                 </el-icon>
             </div>
         </div>
-        <el-dialog
-            v-model="dialogVisible"
-            width="20%"
-            :show-close="false"
-            align-center
-        >
+        <el-dialog v-model="dialogVisible" width="20%" :show-close="false" align-center>
             <template #header>
                 <p style="margin: 0">删除</p>
             </template>
             <p>确定删除这条通知吗？</p>
             <div class="dialog">
-                <el-button
-                    @click="deleteNotification"
-                    type="danger"
-                    round
-                    size="small"
+                <el-button @click="deleteNotification" type="danger" round size="small"
                     >删除</el-button
                 >
-                <el-button
-                    @click="cancelDelete"
-                    type="default"
-                    round
-                    size="small"
-                    >取消</el-button
-                >
+                <el-button @click="cancelDelete" type="default" round size="small">取消</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
-import {
-    deleteNotificationApi,
-    readNotificationApi,
-} from "@/api/notification/notification.api";
-import { UserStore } from "@/store/modules/user";
-import { getTimeStr } from "@/utils/time";
-import { ElMessage } from "element-plus";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { deleteNotificationApi, readNotificationApi } from '@/api/notification/notification.api'
+import { UserStore } from '@/store/modules/user'
+import { getTimeStr } from '@/utils/time'
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 enum NotificationType {
-    QUESTION = "question",
-    ANSWER = "answer",
-    REPLY = "reply",
+    QUESTION = 'question',
+    ANSWER = 'answer',
+    REPLY = 'reply',
 }
 
 interface NotificationCardProps {
-    type: string;
-    id: number; // 提醒id
-    question_id: number; // 问题id
-    question_title: string; // 问题标题
-    question_content: string; // 问题内容
-    is_read: boolean; // 是否已读
-    created_at: number; // 创建时间
-    user_avatar?: string; // 提问者头像
-    user_name?: string; // 提问者昵称
-    user_id?: number; // 提问者id
-    answer_id?: number; // 回答id
-    answer_content?: string; // 回答内容
-    respondent_avatar?: string; // 回复者头像
-    respondent_name?: string; // 回复者昵称
-    respondent_id?: number; // 回复者id
-    reply_id?: number; // 回复id
-    reply_content?: string; // 回复内容
+    type: string
+    id: number // 提醒id
+    question_id: number // 问题id
+    question_title: string // 问题标题
+    question_content: string // 问题内容
+    is_read: boolean // 是否已读
+    created_at: number // 创建时间
+    user_avatar?: string // 提问者头像
+    user_name?: string // 提问者昵称
+    user_id?: number // 提问者id
+    answer_id?: number // 回答id
+    answer_content?: string // 回答内容
+    respondent_avatar?: string // 回复者头像
+    respondent_name?: string // 回复者昵称
+    respondent_id?: number // 回复者id
+    reply_id?: number // 回复id
+    reply_content?: string // 回复内容
 }
-const props = defineProps<NotificationCardProps>();
+const props = defineProps<NotificationCardProps>()
 
-const userStore = UserStore();
+const userStore = UserStore()
 
-const userName = userStore.getUser().name;
+const userName = userStore.getUser().name
 
-const emit = defineEmits(["reply", "delete", "read"]);
+const emit = defineEmits(['reply', 'delete', 'read'])
 
-const router = useRouter();
+const router = useRouter()
 
 async function clickReply() {
-    emit("reply");
-    let path = "";
+    emit('reply')
+    let path = ''
     if (props.type == NotificationType.QUESTION) {
-        path = `/question-detail/${props.question_id}`;
+        path = `/question-detail/${props.question_id}`
     } else if (props.type == NotificationType.ANSWER) {
-        path = `/question-detail/${props.question_id}#${props.answer_id}`;
+        path = `/question-detail/${props.question_id}#${props.answer_id}`
     } else if (props.type == NotificationType.REPLY) {
-        path = `/question-detail/${props.question_id}#${props.answer_id}`;
+        path = `/question-detail/${props.question_id}#${props.answer_id}`
     }
     await readNotificationApi(props.id).then((res) => {
         if (res != null) {
-            emit("read", props.id, props.type, res.is_read);
+            emit('read', props.id, props.type, res.is_read)
         }
-    });
+    })
     router.push(path)
 }
 
 function clickDelete() {
-    dialogVisible.value = true;
+    dialogVisible.value = true
 }
 
 async function deleteNotification() {
-    console.log("delete");
-    dialogVisible.value = false;
+    console.log('delete')
+    dialogVisible.value = false
     await deleteNotificationApi(props.id).then((res) => {
         if (res != null) {
-            ElMessage.success("删除成功");
-            emit("delete", props.id, props.type);
+            ElMessage.success('删除成功')
+            emit('delete', props.id, props.type)
         }
-    });
+    })
 }
 
 function cancelDelete() {
-    dialogVisible.value = false;
+    dialogVisible.value = false
 }
 
-const dialogVisible = ref(false);
+const dialogVisible = ref(false)
 </script>
 
 <style scoped lang="scss">

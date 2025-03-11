@@ -1,28 +1,29 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { DeviceTypeStore } from "@/store/modules/device-type";
-import { getImgStyle, getTimeStr } from "../bubble-card";
-import { computed, ref } from "vue";
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { getImgStyle, getTimeStr } from '../bubble-card'
+import { computed, ref } from 'vue'
 interface BubbleAnswerProps {
-    isMine?: boolean;
-    avatar: string;
-    nickName: string;
-    text: string;
-    likeCount: number;
-    timeStamp: number;
-    width?: string;
-    isLiked?: boolean;
+    isMine?: boolean
+    avatar: string
+    nickName: string
+    text: string
+    likeCount: number
+    timeStamp: number
+    width?: string
+    isLiked?: boolean
     quote?: {
-        text: string;
-        author: string;
-    };
-    isTeacher?: boolean;
-    teacherName?: string;
-    imageUrls?: string[];
-    bubbleKey?: any;
-    clickAvatar?: (key: any) => void;
-    clickLike?: (key: any) => void;
-    clickQuote?: (key: any) => void;
-    clickCard?: (key: any) => void;
+        text: string
+        author: string
+    }
+    isTeacher?: boolean
+    teacherName?: string
+    imageUrls?: string[]
+    bubbleKey?: any
+    clickAvatar?: (key: any) => void
+    clickLike?: (key: any) => void
+    clickQuote?: (key: any) => void
+    clickCard?: (key: any) => void
 }
 
 const props = withDefaults(defineProps<BubbleAnswerProps>(), {
@@ -30,7 +31,7 @@ const props = withDefaults(defineProps<BubbleAnswerProps>(), {
     clickLike: () => {},
     clickQuote: () => {},
     clickCard: () => {},
-});
+})
 
 const Quote = computed(() =>
     props.quote && props.quote.text && props.quote.author
@@ -39,41 +40,37 @@ const Quote = computed(() =>
               text: props.quote.text,
               author: props.quote.author,
           }
-        : { hasQuote: false }
-);
-const timeStr = computed(() => getTimeStr(props.timeStamp));
-const key = computed(() => (props.bubbleKey ? props.bubbleKey : null));
-const deviceType = DeviceTypeStore();
+        : { hasQuote: false },
+)
+const timeStr = computed(() => getTimeStr(props.timeStamp))
+const key = computed(() => (props.bubbleKey ? props.bubbleKey : null))
+const deviceType = DeviceTypeStore()
 const containerStyle = computed(() => {
-    let margin = deviceType.isMobile ? "2vw" : "12px";
-    let width = props.width ? props.width : "450px";
-    let style1 = {
+    const margin = deviceType.isMobile ? '2vw' : '12px'
+    const width = props.width ? props.width : '450px'
+    const style1 = {
         marginRight: margin,
-        backgroundColor: "#e5f0fc",
+        backgroundColor: '#e5f0fc',
         // alignItems: "flex-end",
         width: width,
-    };
-    let style2 = {
+    }
+    const style2 = {
         marginLeft: margin,
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
         width: width,
-    };
-    return props.isMine ? style1 : style2;
-});
-const imageContainer = computed(() =>
-    getImgStyle(props.imageUrls, props.width)
-);
+    }
+    return props.isMine ? style1 : style2
+})
+const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
 const avatarMargin = computed(() => {
-    let margin = props.isMine ? "margin-right: 30px;" : "margin-left: 24px;";
-    return deviceType.isMobile ? "" : margin;
-});
-const _avatar = ref(
-    props.avatar ? props.avatar : "/src/assets/default-avatar.png"
-);
+    const margin = props.isMine ? 'margin-right: 30px;' : 'margin-left: 24px;'
+    return deviceType.isMobile ? '' : margin
+})
+const _avatar = ref(props.avatar ? props.avatar : '/src/assets/default-avatar.png')
 const showDefaultAvatar = () => {
     // console.log("showDefaultAvatar");
-    _avatar.value = "/src/assets/default-avatar.png";
-};
+    _avatar.value = '/src/assets/default-avatar.png'
+}
 </script>
 <template>
     <div
@@ -100,24 +97,16 @@ const showDefaultAvatar = () => {
         >
             <img src="@/assets/default-avatar.png" />
         </el-avatar>
-        <div
-            class="card-container"
-            :style="containerStyle"
-            @click.stop="clickCard(key)"
-        >
+        <div class="card-container" :style="containerStyle" @click.stop="clickCard(key)">
             <div class="ans-title">
                 <div class="nickname">{{ nickName }}</div>
                 <div v-if="isTeacher" class="suffixed-text">
-                    {{ "@" + teacherName }}
+                    {{ '@' + teacherName }}
                 </div>
             </div>
             <div class="ans-body">
-                <div
-                    v-if="Quote.hasQuote"
-                    class="quote-container"
-                    @click.stop="clickQuote(key)"
-                >
-                    <div class="author">{{ Quote.author + ":" }}</div>
+                <div v-if="Quote.hasQuote" class="quote-container" @click.stop="clickQuote(key)">
+                    <div class="author">{{ Quote.author + ':' }}</div>
                     <div class="quote-text">{{ Quote.text }}</div>
                 </div>
                 <div class="text">{{ text }}</div>
