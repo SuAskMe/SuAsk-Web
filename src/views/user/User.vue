@@ -1,51 +1,61 @@
 <template>
-    <el-container style="height: 100%">
-        <el-header class="header" height="auto">
+    <el-container style="height: 100%" class="container">
+        <el-header class="user-header" height="auto">
             <QuestionHeader @return="navigateBack" :return_btn="true" />
         </el-header>
-        <el-main class="main">
-            <el-scrollbar>
-                <div class="main-item">
-                    <el-avatar :size="200" :src="userInfo.avatar">
-                        <img src="@/assets/default-avatar.png" />
-                    </el-avatar>
-                    <p class="nickname">{{ userInfo.nickname }}</p>
-                    <p class="name">@{{ userInfo.name }}</p>
-                    <MdPreview
-                        class="md"
-                        :id="id"
-                        :modelValue="userInfo.introduction"
-                        style="background-color: #f5f5f5"
-                    />
-                </div>
-                <div v-if="userInfo.role == 'teacher'" class="teacher-item">
-                    <div class="title">
-                        <p>置顶问题</p>
-                        <!-- <p>{{ questionList.length }}</p> -->
+        <el-scrollbar>
+            <el-main class="main-container">
+                <div class="main">
+                    <div class="basic-item">
+                        <div class="user-profile-container">
+                            <div class="section-title">
+                                <p>个人信息</p>
+                            </div>
+                            <div class="user-profile">
+                                <el-avatar :size="200" :src="userInfo.avatar">
+                                    <img src="@/assets/default-avatar.png" />
+                                </el-avatar>
+                                <p class="nickname">{{ userInfo.nickname }}</p>
+                                <p class="name">@{{ userInfo.name }}</p>
+                                <p class="role">{{ roleFormat(userInfo.role) }}</p>
+                            </div>
+                        </div>
+                        <div class="intro-container">
+                            <div class="section-title">
+                                <p>简介</p>
+                            </div>
+                            <MdPreview class="md" :id="id" :modelValue="userInfo.introduction" />
+                        </div>
                     </div>
-                    <div class="question">
-                        <el-scrollbar>
-                            <BubbleCard
-                                class="question-item"
-                                v-for="(question, index) in questionList"
-                                :key="question.id"
-                                :title="question.title"
-                                :text="question.contents"
-                                :views="question.views"
-                                :time-stamp="question.created_at"
-                                :image-urls="question.image_urls"
-                                :bubble-key="question.id"
-                                :style="{
-                                    marginTop: index === 0 ? '24px' : '0',
-                                }"
-                                width="45vw"
-                                :click-card="navigateTo"
-                            />
-                        </el-scrollbar>
+                    <div v-if="userInfo.role == 'teacher'" class="teacher-item">
+                        <div class="top-question-box">
+                            <div class="title">
+                                <p>置顶问题</p>
+                            </div>
+                            <div class="question">
+                                <BubbleCard
+                                    class="question-item"
+                                    v-for="(question, index) in questionList"
+                                    :key="question.id"
+                                    :title="question.title"
+                                    :text="question.contents"
+                                    :views="question.views"
+                                    :time-stamp="question.created_at"
+                                    :image-urls="question.image_urls"
+                                    :bubble-key="question.id"
+                                    :style="{
+                                        marginTop: index === 0 ? '24px' : '0',
+                                    }"
+                                    width="45vw"
+                                    :click-card="navigateTo"
+                                    center
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </el-scrollbar>
-        </el-main>
+            </el-main>
+        </el-scrollbar>
     </el-container>
 </template>
 
@@ -63,10 +73,8 @@ import { router } from '@/router'
 import { getTeacherPinApi } from '@/api/teacher/teacher.api'
 import type { TeacherPinItem } from '@/model/teacher.model'
 
-// md-editor
 const id = 'preview-only'
 
-// user info
 const userInfo = ref<UserInfo>({
     id: 0,
     name: '',
@@ -84,7 +92,6 @@ async function getUserInfo() {
         .then((res) => {
             if (res) {
                 userInfo.value = res
-                // console.log(userInfo.value);
             } else {
                 ElMessage.error('获取用户信息失败')
             }
@@ -99,7 +106,6 @@ function navigateBack() {
 }
 
 const navigateTo = (key: number) => {
-    // console.log(key);
     router.push({
         path: `/question-detail/${key}`,
     })
@@ -127,65 +133,19 @@ async function getPinQuestion() {
             console.log(err)
         })
 }
-</script>
 
-<style scoped lang="scss">
-.main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0;
-    background-color: #f5f5f5;
-
-    .main-item {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin-top: 20px;
-
-        .nickname {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin: 0;
-            margin-top: 10px;
-        }
-
-        .name {
-            font-size: 18px;
-            color: #666;
-            margin-top: 10px;
-            margin: 0;
-            margin-top: 10px;
-        }
-    }
-
-    .teacher-item {
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-        height: 100%;
-
-        .title {
-            display: flex;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .question {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100%;
-
-            .question-item {
-                cursor: pointer;
-            }
-        }
+function roleFormat(role: string) {
+    switch (role) {
+        case 'student':
+            return '学生'
+        case 'teacher':
+            return '教师'
+        case 'admin':
+            return '管理员'
+        default:
+            return '未知'
     }
 }
-</style>
+</script>
+
+<style scoped lang="scss" src="./user-page.scss"></style>

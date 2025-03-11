@@ -22,6 +22,7 @@ interface BubbleCardProps {
     showFavorite?: boolean
     isFavorite?: boolean
     tag?: string
+    center?: boolean
     clickCard?: (key: any) => void
     clickPin?: (key: any) => void
     clickFavorite?: (key: any) => void
@@ -35,9 +36,15 @@ const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => (props.bubbleKey ? props.bubbleKey : null))
 const deviceType = DeviceTypeStore()
 const containerStyle = computed(() => {
-    return {
-        width: props.width ? props.width : '450px',
-        marginLeft: deviceType.isMobile ? '0' : '24px',
+    if (props.center) {
+        return {
+            marginLeft: 0,
+        }
+    } else {
+        return {
+            width: props.width ? props.width : '450px',
+            marginLeft: deviceType.isMobile ? '0' : '24px',
+        }
     }
 })
 const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
