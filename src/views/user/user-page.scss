@@ -1,0 +1,168 @@
+.container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: #f0f2f5; // 添加浅灰色背景增加对比度
+
+    .user-header {
+        border-bottom: 1px solid $su-border;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // 添加阴影增强对比
+    }
+
+    .main-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 0;
+        box-sizing: border-box;
+        align-items: center;
+
+        .main {
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: 5% 20px;
+            width: 80%;
+            max-width: 1000px;
+
+            @media screen and (max-width: 768px) {
+                width: 100%;
+            }
+
+            .basic-item {
+                display: flex;
+                flex-direction: row;
+                gap: 5%;
+
+                @media screen and (max-width: 768px) {
+                    flex-direction: column;
+                }
+
+                .user-profile-container,
+                .intro-container {
+                    border-radius: 12px;
+                    overflow: hidden;
+                    background-color: #fff;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .user-profile-container {
+                    width: 35%;
+                    @media screen and (max-width: 768px) {
+                        width: 100%;
+                        margin-bottom: 20px;
+                    }
+                }
+
+                .intro-container {
+                    flex: 1;
+                }
+
+                .section-title {
+                    display: flex;
+                    justify-content: center;
+                    font-size: 22px;
+                    font-weight: bold;
+                    margin-bottom: 0;
+                    padding: 15px;
+                    background-color: $su-blue;
+                    color: #fff;
+
+                    p {
+                        margin: 0;
+                    }
+                }
+
+                .user-profile {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-color: #fff;
+                    padding: 25px;
+                    border-radius: 12px;
+
+                    .nickname {
+                        font-size: 26px;
+                        font-weight: 700;
+                        color: #262626;
+                        margin: 15px 0 5px 0;
+                    }
+
+                    .name {
+                        font-size: 18px;
+                        color: #595959;
+                        margin: 5px 0;
+                    }
+
+                    .role {
+                        font-size: 16px;
+                        color: #fff;
+                        background-color: $su-blue;
+                        padding: 4px 12px;
+                        border-radius: 16px;
+                        margin-top: 10px;
+                    }
+                }
+
+                .md {
+                    border: none;
+                    padding: 25px;
+                    border-radius: 12px;
+                    background-color: #fff;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    flex-grow: 1;
+                }
+            }
+
+            .teacher-item {
+                display: flex;
+                flex-direction: column;
+                margin-top: 5%;
+                box-sizing: border-box;
+
+                .top-question-box {
+                    border: none;
+                    border-radius: 12px;
+                    box-sizing: border-box;
+                    background-color: #fff;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    overflow: hidden;
+
+                    .title {
+                        display: flex;
+                        justify-content: center;
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-bottom: 0;
+                        padding: 15px;
+                        background-color: $su-blue;
+                        color: #fff;
+
+                        p {
+                            margin: 0;
+                        }
+                    }
+
+                    .question {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        height: 100%;
+                        box-sizing: border-box;
+                        padding: 15px;
+
+                        .question-item {
+                            cursor: pointer;
+                            margin-bottom: 15px;
+                            transition: all 0.3s;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
