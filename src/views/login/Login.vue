@@ -31,24 +31,15 @@
                 </el-input>
             </div>
             <div>
-                <el-button
-                    type="primary"
-                    style="width: 25%"
-                    @click="login"
-                    shouldAddSpace
-                >
+                <el-button type="primary" style="width: 25%" @click="login" shouldAddSpace>
                     登 录
                 </el-button>
             </div>
             <div class="footer">
-                <span
-                    @click="forgetPassword"
-                    style="color: #808080; cursor: pointer"
+                <span @click="forgetPassword" style="color: #808080; cursor: pointer"
                     >忘记密码</span
                 >
-                <span @click="register" style="color: #71b6ff; cursor: pointer"
-                    >注册账号</span
-                >
+                <span @click="register" style="color: #71b6ff; cursor: pointer">注册账号</span>
             </div>
         </div>
         <div style="margin-top: 15px">
@@ -65,98 +56,98 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import ForgetPasswordPage from "./ForgetPasswordPage.vue";
-import RegisterPage from "./RegisterPage.vue";
-import { heartbeatApi } from "@/api/user/login.api";
-import { mailCheck } from "@/utils/login/register";
-import type { LoginReq, User } from "@/model/user.model";
-import { ElMessage } from "element-plus";
-import { UserStore } from "@/store/modules/user";
-import { useRouter } from "vue-router";
-import { ControlPanelStore } from "@/store/modules/control-panel";
+import { onMounted, ref } from 'vue'
+import ForgetPasswordPage from './ForgetPasswordPage.vue'
+import RegisterPage from './RegisterPage.vue'
+import { heartbeatApi } from '@/api/user/login.api'
+import { mailCheck } from '@/utils/login/register'
+import type { LoginReq, User } from '@/model/user.model'
+import { ElMessage } from 'element-plus'
+import { UserStore } from '@/store/modules/user'
+import { useRouter } from 'vue-router'
+import { ControlPanelStore } from '@/store/modules/control-panel'
 
-const userNameOrEmail = ref("");
-const password = ref("");
+const userNameOrEmail = ref('')
+const password = ref('')
 
-const router = useRouter();
-const userStore = UserStore();
+const router = useRouter()
+const userStore = UserStore()
 
 async function login() {
-    if (userNameOrEmail.value == "" || password.value == "") {
-        ElMessage.error("用户名或密码不能为空");
-        return;
+    if (userNameOrEmail.value == '' || password.value == '') {
+        ElMessage.error('用户名或密码不能为空')
+        return
     }
     const loginReq: LoginReq = {
-        name: "",
-        email: "",
+        name: '',
+        email: '',
         password: password.value,
-    };
+    }
     if (mailCheck(userNameOrEmail.value)) {
-        loginReq.email = userNameOrEmail.value;
+        loginReq.email = userNameOrEmail.value
     } else {
-        loginReq.name = userNameOrEmail.value;
+        loginReq.name = userNameOrEmail.value
     }
     try {
-        const userInfo = await userStore.login(loginReq);
+        const userInfo = await userStore.login(loginReq)
         if (userInfo) {
-            ElMessage.success("登录成功");
-            router.push({ name: "AskAll" });
-            ControlPanelStore().clearSelectedItem();
+            ElMessage.success('登录成功')
+            router.push({ name: 'AskAll' })
+            ControlPanelStore().clearSelectedItem()
             // console.log(userStore.getUser);
         } else {
-            ElMessage.error("登录失败");
+            ElMessage.error('登录失败')
         }
     } catch (e) {
-        ElMessage.error((e as unknown as Error).message);
+        ElMessage.error((e as unknown as Error).message)
     }
 }
 
-const showForgetPassword = ref(false);
-const showRegister = ref(false);
+const showForgetPassword = ref(false)
+const showRegister = ref(false)
 
 function forgetPassword() {
-    showForgetPassword.value = true;
+    showForgetPassword.value = true
 }
 
 function register() {
-    showRegister.value = true;
+    showRegister.value = true
 }
 
 function navigateToUnlogin() {
-    userStore.resetState();
+    userStore.resetState()
     const user: User = {
         id: 0,
-        name: "susu",
-        nickname: "susu",
-        email: "",
-        role: "",
-        introduction: "",
+        name: 'susu',
+        nickname: 'susu',
+        email: '',
+        role: '',
+        introduction: '',
         avatar: null,
         themeId: 1,
-        question_box_perm: "",
-    };
-    userStore.setUser(user);
-    ControlPanelStore().setSelectedItem("ask-teacher");
-    router.push({ name: "AskTeacher" });
+        question_box_perm: '',
+    }
+    userStore.setUser(user)
+    ControlPanelStore().setSelectedItem('ask-teacher')
+    router.push({ name: 'AskTeacher' })
 }
 
 onMounted(async () => {
     // console.log("login mounted");
     // console.log(userStore.getToken());
-    if (userStore.getToken() !== "") {
+    if (userStore.getToken() !== '') {
         await heartbeatApi().then((res) => {
             // console.log(res);
             if (userStore.userInfo?.id === res.id) {
-                router.push({ name: "AskAll" });
-                ControlPanelStore().clearSelectedItem();
+                router.push({ name: 'AskAll' })
+                ControlPanelStore().clearSelectedItem()
             } else {
-                userStore.resetState();
-                ControlPanelStore().clearSelectedItem();
+                userStore.resetState()
+                ControlPanelStore().clearSelectedItem()
             }
-        });
+        })
     }
-});
+})
 </script>
 
 <style scoped lang="scss">

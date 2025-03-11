@@ -1,16 +1,20 @@
 <template>
     <div v-for="(src, index) in src" :key="src">
-        <img :class="{ select: selectIndex - 1 == index }" class="theme-image" @click="selectImg(index)" :src="src"
-            :width="width" />
+        <img
+            :class="{ select: selectIndex - 1 == index }"
+            class="theme-image"
+            @click="selectImg(index)"
+            :src="src"
+            :width="width"
+        />
     </div>
 </template>
 
-<script setup lang='ts'>
-
+<script setup lang="ts">
 defineProps<{
-    src: string[];
-    width: string;
-}>();
+    src: string[]
+    width: string
+}>()
 
 const selectIndex = defineModel<number>({ default: 1 })
 const selectImg = (index: number) => {

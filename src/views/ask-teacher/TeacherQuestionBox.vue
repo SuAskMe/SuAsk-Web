@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
     <el-container class="container">
         <div class="main-container" ref="mainContainer">
@@ -56,7 +57,7 @@
 
 <script setup lang="ts">
 import SvgIcon from '@/components/svg-icon'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import TeacherCard from '@/components/teacher-card'
 import { getTeacherApi } from '@/api/teacher/teacher.api'
 import { TeacherPerm, type TeacherItem } from '@/model/teacher.model'
@@ -87,7 +88,7 @@ async function getTeacherList() {
             }
         })
         .then(() => {
-            let teachersObj = teacherList.value
+            const teachersObj = teacherList.value
             for (let i = 0; i < teachersObj.length; i++) {
                 teachersObj[i].value = teachersObj[i].name
             }
@@ -95,14 +96,14 @@ async function getTeacherList() {
         })
 }
 
-let teacherList = ref<TeacherItem[]>([])
+const teacherList = ref<TeacherItem[]>([])
 
 let teachersStr = JSON.stringify(teacherList)
 
 const searchInput = ref('')
 
 const querySearch = (queryString: string, cb: any) => {
-    let teachersObj = JSON.parse(teachersStr)
+    const teachersObj = JSON.parse(teachersStr)
     const results = queryString ? teachersObj.filter(createFilter(queryString)) : teachersObj
     cb(results)
 }
@@ -130,7 +131,7 @@ const resetList = (value: string | number) => {
 }
 
 const searchBtn = () => {
-    let teachersObj = JSON.parse(teachersStr)
+    const teachersObj = JSON.parse(teachersStr)
     const results = searchInput.value
         ? teachersObj.filter(createFilter(searchInput.value))
         : teachersObj

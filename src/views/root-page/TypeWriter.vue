@@ -4,12 +4,12 @@
     </div>
 </template>
 
-<script setup lang='ts'>
-import { onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 
 const props = defineProps({
     optionalText: {
-        type: Array<String>,
+        type: Array<string>,
         default: ['开启你的问答之旅吧'],
     },
     isMobile: {
@@ -18,30 +18,30 @@ const props = defineProps({
     },
 })
 
-const typingText = ref('');
-const index = ref(0);
-const optionalText = ref(getRandomText());
+const typingText = ref('')
+const index = ref(0)
+const currentText = ref(getRandomText())
 
 function getRandomText() {
-    return props.optionalText[Math.floor(Math.random() * props.optionalText.length)];
+    return props.optionalText[Math.floor(Math.random() * props.optionalText.length)]
 }
 
 function startTyping() {
-    index.value++;
-    typingText.value = optionalText.value.slice(0, index.value);
-    if (index.value < optionalText.value.length) {
-        setTimeout(startTyping, 100);
+    index.value++
+    typingText.value = currentText.value.slice(0, index.value)
+    if (index.value < currentText.value.length) {
+        setTimeout(startTyping, 100)
     } else {
-        index.value = 0;
-        setTimeout(startTyping, 3000);
-        optionalText.value = getRandomText();
+        index.value = 0
+        setTimeout(startTyping, 3000)
+        currentText.value = getRandomText()
     }
 }
 
 onMounted(() => {
-    getRandomText();
-    startTyping();
-});
+    getRandomText()
+    startTyping()
+})
 </script>
 
 <style>
@@ -49,25 +49,25 @@ onMounted(() => {
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
-    border-right: 2px solid #71B6FF;
+    border-right: 2px solid #71b6ff;
     animation: blink 0.7s steps(2) infinite;
     font-size: 4dvh;
-    color: #71B6FF;
+    color: #71b6ff;
 }
 
 .type-writer-phone span {
     white-space: nowrap;
     overflow: hidden;
     display: inline-block;
-    border-right: 2px solid #71B6FF;
+    border-right: 2px solid #71b6ff;
     animation: blink 0.7s steps(2) infinite;
     font-size: 3dvh;
-    color: #71B6FF;
+    color: #71b6ff;
 }
 
 @keyframes blink {
     0% {
-        border-color: #71B6FF;
+        border-color: #71b6ff;
     }
 
     50% {
@@ -75,7 +75,7 @@ onMounted(() => {
     }
 
     100% {
-        border-color: #71B6FF;
+        border-color: #71b6ff;
     }
 }
 </style>

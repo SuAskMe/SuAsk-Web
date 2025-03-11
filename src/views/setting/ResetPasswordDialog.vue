@@ -33,9 +33,7 @@
                             style="height: 40px; width: 6rem"
                             :disabled="verifyStatus.disabled"
                             >{{
-                                verifyStatus.disabled
-                                    ? verifyStatus.duration
-                                    : "获取验证码"
+                                verifyStatus.disabled ? verifyStatus.duration : '获取验证码'
                             }}</el-button
                         >
                     </div>
@@ -58,9 +56,7 @@
                     >
                     </el-input>
                     <div class="button">
-                        <el-button @click="resetPassword" type="primary"
-                            >重置</el-button
-                        >
+                        <el-button @click="resetPassword" type="primary">重置</el-button>
                     </div>
                 </div>
             </div>
@@ -69,95 +65,93 @@
 </template>
 
 <script setup lang="ts">
-import { resetPasswordApi, sendCodeApi } from "@/api/user/reset_password.api";
-import type { ResetPassword } from "@/model/user.model";
-import { DeviceTypeStore } from "@/store/modules/device-type";
-import { UserStore } from "@/store/modules/user";
-import { mailCheck } from "@/utils/login/register";
-import { ElMessage } from "element-plus";
-import { computed, reactive, ref } from "vue";
+import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api'
+import type { ResetPassword } from '@/model/user.model'
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { UserStore } from '@/store/modules/user'
+import { ElMessage } from 'element-plus'
+import { computed, reactive, ref } from 'vue'
 
-const visible = defineModel("visible", { type: Boolean, default: true });
+const visible = defineModel('visible', { type: Boolean, default: true })
 
-const deviceTypeStore = DeviceTypeStore();
+const deviceTypeStore = DeviceTypeStore()
 
-const userStore = UserStore();
-const basicInfo = computed(() => userStore.getUser());
+const userStore = UserStore()
 
-const mail = computed(() => userStore.getUser().email);
-const code = ref("");
-const newPassword = ref("");
-const confirmPassword = ref("");
+const mail = computed(() => userStore.getUser().email)
+const code = ref('')
+const newPassword = ref('')
+const confirmPassword = ref('')
 
 const verifyStatus = reactive<{
-    disabled: boolean;
-    duration: number;
-    timer: any;
+    disabled: boolean
+    duration: number
+    timer: any
 }>({
     disabled: false,
     duration: 60,
     timer: null,
-});
+})
 function getCode() {
-    sendCodeApi({ email: mail.value, type: "reset_password" })
+    sendCodeApi({ email: mail.value, type: 'reset_password' })
         .then((res) => {
-            if (res.msg === "200") {
-                ElMessage.success("验证码已发送");
+            if (res.msg === '200') {
+                ElMessage.success('验证码已发送')
                 // console.log(res);
-                verifyStatus.disabled = true;
-                verifyStatus.timer && clearInterval(verifyStatus.timer);
+                verifyStatus.disabled = true
+                verifyStatus.timer && clearInterval(verifyStatus.timer)
                 verifyStatus.timer = setInterval(() => {
-                    verifyStatus.duration--;
+                    verifyStatus.duration--
                     if (verifyStatus.duration === 0) {
-                        verifyStatus.disabled = false;
-                        verifyStatus.duration = 60;
-                        clearInterval(verifyStatus.timer);
+                        verifyStatus.disabled = false
+                        verifyStatus.duration = 60
+                        clearInterval(verifyStatus.timer)
                     }
-                }, 1000);
+                }, 1000)
             } else {
-                ElMessage.error(res.msg);
+                ElMessage.error(res.msg)
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 
 function resetPassword() {
-    if (code.value == "") {
-        ElMessage.error("请输入验证码");
-        return;
+    if (code.value == '') {
+        ElMessage.error('请输入验证码')
+        return
     }
-    if (newPassword.value == "") {
-        ElMessage.error("请输入新密码");
-        return;
+    if (newPassword.value == '') {
+        ElMessage.error('请输入新密码')
+        return
     }
-    if (confirmPassword.value == "") {
-        ElMessage.error("请再次输入新密码");
-        return;
+    if (confirmPassword.value == '') {
+        ElMessage.error('请再次输入新密码')
+        return
     }
     if (newPassword.value != confirmPassword.value) {
-        ElMessage.error("两次输入密码不一致");
-        return;
+        ElMessage.error('两次输入密码不一致')
+        return
     }
     const data: ResetPassword = {
         email: mail.value,
         code: code.value,
         password: newPassword.value,
-    };
+    }
     resetPasswordApi(data)
         .then((res) => {
             if (res) {
-                ElMessage.success("重置成功");
-                visible.value = false;
+                ElMessage.success('重置成功')
+                visible.value = false
             } else {
-                ElMessage.error("验证码错误");
-                visible.value = false;
+                ElMessage.error('验证码错误')
+                visible.value = false
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 </script>
 

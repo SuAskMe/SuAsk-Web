@@ -11,11 +11,7 @@
                 <p>忘记密码</p>
             </div>
             <div class="send-code">
-                <el-input
-                    v-model="mail"
-                    style="height: 40px"
-                    placeholder="请输入注册邮箱"
-                >
+                <el-input v-model="mail" style="height: 40px" placeholder="请输入注册邮箱">
                     <template #prefix>
                         <svg-icon icon="mail" color="#71B6FF" size="20px" />
                     </template>
@@ -33,9 +29,7 @@
                         style="height: 40px; width: 6rem"
                         :disabled="verifyStatus.disabled"
                         >{{
-                            verifyStatus.disabled
-                                ? verifyStatus.duration
-                                : "获取验证码"
+                            verifyStatus.disabled ? verifyStatus.duration : '获取验证码'
                         }}</el-button
                     >
                 </div>
@@ -58,9 +52,7 @@
                 >
                 </el-input>
                 <div class="button">
-                    <el-button @click="resetPassword" type="primary"
-                        >重置</el-button
-                    >
+                    <el-button @click="resetPassword" type="primary">重置</el-button>
                 </div>
             </div>
         </div>
@@ -68,106 +60,101 @@
 </template>
 
 <script setup lang="ts">
-import {
-    sendCodeApi,
-    resetPasswordApi,
-    forgetPasswordApi,
-} from "@/api/user/reset_password.api";
-import type { ResetPassword } from "@/model/user.model";
-import { DeviceTypeStore } from "@/store/modules/device-type";
-import { mailCheck } from "@/utils/login/register";
-import { ElMessage } from "element-plus";
-import { disabledTimeListsProps } from "element-plus/es/components/time-picker/src/props/shared.mjs";
-import { reactive, ref } from "vue";
+import { sendCodeApi, forgetPasswordApi } from '@/api/user/reset_password.api'
+import type { ResetPassword } from '@/model/user.model'
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { mailCheck } from '@/utils/login/register'
+import { ElMessage } from 'element-plus'
+import { reactive, ref } from 'vue'
 
-const deviceTypeStore = DeviceTypeStore();
+const deviceTypeStore = DeviceTypeStore()
 
-const visible = defineModel("visible", {
+const visible = defineModel('visible', {
     type: Boolean,
     default: false,
-});
+})
 
-const mail = ref("");
-const code = ref("");
-const newPassword = ref("");
-const confirmPassword = ref("");
+const mail = ref('')
+const code = ref('')
+const newPassword = ref('')
+const confirmPassword = ref('')
 
 const verifyStatus = reactive<{
-    disabled: boolean;
-    duration: number;
-    timer: any;
+    disabled: boolean
+    duration: number
+    timer: any
 }>({
     disabled: false,
     duration: 60,
     timer: null,
-});
+})
 function getCode() {
-    if (mail.value == "") {
-        ElMessage.error("请输入注册邮箱");
-        return;
+    if (mail.value == '') {
+        ElMessage.error('请输入注册邮箱')
+        return
     } else if (!mailCheck(mail.value)) {
-        ElMessage.error("邮箱格式不正确");
-        return;
+        ElMessage.error('邮箱格式不正确')
+        return
     }
-    sendCodeApi({ email: mail.value, type: "forget_password" })
+    sendCodeApi({ email: mail.value, type: 'forget_password' })
         .then((res) => {
-            if (res.msg === "200") {
-                ElMessage.success("验证码已发送");
-                verifyStatus.disabled = true;
-                verifyStatus.timer && clearInterval(verifyStatus.timer);
+            if (res.msg === '200') {
+                ElMessage.success('验证码已发送')
+                verifyStatus.disabled = true
+                verifyStatus.timer && clearInterval(verifyStatus.timer)
                 verifyStatus.timer = setInterval(() => {
-                    verifyStatus.duration--;
+                    verifyStatus.duration--
                     if (verifyStatus.duration === 0) {
-                        verifyStatus.disabled = false;
-                        verifyStatus.duration = 60;
-                        clearInterval(verifyStatus.timer);
+                        verifyStatus.disabled = false
+                        verifyStatus.duration = 60
+                        clearInterval(verifyStatus.timer)
                     }
-                }, 1000);
+                }, 1000)
                 // console.log(res);
             } else {
-                ElMessage.error(res.msg);
+                ElMessage.error(res.msg)
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 
 function resetPassword() {
-    if (code.value == "") {
-        ElMessage.error("请输入验证码");
-        return;
+    if (code.value == '') {
+        ElMessage.error('请输入验证码')
+        return
     }
-    if (newPassword.value == "") {
-        ElMessage.error("请输入新密码");
-        return;
+    if (newPassword.value == '') {
+        ElMessage.error('请输入新密码')
+        return
     }
-    if (confirmPassword.value == "") {
-        ElMessage.error("请再次输入新密码");
-        return;
+    if (confirmPassword.value == '') {
+        ElMessage.error('请再次输入新密码')
+        return
     }
     if (newPassword.value != confirmPassword.value) {
-        ElMessage.error("两次输入密码不一致");
-        return;
+        ElMessage.error('两次输入密码不一致')
+        return
     }
     const data: ResetPassword = {
         email: mail.value,
         code: code.value,
         password: newPassword.value,
-    };
+    }
     forgetPasswordApi(data)
         .then((res) => {
             if (res) {
-                ElMessage.success("重置成功");
-                visible.value = false;
+                ElMessage.success('重置成功')
+                visible.value = false
             } else {
-                ElMessage.error("验证码错误");
-                visible.value = false;
+                ElMessage.error('验证码错误')
+                visible.value = false
             }
         })
         .catch((err) => {
-            console.log(err);
-        });
+            console.log(err)
+        })
 }
 </script>
 
