@@ -5,21 +5,45 @@
         </el-header>
         <el-scrollbar>
             <el-main class="main-container">
-                <el-dialog v-model="cropVisible" title="裁剪头像" width="70%" center>
-                    <div style="width: auto; height: 400px; margin: 0 auto; position: relative">
-                        <vue-cropper
-                            ref="cropper"
-                            :img="cropImg"
-                            :auto-crop="true"
-                            :fixed="true"
-                            :fixed-number="[1, 1]"
-                            :center-box="true"
-                            outputType="png"
-                        />
+                <el-dialog
+                    v-model="cropVisible"
+                    title="裁剪头像"
+                    center
+                    align-center
+                    :style="{
+                        height: deviceTypeStore.isMobile ? '100vh' : '90vh',
+                        width: '100vw',
+                        maxWidth: '768px',
+                    }"
+                    class="crop-dialog"
+                >
+                    <div
+                        ref="cropperContainer"
+                        class="cropper-container"
+                        :style="{
+                            height: deviceTypeStore.isMobile ? '80vh' : '70vh',
+                            width: '92vw',
+                            maxWidth: '720px',
+                        }"
+                    >
+                        <div
+                            :style="{ width: imgSize.width + 'px', height: imgSize.height + 'px' }"
+                        >
+                            <vue-cropper
+                                ref="cropper"
+                                :img="cropImg"
+                                :auto-crop="true"
+                                :fixed="true"
+                                :fixed-number="[1, 1]"
+                                :center-box="true"
+                                outputType="png"
+                            />
+                        </div>
                     </div>
-
                     <template #footer>
-                        <el-button @click="cropVisible = false">取消</el-button>
+                        <el-button @click="cropVisible = false" style="margin-right: 15vw"
+                            >取消</el-button
+                        >
                         <el-button type="primary" @click="confirmCrop">确认</el-button>
                     </template>
                 </el-dialog>
@@ -167,7 +191,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { ElLoading, ElMessage } from 'element-plus'
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'
@@ -205,14 +229,24 @@ function pickImage() {
     }
 }
 
-function pickImageImpl(event: any) {
+const avatarFile = ref<File | null>(null)
+const cropVisible = ref(false)
+const cropImg = ref('')
+const imgSize = ref({ width: 0, height: 0 })
+const cropper = ref<any>(null)
+const avatarFileType = ref('')
+const cropperContainer = ref<HTMLDivElement | null>(null)
+// let maxW = 1000
+// let maxH = 1000
+
+async function pickImageImpl(event: any) {
     const files = event.target.files
     if (files.length > 1) {
         ElMessage.error('最多上传一张头像')
         return
     }
     if (!files) return
-    const file = event.target.files[0]
+    const file: File = event.target.files[0]
     event.target.value = ''
     // 限制文件类型
     if (!['image/jpeg', 'image/png'].includes(file.type)) {
@@ -221,14 +255,26 @@ function pickImageImpl(event: any) {
     }
     avatarFileType.value = file.type
     cropImg.value = URL.createObjectURL(file)
+    const img = await new Promise<HTMLImageElement>((resolve) => {
+        const img = new Image()
+        img.onload = () => resolve(img)
+        img.src = cropImg.value
+    })
+    let w = img.width
+    let h = img.height
     cropVisible.value = true
+    nextTick(() => {
+        const maxH = cropperContainer.value!.offsetHeight
+        const maxW = cropperContainer.value!.offsetWidth
+        // console.log(maxH, maxW)
+        if (w > maxW || h > maxH) {
+            const scale = Math.min(maxW / w, maxH / h)
+            w = w * scale
+            h = h * scale
+        }
+        imgSize.value = { width: w, height: h }
+    })
 }
-
-const avatarFile = ref<File | null>(null)
-const cropVisible = ref(false)
-const cropImg = ref('')
-const cropper = ref<any>(null)
-const avatarFileType = ref('')
 
 // 新增裁剪确认处理
 const confirmCrop = async () => {

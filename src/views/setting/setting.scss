@@ -62,6 +62,19 @@
             }
         }
 
+        .crop-dialog {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cropper-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // background-color: antiquewhite;
+        }
+
         .name-bio-avatar {
             display: flex;
             justify-content: space-between;
