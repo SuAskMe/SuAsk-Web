@@ -104,10 +104,9 @@ async function logout() {
             .confirm-btn {
                 background-color: #ff4d4f;
                 border-color: #ff4d4f;
-
                 &:hover {
-                    background-color: darken(#ff4d4f, 5%);
-                    border-color: darken(#ff4d4f, 5%);
+                    background-color: #ff3336;
+                    border-color: #ff3336;
                 }
             }
         }
