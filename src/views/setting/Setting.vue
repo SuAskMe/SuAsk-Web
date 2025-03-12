@@ -1,10 +1,29 @@
 <template>
+    <!--                         -->
     <el-container class="container">
         <el-header class="header">
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
         </el-header>
         <el-scrollbar>
             <el-main class="main-container">
+                <el-dialog v-model="cropVisible" title="裁剪头像" width="70%" center>
+                    <div style="width: auto; height: 400px; margin: 0 auto; position: relative">
+                        <vue-cropper
+                            ref="cropper"
+                            :img="cropImg"
+                            :auto-crop="true"
+                            :fixed="true"
+                            :fixed-number="[1, 1]"
+                            :center-box="true"
+                            outputType="png"
+                        />
+                    </div>
+
+                    <template #footer>
+                        <el-button @click="cropVisible = false">取消</el-button>
+                        <el-button type="primary" @click="confirmCrop">确认</el-button>
+                    </template>
+                </el-dialog>
                 <div class="title">
                     <p>基础信息</p>
                     <hr />
@@ -30,7 +49,6 @@
                                 ref="imgPicker"
                                 accept="image/png,image/jpeg,image/jpg"
                                 style="display: none"
-                                multiple
                                 @change="pickImageImpl"
                             />
                             <el-button
@@ -97,7 +115,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElLoading, ElMessage } from 'element-plus'
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'
 import { updateTeacherPermApi } from '@/api/teacher/teacher.api'
@@ -108,6 +126,9 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import ThemeImage from './ThemeImage.vue'
 import ResetPasswordDialog from './ResetPasswordDialog.vue'
 import LogoutDialog from './LogoutDialog.vue'
+import 'vue-cropper/dist/index.css'
+import { VueCropper } from 'vue-cropper'
+import { compressionBlob } from '@/utils/imgCompress'
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })
@@ -132,16 +153,54 @@ function pickImage() {
 }
 
 function pickImageImpl(event: any) {
-    const file = event.target.files
-    if (file.length > 1) {
+    const files = event.target.files
+    if (files.length > 1) {
         ElMessage.error('最多上传一张头像')
         return
     }
-    avatarFile.value = file[0]
-    basicInfo.value.avatar = URL.createObjectURL(file[0])
+    if (!files) return
+    const file = event.target.files[0]
+    event.target.value = ''
+    // 限制文件类型
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        ElMessage.error('仅支持 JPG/PNG 格式')
+        return
+    }
+    avatarFileType.value = file.type
+    cropImg.value = URL.createObjectURL(file)
+    cropVisible.value = true
 }
 
 const avatarFile = ref<File | null>(null)
+const cropVisible = ref(false)
+const cropImg = ref('')
+const cropper = ref<any>(null)
+const avatarFileType = ref('')
+
+// 新增裁剪确认处理
+const confirmCrop = async () => {
+    cropper.value.getCropBlob(async (blob: Blob) => {
+        const imgLoading = ElLoading.service({
+            lock: true,
+            text: 'Loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+        })
+        // 更新预览和上传文件
+        const resizedBlob = await compressionBlob(blob, avatarFileType.value, 0.5, 400, 400)
+        let name = ''
+        if (avatarFileType.value === 'image/jpeg') {
+            name = 'avatar.jpg'
+        } else if (avatarFileType.value === 'image/png') {
+            name = 'avatar.png'
+        }
+        avatarFile.value = new File([resizedBlob], name, {
+            type: avatarFileType.value,
+        })
+        basicInfo.value.avatar = URL.createObjectURL(avatarFile.value)
+        cropVisible.value = false
+        imgLoading.close()
+    })
+}
 
 const userStore = UserStore()
 
@@ -152,7 +211,6 @@ async function updateUserInfo() {
     formData.append('nickname', basicInfo.value.nickname)
     formData.append('introduction', basicInfo.value.introduction)
     formData.append('themeId', basicInfo.value.themeId.toString())
-
     formData.append('avatar', avatarFile.value!)
 
     await updateUserInfoApi(formData)
@@ -192,21 +250,22 @@ function showLogoutDialog() {
 
 const questionVisible = ref(userStore.getUser().question_box_perm)
 
-watch(
-    () => questionVisible.value,
-    async (newVal) => {
-        await updateTeacherPermApi(questionVisible.value).then(async (res) => {
-            if (res) {
-                ElMessage.success('保存成功')
-                const user = userStore.getUser()
-                user.question_box_perm = questionVisible.value
-                userStore.setUser(user)
-            } else {
-                ElMessage.error('保存失败')
-            }
-        })
-    },
-)
+userStore.getRole() == 'teacher' &&
+    watch(
+        () => questionVisible.value,
+        async (newVal) => {
+            await updateTeacherPermApi(questionVisible.value).then(async (res) => {
+                if (res) {
+                    ElMessage.success('保存成功')
+                    let user = userStore.getUser()
+                    user.question_box_perm = questionVisible.value
+                    userStore.setUser(user)
+                } else {
+                    ElMessage.error('保存失败')
+                }
+            })
+        },
+    )
 </script>
 
 <style lang="scss" scoped src="./setting.scss">
