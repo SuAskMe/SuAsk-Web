@@ -4,84 +4,59 @@
             v-model="visible"
             :show-close="deviceTypeStore.isMobile"
             align-center
-            width="450px"
+            width="400px"
             :fullscreen="deviceTypeStore.isMobile"
-            class="password-dialog"
         >
             <div class="dialog-content">
-                <div class="title">
-                    <i class="el-icon-lock dialog-icon"></i>
-                    <h2>重置密码</h2>
-                </div>
-
+                <div class="title">重置密码</div>
                 <div class="send-code">
-                    <div class="form-field">
-                        <label>邮箱</label>
+                    <el-input
+                        v-model="mail"
+                        style="height: 40px"
+                        placeholder="请输入注册邮箱"
+                        disabled
+                    >
+                        <template #prefix>
+                            <svg-icon icon="mail" color="#71B6FF" size="20px" />
+                        </template>
+                    </el-input>
+                    <div class="verification-code">
                         <el-input
-                            v-model="mail"
-                            style="height: 45px"
-                            placeholder="请输入注册邮箱"
-                            disabled
+                            v-model="code"
+                            style="height: 40px"
+                            placeholder="请输入验证码"
+                            clearable
+                        />
+                        <el-button
+                            @click="getCode"
+                            type="primary"
+                            style="height: 40px; width: 6rem"
+                            :disabled="verifyStatus.disabled"
+                            >{{
+                                verifyStatus.disabled ? verifyStatus.duration : '获取验证码'
+                            }}</el-button
                         >
-                            <template #prefix>
-                                <svg-icon icon="mail" color="#71B6FF" size="20px" />
-                            </template>
-                        </el-input>
-                    </div>
-
-                    <div class="form-field">
-                        <label>验证码</label>
-                        <div class="verification-code">
-                            <el-input
-                                v-model="code"
-                                style="height: 45px"
-                                placeholder="请输入验证码"
-                                clearable
-                            />
-                            <el-button
-                                @click="getCode"
-                                type="primary"
-                                style="height: 45px; width: 7rem"
-                                :disabled="verifyStatus.disabled"
-                                class="code-button"
-                                >{{
-                                    verifyStatus.disabled
-                                        ? `${verifyStatus.duration}s`
-                                        : '获取验证码'
-                                }}</el-button
-                            >
-                        </div>
                     </div>
                 </div>
-
                 <div class="reset">
-                    <div class="form-field">
-                        <label>新密码</label>
-                        <el-input
-                            v-model="newPassword"
-                            placeholder="请输入新密码"
-                            style="height: 45px"
-                            clearable
-                            show-password
-                        >
-                        </el-input>
-                    </div>
-
-                    <div class="form-field">
-                        <label>确认密码</label>
-                        <el-input
-                            v-model="confirmPassword"
-                            placeholder="请再次输入新密码"
-                            style="height: 45px"
-                            clearable
-                            show-password
-                        >
-                        </el-input>
-                    </div>
-
+                    <el-input
+                        v-model="newPassword"
+                        placeholder="请输入新密码"
+                        style="height: 40px"
+                        clearable
+                        show-password
+                    >
+                    </el-input>
+                    <el-input
+                        v-model="confirmPassword"
+                        placeholder="请再次输入新密码"
+                        style="height: 40px"
+                        clearable
+                        show-password
+                    >
+                    </el-input>
                     <div class="button">
-                        <el-button @click="visible = false" type="default">取消</el-button>
-                        <el-button @click="resetPassword" type="primary">重置密码</el-button>
+                        <el-button @click="resetPassword" type="primary">重置</el-button>
                     </div>
                 </div>
             </div>
@@ -182,97 +157,61 @@ function resetPassword() {
 
 <style scoped lang="scss">
 .dialog {
+    display: flex;
+    flex-direction: column;
+
     .dialog-content {
         @media (max-width: 768px) {
-            margin-top: 20vh;
+            margin-top: 25vh;
         }
 
         .title {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-
-            .dialog-icon {
-                font-size: 24px;
-                margin-right: 10px;
-                color: $su-blue;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-                font-weight: 600;
-                margin: 0;
-                color: #333;
-            }
-        }
-
-        .form-field {
-            margin-bottom: 1.25rem;
-
-            label {
-                display: block;
-                margin-bottom: 0.5rem;
-                font-size: 0.9rem;
-                color: #606266;
-                font-weight: 500;
-            }
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .send-code {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
             .verification-code {
                 display: flex;
                 width: 100%;
+                justify-content: space-between;
                 gap: 10px;
-
-                .code-button {
-                    border-radius: 8px;
-                    transition: all 0.3s ease;
-                }
             }
         }
 
         .reset {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+
             .button {
+                width: 100%;
                 display: flex;
-                justify-content: flex-end;
-                gap: 12px;
-                margin-top: 2rem;
+                justify-content: end;
 
                 .el-button {
-                    min-width: 100px;
-                    height: 40px;
-                    border-radius: 8px;
-                    font-weight: 500;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        transform: translateY(-2px);
-                    }
+                    width: 40%;
+                    height: 30px;
+                    border-radius: 15px;
                 }
             }
         }
     }
 }
 
-:deep(.el-dialog) {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-
-    @media (max-width: 768px) {
-        border-radius: 0;
+@media (min-width: 768px) {
+    :deep(.el-dialog) {
+        border-radius: 20px;
     }
 }
 
 :deep(.el-dialog__header) {
     padding: 0;
-}
-
-:deep(.el-dialog__body) {
-    padding: 25px 30px;
-}
-
-:deep(.el-input__wrapper) {
-    border-radius: 8px;
 }
 </style>
