@@ -1,10 +1,24 @@
 <template>
     <div class="dialog">
-        <el-dialog v-model="visible" :show-close="false" align-center width="300px">
-            <div class="title">确定要退出登录吗?</div>
-            <div class="main">
-                <el-button @click="logout" type="primary">确定</el-button>
-                <el-button @click="visible = false" type="default">取消</el-button>
+        <el-dialog
+            v-model="visible"
+            :show-close="false"
+            align-center
+            width="400px"
+            class="logout-dialog"
+        >
+            <div class="dialog-content">
+                <div class="icon-container">
+                    <i class="el-icon-warning-outline"></i>
+                </div>
+                <h2 class="title">确定要退出登录吗?</h2>
+                <p class="description">退出后需要重新登录才能访问您的账号</p>
+                <div class="actions">
+                    <el-button @click="visible = false" type="default">取消</el-button>
+                    <el-button @click="logout" type="primary" class="confirm-btn"
+                        >确定退出</el-button
+                    >
+                </div>
             </div>
         </el-dialog>
     </div>
@@ -44,25 +58,73 @@ async function logout() {
 
 <style scoped lang="scss">
 .dialog {
-    .title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+    .dialog-content {
+        text-align: center;
+        padding: 1rem 0;
 
-    .main {
-        display: flex;
+        .icon-container {
+            margin-bottom: 1rem;
 
-        justify-content: space-between;
-        align-items: center;
+            i {
+                font-size: 3rem;
+                color: #ff9800;
+            }
+        }
+
+        .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+
+        .description {
+            color: #909399;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+
+            .el-button {
+                min-width: 100px;
+                height: 40px;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                }
+            }
+
+            .confirm-btn {
+                background-color: #ff4d4f;
+                border-color: #ff4d4f;
+
+                &:hover {
+                    background-color: darken(#ff4d4f, 5%);
+                    border-color: darken(#ff4d4f, 5%);
+                }
+            }
+        }
     }
 }
 
 :deep(.el-dialog) {
-    border-radius: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 :deep(.el-dialog__header) {
     padding: 0;
+}
+
+:deep(.el-dialog__body) {
+    padding: 25px 30px;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-    <!--                         -->
     <el-container class="container">
         <el-header class="header">
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
@@ -24,86 +23,140 @@
                         <el-button type="primary" @click="confirmCrop">确认</el-button>
                     </template>
                 </el-dialog>
-                <div class="title">
-                    <p>基础信息</p>
-                    <hr />
-                </div>
-                <div class="name-bio-avatar">
-                    <div class="name-bio">
-                        <p>昵称</p>
-                        <div>
-                            <el-input v-model="basicInfo.nickname" placeholder="Please input" />
+
+                <div class="setting-card">
+                    <div class="title">
+                        <h2>基础信息</h2>
+                    </div>
+                    <div class="name-bio-avatar">
+                        <div class="name-bio">
+                            <div class="field-group">
+                                <label>昵称</label>
+                                <el-input v-model="basicInfo.nickname" placeholder="请输入昵称" />
+                            </div>
+                            <div class="field-group">
+                                <label>简介</label>
+                                <bio-panel v-model="basicInfo.introduction" />
+                            </div>
                         </div>
-                        <p>简介</p>
-                        <div>
-                            <bio-panel v-model="basicInfo.introduction" />
+                        <div class="avatar-id">
+                            <div class="avatar-container">
+                                <div class="avatar">
+                                    <el-avatar :size="150" :src="basicInfo.avatar">
+                                        <img src="@/assets/default-avatar.png" />
+                                    </el-avatar>
+                                    <input
+                                        type="file"
+                                        ref="imgPicker"
+                                        accept="image/png,image/jpeg,image/jpg"
+                                        style="display: none"
+                                        @change="pickImageImpl"
+                                    />
+                                    <el-button
+                                        @click.stop="pickImage"
+                                        class="upload-btn"
+                                        type="primary"
+                                        size="small"
+                                    >
+                                        <template #icon>
+                                            <svg-icon icon="edit" color="#ffffff" />
+                                        </template>
+                                        编辑
+                                    </el-button>
+                                </div>
+                                <p class="id">@{{ basicInfo.name }}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="avatar-id">
-                        <div class="avatar">
-                            <el-avatar :size="150" :src="basicInfo.avatar">
-                                <img src="@/assets/default-avatar.png" />
-                            </el-avatar>
-                            <input
-                                type="file"
-                                ref="imgPicker"
-                                accept="image/png,image/jpeg,image/jpg"
-                                style="display: none"
-                                @change="pickImageImpl"
+                </div>
+
+                <div class="setting-card">
+                    <div class="title">
+                        <h2>主题</h2>
+                    </div>
+                    <div class="theme-picker">
+                        <div class="theme">
+                            <theme-image
+                                v-model="basicInfo.themeId"
+                                :src="imgList"
+                                :width="deviceTypeStore.isMobile ? '75px' : '100px'"
                             />
-                            <el-button
-                                @click.stop="pickImage"
-                                class="upload-btn"
-                                type="default"
-                                size="small"
-                            >
-                                <template #icon>
-                                    <svg-icon icon="edit" color="#808080" />
-                                </template>
-                                编辑
-                            </el-button>
                         </div>
-                        <p class="id">@{{ basicInfo.name }}</p>
                     </div>
                 </div>
-                <div class="title">
-                    <p>主题</p>
-                    <hr />
+
+                <div class="button-container">
+                    <el-button
+                        @click="updateUserInfo"
+                        type="primary"
+                        size="large"
+                        class="save-button"
+                    >
+                        保存更改
+                    </el-button>
                 </div>
-                <div class="theme-picker">
-                    <div class="theme">
-                        <theme-image
-                            v-model="basicInfo.themeId"
-                            :src="imgList"
-                            :width="deviceTypeStore.isMobile ? '75px' : '100px'"
-                        />
+
+                <div v-if="userStore.getRole() == 'teacher'" class="setting-card">
+                    <div class="title">
+                        <h2>提问箱可见性</h2>
+                    </div>
+                    <div class="visibility-selector">
+                        <div
+                            class="visibility-card"
+                            :class="{ active: questionVisible === 'public' }"
+                            @click="questionVisible = 'public'"
+                        >
+                            <div class="card-content">
+                                <div class="icon-container">
+                                    <i class="el-icon-view"></i>
+                                </div>
+                                <h3 class="option-title">公开</h3>
+                                <p class="option-desc">任何人都可以访问提问箱</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="visibility-card"
+                            :class="{ active: questionVisible === 'protected' }"
+                            @click="questionVisible = 'protected'"
+                        >
+                            <div class="card-content">
+                                <div class="icon-container">
+                                    <i class="el-icon-lock"></i>
+                                </div>
+                                <h3 class="option-title">需登录</h3>
+                                <p class="option-desc">仅登录用户可以访问提问箱</p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="visibility-card"
+                            :class="{ active: questionVisible === 'private' }"
+                            @click="questionVisible = 'private'"
+                        >
+                            <div class="card-content">
+                                <div class="icon-container">
+                                    <i class="el-icon-turn-off"></i>
+                                </div>
+                                <h3 class="option-title">关闭</h3>
+                                <p class="option-desc">暂时关闭提问箱，无法访问</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="title">
-                    <hr />
-                </div>
-                <div class="button">
-                    <el-button @click="updateUserInfo" type="primary">保存更改</el-button>
-                </div>
-                <div v-if="userStore.getRole() == 'teacher'" class="title">
-                    <p>提问箱可见性</p>
-                    <hr />
-                </div>
-                <div v-if="userStore.getRole() == 'teacher'" class="change-perm">
-                    <div>
-                        <el-radio-group v-model="questionVisible" size="large">
-                            <el-radio-button label="公开" value="public" />
-                            <el-radio-button label="需登录" value="protected" />
-                            <el-radio-button label="关闭" value="private" />
-                        </el-radio-group>
+
+                <div class="setting-card danger-zone">
+                    <div class="title">
+                        <h2>账号设置</h2>
                     </div>
-                </div>
-                <div class="title">
-                    <hr />
-                </div>
-                <div class="password-logout">
-                    <p class="danger-option" @click="resetPassword">重置密码</p>
-                    <p class="danger-option" @click="showLogoutDialog">退出登录</p>
+                    <div class="password-logout">
+                        <p class="danger-option" @click="resetPassword">
+                            <i class="el-icon-lock"></i> 重置密码
+                        </p>
+                        <p class="danger-option" @click="showLogoutDialog">
+                            <i class="el-icon-switch-button"></i> 退出登录
+                        </p>
+                    </div>
                 </div>
                 <div style="height: 50px"></div>
             </el-main>
@@ -250,14 +303,14 @@ function showLogoutDialog() {
 
 const questionVisible = ref(userStore.getUser().question_box_perm)
 
-userStore.getRole() == 'teacher' &&
+if (userStore.getRole() == 'teacher') {
     watch(
         () => questionVisible.value,
-        async (newVal) => {
+        async () => {
             await updateTeacherPermApi(questionVisible.value).then(async (res) => {
                 if (res) {
                     ElMessage.success('保存成功')
-                    let user = userStore.getUser()
+                    const user = userStore.getUser()
                     user.question_box_perm = questionVisible.value
                     userStore.setUser(user)
                 } else {
@@ -266,14 +319,27 @@ userStore.getRole() == 'teacher' &&
             })
         },
     )
+}
 </script>
 
 <style lang="scss" scoped src="./setting.scss">
 :deep(.el-dialog) {
     border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
 }
 
 :deep(.el-input__wrapper) {
     border-radius: 10px;
+    transition: all 0.3s;
+
+    &:hover,
+    &:focus {
+        box-shadow: 0 0 0 1px $su-blue inset;
+    }
+}
+
+:deep(.el-radio-button__inner) {
+    transition: all 0.3s ease;
 }
 </style>
