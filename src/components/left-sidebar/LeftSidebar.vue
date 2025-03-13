@@ -48,28 +48,28 @@
         </div>
     </div>
 
-    <!-- <Teleport to="body"> -->
-    <Transition name="drawer-fade">
-        <div v-if="drawer" class="custom-drawer-container" @click.self="closeDrawer"></div>
-    </Transition>
-    <Transition name="drawer-slide">
-        <div
-            v-show="drawer"
-            class="custom-drawer"
-            :style="{
-                width: deviceTypeStore.isMobile ? '100%' : '400px',
-            }"
-        >
-            <NotificationDialog
-                @close-drawer="closeDrawer"
-                :question-count="newQuestionCount"
-                :answer-count="newAnswerCount"
-                :reply-count="newReplyCount"
-                :user_id="userInfo.id"
-            ></NotificationDialog>
-        </div>
-    </Transition>
-    <!-- </Teleport> -->
+    <Teleport to="body">
+        <Transition name="drawer-fade">
+            <div v-if="drawer" class="custom-drawer-container" @click.self="closeDrawer"></div>
+        </Transition>
+        <Transition name="drawer-slide">
+            <div
+                v-if="drawer"
+                class="custom-drawer"
+                :style="{
+                    width: deviceTypeStore.isMobile ? '100%' : '400px',
+                }"
+            >
+                <NotificationDialog
+                    @close-drawer="closeDrawer"
+                    :question-count="newQuestionCount"
+                    :answer-count="newAnswerCount"
+                    :reply-count="newReplyCount"
+                    :user_id="userInfo.id"
+                ></NotificationDialog>
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -79,13 +79,13 @@ import TeacherItem from './TeacherItem.vue'
 import DefaultItem from './DefaultItem.vue'
 import { ElMessage } from 'element-plus'
 import { getNotificationCountApi } from '@/api/notification/notification.api'
-import NotificationDialog from './NotificationDialog.vue'
+import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 
-const drawer = ref(true)
+const drawer = ref(false)
 
 // 用户信息
 const userStore = UserStore()

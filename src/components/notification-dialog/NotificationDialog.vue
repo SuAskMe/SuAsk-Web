@@ -18,32 +18,41 @@
             <div
                 class="notification-tab"
                 :class="{ active: radio == NotificationType.QUESTION }"
-                @click="radio = NotificationType.QUESTION"
+                @click="switchTab(NotificationType.QUESTION)"
+                v-if="userStore.getRole() == 'teacher'"
             >
                 提问我的
-                <div v-if="props.questionCount > 0" class="badge">{{ props.questionCount }}</div>
+                <div v-if="props.questionCount > 0" class="badge">
+                    {{ props.questionCount }}
+                </div>
             </div>
             <div
                 class="notification-tab"
                 :class="{ active: radio === NotificationType.ANSWER }"
-                @click="radio = NotificationType.ANSWER"
+                @click="switchTab(NotificationType.ANSWER)"
             >
                 回答我的
-                <div v-if="props.answerCount > 0" class="badge">{{ props.answerCount }}</div>
+                <div v-if="props.answerCount > 0" class="badge">
+                    {{ props.answerCount }}
+                </div>
             </div>
             <div
                 class="notification-tab"
                 :class="{ active: radio === NotificationType.REPLY }"
-                @click="radio = NotificationType.REPLY"
+                @click="switchTab(NotificationType.REPLY)"
             >
                 回复我的
                 <div v-if="props.replyCount > 0" class="badge">{{ props.replyCount }}</div>
             </div>
         </div>
-        <div class="notification-container">
-            <el-scrollbar>
-                <div v-if="radio == NotificationType.QUESTION">
-                    <transition-group name="notification" tag="div" class="notification-list">
+        <el-scrollbar>
+            <Transition :name="animationName" mode="out-in">
+                <div class="notification-container" :key="radio">
+                    <div
+                        v-if="
+                            radio == NotificationType.QUESTION && userStore.getRole() == 'teacher'
+                        "
+                    >
                         <div v-for="item in newQuestion" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="question"
@@ -58,21 +67,18 @@
                                 :user_id="item.user_id"
                                 @reply="closeDrawer"
                                 @delete="deleteNotification"
-                                @read="readNotification"
                             />
                         </div>
-                    </transition-group>
-                    <div v-if="newQuestion.length == 0" class="empty-state">
-                        <div class="empty-icon">
-                            <el-icon :size="48">
-                                <Notification />
-                            </el-icon>
+                        <div v-if="newQuestion.length == 0" class="empty-state">
+                            <div class="empty-icon">
+                                <el-icon :size="48">
+                                    <Notification />
+                                </el-icon>
+                            </div>
+                            <div class="empty-text">暂无提问通知</div>
                         </div>
-                        <div class="empty-text">暂无提问通知</div>
                     </div>
-                </div>
-                <div v-if="radio == NotificationType.ANSWER">
-                    <transition-group name="notification" tag="div" class="notification-list">
+                    <div v-else-if="radio == NotificationType.ANSWER">
                         <div v-for="item in newAnswer" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="answer"
@@ -89,21 +95,19 @@
                                 :respondent_id="item.respondent_id"
                                 @reply="closeDrawer"
                                 @delete="deleteNotification"
-                                @read="readNotification"
+                                @open-delete-dialog="openDeleteDialog"
                             />
                         </div>
-                    </transition-group>
-                    <div v-if="newAnswer.length == 0" class="empty-state">
-                        <div class="empty-icon">
-                            <el-icon :size="48">
-                                <ChatLineRound />
-                            </el-icon>
+                        <div v-if="newAnswer.length == 0" class="empty-state">
+                            <div class="empty-icon">
+                                <el-icon :size="48">
+                                    <ChatLineRound />
+                                </el-icon>
+                            </div>
+                            <div class="empty-text">暂无回答通知</div>
                         </div>
-                        <div class="empty-text">暂无回答通知</div>
                     </div>
-                </div>
-                <div v-if="radio == NotificationType.REPLY">
-                    <transition-group name="notification" tag="div" class="notification-list">
+                    <div v-else-if="radio == NotificationType.REPLY">
                         <div v-for="item in newReply" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="reply"
@@ -122,29 +126,98 @@
                                 :reply_content="item.reply_content"
                                 @reply="closeDrawer"
                                 @delete="deleteNotification"
-                                @read="readNotification"
                             />
                         </div>
-                    </transition-group>
-                    <div v-if="newReply.length == 0" class="empty-state">
-                        <div class="empty-icon">
-                            <el-icon :size="48">
-                                <ChatDotRound />
-                            </el-icon>
+                        <div v-if="newReply.length == 0" class="empty-state">
+                            <div class="empty-icon">
+                                <el-icon :size="48">
+                                    <ChatDotRound />
+                                </el-icon>
+                            </div>
+                            <div class="empty-text">暂无回复通知</div>
                         </div>
-                        <div class="empty-text">暂无回复通知</div>
                     </div>
                 </div>
-            </el-scrollbar>
-        </div>
+            </Transition>
+        </el-scrollbar>
     </div>
+    <el-dialog
+        v-model="deleteDialogVisible"
+        width="300px"
+        :show-close="false"
+        align-center
+        class="delete-dialog"
+        style="border-radius: 20px"
+    >
+        <template #header>
+            <div class="dialog-header">
+                <el-icon size="22" color="#f56c6c"><WarningFilled /></el-icon>
+                <span>删除通知</span>
+            </div>
+        </template>
+        <p class="dialog-content">确定要删除这条通知吗？此操作不可撤销。</p>
+        <div class="dialog-footer">
+            <el-button @click="cancelDelete" plain size="small">取消</el-button>
+            <el-button @click="deleteNotification" type="danger" size="small">
+                <template #icon
+                    ><el-icon><Delete /></el-icon
+                ></template>
+                删除
+            </el-button>
+        </div>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { getNotificationApi } from '@/api/notification/notification.api'
+import { deleteNotificationApi, getNotificationApi } from '@/api/notification/notification.api'
 import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model'
-import { NotificationCard } from '@/components/notification-card'
-import { onMounted, ref } from 'vue'
+import { NotificationCard } from '@/components/notification-dialog'
+import { computed, onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { UserStore } from '@/store/modules/user'
+
+const deleteDialogVisible = ref(false)
+
+const userStore = UserStore()
+
+const deleteMessage = ref<deleteMessage>({
+    id: 0,
+    type: '',
+})
+
+interface deleteMessage {
+    id: number
+    type: string
+}
+
+function openDeleteDialog(_deleteMessage: deleteMessage) {
+    deleteDialogVisible.value = true
+    deleteMessage.value = _deleteMessage
+}
+
+async function deleteNotification() {
+    console.log('delete')
+    deleteDialogVisible.value = false
+    console.log(deleteMessage.value)
+
+    await deleteNotificationApi(deleteMessage.value.id).then((res) => {
+        if (res != null) {
+            ElMessage.success('删除成功')
+        }
+    })
+
+    if (deleteMessage.value.type == NotificationType.QUESTION) {
+        newQuestion.value = newQuestion.value.filter((item) => item.id !== deleteMessage.value.id)
+    } else if (deleteMessage.value.type == NotificationType.ANSWER) {
+        newAnswer.value = newAnswer.value.filter((item) => item.id !== deleteMessage.value.id)
+    } else if (deleteMessage.value.type == NotificationType.REPLY) {
+        newReply.value = newReply.value.filter((item) => item.id !== deleteMessage.value.id)
+    }
+}
+
+function cancelDelete() {
+    deleteDialogVisible.value = false
+}
 
 enum NotificationType {
     QUESTION = 'question',
@@ -159,23 +232,36 @@ const props = defineProps<{
     user_id: number
 }>()
 
-const radio = ref(NotificationType.QUESTION)
+const radio = ref(NotificationType.ANSWER)
+const prevRadio = ref(NotificationType.ANSWER)
+const animationName = ref('fade-right')
+
+const NotificationTabList = computed(() => {
+    if (userStore.getRole() === 'teacher') {
+        return [NotificationType.QUESTION, NotificationType.ANSWER, NotificationType.REPLY]
+    } else {
+        return [NotificationType.ANSWER, NotificationType.REPLY]
+    }
+})
+
+function switchTab(tabType: NotificationType) {
+    if (tabType === radio.value) return
+    if (
+        NotificationTabList.value.indexOf(tabType) < NotificationTabList.value.indexOf(radio.value)
+    ) {
+        animationName.value = 'fade-left'
+    } else {
+        animationName.value = 'fade-right'
+    }
+
+    prevRadio.value = radio.value
+    radio.value = tabType
+}
 
 const emit = defineEmits(['closeDrawer'])
 
 function closeDrawer() {
     emit('closeDrawer')
-}
-
-function deleteNotification(id: number, type: string) {
-    // console.log(id, type);
-    if (type == NotificationType.QUESTION) {
-        newQuestion.value = newQuestion.value.filter((item) => item.id !== id)
-    } else if (type == NotificationType.ANSWER) {
-        newAnswer.value = newAnswer.value.filter((item) => item.id !== id)
-    } else if (type == NotificationType.REPLY) {
-        newReply.value = newReply.value.filter((item) => item.id !== id)
-    }
 }
 
 const newQuestion = ref<NewQuestion[]>([])
@@ -194,13 +280,8 @@ async function loadNotification() {
         })
 }
 
-function readNotification(id: number, type: string, is_read: boolean) {
-    // console.log(id, type, is_read);
-}
-
 onMounted(async () => {
     await loadNotification()
-    // console.log(newReply.value);
 })
 </script>
 
@@ -209,7 +290,7 @@ onMounted(async () => {
     display: flex;
     height: 100%;
     flex-direction: column;
-    background-color: #f9fafc;
+    background-color: $su-bg-grey;
 
     .title {
         display: flex;
@@ -310,18 +391,17 @@ onMounted(async () => {
         display: flex;
         flex-direction: column;
         flex: 1;
-        padding: 0 15px;
+        height: 100%;
+        padding-bottom: 10%;
+        width: 100%; /* 确保宽度100%以便应用动画 */
 
-        .notification-list {
-            padding: 5px 0;
+        .notification-item {
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            padding: 0 15px;
 
-            .notification-item {
-                margin-bottom: 10px;
-                transition: all 0.3s ease;
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
+            &:last-child {
+                margin-bottom: 0;
             }
         }
 
@@ -349,23 +429,60 @@ onMounted(async () => {
     }
 }
 
-// 添加过渡动画
-.notification-enter-active,
-.notification-leave-active {
-    transition: all 0.4s ease;
+.delete-dialog {
+    .dialog-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #f56c6c;
+        font-weight: 600;
+        padding: 15px 0 0;
+    }
+
+    .dialog-content {
+        margin: 15px 0;
+        color: #606266;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .dialog-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 20px;
+    }
 }
 
-.notification-enter-from {
+/* 从右侧滑入滑出的动画 */
+.fade-right-enter-active,
+.fade-right-leave-active {
+    transition: all 0.3s ease;
+}
+
+.fade-right-enter-from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(30px);
 }
 
-.notification-leave-to {
+.fade-right-leave-to {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(-30px);
 }
 
-.notification-move {
-    transition: transform 0.5s ease;
+/* 从左侧滑入滑出的动画 */
+.fade-left-enter-active,
+.fade-left-leave-active {
+    transition: all 0.3s ease;
+}
+
+.fade-left-enter-from {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.fade-left-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 </style>

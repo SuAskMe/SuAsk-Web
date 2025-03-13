@@ -1,6 +1,6 @@
 <template>
     <div class="notification-card" :class="{ 'is-read': props.is_read }">
-        <div class="card-inner">
+        <div class="card-inner" @click="clickReply">
             <div v-if="!props.is_read" class="unread-marker"></div>
 
             <div class="header" v-if="props.type == NotificationType.QUESTION">
@@ -41,12 +41,6 @@
             <div class="footer">
                 <span class="time">{{ getTimeStr(created_at) }}</span>
                 <div class="actions">
-                    <div @click.stop="clickReply" class="action-btn reply-btn">
-                        <el-icon size="14">
-                            <ChatRound />
-                        </el-icon>
-                        <span class="text">回复</span>
-                    </div>
                     <div @click.stop="clickDelete" class="action-btn delete-btn">
                         <el-icon size="14">
                             <Delete />
@@ -56,40 +50,13 @@
                 </div>
             </div>
         </div>
-
-        <el-dialog
-            v-model="dialogVisible"
-            width="300px"
-            :show-close="false"
-            align-center
-            class="delete-dialog"
-        >
-            <template #header>
-                <div class="dialog-header">
-                    <el-icon size="22" color="#f56c6c"><WarningFilled /></el-icon>
-                    <span>删除通知</span>
-                </div>
-            </template>
-            <p class="dialog-content">确定要删除这条通知吗？此操作不可撤销。</p>
-            <div class="dialog-footer">
-                <el-button @click="cancelDelete" plain size="small">取消</el-button>
-                <el-button @click="deleteNotification" type="danger" size="small">
-                    <template #icon
-                        ><el-icon><Delete /></el-icon
-                    ></template>
-                    删除
-                </el-button>
-            </div>
-        </el-dialog>
     </div>
 </template>
 
 <script setup lang="ts">
-import { deleteNotificationApi, readNotificationApi } from '@/api/notification/notification.api'
+import { readNotificationApi } from '@/api/notification/notification.api'
 import { UserStore } from '@/store/modules/user'
 import { getTimeStr } from '@/utils/time'
-import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 enum NotificationType {
@@ -123,7 +90,7 @@ const userStore = UserStore()
 
 const userName = userStore.getUser().name
 
-const emit = defineEmits(['reply', 'delete', 'read'])
+const emit = defineEmits(['reply', 'delete', 'read', 'openDeleteDialog'])
 
 const router = useRouter()
 
@@ -146,25 +113,9 @@ async function clickReply() {
 }
 
 function clickDelete() {
-    dialogVisible.value = true
+    emit('openDeleteDialog', { id: props.id, type: props.type })
+    console.log('clickDelete', props.id)
 }
-
-async function deleteNotification() {
-    console.log('delete')
-    dialogVisible.value = false
-    await deleteNotificationApi(props.id).then((res) => {
-        if (res != null) {
-            ElMessage.success('删除成功')
-            emit('delete', props.id, props.type)
-        }
-    })
-}
-
-function cancelDelete() {
-    dialogVisible.value = false
-}
-
-const dialogVisible = ref(false)
 </script>
 
 <style scoped lang="scss">
@@ -172,7 +123,6 @@ const dialogVisible = ref(false)
     width: 100%;
     border-radius: 10px;
     background-color: white;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     overflow: hidden;
 
@@ -182,7 +132,7 @@ const dialogVisible = ref(false)
     }
 
     &.is-read {
-        opacity: 0.75;
+        opacity: 0.6;
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
 
         &:hover {
@@ -399,46 +349,6 @@ const dialogVisible = ref(false)
                 }
             }
         }
-    }
-}
-
-.delete-dialog {
-    .dialog-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #f56c6c;
-        font-weight: 600;
-        padding: 15px 0 0;
-    }
-
-    .dialog-content {
-        margin: 15px 0;
-        color: #606266;
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    .dialog-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 20px;
-    }
-}
-
-:deep(.el-dialog) {
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-
-    .el-dialog__header {
-        margin: 0;
-        padding: 0;
-    }
-
-    .el-dialog__body {
-        padding: 15px 20px;
     }
 }
 </style>
