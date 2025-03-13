@@ -1,62 +1,74 @@
 <template>
-    <el-dialog
-        v-model="visible"
-        :show-close="deviceTypeStore.isMobile"
-        align-center
-        width="400px"
-        :fullscreen="deviceTypeStore.isMobile"
-    >
-        <div class="dialog">
-            <div class="title">
-                <p>忘记密码</p>
-            </div>
-            <div class="send-code">
-                <el-input v-model="mail" style="height: 40px" placeholder="请输入注册邮箱">
-                    <template #prefix>
-                        <svg-icon icon="mail" color="#71B6FF" size="20px" />
-                    </template>
-                </el-input>
-                <div class="verification-code">
+    <div>
+        <el-dialog
+            v-model="visible"
+            :show-close="deviceTypeStore.isMobile"
+            align-center
+            width="450px"
+            :fullscreen="deviceTypeStore.isMobile"
+            class="forget-dialog"
+        >
+            <div class="dialog-card">
+                <div class="title-container">
+                    <h2 class="title">忘记密码</h2>
+                    <div class="title-underline"></div>
+                </div>
+                <div class="send-code">
+                    <el-input v-model="mail" class="custom-input" placeholder="请输入注册邮箱">
+                        <template #prefix>
+                            <svg-icon icon="mail" color="#71B6FF" size="20px" />
+                        </template>
+                    </el-input>
+                    <div class="verification-code">
+                        <el-input
+                            v-model="code"
+                            class="custom-input"
+                            placeholder="请输入验证码"
+                            clearable
+                        />
+                        <el-button
+                            @click="getCode"
+                            type="primary"
+                            class="code-btn"
+                            :disabled="verifyStatus.disabled"
+                            >{{
+                                verifyStatus.disabled ? verifyStatus.duration + 's' : '获取验证码'
+                            }}</el-button
+                        >
+                    </div>
+                </div>
+                <div class="reset">
                     <el-input
-                        v-model="code"
-                        style="height: 40px"
-                        placeholder="请输入验证码"
+                        v-model="newPassword"
+                        placeholder="请输入新密码"
+                        class="custom-input"
                         clearable
-                    />
-                    <el-button
-                        @click="getCode"
-                        type="primary"
-                        style="height: 40px; width: 6rem"
-                        :disabled="verifyStatus.disabled"
-                        >{{
-                            verifyStatus.disabled ? verifyStatus.duration : '获取验证码'
-                        }}</el-button
+                        show-password
                     >
+                        <template #prefix>
+                            <el-icon color="#71B6FF" size="20px"><Lock /></el-icon>
+                        </template>
+                    </el-input>
+                    <el-input
+                        v-model="confirmPassword"
+                        placeholder="请再次输入新密码"
+                        class="custom-input"
+                        clearable
+                        show-password
+                    >
+                        <template #prefix>
+                            <el-icon color="#71B6FF" size="20px"><Lock /></el-icon>
+                        </template>
+                    </el-input>
+                    <div class="button-container">
+                        <el-button @click="resetPassword" type="primary" class="submit-btn"
+                            >重置密码</el-button
+                        >
+                    </div>
                 </div>
             </div>
-            <div class="reset">
-                <el-input
-                    v-model="newPassword"
-                    placeholder="请输入新密码"
-                    style="height: 40px"
-                    clearable
-                    show-password
-                >
-                </el-input>
-                <el-input
-                    v-model="confirmPassword"
-                    placeholder="请再次输入新密码"
-                    style="height: 40px"
-                    clearable
-                    show-password
-                >
-                </el-input>
-                <div class="button">
-                    <el-button @click="resetPassword" type="primary">重置</el-button>
-                </div>
-            </div>
-        </div>
-    </el-dialog>
+        </el-dialog>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -159,54 +171,127 @@ function resetPassword() {
 </script>
 
 <style scoped lang="scss">
-.dialog {
+:deep(.el-dialog__header) {
+    padding: 0;
+}
+
+:deep(.el-dialog__body) {
+    padding: 0;
+}
+
+:deep(.el-dialog) {
+    border-radius: 12px;
+    overflow: hidden;
+
+    @media screen and (max-width: 768px) {
+        border-radius: 0;
+    }
+}
+
+.dialog-card {
     display: flex;
     flex-direction: column;
+    padding: 30px 25px;
+    background: linear-gradient(to bottom, #f8faff, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+
     @media (max-width: 768px) {
-        margin-top: 25vh;
+        margin-top: 15vh;
+        padding: 25px 20px;
     }
 
-    .title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 20px;
+    .title-container {
         text-align: center;
+        margin-bottom: 30px;
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .title-underline {
+            height: 3px;
+            width: 60px;
+            margin: 0 auto;
+            background: linear-gradient(to right, #71b6ff, #4891e0);
+            border-radius: 3px;
+        }
+    }
+
+    .custom-input {
+        height: 46px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        :deep(.el-input__wrapper) {
+            border-radius: 8px;
+            box-shadow: 0 0 0 1px rgba(113, 182, 255, 0.2);
+
+            &:hover,
+            &:focus {
+                box-shadow: 0 0 0 1px rgba(113, 182, 255, 0.4);
+            }
+        }
     }
 
     .send-code {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        margin-bottom: 10px;
 
         .verification-code {
             display: flex;
             width: 100%;
             justify-content: space-between;
             gap: 10px;
+
+            .code-btn {
+                height: 46px;
+                min-width: 110px;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
         }
     }
 
     .reset {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-top: 20px;
 
-        .button {
+        .button-container {
             width: 100%;
             display: flex;
-            justify-content: end;
+            justify-content: center;
+            margin-top: 10px;
 
-            .el-button {
-                width: 40%;
-                height: 30px;
-                border-radius: 15px;
+            .submit-btn {
+                width: 100%;
+                height: 46px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 500;
+                margin-top: 10px;
+                background: linear-gradient(to right, #71b6ff, #4891e0);
+                border: none;
+                box-shadow: 0 4px 10px rgba(113, 182, 255, 0.3);
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 15px rgba(113, 182, 255, 0.4);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
             }
         }
     }
-}
-
-:deep(.el-dialog__header) {
-    padding: 0;
 }
 </style>

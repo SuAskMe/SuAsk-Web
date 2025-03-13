@@ -30,6 +30,10 @@ const selectImg = (index: number) => {
     display: flex;
     gap: 2rem;
     flex-wrap: nowrap;
+
+    @media screen and (max-width: 768px) {
+        gap: 1rem;
+    }
 }
 
 .theme-image-wrapper {
