@@ -66,7 +66,7 @@
                                 :user_name="item.user_name"
                                 :user_id="item.user_id"
                                 @reply="closeDrawer"
-                                @delete="deleteNotification"
+                                @open-delete-dialog="openDeleteDialog"
                             />
                         </div>
                         <div v-if="newQuestion.length == 0" class="empty-state">
@@ -94,7 +94,6 @@
                                 :respondent_name="item.respondent_name"
                                 :respondent_id="item.respondent_id"
                                 @reply="closeDrawer"
-                                @delete="deleteNotification"
                                 @open-delete-dialog="openDeleteDialog"
                             />
                         </div>
@@ -125,7 +124,7 @@
                                 :reply_id="item.reply_id"
                                 :reply_content="item.reply_content"
                                 @reply="closeDrawer"
-                                @delete="deleteNotification"
+                                @open-delete-dialog="openDeleteDialog"
                             />
                         </div>
                         <div v-if="newReply.length == 0" class="empty-state">
