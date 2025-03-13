@@ -90,7 +90,7 @@ const userStore = UserStore()
 
 const userName = userStore.getUser().name
 
-const emit = defineEmits(['reply', 'delete', 'read', 'openDeleteDialog'])
+const emit = defineEmits(['reply', 'read', 'openDeleteDialog'])
 
 const router = useRouter()
 
