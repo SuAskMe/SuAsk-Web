@@ -8,9 +8,7 @@
             @click="selectImg(index)"
         >
             <img class="theme-image" :src="src" :width="width" :alt="`主题 ${index + 1}`" />
-            <div class="selection-indicator">
-                <i class="el-icon-check"></i>
-            </div>
+            <div class="selection-indicator"></div>
         </div>
     </div>
 </template>
@@ -30,7 +28,7 @@ const selectImg = (index: number) => {
 <style lang="scss" scoped>
 .theme-images-container {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-wrap: nowrap;
 }
 
@@ -49,6 +47,7 @@ const selectImg = (index: number) => {
 
     &.selected {
         outline: 2px solid $su-blue;
+        outline-offset: -2px;
         transform: translateY(-3px);
         box-shadow: 0 6px 14px rgba(113, 182, 255, 0.35);
 
@@ -76,14 +75,8 @@ const selectImg = (index: number) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        opacity: 0;
         transition: all 0.3s ease;
         font-size: 12px;
-
-        i {
-            font-size: 12px;
-        }
     }
 }
 </style>

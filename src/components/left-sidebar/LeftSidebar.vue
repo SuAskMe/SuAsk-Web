@@ -48,33 +48,39 @@
         </div>
     </div>
 
-    <el-drawer
-        class="drawer"
-        v-model="drawer"
-        :with-header="false"
-        :size="deviceTypeStore.isMobile ? '100%' : 400"
-        destroy-on-close
-    >
-        <Notification
-            @close-drawer="closeDrawer"
-            :question-count="newQuestionCount"
-            :answer-count="newAnswerCount"
-            :reply-count="newReplyCount"
-            :user_id="userInfo.id"
-        ></Notification>
-    </el-drawer>
+    <Teleport to="body">
+        <Transition name="drawer-fade">
+            <div v-if="drawer" class="custom-drawer-container" @click.self="closeDrawer"></div>
+        </Transition>
+        <Transition name="drawer-slide">
+            <div
+                v-if="drawer"
+                class="custom-drawer"
+                :style="{
+                    width: deviceTypeStore.isMobile ? '100%' : '400px',
+                }"
+            >
+                <NotificationDialog
+                    @close-drawer="closeDrawer"
+                    :question-count="newQuestionCount"
+                    :answer-count="newAnswerCount"
+                    :reply-count="newReplyCount"
+                    :user_id="userInfo.id"
+                ></NotificationDialog>
+            </div>
+        </Transition>
+    </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-
+import { computed, onMounted, ref, watch, onUnmounted } from 'vue'
 import StudentItem from './StudentItem.vue'
 import TeacherItem from './TeacherItem.vue'
+import DefaultItem from './DefaultItem.vue'
 import { ElMessage } from 'element-plus'
 import { getNotificationCountApi } from '@/api/notification/notification.api'
-import Notification from './Notification.vue'
+import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
 import { UserStore } from '@/store/modules/user'
-import DefaultItem from './DefaultItem.vue'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
@@ -82,7 +88,6 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 const drawer = ref(false)
 
 // 用户信息
-
 const userStore = UserStore()
 const userInfo = computed(() => userStore.getUser())
 
@@ -97,12 +102,35 @@ function toggleSidebar() {
 const deviceTypeStore = DeviceTypeStore()
 
 function closeDrawer() {
-    // console.log("closeDrawer");
     drawer.value = false
 }
+
 async function openDrawer() {
     drawer.value = true
 }
+
+const handleEscKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && drawer.value) {
+        closeDrawer()
+    }
+}
+
+// 添加键盘事件监听
+watch(drawer, (val) => {
+    if (val) {
+        document.body.style.overflow = 'hidden' // 防止背景滚动
+        document.addEventListener('keydown', handleEscKey)
+    } else {
+        document.body.style.overflow = ''
+        document.removeEventListener('keydown', handleEscKey)
+    }
+})
+
+// 组件卸载时移除事件监听和样式
+onUnmounted(() => {
+    document.body.style.overflow = ''
+    document.removeEventListener('keydown', handleEscKey)
+})
 
 const newQuestionCount = ref(0)
 const newAnswerCount = ref(0)
@@ -116,7 +144,6 @@ async function getNotificationCount() {
                 newAnswerCount.value = res.new_answer_count
                 newReplyCount.value = res.new_reply_count
             }
-            // console.log(res);
         })
         .catch((err) => {
             console.log(err)
@@ -262,27 +289,62 @@ onMounted(() => {
             border-radius: 20px;
         }
     }
+}
 
-    .drawer {
-        display: flex;
-        height: 100%;
+/* 抽屉相关样式 */
+.custom-drawer-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(30px);
+}
 
-        .title {
-            font-size: 20px;
-            font-weight: bold;
-            padding: 20px 20px 10px 20px;
-        }
-    }
+.custom-drawer {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    background-color: white;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+}
 
-    .notification-enter-active,
-    .notification-leave-active {
-        transition: opacity 0.5s;
-    }
+/* 抽屉动画效果 */
+.drawer-fade-enter-active,
+.drawer-fade-leave-active {
+    transition: opacity 0.3s ease;
+}
 
-    .notification-enter-from,
-    .notification-leave-to {
-        opacity: 0;
-        transform: translateX(20px);
-    }
+.drawer-fade-enter-from,
+.drawer-fade-leave-to {
+    opacity: 0;
+}
+
+.drawer-slide-enter-active,
+.drawer-slide-leave-active {
+    transition: transform 0.3s ease;
+}
+
+.drawer-slide-enter-from,
+.drawer-slide-leave-to {
+    transform: translateX(100%);
+}
+
+/* 通知相关动画 */
+.notification-enter-active,
+.notification-leave-active {
+    transition: opacity 0.5s;
+}
+
+.notification-enter-from,
+.notification-leave-to {
+    opacity: 0;
+    transform: translateX(20px);
 }
 </style>
