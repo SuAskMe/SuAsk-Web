@@ -1,65 +1,84 @@
 <template>
-    <div class="main" :style="props.is_read ? 'opacity: 0.5' : ''">
-        <div class="header" v-if="props.type == NotificationType.QUESTION">
-            <span class="name">{{ user_name }}</span>
-            <span class="topic">提出了一个问题</span>
-        </div>
-        <div class="question" v-if="props.type == NotificationType.QUESTION">
-            <span class="question-title">{{ question_title }}</span>
-            <span class="question-content">{{ question_content }}</span>
-        </div>
+    <div class="notification-card" :class="{ 'is-read': props.is_read }">
+        <div class="card-inner">
+            <div v-if="!props.is_read" class="unread-marker"></div>
 
-        <div class="header" v-if="props.type == NotificationType.ANSWER">
-            <span class="name">{{ respondent_name }}</span>
-            <span class="topic">对我的问题发表了回答</span>
-        </div>
-        <div class="answer" v-if="props.type == NotificationType.ANSWER">
-            <span class="answer-content">{{ answer_content }}</span>
-        </div>
-
-        <div class="header" v-if="props.type == NotificationType.REPLY">
-            <span class="name">{{ respondent_name }}</span>
-            <span class="topic">回复了我的回答</span>
-        </div>
-        <div class="reply" v-if="props.type == NotificationType.REPLY">
-            <div class="reply-content">
-                <span class="text">回复</span>
-                <span class="name">@{{ userName }}</span>
-                <span class="content">: {{ answer_content }}</span>
+            <div class="header" v-if="props.type == NotificationType.QUESTION">
+                <span class="name">{{ user_name }}</span>
+                <span class="topic">提出了一个问题</span>
             </div>
-            <div class="reply-to-content">
-                <div class="line" />
-                <div class="reply-to-content-text">
-                    <span class="name">{{ userName }}:</span>
-                    <span class="content">{{ reply_content }}</span>
+            <div class="question" v-if="props.type == NotificationType.QUESTION">
+                <span class="question-title">{{ question_title }}</span>
+                <span class="question-content">{{ question_content }}</span>
+            </div>
+
+            <div class="header" v-if="props.type == NotificationType.ANSWER">
+                <span class="name">{{ respondent_name }}</span>
+                <span class="topic">对我的问题发表了回答</span>
+            </div>
+            <div class="answer" v-if="props.type == NotificationType.ANSWER">
+                <span class="answer-content">{{ answer_content }}</span>
+            </div>
+
+            <div class="header" v-if="props.type == NotificationType.REPLY">
+                <span class="name">{{ respondent_name }}</span>
+                <span class="topic">回复了我的回答</span>
+            </div>
+            <div class="reply" v-if="props.type == NotificationType.REPLY">
+                <div class="reply-content">
+                    <span class="text">回复</span>
+                    <span class="name">@{{ userName }}</span>
+                    <span class="content">: {{ answer_content }}</span>
+                </div>
+                <div class="reply-to-content">
+                    <div class="line"></div>
+                    <div class="reply-to-content-text">
+                        <span class="name">{{ userName }}:</span>
+                        <span class="content">{{ reply_content }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <span class="time">{{ getTimeStr(created_at) }}</span>
+                <div class="actions">
+                    <div @click.stop="clickReply" class="action-btn reply-btn">
+                        <el-icon size="14">
+                            <ChatRound />
+                        </el-icon>
+                        <span class="text">回复</span>
+                    </div>
+                    <div @click.stop="clickDelete" class="action-btn delete-btn">
+                        <el-icon size="14">
+                            <Delete />
+                        </el-icon>
+                        <span class="text">删除</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <span class="time">{{ getTimeStr(created_at) }}</span>
-            <div @click.stop="clickReply" class="reply-btn">
-                <span class="text">回复</span>
-                <el-icon size="13">
-                    <ChatRound />
-                </el-icon>
-            </div>
-            <div @click.stop="clickDelete" class="delete-btn">
-                <span>删除</span>
-                <el-icon size="13">
-                    <Delete />
-                </el-icon>
-            </div>
-        </div>
-        <el-dialog v-model="dialogVisible" width="20%" :show-close="false" align-center>
+
+        <el-dialog
+            v-model="dialogVisible"
+            width="300px"
+            :show-close="false"
+            align-center
+            class="delete-dialog"
+        >
             <template #header>
-                <p style="margin: 0">删除</p>
+                <div class="dialog-header">
+                    <el-icon size="22" color="#f56c6c"><WarningFilled /></el-icon>
+                    <span>删除通知</span>
+                </div>
             </template>
-            <p>确定删除这条通知吗？</p>
-            <div class="dialog">
-                <el-button @click="deleteNotification" type="danger" round size="small"
-                    >删除</el-button
-                >
-                <el-button @click="cancelDelete" type="default" round size="small">取消</el-button>
+            <p class="dialog-content">确定要删除这条通知吗？此操作不可撤销。</p>
+            <div class="dialog-footer">
+                <el-button @click="cancelDelete" plain size="small">取消</el-button>
+                <el-button @click="deleteNotification" type="danger" size="small">
+                    <template #icon
+                        ><el-icon><Delete /></el-icon
+                    ></template>
+                    删除
+                </el-button>
             </div>
         </el-dialog>
     </div>
@@ -149,81 +168,104 @@ const dialogVisible = ref(false)
 </script>
 
 <style scoped lang="scss">
-.main {
+.notification-card {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-    border-top: 1px solid $su-border;
-    border-bottom: 1px solid $su-border;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+
+    &.is-read {
+        opacity: 0.75;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .card-inner {
+        position: relative;
+        padding: 15px;
+    }
+
+    .unread-marker {
+        position: absolute;
+        top: 15px;
+        left: -15px;
+        width: 4px;
+        height: 18px;
+        background-color: $su-blue;
+        border-radius: 0 2px 2px 0;
+    }
 
     .header {
         display: flex;
         margin-bottom: 10px;
-        line-height: 16px;
+        line-height: 20px;
 
         .name {
-            font-size: 16px;
-            font-weight: bold;
-            margin-right: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-right: 8px;
             color: $su-blue;
         }
 
         .topic {
             font-size: 14px;
-            line-height: 16px;
             color: $su-grey;
+            display: flex;
+            align-items: center;
         }
     }
 
     .footer {
         display: flex;
-        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        height: 16px;
+        margin-top: 12px;
 
         .time {
             font-size: 12px;
-            line-height: 16px;
-            color: $su-grey;
+            color: #909399;
         }
 
-        .reply-btn {
+        .actions {
             display: flex;
-            align-items: center;
-            font-size: 12px;
-            line-height: 16px;
-            color: $su-grey;
-            margin-left: 10px;
+            gap: 12px;
 
-            .el-icon {
-                vertical-align: sub;
-                margin-left: 5px;
+            .action-btn {
+                display: flex;
+                align-items: center;
+                font-size: 12px;
+                color: #909399;
+                padding: 4px 8px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                cursor: pointer;
+
+                .text {
+                    margin-left: 4px;
+                }
+
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
+
+                &.reply-btn:hover {
+                    color: $su-blue;
+                }
+
+                &.delete-btn:hover {
+                    color: $su-red;
+                }
             }
-        }
-
-        .delete-btn {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            line-height: 16px;
-            color: $su-grey;
-            margin-left: 10px;
-
-            .el-icon {
-                vertical-align: sub;
-                margin-left: 5px;
-            }
-        }
-
-        .reply-btn:hover {
-            cursor: pointer;
-            color: $su-blue;
-        }
-
-        .delete-btn:hover {
-            cursor: pointer;
-            color: $su-red;
         }
     }
 
@@ -232,23 +274,30 @@ const dialogVisible = ref(false)
         flex-direction: column;
         margin-bottom: 10px;
         width: 100%;
+        background-color: rgba(0, 0, 0, 0.02);
+        padding: 10px;
+        border-radius: 6px;
+        border-left: 3px solid rgba(113, 182, 255, 0.5);
 
         .question-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: #303133;
         }
 
         .question-content {
-            font-size: 14px;
-            line-height: 16px;
-            color: $su-grey;
-            white-space: nowrap;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #606266;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
     }
 
@@ -257,13 +306,20 @@ const dialogVisible = ref(false)
         flex-direction: column;
         margin-bottom: 10px;
         width: 100%;
+        background-color: rgba(0, 0, 0, 0.02);
+        padding: 10px;
+        border-radius: 6px;
+        border-left: 3px solid rgba(103, 194, 58, 0.5);
 
         .answer-content {
             font-size: 14px;
-            line-height: 16px;
-            white-space: nowrap;
+            line-height: 1.5;
+            color: #303133;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
     }
 
@@ -272,13 +328,17 @@ const dialogVisible = ref(false)
         flex-direction: column;
         margin-bottom: 10px;
         width: 100%;
+        background-color: rgba(0, 0, 0, 0.02);
+        padding: 10px;
+        border-radius: 6px;
+        border-left: 3px solid rgba(230, 162, 60, 0.5);
 
         .reply-content {
             display: flex;
             align-items: center;
             font-size: 14px;
-            line-height: 16px;
-            margin-bottom: 10px;
+            line-height: 1.5;
+            margin-bottom: 8px;
             overflow: hidden;
 
             .text {
@@ -290,10 +350,11 @@ const dialogVisible = ref(false)
                 color: $su-blue;
                 margin-right: 5px;
                 flex-shrink: 0;
+                font-weight: 500;
             }
 
             .content {
-                color: $su-grey;
+                color: #303133;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -304,55 +365,80 @@ const dialogVisible = ref(false)
         .reply-to-content {
             display: flex;
             flex-direction: row;
-            margin-bottom: 10px;
             overflow: hidden;
-            height: 16px;
 
             .line {
                 width: 3px;
-                height: 100%;
-                background-color: $su-grey-light;
+                height: auto;
+                background-color: #e0e0e0;
                 border-radius: 3px;
-                margin-bottom: 5px;
-                margin-right: 5px;
+                margin-right: 8px;
                 flex-shrink: 0;
             }
 
             .reply-to-content-text {
                 display: flex;
-                font-size: 14px;
-                line-height: 16px;
+                font-size: 13px;
+                line-height: 1.5;
                 overflow: hidden;
-                color: $su-grey;
+                color: #606266;
 
                 .name {
                     margin-right: 5px;
                     flex-shrink: 0;
+                    font-weight: 500;
                 }
 
                 .content {
-                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
                     flex-grow: 1;
                 }
             }
         }
     }
+}
 
-    .dialog {
+.delete-dialog {
+    .dialog-header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-top: 10px;
+        gap: 10px;
+        color: #f56c6c;
+        font-weight: 600;
+        padding: 15px 0 0;
+    }
+
+    .dialog-content {
+        margin: 15px 0;
+        color: #606266;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .dialog-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
     }
 }
 
 :deep(.el-dialog) {
-    border-radius: 20px;
-}
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 
-:deep(.el-dialog__header) {
-    padding: 0;
+    .el-dialog__header {
+        margin: 0;
+        padding: 0;
+    }
+
+    .el-dialog__body {
+        padding: 15px 20px;
+    }
 }
 </style>

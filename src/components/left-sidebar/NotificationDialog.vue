@@ -21,6 +21,7 @@
                 @click="radio = NotificationType.QUESTION"
             >
                 提问我的
+                <div v-if="props.questionCount > 0" class="badge">{{ props.questionCount }}</div>
             </div>
             <div
                 class="notification-tab"
@@ -28,6 +29,7 @@
                 @click="radio = NotificationType.ANSWER"
             >
                 回答我的
+                <div v-if="props.answerCount > 0" class="badge">{{ props.answerCount }}</div>
             </div>
             <div
                 class="notification-tab"
@@ -35,13 +37,14 @@
                 @click="radio = NotificationType.REPLY"
             >
                 回复我的
+                <div v-if="props.replyCount > 0" class="badge">{{ props.replyCount }}</div>
             </div>
         </div>
         <div class="notification-container">
             <el-scrollbar>
                 <div v-if="radio == NotificationType.QUESTION">
-                    <transition-group name="notification">
-                        <div v-for="item in newQuestion" :key="item.id">
+                    <transition-group name="notification" tag="div" class="notification-list">
+                        <div v-for="item in newQuestion" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="question"
                                 :created_at="item.created_at"
@@ -59,11 +62,18 @@
                             />
                         </div>
                     </transition-group>
-                    <div v-if="newQuestion.length == 0" class="text">暂无提问</div>
+                    <div v-if="newQuestion.length == 0" class="empty-state">
+                        <div class="empty-icon">
+                            <el-icon :size="48">
+                                <Notification />
+                            </el-icon>
+                        </div>
+                        <div class="empty-text">暂无提问通知</div>
+                    </div>
                 </div>
                 <div v-if="radio == NotificationType.ANSWER">
-                    <transition-group name="notification">
-                        <div v-for="item in newAnswer" :key="item.id">
+                    <transition-group name="notification" tag="div" class="notification-list">
+                        <div v-for="item in newAnswer" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="answer"
                                 :created_at="item.created_at"
@@ -83,11 +93,18 @@
                             />
                         </div>
                     </transition-group>
-                    <div v-if="newAnswer.length == 0" class="text">暂无回答</div>
+                    <div v-if="newAnswer.length == 0" class="empty-state">
+                        <div class="empty-icon">
+                            <el-icon :size="48">
+                                <ChatLineRound />
+                            </el-icon>
+                        </div>
+                        <div class="empty-text">暂无回答通知</div>
+                    </div>
                 </div>
                 <div v-if="radio == NotificationType.REPLY">
-                    <transition-group name="notification">
-                        <div v-for="item in newReply" :key="item.id">
+                    <transition-group name="notification" tag="div" class="notification-list">
+                        <div v-for="item in newReply" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="reply"
                                 :created_at="item.created_at"
@@ -109,7 +126,14 @@
                             />
                         </div>
                     </transition-group>
-                    <div v-if="newReply.length == 0" class="text">暂无回复</div>
+                    <div v-if="newReply.length == 0" class="empty-state">
+                        <div class="empty-icon">
+                            <el-icon :size="48">
+                                <ChatDotRound />
+                            </el-icon>
+                        </div>
+                        <div class="empty-text">暂无回复通知</div>
+                    </div>
                 </div>
             </el-scrollbar>
         </div>
@@ -185,34 +209,50 @@ onMounted(async () => {
     display: flex;
     height: 100%;
     flex-direction: column;
+    background-color: #f9fafc;
 
     .title {
         display: flex;
         align-items: center;
+        padding: 15px 15px 10px;
 
         .back-btn {
             cursor: pointer;
-            padding: 5px;
-            align-items: center;
+            padding: 8px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background-color: rgba(113, 182, 255, 0.1);
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: rgba(113, 182, 255, 0.2);
+                transform: translateX(-3px);
+            }
         }
 
         .message {
             position: relative;
             padding-right: 15px;
-            padding-top: 3px;
             font-size: 20px;
-            align-items: center;
+            font-weight: 600;
+            color: #303133;
 
             .count {
                 position: absolute;
-                top: 0;
+                top: -2px;
                 right: 0;
-                margin-left: 10px;
-                padding: 0 3px;
-                font-size: 10px;
+                min-width: 16px;
+                height: 16px;
+                padding: 0 5px;
+                font-size: 12px;
+                font-weight: bold;
                 color: white;
-                border-radius: 5px;
+                border-radius: 8px;
                 background-color: $su-red;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 6px rgba(255, 77, 79, 0.4);
             }
         }
     }
@@ -220,24 +260,48 @@ onMounted(async () => {
     .notification-tabs {
         display: flex;
         border-bottom: 1px solid $su-border;
-        margin-bottom: 10px;
+        margin: 0px 15px 15px;
+        background-color: white;
+        border-radius: 12px;
+        padding: 5px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 
         .notification-tab {
+            position: relative;
             flex: 1;
             text-align: center;
-            padding: 10px;
+            padding: 12px 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             color: #606266;
             transition: all 0.3s ease;
+            border-radius: 8px;
 
             &:hover {
                 color: $su-blue;
+                background-color: rgba(113, 182, 255, 0.05);
             }
+
             &.active {
                 color: $su-blue;
-                border-bottom: 2px solid $su-blue;
                 font-weight: bold;
+                background-color: rgba(113, 182, 255, 0.1);
+            }
+
+            .badge {
+                position: absolute;
+                top: 6px;
+                right: 15%;
+                min-width: 16px;
+                height: 16px;
+                padding: 0 4px;
+                font-size: 10px;
+                color: white;
+                border-radius: 8px;
+                background-color: $su-red;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
     }
@@ -245,14 +309,63 @@ onMounted(async () => {
     .notification-container {
         display: flex;
         flex-direction: column;
-        height: 90%;
-        width: auto;
-        margin-top: 10px;
+        flex: 1;
+        padding: 0 15px;
 
-        .text {
-            text-align: center;
-            margin-top: 20px;
+        .notification-list {
+            padding: 5px 0;
+
+            .notification-item {
+                margin-bottom: 10px;
+                transition: all 0.3s ease;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+            color: #909399;
+
+            .empty-icon {
+                margin-bottom: 15px;
+                color: #c0c4cc;
+
+                .el-icon {
+                    opacity: 0.6;
+                }
+            }
+
+            .empty-text {
+                font-size: 14px;
+            }
         }
     }
+}
+
+// 添加过渡动画
+.notification-enter-active,
+.notification-leave-active {
+    transition: all 0.4s ease;
+}
+
+.notification-enter-from {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.notification-leave-to {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.notification-move {
+    transition: transform 0.5s ease;
 }
 </style>
