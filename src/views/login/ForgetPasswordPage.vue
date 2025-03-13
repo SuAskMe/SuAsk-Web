@@ -6,7 +6,6 @@
             align-center
             width="450px"
             :fullscreen="deviceTypeStore.isMobile"
-            :close-on-click-modal="false"
             class="forget-dialog"
         >
             <div class="dialog-card">
