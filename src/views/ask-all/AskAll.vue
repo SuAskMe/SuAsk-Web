@@ -198,8 +198,14 @@ const navigateTo = (key: number) => {
         views: questionList[key].views,
     }
     syncStore.SetSync(key, questionList[key].id, questionList[key].views)
+
     router.push({
         path: `/question-detail/${questionList[key].id}`,
+    })
+    nextTick(() => {
+        if (questionList[key].answer_num === 0) {
+            composeDialogStore.open()
+        }
     })
 }
 
