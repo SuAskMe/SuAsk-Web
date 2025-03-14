@@ -1,33 +1,21 @@
 <script lang="ts" setup>
-import { DeviceTypeStore } from "@/store/modules/device-type";
-import { SidebarStore } from "@/store/modules/sidebar";
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/store/modules/sidebar'
 
-const sidebarStore = SidebarStore();
-const deviceStore = DeviceTypeStore();
+const sidebarStore = SidebarStore()
+const deviceStore = DeviceTypeStore()
 const toggleSidebar = (event: MouseEvent) => {
-    if (
-        event.target === event.currentTarget &&
-        deviceStore.isMobile &&
-        sidebarStore.IsOpen
-    ) {
-        sidebarStore.close();
+    if (event.target === event.currentTarget && deviceStore.isMobile && sidebarStore.IsOpen) {
+        sidebarStore.close()
     }
-};
+}
 </script>
 
 <template>
-    <el-container
-        class="container"
-        :class="{ 'sidebar-open': sidebarStore.IsOpen }"
-    >
+    <el-container class="container" :class="{ 'sidebar-open': sidebarStore.IsOpen }">
         <Transition name="sidebar_anime" appear>
-            <el-aside
-                class="sidebar-aside"
-                width="auto"
-                v-show="sidebarStore.IsOpen"
-            >
-                <router-view key="$route.fullPath" name="left_side">
-                </router-view>
+            <el-aside class="sidebar-aside" width="auto" v-show="sidebarStore.IsOpen">
+                <router-view key="$route.fullPath" name="left_side"> </router-view>
             </el-aside>
         </Transition>
         <el-main class="main-content" @click="toggleSidebar">
@@ -56,7 +44,9 @@ const toggleSidebar = (event: MouseEvent) => {
 <style scoped lang="scss">
 .sidebar_anime-enter-active,
 .sidebar_anime-leave-active {
-    transition: all 0.5s ease, opacity 0.5s ease;
+    transition:
+        all 0.5s ease,
+        opacity 0.5s ease;
 }
 
 .sidebar_anime-enter-from,
@@ -89,7 +79,9 @@ const toggleSidebar = (event: MouseEvent) => {
 
 .main-content {
     margin-left: 300px;
-    transition: margin-left 0.5s ease, filter 0.5s ease;
+    transition:
+        margin-left 0.5s ease,
+        filter 0.5s ease;
 }
 
 .container:not(.sidebar-open) .main-content {

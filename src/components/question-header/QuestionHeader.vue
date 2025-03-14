@@ -41,7 +41,7 @@
                         :style="deviceType.isMobile ? 'width: 65vw' : 'width: 300px'"
                         clearable
                     ></el-autocomplete>
-                    <div class="search-icon" @click.stop="search">
+                    <div class="search-icon" @click.stop="clickSearch">
                         <svg-icon
                             icon="search"
                             :color="showInput ? '#71B6FF' : '#808080'"
@@ -61,7 +61,7 @@ import type { GetKeywordReq, GetKeywordRes } from '@/model/question.model'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 import request from '@/utils/http/request'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 const emit = defineEmits(['changeSort', 'search', 'cancelSearch', 'return', 'sidebar'])
 
 const sidebarStore = SidebarStore()
@@ -121,7 +121,7 @@ async function querySearch(queryString: string, cb: any) {
 
 let searchRecord = false
 
-const search = () => {
+const clickSearch = () => {
     searchText.value = searchText.value.trim()
     if (showInput.value && searchText.value.length >= 2) {
         searchRecord = true
@@ -219,10 +219,6 @@ async function getKeyWords(data: GetKeywordReq): Promise<GetKeywordRes> {
                 height: 30px;
                 border-radius: 50%;
                 cursor: pointer;
-
-                &:hover {
-                    background-color: $su-blue-light;
-                }
             }
 
             .cancel-btn {
