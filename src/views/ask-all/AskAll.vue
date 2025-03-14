@@ -43,6 +43,7 @@
                         :avatars="question.answer_avatars"
                         :bubble-key="index"
                         :click-card="navigateTo"
+                        :click-footer="navigateToAnswer"
                         :show-favorite="false"
                         :click-favorite="favorite"
                         :width="deviceType.isMobile ? '80vw' : '45vw'"
@@ -191,6 +192,20 @@ watch(
 )
 
 const navigateTo = (key: number) => {
+    key = Number(key)
+    record = {
+        index: key,
+        id: questionList[key].id,
+        views: questionList[key].views,
+    }
+    syncStore.SetSync(key, questionList[key].id, questionList[key].views)
+
+    router.push({
+        path: `/question-detail/${questionList[key].id}`,
+    })
+}
+
+const navigateToAnswer = (key: number) => {
     key = Number(key)
     record = {
         index: key,

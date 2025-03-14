@@ -20,11 +20,13 @@ interface BubbleQuestionProps {
     showFavorite?: boolean
     clickCard?: (key: any) => void
     clickFavorite?: (key: any) => void
+    clickFooter?: (key: any) => void
 }
 const props = withDefaults(defineProps<BubbleQuestionProps>(), {
     showFavorite: true,
     clickCard: () => {},
     clickFavorite: () => {},
+    clickFooter: () => {},
 })
 const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => {
@@ -119,7 +121,7 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
             </div>
             <div v-else class="card-footer">
                 <svg-icon class="msg-icon" icon="communicate_message" size="24" color="#66b0ff" />
-                <div class="text">发表一个回答...</div>
+                <div class="text" @click.stop="clickFooter(key)">发表一个回答...</div>
                 <div
                     v-if="showFavorite"
                     class="favorite"
