@@ -5,7 +5,8 @@
 
     .header {
         border-bottom: solid 1px $su-border;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        height: 60px;
+        position: relative;
     }
 
     .main-container {
