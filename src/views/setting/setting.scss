@@ -142,6 +142,10 @@
             padding: 1rem;
             scrollbar-width: thin;
 
+            @media screen and (max-width: 768px) {
+                padding: 1rem 0;
+            }
+
             &::-webkit-scrollbar {
                 height: 6px;
             }
