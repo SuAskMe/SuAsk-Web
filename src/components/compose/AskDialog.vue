@@ -1,164 +1,176 @@
 <template>
-    <div class="dialog-container">
-        <div v-if="!draftVisible" class="compose">
-            <div class="header">
-                <el-icon
-                    @click.stop="closeDialog"
-                    size="20px"
-                    :color="hoverColor"
-                    @mouseover="hoverColor = '#71b6ff'"
-                    @mouseleave="hoverColor = '#000000'"
-                    style="cursor: pointer"
-                >
-                    <Close />
-                </el-icon>
-                <p v-if="teacher" class="ask-teacher">
-                    问 <span>{{ teacher?.teacherName }}</span> 老师
-                </p>
-                <el-button @click.stop="openDraft" type="primary" round text>草稿</el-button>
-            </div>
-            <div class="main">
-                <div class="title">
-                    <el-avatar :src="avatarURL" :size="40">
-                        <img src="@/assets/default-avatar.png" />
-                    </el-avatar>
-                    <el-input
-                        v-model="questionContent.title"
-                        placeholder="问题标题"
-                        style="width: 87%"
-                        :input-attrs="{ style: 'font-size: 16px;' }"
-                    />
-                </div>
-                <div class="content">
-                    <el-input
-                        v-model="questionContent.content"
-                        :autosize="{ minRows: 6, maxRows: 18 }"
-                        type="textarea"
-                        placeholder="问题内容"
-                    />
-                    <div class="image-container">
-                        <div
-                            class="picked-image"
-                            v-for="(img, index) in questionContent.imageList"
-                            :key="img.id"
-                            :id="'image-' + img.id"
-                        >
-                            <el-image
-                                @click.stop
-                                :src="img.url"
-                                :preview-src-list="[img.url]"
-                                class="image"
-                                fit="cover"
-                                preview-teleported
-                            ></el-image>
-                            <div class="delete-btn" @click.stop="deleteImage(index)">
-                                <SvgIcon icon="delete-round" color="#FF5F96" size="16px"></SvgIcon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr class="line" />
-            <div class="footer">
-                <div style="display: flex; align-items: center; gap: 10px">
-                    <SvgIcon
-                        @click.stop="pickImage"
-                        icon="image"
-                        size="24px"
-                        color="#71b6ff"
-                        style="cursor: pointer"
-                    />
-                </div>
-                <input
-                    type="file"
-                    ref="imgPicker"
-                    accept="image/png,image/jpeg,image/jpg"
-                    style="display: none"
-                    @change="pickImageImpl"
-                    multiple
-                />
-                <el-button
-                    @click="postQuestion"
-                    type="primary"
-                    round
-                    color="#71b6ff"
-                    style="color: white"
-                    >发布</el-button
-                >
-            </div>
-        </div>
-        <div v-if="draftVisible" class="draft">
-            <div class="header">
-                <div class="left-item">
+    <div :class="['dialog-container', draftVisible ? 'draft' : 'compose']">
+        <Transition name="fade" mode="out-in">
+            <div v-if="!draftVisible" class="compose" key="compose">
+                <div class="header">
                     <el-icon
-                        @click="draftVisible = false"
+                        @click.stop="closeDialog"
                         size="20px"
                         :color="hoverColor"
                         @mouseover="hoverColor = '#71b6ff'"
                         @mouseleave="hoverColor = '#000000'"
+                        style="cursor: pointer"
                     >
-                        <ArrowLeft />
+                        <Close />
                     </el-icon>
-                    <p>草稿</p>
+                    <p v-if="teacher" class="ask-teacher">
+                        问 <span>{{ teacher?.teacherName }}</span> 老师
+                    </p>
+                    <el-button @click.stop="openDraft" type="primary" round text>草稿</el-button>
                 </div>
-                <el-button
-                    v-if="!deleteMod"
-                    @click="handleDeleteMod"
-                    type="primary"
-                    round
-                    color="#71b6ff"
-                    style="color: white"
-                    >编辑</el-button
-                >
-                <el-button
-                    v-if="deleteMod"
-                    @click="handleDeleteMod"
-                    type="primary"
-                    round
-                    color="#71b6ff"
-                    style="color: white"
-                    >完成</el-button
-                >
-            </div>
-            <el-checkbox-group v-model="deleteDrafts" class="draft-items" v-if="drafts.length != 0">
-                <div v-for="draft in drafts" :key="draft.id" class="border">
-                    <div @click="useDraft(draft)" class="draft-item">
-                        <div class="text-space">
-                            <p class="title">{{ draft.title }}</p>
-                            <p class="content">{{ draft.content }}</p>
+                <div class="main">
+                    <div class="title">
+                        <el-avatar :src="avatarURL" :size="40">
+                            <img src="@/assets/default-avatar.png" />
+                        </el-avatar>
+                        <el-input
+                            v-model="questionContent.title"
+                            placeholder="问题标题"
+                            style="width: 87%"
+                            :input-attrs="{ style: 'font-size: 16px;' }"
+                        />
+                    </div>
+                    <div class="content">
+                        <el-input
+                            v-model="questionContent.content"
+                            :autosize="{ minRows: 6, maxRows: 18 }"
+                            type="textarea"
+                            placeholder="问题内容"
+                        />
+                        <div class="image-container">
+                            <div
+                                class="picked-image"
+                                v-for="(img, index) in questionContent.imageList"
+                                :key="img.id"
+                                :id="'image-' + img.id"
+                            >
+                                <el-image
+                                    @click.stop
+                                    :src="img.url"
+                                    :preview-src-list="[img.url]"
+                                    class="image"
+                                    fit="cover"
+                                    preview-teleported
+                                ></el-image>
+                                <div class="delete-btn" @click.stop="deleteImage(index)">
+                                    <SvgIcon
+                                        icon="delete-round"
+                                        color="#FF5F96"
+                                        size="16px"
+                                    ></SvgIcon>
+                                </div>
+                            </div>
                         </div>
-                        <img-list
-                            class="img-list"
-                            v-if="draft.imgList.length != 0"
-                            :img-list="draft.imgList"
-                        ></img-list>
-                        <el-checkbox v-if="deleteMod" :value="draft.id" />
                     </div>
                 </div>
-            </el-checkbox-group>
-            <div v-if="deleteMod" class="footer">
-                <el-button
-                    @click="handleCheckAllChange"
-                    type="primary"
-                    size="small"
-                    round
-                    color="#71b6ff"
-                    style="color: white"
-                    >全选</el-button
-                >
-                <el-button
-                    @click="deleteDraft(deleteDrafts)"
-                    type="danger"
-                    size="small"
-                    round
-                    :disabled="deleteDrafts.length == 0"
-                    >删除</el-button
-                >
+                <hr class="line" />
+                <div class="footer">
+                    <div style="display: flex; align-items: center; gap: 10px">
+                        <SvgIcon
+                            @click.stop="pickImage"
+                            icon="image"
+                            size="24px"
+                            color="#71b6ff"
+                            style="cursor: pointer"
+                        />
+                    </div>
+                    <input
+                        type="file"
+                        ref="imgPicker"
+                        accept="image/png,image/jpeg,image/jpg"
+                        style="display: none"
+                        @change="pickImageImpl"
+                        multiple
+                    />
+                    <el-button
+                        @click="postQuestion"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >发布</el-button
+                    >
+                </div>
             </div>
-            <div v-if="drafts.length == 0">
-                <p>暂无草稿</p>
+            <div v-else class="draft" key="draft">
+                <div class="header">
+                    <div class="left-item">
+                        <el-icon
+                            @click="draftVisible = false"
+                            size="20px"
+                            :color="hoverColor"
+                            @mouseover="hoverColor = '#71b6ff'"
+                            @mouseleave="hoverColor = '#000000'"
+                        >
+                            <ArrowLeft />
+                        </el-icon>
+                        <p>草稿</p>
+                    </div>
+                    <el-button
+                        v-if="!deleteMod"
+                        @click="handleDeleteMod"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >编辑</el-button
+                    >
+                    <el-button
+                        v-if="deleteMod"
+                        @click="handleDeleteMod"
+                        type="primary"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >完成</el-button
+                    >
+                </div>
+                <el-scrollbar>
+                    <el-checkbox-group
+                        v-model="deleteDrafts"
+                        class="draft-items"
+                        v-if="drafts.length != 0"
+                    >
+                        <div v-for="draft in drafts" :key="draft.id" class="border">
+                            <div @click="useDraft(draft)" class="draft-item">
+                                <div class="text-space">
+                                    <p class="title">{{ draft.title }}</p>
+                                    <p class="content">{{ draft.content }}</p>
+                                </div>
+                                <img-list
+                                    class="img-list"
+                                    v-if="draft.imgList.length != 0"
+                                    :img-list="draft.imgList"
+                                ></img-list>
+                                <el-checkbox v-if="deleteMod" :value="draft.id" />
+                            </div>
+                        </div>
+                    </el-checkbox-group>
+                </el-scrollbar>
+                <div v-if="deleteMod" class="footer">
+                    <el-button
+                        @click="handleCheckAllChange"
+                        type="primary"
+                        size="small"
+                        round
+                        color="#71b6ff"
+                        style="color: white"
+                        >全选</el-button
+                    >
+                    <el-button
+                        @click="deleteDraft(deleteDrafts)"
+                        type="danger"
+                        size="small"
+                        round
+                        :disabled="deleteDrafts.length == 0"
+                        >删除</el-button
+                    >
+                </div>
+                <div v-if="drafts.length == 0">
+                    <p>暂无草稿</p>
+                </div>
             </div>
-        </div>
+        </Transition>
         <el-dialog
             v-model="innerVisible"
             width="300px"

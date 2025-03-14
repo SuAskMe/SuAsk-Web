@@ -13,10 +13,6 @@
         margin-top: 10px;
         box-sizing: border-box;
 
-        @media screen and (max-width: 768px) {
-            padding: 0 20px;
-        }
-
         .quote {
             display: flex;
             width: 100%;
@@ -74,10 +70,6 @@
         display: flex;
         width: 100%;
         box-sizing: border-box;
-
-        @media screen and (max-width: 768px) {
-            padding: 0 20px;
-        }
 
         .avatar {
             margin-right: 10px;
