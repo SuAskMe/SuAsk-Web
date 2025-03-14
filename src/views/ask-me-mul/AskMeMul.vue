@@ -4,8 +4,8 @@
             <QuestionHeader
                 @change-sort="changeSort"
                 :title="title"
-                :has_sort_upvote="title !== '置顶'"
-                :sort_and_search="title !== '置顶'"
+                :has_sort_upvote="title !== '置顶提问'"
+                :sort_and_search="title !== '置顶提问'"
                 @sidebar="sidebar"
                 sidebar_btn
             />
