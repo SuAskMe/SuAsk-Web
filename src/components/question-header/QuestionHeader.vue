@@ -10,7 +10,7 @@
         >
             <svg-icon icon="sidebar" color="#71B6FF" size="25px" :filled="sidebarStore.IsOpen" />
         </div>
-        <div v-if="props.title" class="title">{{ props.title }}</div>
+        <div v-if="props.title && !showInput" class="title">{{ props.title }}</div>
         <div v-if="props.sort_and_search" class="sort-and-search">
             <el-dropdown v-if="!showInput" class="header-item">
                 <span class="dropdown">

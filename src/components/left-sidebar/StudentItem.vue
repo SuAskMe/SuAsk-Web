@@ -1,5 +1,5 @@
 <template>
-    <div class="control-panel-e">
+    <div class="control-panel-items">
         <control-panel-item
             class="control-panel-item"
             id="ask-all"
@@ -50,7 +50,7 @@ import ControlPanelItem from '@/components/control-panel-item'
 </script>
 
 <style scoped lang="scss">
-.control-panel-e {
+.control-panel-items {
     display: flex;
     flex-direction: column;
     margin-top: 30px;

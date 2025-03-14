@@ -1,29 +1,29 @@
-import type { AppRouteRecordRaw } from "@/router/types";
-import { isMobile } from "@/utils/device";
+import type { AppRouteRecordRaw } from '@/router/types'
+import { isMobile } from '@/utils/device'
 
-const WebHome = () => import("@/layout/home/WebHome.vue");
-const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
+const WebHome = () => import('@/layout/home/WebHome.vue')
+const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
 
-const AskMe = () => import("@/views/ask-me/AskMe.vue");
-const AskMeMul = () => import("@/views/ask-me-mul/AskMeMul.vue");
+const AskMe = () => import('@/views/ask-me/AskMe.vue')
+const AskMeMul = () => import('@/views/ask-me-mul/AskMeMul.vue')
 
 export const AskMeRoute: AppRouteRecordRaw = {
-    path: "/ask-me",
-    name: "AskMeRoot",
+    path: '/ask-me',
+    name: 'AskMeRoot',
     meta: {
-        title: "我的提问箱",
+        title: '我的提问箱',
     },
     props: {
-        userType: "student",
-        deviceType: isMobile() ? "phone" : "desktop",
+        userType: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop',
     },
     component: WebHome,
     children: [
         {
-            path: "",
-            name: "AskMe",
+            path: '',
+            name: 'AskMe',
             meta: {
-                title: "我的提问箱",
+                title: '我的提问箱',
             },
             components: {
                 default: AskMe,
@@ -31,46 +31,46 @@ export const AskMeRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: "answered",
-            name: "AskMeAnswered",
+            path: 'answered',
+            name: 'AskMeAnswered',
             meta: {
-                title: "已回答",
+                title: '已回答提问',
             },
             components: {
                 default: AskMeMul,
                 left_side: LeftSidebar,
             },
             props: {
-                default: { type: "answered" },
+                default: { type: 'answered' },
             },
         },
         {
-            path: "unanswered",
-            name: "AskMeUnanswered",
+            path: 'unanswered',
+            name: 'AskMeUnanswered',
             meta: {
-                title: "未回答",
+                title: '新的提问',
             },
             components: {
                 default: AskMeMul,
                 left_side: LeftSidebar,
             },
             props: {
-                default: { type: "unanswered" },
+                default: { type: 'unanswered' },
             },
         },
         {
-            path: "top",
-            name: "AskMeTop",
+            path: 'top',
+            name: 'AskMeTop',
             meta: {
-                title: "置顶",
+                title: '置顶提问',
             },
             components: {
                 default: AskMeMul,
                 left_side: LeftSidebar,
             },
             props: {
-                default: { type: "top" },
+                default: { type: 'top' },
             },
         },
     ],
-};
+}
