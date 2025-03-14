@@ -32,7 +32,7 @@ const selectImg = (index: number) => {
     flex-wrap: nowrap;
 
     @media screen and (max-width: 768px) {
-        gap: 1rem;
+        gap: 0.7rem;
     }
 }
 
