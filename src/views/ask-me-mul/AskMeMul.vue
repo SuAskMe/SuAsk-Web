@@ -4,10 +4,10 @@
             <QuestionHeader
                 @change-sort="changeSort"
                 :title="title"
-                return_btn
                 :has_sort_upvote="title !== '置顶'"
                 :sort_and_search="title !== '置顶'"
-                @return="navigateBack"
+                @sidebar="sidebar"
+                sidebar_btn
             />
         </el-header>
         <el-main class="main-container">
@@ -49,8 +49,14 @@ import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SyncStore } from '@/store/modules/question-detail'
 import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/store/modules/sidebar'
 const loading = ref(false)
 const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+
+const sidebarStore = SidebarStore()
+const sidebar = () => {
+    sidebarStore.toggle()
+}
 
 interface AskMeAnsProps {
     type: string
@@ -61,11 +67,11 @@ setAnsweredOrNot(props.type)
 const title = computed(() => {
     switch (props.type) {
         case 'unanswered':
-            return '未回答'
+            return '新的提问'
         case 'answered':
-            return '已回答'
+            return '已回答提问'
         case 'top':
-            return '置顶'
+            return '置顶提问'
         default:
             return ''
     }
