@@ -55,6 +55,8 @@
 
 <script setup lang="ts">
 import { readNotificationApi } from '@/api/notification/notification.api'
+import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
 import { getTimeStr } from '@/utils/time'
 import { useRouter } from 'vue-router'
@@ -88,6 +90,10 @@ const props = defineProps<NotificationCardProps>()
 
 const userStore = UserStore()
 
+const deviceTypeStore = DeviceTypeStore()
+
+const sidebarStore = SidebarStore()
+
 const userName = userStore.getUser().name
 
 const emit = defineEmits(['reply', 'read', 'openDeleteDialog'])
@@ -99,9 +105,7 @@ async function clickReply() {
     let path = ''
     if (props.type == NotificationType.QUESTION) {
         path = `/question-detail/${props.question_id}`
-    } else if (props.type == NotificationType.ANSWER) {
-        path = `/question-detail/${props.question_id}#${props.answer_id}`
-    } else if (props.type == NotificationType.REPLY) {
+    } else if (props.type == NotificationType.ANSWER || props.type == NotificationType.REPLY) {
         path = `/question-detail/${props.question_id}#${props.answer_id}`
     }
     await readNotificationApi(props.id).then((res) => {
@@ -110,6 +114,9 @@ async function clickReply() {
         }
     })
     router.push(path)
+    if (sidebarStore.IsOpen && deviceTypeStore.isMobile) {
+        sidebarStore.close()
+    }
 }
 
 function clickDelete() {
