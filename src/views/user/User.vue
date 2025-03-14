@@ -50,7 +50,7 @@
                                     :style="{
                                         marginTop: index === 0 ? '24px' : '0',
                                     }"
-                                    width="45vw"
+                                    width="80%"
                                     :click-card="navigateTo"
                                     center
                                 />
@@ -76,8 +76,11 @@ import QuestionHeader from '@/components/question-header'
 import { router } from '@/router'
 import { getTeacherPinApi } from '@/api/teacher/teacher.api'
 import type { TeacherPinItem } from '@/model/teacher.model'
+import { DeviceTypeStore } from '@/store/modules/device-type'
 
 const id = 'preview-only'
+
+const deviceTypeStore = DeviceTypeStore()
 
 const userInfo = ref<UserInfo>({
     id: 0,

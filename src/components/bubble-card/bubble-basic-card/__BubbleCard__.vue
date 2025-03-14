@@ -38,7 +38,9 @@ const deviceType = DeviceTypeStore()
 const containerStyle = computed(() => {
     if (props.center) {
         return {
+            width: props.width ? props.width : '450px',
             marginLeft: 0,
+            display: 'flex',
         }
     } else {
         return {
@@ -66,12 +68,8 @@ const tagStyle = computed(() => {
     <div
         class="bubble-card"
         :style="
-            deviceType.isMobile
-                ? {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                  }
+            props.center || deviceType.isMobile
+                ? { display: 'flex', flexDirection: 'column', alignItems: 'center' }
                 : {}
         "
     >
