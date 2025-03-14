@@ -1,5 +1,5 @@
 <template>
-    <div :class="['dialog-container', draftVisible ? 'draft' : 'compose']">
+    <div class="dialog-container">
         <Transition name="fade" mode="out-in">
             <div v-if="!draftVisible" class="compose" key="compose">
                 <div class="header">
@@ -166,7 +166,7 @@
                         >删除</el-button
                     >
                 </div>
-                <div v-if="drafts.length == 0">
+                <div v-if="drafts.length == 0" class="empty">
                     <p>暂无草稿</p>
                 </div>
             </div>

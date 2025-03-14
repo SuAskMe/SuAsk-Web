@@ -101,4 +101,14 @@
         margin-top: 10px;
         align-items: center;
     }
+
+    .empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        font-size: 16px;
+        color: $su-blue;
+    }
 }
