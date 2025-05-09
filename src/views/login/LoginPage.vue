@@ -193,8 +193,8 @@ const openRegister = () => {
 }
 
 .shape2 {
-    width: 200px;
-    height: 200px;
+    width: 350px;
+    height: 350px;
     background: rgba(255, 208, 122, 0.3);
     bottom: 10%;
     left: 5%;
