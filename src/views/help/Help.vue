@@ -12,7 +12,7 @@
                     <el-card class="help-card intro-card" shadow="hover">
                         <h1>SuAsk • 速问</h1>
                         <el-image
-                            src="https://github.com/user-attachments/assets/68cbe1a7-1d9a-4487-a639-c86c15fbf6e9"
+                            src="https://suask.me/upload/cf/09/cf09243ca5e3a5461a8cca5947f5896247918a9a26bcfd6e5d6828634577c47f.png"
                         />
                         <p class="intro-text">
                             一个匿名提问箱，为了解决<del>苏老师</del>匿名提问箱经常跑路的问题
@@ -26,7 +26,7 @@
                             </div>
                         </template>
                         <el-image
-                            src="https://github.com/user-attachments/assets/a87d6177-c133-469e-8de1-f8d574bc923f"
+                            src="https://suask.me/upload/b2/57/b25743db92fd95fbc332005c4172a1d96fab7627201782eb8f02bebd78d856a4.png"
                         />
                         <ul class="feature-list">
                             <li>
