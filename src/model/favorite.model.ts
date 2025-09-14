@@ -4,7 +4,7 @@ export interface GetFavoriteReq {
 }
 
 export interface GetFavoriteRes {
-    favorite_list: FavoriteItem[]
+    question_list: FavoriteItem[]
     remain_page: number
 }
 
@@ -40,7 +40,7 @@ export interface SearchFavoriteReq {
 }
 
 export interface SearchFavoriteRes {
-    favorite_list: FavoriteItem[]
+    question_list: FavoriteItem[]
     remain_page: number
 }
 

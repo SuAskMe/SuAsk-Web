@@ -76,11 +76,11 @@ import QuestionHeader from '@/components/question-header'
 import { router } from '@/router'
 import { getTeacherPinApi } from '@/api/teacher/teacher.api'
 import type { TeacherPinItem } from '@/model/teacher.model'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+// import { DeviceTypeStore } from '@/store/modules/device-type'
 
 const id = 'preview-only'
 
-const deviceTypeStore = DeviceTypeStore()
+// const deviceTypeStore = DeviceTypeStore()
 
 const userInfo = ref<UserInfo>({
     id: 0,

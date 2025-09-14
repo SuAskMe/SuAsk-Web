@@ -41,13 +41,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { ElMessage, ElScrollbar } from 'element-plus'
 import { BubbleCard } from '@/components/bubble-card'
 import BackgroundImg from '@/components/background-img'
 import QuestionHeader from '@/components/question-header'
-import { getNextQuestions, InitStatus, Pin } from './AskMe'
-import type { QFMItem } from '@/model/teacher-self.model'
+import {
+    Pin,
+    questionList,
+    InitStatus,
+    getNextQuestions,
+    onSearch,
+    onCancelSearch,
+    refresh,
+} from './AskMe'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SyncStore } from '@/store/modules/question-detail'
@@ -59,13 +66,13 @@ const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
 const deviceType = DeviceTypeStore()
 // 背景图片
 const userStore = UserStore()
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
 
 const Init = async () => {
     if (questionList.length === 0) {
         InitStatus()
         loading.value = true
-        questionList.push(...(await getNextQuestions(0)))
+        await getNextQuestions(0)
         loading.value = false
     }
 }
@@ -83,7 +90,7 @@ const handleScroll = async () => {
             loading.value === false
         ) {
             loading.value = true
-            questionList.push(...(await getNextQuestions()))
+            await getNextQuestions()
             loading.value = false
         }
     }
@@ -95,34 +102,41 @@ const sidebar = () => {
     sidebarStore.toggle()
 }
 
-let sort_type = 0
+// 重置滚动位置到顶部
+const resetScrollPosition = () => {
+    nextTick(() => {
+        if (scrollBar.value && scrollBar.value.wrapRef) {
+            scrollBar.value.wrapRef.scrollTop = 0
+        }
+    })
+}
+
+let sort_type: number | null = null
 
 const changeSort = async (sortType: number) => {
-    if (sort_type === sortType) {
+    if (sort_type !== null && sortType === sort_type) {
         return
     }
     sort_type = sortType
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(sortType)))
+    await refresh(sortType)
+    resetScrollPosition()
     loading.value = false
 }
 
 const search = async (keyword: string) => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(undefined, keyword)))
+    await onSearch(keyword)
+    resetScrollPosition()
     loading.value = false
 }
 
 const cancelSearch = async () => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(undefined, undefined, true)))
+    await onCancelSearch()
+    resetScrollPosition()
     loading.value = false
 }
-
-const questionList: QFMItem[] = reactive([])
 
 const pin = async (key: number) => {
     key = Number(key)

@@ -4,7 +4,7 @@ export interface GetHistoryReq {
 }
 
 export interface GetHistoryRes {
-    favorite_list: HistoryItem[]
+    question_list: HistoryItem[]
     remain_page: number
 }
 
@@ -40,7 +40,7 @@ export interface SearchHistoryReq {
 }
 
 export interface SearchHistoryRes {
-    favorite_list: HistoryItem[]
+    question_list: HistoryItem[]
     remain_page: number
 }
 
