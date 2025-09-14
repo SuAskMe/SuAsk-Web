@@ -131,11 +131,12 @@ watch(drawer, (val) => {
 // 定义事件处理函数
 const handleQuestionDetailOpened = async () => {
     // 延迟一小段时间确保后端已经处理完标记为已读的操作
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    // 更新通知计数
-    if (role.value != 'default') {
-        getNotificationCount()
-    }
+    setTimeout(() => {
+        // 更新通知计数
+        if (role.value != 'default') {
+            getNotificationCount()
+        }
+    }, 1500)
 }
 
 onMounted(() => {
