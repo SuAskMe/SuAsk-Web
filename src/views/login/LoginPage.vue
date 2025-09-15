@@ -31,6 +31,9 @@
                 </div>
 
                 <div class="form-options">
+                    <el-checkbox v-model="autoLogin" class="auto-login-checkbox"
+                        >下次自动登录</el-checkbox
+                    >
                     <span class="forget-password" @click="openForgetPassword">忘记密码?</span>
                 </div>
 
@@ -76,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { User as UserIcon, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -86,6 +89,7 @@ import type { LoginReq, User } from '@/model/user.model'
 import { mailCheck } from '@/utils/login/register'
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStore } from '@/store/modules/user'
+import { heartbeatApi } from '@/api/user/login.api'
 
 const router = useRouter()
 const loading = ref(false)
@@ -93,8 +97,37 @@ const forgetPasswordVisible = ref(false)
 const registerVisible = ref(false)
 const userNameOrEmail = ref('')
 const password = ref('')
+const autoLogin = ref(false)
 
 const userStore = UserStore()
+
+onMounted(async () => {
+    // 如果用户选择了自动登录且本地有token，则尝试自动登录
+    if (autoLogin.value || (userStore.getToken() && localStorage.getItem('autoLogin') === 'true')) {
+        try {
+            const res = await heartbeatApi()
+            if (res && res.id === userStore.getUser().id) {
+                // 心跳成功，获取用户信息
+                const userInfo = userStore.getUser()
+                if (userInfo && Object.keys(userInfo).length > 0) {
+                    ControlPanelStore().clearSelectedItem()
+                    ElMessage.success('自动登录成功')
+                    router.push({ name: 'AskAll' })
+                    return
+                } else {
+                    // 如果心跳成功但无法获取用户信息，则重新登录
+                    await userStore.logout()
+                    throw new Error('无法获取用户信息，请重新登录')
+                }
+            } else {
+                throw new Error('用户信息不匹配')
+            }
+        } catch (error) {
+            console.error('自动登录失败:', error)
+            ElMessage.error('自动登录失败，请手动登录')
+        }
+    }
+})
 
 const handleLogin = async () => {
     if (userNameOrEmail.value == '' || password.value == '') {
@@ -117,6 +150,13 @@ const handleLogin = async () => {
         const userInfo = await userStore.login(loginReq)
 
         if (userInfo) {
+            // 如果用户选择了自动登录，保存设置
+            if (autoLogin.value) {
+                localStorage.setItem('autoLogin', 'true')
+            } else {
+                localStorage.removeItem('autoLogin')
+            }
+
             ControlPanelStore().clearSelectedItem()
             ElMessage.success('登录成功')
             router.push({ name: 'AskAll' })
@@ -265,7 +305,7 @@ const openRegister = () => {
 
     .form-options {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 24px;
         font-size: 14px;

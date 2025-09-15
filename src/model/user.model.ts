@@ -66,3 +66,7 @@ export interface LoginRes {
     token: string
     type: string
 }
+
+export interface HeartbeatRes {
+    id: number
+}

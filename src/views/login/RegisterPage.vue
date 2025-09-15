@@ -218,11 +218,11 @@ async function register() {
 const verifyStatus = reactive<{
     disabled: boolean
     duration: number
-    timer: any
+    timer: number | undefined
 }>({
     disabled: false,
     duration: 60,
-    timer: null,
+    timer: undefined,
 })
 
 async function getVerificationCode() {
@@ -247,7 +247,7 @@ async function getVerificationCode() {
         if (res.msg === '200') {
             ElMessage.success('验证码发送成功')
             verifyStatus.disabled = true
-            verifyStatus.timer && clearInterval(verifyStatus.timer)
+            if (verifyStatus.timer) clearInterval(verifyStatus.timer)
             verifyStatus.timer = setInterval(() => {
                 verifyStatus.duration--
                 if (verifyStatus.duration === 0) {
