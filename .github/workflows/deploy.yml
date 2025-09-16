@@ -47,7 +47,7 @@ jobs:
       #     remote_path: '/home/suask/frontend/'
 
       - name: 部署到服务器
-        uses: burnett01/rsync-deployments@7.0.2
+        uses: burnett01/rsync-deployments@7.1.0
         with:
           switches: -avzr --delete
           path: './dist/*'
