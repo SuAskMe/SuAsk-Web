@@ -38,7 +38,19 @@ export const UserStore = defineStore(
         }
 
         function resetState() {
-            userInfo.value = null
+            userInfo.value = {
+                id: 0,
+                name: 'susu',
+                nickname: 'susu',
+                email: '',
+                role: '',
+                introduction: '',
+                avatar: null,
+                themeId: 1,
+                question_box_perm: '',
+                notifySwitch: false,
+                notifyEmail: '',
+            }
             token.value = ''
             role.value = Role.DEFAULT
         }

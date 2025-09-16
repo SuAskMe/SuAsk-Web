@@ -171,20 +171,6 @@ const handleLogin = async () => {
 
 function navigateToUnlogin() {
     userStore.resetState()
-    const user: User = {
-        id: 0,
-        name: 'susu',
-        nickname: 'susu',
-        email: '',
-        role: '',
-        introduction: '',
-        avatar: null,
-        themeId: 1,
-        question_box_perm: '',
-        notifySwitch: false,
-        notifyEmail: '',
-    }
-    userStore.setUser(user)
     ControlPanelStore().setSelectedItem('ask-teacher')
     router.push({ name: 'AskTeacher' })
 }
