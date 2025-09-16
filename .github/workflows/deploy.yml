@@ -11,6 +11,8 @@ on:
       - src/**
       - package.json
 
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
