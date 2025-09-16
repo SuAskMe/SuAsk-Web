@@ -138,20 +138,40 @@
                     </div>
                     <div class="notification-settings">
                         <div class="field-group">
-                            <label>启用邮件通知</label>
-                            <el-switch
-                                v-model="notificationSettings.notifySwitch"
-                                active-text="开启"
-                                inactive-text="关闭"
-                            />
+                            <label>邮件通知开关</label>
+                            <div class="switch-container">
+                                <span class="switch-label">
+                                    {{
+                                        notificationSettings.notifySwitch
+                                            ? '已启用邮件通知'
+                                            : '邮件通知已关闭'
+                                    }}
+                                </span>
+                                <el-switch
+                                    v-model="notificationSettings.notifySwitch"
+                                    active-text="开启"
+                                    inactive-text="关闭"
+                                    :active-color="'#4CAF50'"
+                                    :inactive-color="'#dcdfe6'"
+                                />
+                            </div>
                         </div>
-                        <div class="field-group">
-                            <label>通知邮箱</label>
-                            <el-input
-                                v-model="notificationSettings.notifyEmail"
-                                placeholder="请输入接收通知的邮箱地址"
-                                :disabled="!notificationSettings.notifySwitch"
-                            />
+
+                        <div class="field-group email-setting">
+                            <label>通知邮箱地址</label>
+                            <div
+                                class="email-input-container"
+                                :class="{ focused: emailInputFocused }"
+                            >
+                                <el-input
+                                    v-model="notificationSettings.notifyEmail"
+                                    placeholder="请输入接收通知的邮箱地址"
+                                    :disabled="!notificationSettings.notifySwitch"
+                                    @focus="emailInputFocused = true"
+                                    @blur="emailInputFocused = false"
+                                    clearable
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -420,6 +440,9 @@ const notificationSettings = ref({
     notifyEmail: userStore.getUser().notifyEmail || '',
 })
 
+// 邮箱输入框聚焦状态
+const emailInputFocused = ref(false)
+
 // 监听通知设置变化
 watch(
     () => notificationSettings.value,
@@ -636,6 +659,8 @@ if (userStore.getRole() == 'teacher') {
             }
 
             .el-input__inner {
+                padding-left: 0;
+
                 &::placeholder {
                     color: #a8abb2;
                 }
