@@ -54,12 +54,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
 import { ElScrollbar } from 'element-plus'
 import { BubbleCard } from '@/components/bubble-card'
 import BackgroundImg from '@/components/background-img'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
-import { getNextQuestions, InitStatus } from './AskTeacher'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import type { QuestionItem } from '@/model/question.model'
 import { useRoute, useRouter } from 'vue-router'
@@ -68,6 +67,15 @@ import { SyncStore } from '@/store/modules/question-detail'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ComposeDialog from '@/components/compose/ComposeDialog.vue'
+import {
+    questionList,
+    InitStatus,
+    getNextQuestions,
+    onSearch,
+    onCancelSearch,
+    refresh,
+    currentTeacherId,
+} from './AskTeacher'
 
 // const showDialog = ref(false);
 const loading = ref(false)
@@ -83,7 +91,7 @@ const composeDialogStore = ComposeDialogStore()
 const route = useRoute()
 
 const teacherName = ref('')
-const teacherId = ref(0)
+const teacherId = ref<number>(0)
 
 provide('teacher', {
     teacherId,
@@ -94,7 +102,8 @@ const Init = async () => {
     if (questionList.length === 0) {
         InitStatus()
         loading.value = true
-        questionList.push(...(await getNextQuestions(teacherId.value, 0)))
+        currentTeacherId.value = teacherId.value
+        await getNextQuestions(0)
         loading.value = false
     }
 }
@@ -112,42 +121,43 @@ const handleScroll = async () => {
             loading.value === false
         ) {
             loading.value = true
-            questionList.push(...(await getNextQuestions(teacherId.value)))
+            await getNextQuestions()
             loading.value = false
         }
     }
 }
 
-let sort_type = 0
+let sort_type: number | null = null
 
 const changeSort = async (sortType: number) => {
-    if (sortType === sort_type) {
+    if (sort_type !== null && sortType === sort_type) {
         return
     }
     sort_type = sortType
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(teacherId.value, sortType)))
+    currentTeacherId.value = teacherId.value
+    await refresh(sortType)
+    resetScrollPosition()
     loading.value = false
 }
 
 const search = async (keyword: string) => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(teacherId.value, undefined, keyword)))
+    currentTeacherId.value = teacherId.value
+    await onSearch(keyword)
+    resetScrollPosition()
     loading.value = false
 }
 
 const cancelSearch = async () => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(teacherId.value, undefined, undefined, true)))
+    currentTeacherId.value = teacherId.value
+    await onCancelSearch()
+    resetScrollPosition()
     loading.value = false
 }
 
-const questionList: QuestionItem[] = reactive([])
-
-let record = {
+let record: { index: number; id: number; views: number } = {
     index: -2,
     id: -2,
     views: -1,
@@ -168,6 +178,15 @@ watch(
         }
     },
 )
+
+// 重置滚动位置到顶部
+const resetScrollPosition = () => {
+    nextTick(() => {
+        if (scrollBar.value && scrollBar.value.wrapRef) {
+            scrollBar.value.wrapRef.scrollTop = 0
+        }
+    })
+}
 
 const router = useRouter()
 

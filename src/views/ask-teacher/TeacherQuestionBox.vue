@@ -23,7 +23,7 @@
                         </div>
                         <el-autocomplete
                             v-model="searchInput"
-                            placeholder="请输入想要搜索的老师姓名"
+                            placeholder="请输入老师名称"
                             :fetch-suggestions="querySearch"
                             :debounce="100"
                             @input="resetList"
@@ -102,7 +102,7 @@ let teachersStr = JSON.stringify(teacherList)
 
 const searchInput = ref('')
 
-const querySearch = (queryString: string, cb: any) => {
+const querySearch = (queryString: string, cb: (results: TeacherItem[]) => void) => {
     const teachersObj = JSON.parse(teachersStr)
     const results = queryString ? teachersObj.filter(createFilter(queryString)) : teachersObj
     cb(results)
@@ -140,6 +140,7 @@ const searchBtn = () => {
 
 const router = useRouter()
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const navigateTo = (key: any) => {
     if (key.perm == TeacherPerm.Private) {
         ElMessage({
@@ -168,6 +169,7 @@ const navigateTo = (key: any) => {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const navigateToTeacherIndex = (key: any) => {
     // router.push({
     //     path: `/teacher-index/${key.teacherId}`,

@@ -99,9 +99,11 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import ComposeDialog from '@/components/compose/ComposeDialog.vue'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 
-// 背景图片
+// 导入全局事件总线
+import { emitter } from '@/utils/emitter'
+
 const userStore = UserStore()
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
 const { userInfo } = storeToRefs(userStore)
 
 const composeDialogStore = ComposeDialogStore()
@@ -164,6 +166,9 @@ onMounted(async () => {
         // console.log(parseInt(route.hash.replace("#", "")));
         scrollToAnswer(parseInt(route.hash.replace('#', '')))
     }
+
+    // 发送事件通知左侧边栏更新通知计数
+    emitter.emit('questionDetailOpened', { questionId: question.value.id })
 })
 
 const observe = new IntersectionObserver(

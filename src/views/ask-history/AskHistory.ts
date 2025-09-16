@@ -63,8 +63,8 @@ async function getQuestionsByPage(
     if (res.remain_page <= 0) {
         isEnd_ah = true
     }
-    if (res.favorite_list) {
-        return res.favorite_list
+    if (res.question_list) {
+        return res.question_list
     } else {
         return []
     }

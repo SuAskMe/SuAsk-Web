@@ -73,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, onUnmounted } from 'vue'
+import { computed, onMounted, ref, onUnmounted, watch } from 'vue'
 import StudentItem from './StudentItem.vue'
 import TeacherItem from './TeacherItem.vue'
 import DefaultItem from './DefaultItem.vue'
@@ -84,6 +84,9 @@ import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
+
+// 导入全局事件总线
+import { emitter } from '@/utils/emitter'
 
 const drawer = ref(false)
 
@@ -125,9 +128,28 @@ watch(drawer, (val) => {
         document.removeEventListener('keydown', handleEscKey)
     }
 })
+// 定义事件处理函数
+const handleQuestionDetailOpened = async () => {
+    // 延迟一小段时间确保后端已经处理完标记为已读的操作
+    setTimeout(() => {
+        // 更新通知计数
+        if (role.value != 'default') {
+            getNotificationCount()
+        }
+    }, 1500)
+}
 
-// 组件卸载时移除事件监听和样式
+onMounted(() => {
+    if (role.value != 'default') {
+        getNotificationCount()
+    }
+    // 监听问题详情页打开事件
+    emitter.on('questionDetailOpened', handleQuestionDetailOpened)
+})
+
+// 组件卸载时移除事件监听
 onUnmounted(() => {
+    emitter.off('questionDetailOpened', handleQuestionDetailOpened)
     document.body.style.overflow = ''
     document.removeEventListener('keydown', handleEscKey)
 })
@@ -167,12 +189,6 @@ function navigateToUserInfo() {
 function navigateToLogin() {
     router.push('/login')
 }
-
-onMounted(() => {
-    if (role.value != 'default') {
-        getNotificationCount()
-    }
-})
 </script>
 
 <style scoped lang="scss">
@@ -180,6 +196,7 @@ onMounted(() => {
     height: 100%;
     width: 300px;
     border-right: 1px solid $su-border;
+    overflow: hidden;
     @media (max-width: 768px) and (min-width: 300px) {
         width: 80vw;
     }
