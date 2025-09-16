@@ -17,7 +17,9 @@
                                 </el-avatar>
                                 <p class="nickname">{{ userInfo.nickname }}</p>
                                 <p class="name">@{{ userInfo.name }}</p>
-                                <p class="role">{{ roleFormat(userInfo.role) }}</p>
+                                <p class="role" :style="{ backgroundColor: roleColor }">
+                                    {{ roleFormat(userInfo.role) }}
+                                </p>
                             </div>
                         </div>
                         <div class="intro-container">
@@ -90,6 +92,7 @@ const userInfo = ref<UserInfo>({
     introduction: '',
     avatar: null,
 })
+const roleColor = ref<string>('#71b6ff')
 
 const route = useRoute()
 
@@ -146,8 +149,10 @@ function roleFormat(role: string) {
         case 'student':
             return '学生'
         case 'teacher':
+            roleColor.value = '#f0c245'
             return '教师'
         case 'admin':
+            roleColor.value = '#fc4f43;'
             return '管理员'
         default:
             return '未知'

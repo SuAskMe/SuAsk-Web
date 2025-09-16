@@ -181,6 +181,8 @@ function navigateToUnlogin() {
         avatar: null,
         themeId: 1,
         question_box_perm: '',
+        notifySwitch: false,
+        notifyEmail: '',
     }
     userStore.setUser(user)
     ControlPanelStore().setSelectedItem('ask-teacher')
@@ -309,6 +311,10 @@ const openRegister = () => {
         align-items: center;
         margin-bottom: 24px;
         font-size: 14px;
+
+        .auto-login-checkbox {
+            color: #909399;
+        }
 
         .forget-password {
             color: #71b6ff;
