@@ -24,7 +24,7 @@ const toggleSidebar = (event: MouseEvent) => {
                     :exclude="[
                         'QuestionDetail',
                         'UserRoot',
-                        'User',
+                        'UserInfo',
                         'AskTeacherRoot',
                         'AskTeacherDetail',
                         'AskTeacher',

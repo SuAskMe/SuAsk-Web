@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
     <el-card @click.stop="clickCard(teacherKey)" shadow="hover" class="teacher-card" :style="style">
         <div class="card-left">
@@ -34,8 +35,11 @@ import { computed } from 'vue'
 interface CardProps {
     teacher: TeacherItem
     width: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     clickCard?: (key: any) => void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     clickBtn?: (key: any) => void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     teacherKey?: any
 }
 const props = withDefaults(defineProps<CardProps>(), {
@@ -54,6 +58,7 @@ const style = computed(() => {
 <style scoped lang="scss">
 .teacher-card {
     position: relative;
+    max-width: 500px;
     height: 240px;
     border-radius: 8px;
     padding: 0;
@@ -112,22 +117,22 @@ const style = computed(() => {
         .teacher-name {
             font-size: 1.2em;
             font-weight: bold;
-            margin-bottom: 20px;
-            margin-top: 20px;
+            margin-bottom: 1em;
+            margin-top: 1em;
             color: $su-blue-dark;
         }
 
         .teacher-title {
             font-size: 1em;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 0em;
             color: $su-blue;
         }
 
         .teacher-email {
             font-size: 1em;
             line-height: 1.25;
-            margin-bottom: 10px;
+            margin-bottom: 0em;
             word-wrap: break-word;
             word-break: break-all;
             color: $su-grey;

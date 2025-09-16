@@ -6,14 +6,11 @@ import {
     getQFMUnansweredApi,
     pinQFMApi,
 } from '@/api/question/teacher-self.api'
+import { usePagination, type PaginationParams } from '@/utils/pagination'
 
 let Api = getQFMAnsweredApi
-let isEnd_amm = false
-let currentPage_amm = 1
-let sortType_amm = -1
-let alock_amm = false
 
-export function setAnsweredOrNot(type: string): void {
+function setAnsweredOrNot(type: string): void {
     switch (type) {
         case 'answered':
             Api = getQFMAnsweredApi
@@ -27,54 +24,33 @@ export function setAnsweredOrNot(type: string): void {
     }
 }
 
-export function InitStatus(type: string): void {
-    isEnd_amm = false
-    currentPage_amm = 1
-    sortType_amm = -1
-    alock_amm = false
-    setAnsweredOrNot(type)
-}
-
-export async function getNextQuestions(sortType_?: number): Promise<QFMItem[]> {
-    // let mock = mockQuestions();
-    // return mock.question_list;
-    if (sortType_ !== undefined && sortType_ !== sortType_amm) {
-        currentPage_amm = 1
-        sortType_amm = sortType_
-        isEnd_amm = false
-    } else {
-        currentPage_amm++
-    }
-    if (isEnd_amm) {
-        if (!alock_amm) {
-            alock_amm = true
-            ElMessage({ message: '没有更多了', type: 'success' })
-        }
-        setTimeout(() => {
-            alock_amm = false
-        }, 2000)
-
-        return new Promise<QFMItem[]>((resolve) => {
-            resolve([])
+const {
+    data: questionList,
+    init: InitStatus,
+    loadMore: getNextQuestions,
+    refresh,
+} = usePagination<QFMItem>({
+    fetchData: async (params: PaginationParams) => {
+        const res: GetQFMRes = await Api({
+            sort_type: params.sort_type,
+            page: params.page,
         })
-    }
-    // console.log("getNextQuestions", sortType, currentPage);
-    return getQuestionsByPage(sortType_amm, currentPage_amm)
+        return res
+    },
+})
+
+// 为InitStatus添加type参数以适配原有接口
+const InitStatusWithType = (type: string) => {
+    setAnsweredOrNot(type)
+    InitStatus()
 }
 
-async function getQuestionsByPage(sortType: number, page: number): Promise<QFMItem[]> {
-    const res: GetQFMRes = await Api({
-        sort_type: sortType,
-        page: page,
-    })
-    if (res.remain_page <= 0) {
-        isEnd_amm = true
-    }
-    if (res.question_list) {
-        return res.question_list
-    } else {
-        return []
-    }
+export {
+    questionList,
+    InitStatusWithType as InitStatus,
+    getNextQuestions,
+    refresh,
+    setAnsweredOrNot,
 }
 
 export async function Pin(question_id: number): Promise<boolean | null> {

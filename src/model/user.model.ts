@@ -9,6 +9,8 @@ export interface UpdateUser {
     nickname: string | null
     introduction: string | null
     themeId: number | null
+    notifySwitch: boolean | null
+    notifyEmail: string | null
     // avatarFile: File | null;
 }
 
@@ -22,6 +24,8 @@ export interface User {
     avatar: string | null
     themeId: number
     question_box_perm: string
+    notifySwitch: boolean
+    notifyEmail: string
 }
 
 export interface UserInfo {
@@ -65,4 +69,8 @@ export interface LoginRes {
     role: string
     token: string
     type: string
+}
+
+export interface HeartbeatRes {
+    id: number
 }

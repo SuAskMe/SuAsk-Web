@@ -76,7 +76,7 @@ const deviceType = DeviceTypeStore()
 
 // 背景图片
 const userStore = UserStore()
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
 
 const Init = async () => {
     if (questionList.length === 0) {

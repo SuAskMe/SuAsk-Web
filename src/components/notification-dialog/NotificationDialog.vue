@@ -171,9 +171,12 @@
 import { deleteNotificationApi, getNotificationApi } from '@/api/notification/notification.api'
 import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model'
 import { NotificationCard } from '@/components/notification-dialog'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UserStore } from '@/store/modules/user'
+
+// 导入全局事件总线
+import { emitter } from '@/utils/emitter'
 
 const deleteDialogVisible = ref(false)
 
@@ -281,7 +284,43 @@ async function loadNotification() {
 
 onMounted(async () => {
     await loadNotification()
+
+    // 监听问题详情页打开事件
+    emitter.on('questionDetailOpened', handleQuestionDetailOpened)
 })
+
+// 组件卸载时移除事件监听
+onUnmounted(() => {
+    emitter.off('questionDetailOpened', handleQuestionDetailOpened)
+})
+
+// 定义事件处理函数
+const handleQuestionDetailOpened = async (data: { questionId: number }) => {
+    // 直接在前端更新相关通知的状态为已读
+    // 更新提问通知
+    newQuestion.value = newQuestion.value.map((item) => {
+        if (item.question_id === data.questionId) {
+            return { ...item, is_read: true }
+        }
+        return item
+    })
+
+    // 更新回答通知
+    newAnswer.value = newAnswer.value.map((item) => {
+        if (item.question_id === data.questionId) {
+            return { ...item, is_read: true }
+        }
+        return item
+    })
+
+    // 更新回复通知
+    newReply.value = newReply.value.map((item) => {
+        if (item.question_id === data.questionId) {
+            return { ...item, is_read: true }
+        }
+        return item
+    })
+}
 </script>
 
 <style scoped lang="scss">

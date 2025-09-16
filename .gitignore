@@ -29,3 +29,5 @@ deploy
 *.sw?
 
 *.tsbuildinfo
+
+.lingma
