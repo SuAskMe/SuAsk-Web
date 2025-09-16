@@ -99,7 +99,7 @@ provide('teacher', {
 })
 
 const Init = async () => {
-    if (questionList.length === 0) {
+    if (currentTeacherId.value != teacherId.value || questionList.length === 0) {
         InitStatus()
         loading.value = true
         currentTeacherId.value = teacherId.value
