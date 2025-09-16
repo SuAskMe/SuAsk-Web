@@ -106,7 +106,8 @@ const showDefaultAvatar = () => {
             </div>
             <div class="ans-body">
                 <div v-if="Quote.hasQuote" class="quote-container" @click.stop="clickQuote(key)">
-                    <div class="author">{{ Quote.author + ':' }}</div>
+                    <div class="author">{{ Quote.author }}</div>
+                    <div class="sep">:</div>
                     <div class="quote-text">{{ Quote.text }}</div>
                 </div>
                 <div class="text">{{ text }}</div>

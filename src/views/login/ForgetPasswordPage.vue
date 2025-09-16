@@ -94,11 +94,11 @@ const confirmPassword = ref('')
 const verifyStatus = reactive<{
     disabled: boolean
     duration: number
-    timer: any
+    timer: number | undefined
 }>({
     disabled: false,
     duration: 60,
-    timer: null,
+    timer: undefined,
 })
 function getCode() {
     if (mail.value == '') {
@@ -113,7 +113,7 @@ function getCode() {
             if (res.msg === '200') {
                 ElMessage.success('验证码已发送')
                 verifyStatus.disabled = true
-                verifyStatus.timer && clearInterval(verifyStatus.timer)
+                if (verifyStatus.timer) clearInterval(verifyStatus.timer)
                 verifyStatus.timer = setInterval(() => {
                     verifyStatus.duration--
                     if (verifyStatus.duration === 0) {

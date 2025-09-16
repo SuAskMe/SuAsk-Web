@@ -52,16 +52,28 @@
     .quote-container {
         background-color: #add3fe69;
         border-radius: 8px;
-        padding: 10px;
+        padding: 0.5em;
         display: flex;
         align-items: flex-end;
         margin-bottom: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         cursor: pointer;
-        /* width: 100%; */
+        overflow: hidden;
+        // width: 100%;
 
         .author {
-            font-size: 14px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #77b9ff;
+            max-width: 40%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
+        }
+
+        .sep {
+            font-size: 0.9em;
             font-weight: bold;
             color: #77b9ff;
             margin-right: 6px;
@@ -71,8 +83,8 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            /* max-width: 80%; */
-            font-size: 12px;
+            // max-width: 80%;
+            font-size: 0.9em;
             color: $su-grey;
             /* margin-bottom: 0px; */
         }

@@ -38,13 +38,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { ElMessage, ElScrollbar } from 'element-plus'
 import { BubbleCard } from '@/components/bubble-card'
 import BackgroundImg from '@/components/background-img'
 import QuestionHeader from '@/components/question-header'
-import { getNextQuestions, InitStatus, Pin, setAnsweredOrNot } from './AskMeMul'
-import type { QFMItem } from '@/model/teacher-self.model'
+import {
+    Pin,
+    questionList,
+    InitStatus,
+    getNextQuestions,
+    refresh,
+    setAnsweredOrNot,
+} from './AskMeMul'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SyncStore } from '@/store/modules/question-detail'
@@ -80,13 +86,13 @@ const title = computed(() => {
 const deviceType = DeviceTypeStore()
 // 背景图片
 const userStore = UserStore()
-const bg_img_index = computed(() => userStore.getUser().themeId)
+const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
 
 const Init = async () => {
     if (questionList.length === 0) {
         InitStatus(props.type)
         loading.value = true
-        questionList.push(...(await getNextQuestions(0)))
+        await getNextQuestions(0)
         loading.value = false
     }
 }
@@ -104,7 +110,7 @@ const handleScroll = async () => {
             loading.value === false
         ) {
             loading.value = true
-            questionList.push(...(await getNextQuestions()))
+            await getNextQuestions()
             loading.value = false
         }
     }
@@ -118,12 +124,9 @@ const changeSort = async (sortType: number) => {
     }
     sort_type = sortType
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(sortType)))
+    await refresh(sortType)
     loading.value = false
 }
-
-const questionList: QFMItem[] = reactive([])
 
 const pin = async (key: number) => {
     key = Number(key)
@@ -184,9 +187,9 @@ onMounted(() => {
     Init()
 })
 
-function navigateBack() {
-    router.push('/ask-me')
-}
+// function navigateBack() {
+//     router.push('/ask-me')
+// }
 </script>
 
 <style scoped src="./AskMeMul.scss"></style>
