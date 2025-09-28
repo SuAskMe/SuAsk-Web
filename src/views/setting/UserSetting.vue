@@ -126,7 +126,7 @@
                             <theme-image
                                 v-model="basicInfo.themeId"
                                 :src="imgList"
-                                :width="deviceTypeStore.isMobile ? '75px' : '100px'"
+                                :width="'150px'"
                             />
                         </div>
                     </div>
@@ -159,19 +159,14 @@
 
                         <div class="field-group email-setting">
                             <label>通知邮箱地址</label>
-                            <div
-                                class="email-input-container"
-                                :class="{ focused: emailInputFocused }"
-                            >
-                                <el-input
-                                    v-model="notificationSettings.notifyEmail"
-                                    placeholder="请输入接收通知的邮箱地址"
-                                    :disabled="!notificationSettings.notifySwitch"
-                                    @focus="emailInputFocused = true"
-                                    @blur="emailInputFocused = false"
-                                    clearable
-                                />
-                            </div>
+                            <el-input
+                                v-model="notificationSettings.notifyEmail"
+                                placeholder="请输入接收通知的邮箱地址"
+                                :disabled="!notificationSettings.notifySwitch"
+                                @focus="emailInputFocused = true"
+                                @blur="emailInputFocused = false"
+                                clearable
+                            />
                         </div>
                     </div>
                 </div>
@@ -199,7 +194,7 @@
                         >
                             <div class="card-content">
                                 <div class="icon-container">
-                                    <i class="el-icon-view"></i>
+                                    <View />
                                 </div>
                                 <h3 class="option-title">公开</h3>
                                 <p class="option-desc">任何人都可以访问提问箱</p>
@@ -213,7 +208,7 @@
                         >
                             <div class="card-content">
                                 <div class="icon-container">
-                                    <i class="el-icon-lock"></i>
+                                    <Lock />
                                 </div>
                                 <h3 class="option-title">需登录</h3>
                                 <p class="option-desc">仅登录用户可以访问提问箱</p>
@@ -227,7 +222,7 @@
                         >
                             <div class="card-content">
                                 <div class="icon-container">
-                                    <i class="el-icon-turn-off"></i>
+                                    <TurnOff />
                                 </div>
                                 <h3 class="option-title">关闭</h3>
                                 <p class="option-desc">暂时关闭提问箱，无法访问</p>
@@ -242,10 +237,10 @@
                     </div>
                     <div class="password-logout">
                         <p class="danger-option" @click="resetPassword">
-                            <i class="el-icon-lock"></i> 重置密码
+                            <Lock class="danger-icon" /> 重置密码
                         </p>
                         <p class="danger-option" @click="showLogoutDialog">
-                            <i class="el-icon-switch-button"></i> 退出登录
+                            <SwitchButton class="danger-icon" /> 退出登录
                         </p>
                     </div>
                 </div>
@@ -273,6 +268,7 @@ import LogoutDialog from './LogoutDialog.vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
+import { View, Lock, TurnOff, SwitchButton } from '@element-plus/icons-vue'
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })
@@ -410,8 +406,6 @@ function checkForUnsavedChanges() {
         basicInfo.value.themeId !== originalValues.value.themeId ||
         notificationSettings.value.notifySwitch !== originalValues.value.notifySwitch ||
         notificationSettings.value.notifyEmail !== originalValues.value.notifyEmail ||
-        (userStore.getRole() === 'teacher' &&
-            questionVisible.value !== originalValues.value.question_box_perm) ||
         usingAvatar.value !== originalValues.value.avatar // 添加头像更改检测
 
     if (hasChanges && !hasUnsavedChanges) {
@@ -647,15 +641,15 @@ if (userStore.getRole() == 'teacher') {
         .el-input__wrapper {
             max-width: 500px;
             border-radius: 12px;
-            box-shadow: 0 0 0 1px #dcdfe6 inset;
+            box-shadow: 0 0 0 1px #fae9d1 inset;
             transition: all 0.3s ease;
 
             &.is-focus {
-                box-shadow: 0 0 0 2px #409eff inset;
+                box-shadow: 0 0 0 2px #ffa621 inset;
             }
 
             &:hover {
-                box-shadow: 0 0 0 1px #a8abb2 inset;
+                box-shadow: 0 0 0 1px #f5b24e inset;
             }
 
             .el-input__inner {

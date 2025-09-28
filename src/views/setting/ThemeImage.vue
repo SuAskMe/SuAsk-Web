@@ -6,8 +6,9 @@
             class="theme-image-wrapper"
             :class="{ selected: selectIndex - 1 == index }"
             @click="selectImg(index)"
+            :style="{ width: width }"
         >
-            <img class="theme-image" :src="src" :width="width" :alt="`主题 ${index + 1}`" />
+            <img class="theme-image" :src="src" :alt="`主题 ${index + 1}`" />
             <div class="selection-indicator"></div>
         </div>
     </div>
@@ -28,12 +29,11 @@ const selectImg = (index: number) => {
 <style lang="scss" scoped>
 .theme-images-container {
     display: flex;
-    gap: 2rem;
-    flex-wrap: nowrap;
-
-    @media screen and (max-width: 768px) {
-        gap: 0.7rem;
-    }
+    gap: 1em;
+    flex-wrap: wrap;
+    // @media screen and (max-width: 768px) {
+    //     gap: 0.75em;
+    // }
 }
 
 .theme-image-wrapper {
@@ -43,6 +43,7 @@ const selectImg = (index: number) => {
     overflow: hidden;
     transition: all 0.3s ease;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    max-width: calc((100% - 3em) / 4);
 
     &:hover {
         transform: translateY(-3px);
