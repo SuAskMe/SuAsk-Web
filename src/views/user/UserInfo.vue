@@ -70,7 +70,7 @@ import { getUserByIdApi } from '@/api/user/user.api'
 import type { UserInfo } from '@/model/user.model'
 import { BubbleCard } from '@/components/bubble-card'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
 import { ElMessage } from 'element-plus'
@@ -96,8 +96,8 @@ const roleColor = ref<string>('#71b6ff')
 
 const route = useRoute()
 
-async function getUserInfo() {
-    const userId = route.params.id.toString()
+async function getUserInfo(userId: string) {
+    if (Number(userId) === userInfo.value.id) return
     await getUserByIdApi(userId)
         .then((res) => {
             if (res) {
@@ -121,8 +121,17 @@ const navigateTo = (key: number) => {
     })
 }
 
+onBeforeRouteUpdate(async (to) => {
+    const userId = to.params.id.toString()
+    await getUserInfo(userId)
+    if (userInfo.value.role == 'teacher') {
+        await getPinQuestion()
+    }
+})
+
 onMounted(async () => {
-    await getUserInfo()
+    const userId = route.params.id.toString()
+    await getUserInfo(userId)
     if (userInfo.value.role == 'teacher') {
         await getPinQuestion()
     }

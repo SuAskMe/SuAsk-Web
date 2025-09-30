@@ -13,8 +13,8 @@
                     >
                         <Close />
                     </el-icon>
-                    <p v-if="teacher" class="ask-teacher">
-                        问 <span>{{ teacher?.teacherName }}</span> 老师
+                    <p v-if="teacher && teacher.teacherName" class="ask-teacher">
+                        问 <span>{{ teacher.teacherName }}</span> 老师
                     </p>
                     <el-button @click.stop="openDraft" type="primary" round text>草稿</el-button>
                 </div>
@@ -266,7 +266,12 @@ const questionContent = ref<Ask>({
 //     teacher?: Teacher;
 // }>();
 
-const teacher = inject<{ teacherId: Ref<number>; teacherName: Ref<string> }>('teacher')
+// const teacher = inject<{ teacherId: Ref<number>; teacherName: Ref<string> }>('teacher')
+const teacher = inject<{ teacherId: Ref<number>; teacherName: Ref<string> } | undefined>(
+    'teacher',
+    undefined,
+)
+
 const hoverColor = ref('#000000')
 
 const imgPicker = ref<HTMLInputElement>()

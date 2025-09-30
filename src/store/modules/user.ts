@@ -1,4 +1,4 @@
-import { loginApi, logoutApi } from '@/api/user/login.api'
+import { heartbeatApi, loginApi, logoutApi } from '@/api/user/login.api'
 import { getUserInfoApi } from '@/api/user/user.api'
 import { Role, type LoginReq, type User } from '@/model/user.model'
 import type { Nullable } from 'element-plus/es/components/cascader-panel/src/node.mjs'
@@ -11,7 +11,7 @@ export const UserStore = defineStore(
     () => {
         const userInfo = ref<Nullable<User>>(null)
         const token = ref<Nullable<string>>(null)
-        const role = ref<string>(Role.DEFAULT)
+        // const role = ref<string>(Role.DEFAULT)
 
         function getUser(): User {
             return userInfo.value || ({} as User)
@@ -22,7 +22,7 @@ export const UserStore = defineStore(
         }
 
         function getRole(): string {
-            return role.value
+            return userInfo.value?.role || Role.DEFAULT
         }
 
         function setToken(_token: string) {
@@ -33,9 +33,9 @@ export const UserStore = defineStore(
             userInfo.value = user
         }
 
-        function setRole(_role: string) {
-            role.value = _role
-        }
+        // function setRole(_role: string) {
+        //     role.value = _role
+        // }
 
         function resetState() {
             userInfo.value = {
@@ -43,7 +43,7 @@ export const UserStore = defineStore(
                 name: 'susu',
                 nickname: 'susu',
                 email: '',
-                role: '',
+                role: Role.DEFAULT,
                 introduction: '',
                 avatar: null,
                 themeId: 1,
@@ -52,7 +52,6 @@ export const UserStore = defineStore(
                 notifyEmail: '',
             }
             token.value = ''
-            role.value = Role.DEFAULT
         }
 
         async function login(req: LoginReq): Promise<User | null> {
@@ -62,9 +61,23 @@ export const UserStore = defineStore(
                     return null
                 }
                 setToken(res.token)
-                setRole(res.role)
+                // setRole(res.role)
                 const user = await getUserInfo()
                 return user
+            } catch {
+                return null
+            }
+        }
+
+        async function autoLogin(): Promise<User | null> {
+            try {
+                const res = await heartbeatApi()
+                if (res && res.id === userInfo.value?.id) {
+                    // 心跳成功，获取用户信息
+                    const user = await getUserInfo()
+                    return user
+                }
+                return null
             } catch {
                 return null
             }
@@ -94,7 +107,7 @@ export const UserStore = defineStore(
         return {
             userInfo,
             token,
-            role,
+            // role,
             getUser,
             getToken,
             getRole,
@@ -102,6 +115,7 @@ export const UserStore = defineStore(
             setUser,
             resetState,
             login,
+            autoLogin,
             logout,
         }
     },
