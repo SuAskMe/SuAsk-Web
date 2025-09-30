@@ -84,6 +84,7 @@ async function getTeacherList() {
         .then((res) => {
             if (res) {
                 teacherList.value = res.teachers
+                sortTeachers(teacherList.value)
                 // console.log(teacherList.value);
             }
         })
@@ -92,8 +93,24 @@ async function getTeacherList() {
             for (let i = 0; i < teachersObj.length; i++) {
                 teachersObj[i].value = teachersObj[i].name
             }
+
             teachersStr = JSON.stringify(teachersObj)
         })
+}
+
+const sortTeachers = (teachers: TeacherItem[]) => {
+    const PermSort = new Map<string, number>()
+    PermSort.set(TeacherPerm.Public, 1)
+    PermSort.set(TeacherPerm.Protected, 2)
+    PermSort.set(TeacherPerm.Private, 3)
+    teachers.sort((a, b) => {
+        if (a.perm === b.perm) {
+            return b.responses - a.responses
+        }
+        const av = PermSort.get(a.perm) || 4
+        const bv = PermSort.get(b.perm) || 4
+        return av - bv
+    })
 }
 
 const teacherList = ref<TeacherItem[]>([])
@@ -105,6 +122,7 @@ const searchInput = ref('')
 const querySearch = (queryString: string, cb: (results: TeacherItem[]) => void) => {
     const teachersObj = JSON.parse(teachersStr)
     const results = queryString ? teachersObj.filter(createFilter(queryString)) : teachersObj
+    sortTeachers(results)
     cb(results)
 }
 const createFilter = (queryString: string) => {
@@ -152,7 +170,7 @@ const navigateTo = (key: any) => {
             grouping: true,
         })
         return
-    } else if (key.perm == TeacherPerm.Protected && userStore.role == Role.DEFAULT) {
+    } else if (key.perm == TeacherPerm.Protected && userStore.getRole() == Role.DEFAULT) {
         ElMessage({
             showClose: true,
             message: '该老师提问箱需要您登录之后才能进入',

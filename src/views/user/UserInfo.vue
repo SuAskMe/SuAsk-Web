@@ -12,7 +12,7 @@
                                 <p>个人信息</p>
                             </div>
                             <div class="user-profile">
-                                <el-avatar :size="200" :src="userInfo.avatar">
+                                <el-avatar class="user-avatar" :size="200" :src="userInfo.avatar">
                                     <img src="@/assets/default-avatar.png" />
                                 </el-avatar>
                                 <p class="nickname">{{ userInfo.nickname }}</p>
@@ -102,6 +102,7 @@ async function getUserInfo(userId: string) {
         .then((res) => {
             if (res) {
                 userInfo.value = res
+                console.log(userInfo.value)
             } else {
                 ElMessage.error('获取用户信息失败')
             }

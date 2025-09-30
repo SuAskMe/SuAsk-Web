@@ -85,6 +85,13 @@
                     padding: 25px;
                     border-radius: 12px;
 
+                    .user-avatar {
+                        :deep(img) {
+                            object-fit: cover;
+                            object-position: center top;
+                        }
+                    }
+
                     .nickname {
                         font-size: 26px;
                         font-weight: 700;
