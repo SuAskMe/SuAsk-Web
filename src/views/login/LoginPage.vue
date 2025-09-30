@@ -85,11 +85,10 @@ import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import ForgetPasswordPage from './ForgetPasswordPage.vue'
 import RegisterPage from './RegisterPage.vue'
-import type { LoginReq, User } from '@/model/user.model'
+import type { LoginReq } from '@/model/user.model'
 import { mailCheck } from '@/utils/login/register'
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStore } from '@/store/modules/user'
-import { heartbeatApi } from '@/api/user/login.api'
 
 const router = useRouter()
 const loading = ref(false)
@@ -104,27 +103,24 @@ const userStore = UserStore()
 onMounted(async () => {
     // 如果用户选择了自动登录且本地有token，则尝试自动登录
     if (autoLogin.value || (userStore.getToken() && localStorage.getItem('autoLogin') === 'true')) {
+        loading.value = true
         try {
-            const res = await heartbeatApi()
-            if (res && res.id === userStore.getUser().id) {
-                // 心跳成功，获取用户信息
-                const userInfo = userStore.getUser()
-                if (userInfo && Object.keys(userInfo).length > 0) {
-                    ControlPanelStore().clearSelectedItem()
-                    ElMessage.success('自动登录成功')
-                    router.push({ name: 'AskAll' })
-                    return
-                } else {
-                    // 如果心跳成功但无法获取用户信息，则重新登录
-                    await userStore.logout()
-                    throw new Error('无法获取用户信息，请重新登录')
-                }
+            const userInfo = await userStore.autoLogin()
+            if (userInfo && Object.keys(userInfo).length > 0) {
+                ControlPanelStore().clearSelectedItem()
+                ElMessage.success('自动登录成功')
+                router.push({ name: 'AskAll' })
+                return
             } else {
-                throw new Error('用户信息不匹配')
+                // 如果心跳失败或无法获取用户信息，则重新登录
+                await userStore.logout()
+                throw new Error('无法获取用户信息，请重新登录')
             }
         } catch (error) {
             console.error('自动登录失败:', error)
             ElMessage.error('自动登录失败，请手动登录')
+        } finally {
+            loading.value = false
         }
     }
 })

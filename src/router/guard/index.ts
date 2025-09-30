@@ -30,10 +30,10 @@ export function createRoleMap() {
 export function createRoleGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
         const name = to.name?.toString() + 'Root'
-        const userStore = UserStore()
+        const userRole = UserStore().getRole()
         const roles = routeMap.get(name)
         if (roles) {
-            if (!roles.includes(userStore.getRole())) {
+            if (!roles.includes(userRole)) {
                 next({ name: 'NotFound' })
                 return
             }
