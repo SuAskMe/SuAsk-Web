@@ -12,6 +12,8 @@ import 'animate.css'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+console.info(`[SuAsk-Web] Build time: ${__APP_BUILD_TIME__}`)
+
 config({
     markdownItConfig(md) {
         // Remember the old renderer if overridden, or proxy to the default renderer.
