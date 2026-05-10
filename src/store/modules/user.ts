@@ -1,7 +1,6 @@
 import { heartbeatApi, loginApi, logoutApi } from '@/api/user/login.api'
 import { getUserInfoApi } from '@/api/user/user.api'
 import { Role, type LoginReq, type User } from '@/model/user.model'
-import type { Nullable } from 'element-plus/es/components/cascader-panel/src/node.mjs'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { pinia } from '..'
@@ -9,8 +8,8 @@ import { pinia } from '..'
 export const UserStore = defineStore(
     'user',
     () => {
-        const userInfo = ref<Nullable<User>>(null)
-        const token = ref<Nullable<string>>(null)
+        const userInfo = ref<User | null>(null);
+        const token = ref<string | null>(null)
         // const role = ref<string>(Role.DEFAULT)
 
         function getUser(): User {
