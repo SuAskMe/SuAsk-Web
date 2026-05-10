@@ -1,0 +1,45 @@
+name: Test-Frontend-Deploy # 修改名称以区分
+
+on:
+  push:
+    branches:
+      - dev-v2 # 只监听测试分支
+    paths:
+      - src/**
+      - package.json
+      - public/** # 建议加上 public 目录，通常静态资源在这里
+      - .env* # 建议加上环境配置文件
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # 明确 Node 版本更稳健
+          cache: 'npm'
+
+      - name: 安装依赖
+        run: npm ci # 生产/自动化环境建议用 ci，比 i 更严格且快
+
+      - name: 编译构建
+        # 如果你的项目有环境变量区分（如 .env.development），可以在这里指定
+        # run: npm run build -- --mode development
+        run: npm run build
+
+      - name: 部署到测试服务器
+        uses: burnett01/rsync-deployments@7.1.0
+        with:
+          switches: -avzr --delete
+          path: 'dist/' # 注意：通常不需要 /*，rsync 会处理好目录同步
+          remote_path: '/home/suask/test-frontend/' # 修改为测试环境目录
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_user: ${{ secrets.SSH_USERNAME }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
