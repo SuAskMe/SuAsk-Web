@@ -8,10 +8,21 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
+    const shanghaiBuildTime = new Intl.DateTimeFormat('sv-SE', {
+        timeZone: 'Asia/Shanghai',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    })
+        .format(new Date())
+        .replace(' ', 'T') + '+08:00'
+
     const buildTime =
-        command === 'build'
-            ? new Date().toISOString()
-            : 'development (build time updates on npm run build)'
+        command === 'build' ? shanghaiBuildTime : 'development (build time updates on npm run build)'
 
     return {
         define: {
