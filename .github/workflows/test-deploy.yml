@@ -42,4 +42,4 @@ jobs:
           remote_path: '/home/suask/test-frontend/' # 修改为测试环境目录
           remote_host: ${{ secrets.SSH_HOST }}
           remote_user: ${{ secrets.SSH_USERNAME }}
-          remote_key: ${{ secrets.DEPLOY_KEY }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
