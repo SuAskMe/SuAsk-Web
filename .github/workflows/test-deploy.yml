@@ -40,6 +40,6 @@ jobs:
           switches: -avzr --delete
           path: 'dist/' # 注意：通常不需要 /*，rsync 会处理好目录同步
           remote_path: '/home/suask/test-frontend/' # 修改为测试环境目录
-          remote_host: ${{ secrets.SSH_HOST }}
+          remote_host: ${{ secrets.SERVER_IP }}
           remote_user: ${{ secrets.SSH_USERNAME }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
