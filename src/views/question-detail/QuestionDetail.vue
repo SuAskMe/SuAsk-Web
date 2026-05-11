@@ -92,6 +92,7 @@ import { useRoute } from 'vue-router'
 import { router } from '@/router'
 import { getAnswerApi, upvoteAnswerApi, deleteAnswerApi } from '@/api/answer/answer.api'
 import { deleteQuestionApi } from '@/api/question/question.api'
+import { canDelete, hasTeacherAbility } from '@/utils/auth'
 import type { AnswerItem, Question, UpvoteAnswerReq, UpvoteAnswerRes } from '@/model/answer.model'
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -334,22 +335,15 @@ const question = ref<Question>({
 })
 const canReply = ref<boolean>(false)
 const userId = userInfo.value ? userInfo.value.id : 0
-const userRole = userInfo.value ? userInfo.value.role : ''
 
 // 删除权限判断
 const canDeleteQuestion = computed(() => {
-    if (!userId || userId === 1) return false // 默认用户不能删
-    if (userRole === 'admin') return true
-    // 问题的 src_user_id 或 dst_user_id 等于当前用户
-    // 由于我们没有 src_user_id 在前端，简化为：老师（dst）可删 + admin 可删
-    // 实际权限由后端兜底
-    return userRole === 'teacher' || userRole === 'admin'
+    if (!userId || userId === 1) return false
+    return hasTeacherAbility()
 })
 
 function canDeleteAnswer(answerUserId: number): boolean {
-    if (!userId || userId === 1) return false
-    if (userRole === 'admin') return true
-    return answerUserId === userId
+    return canDelete(answerUserId)
 }
 
 async function deleteQuestion() {

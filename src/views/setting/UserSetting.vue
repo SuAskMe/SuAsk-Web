@@ -182,7 +182,7 @@
                     </el-button>
                 </div>
 
-                <div v-if="userStore.getRole() == 'teacher'" class="setting-card">
+                <div v-if="hasTeacherAbility()" class="setting-card">
                     <div class="title">
                         <h2>提问箱可见性</h2>
                     </div>
@@ -274,6 +274,7 @@ import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
 import { View, Lock, TurnOff, SwitchButton, WarningFilled } from '@element-plus/icons-vue'
+import { hasTeacherAbility } from '@/utils/auth'
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })
@@ -476,7 +477,7 @@ async function updateUserInfo() {
                 originalValues.value.notifySwitch = notificationSettings.value.notifySwitch
                 originalValues.value.notifyEmail = notificationSettings.value.notifyEmail
                 basicInfo.value.avatar = usingAvatar.value
-                if (userStore.getRole() === 'teacher') {
+                if (hasTeacherAbility()) {
                     originalValues.value.question_box_perm = questionVisible.value
                 }
                 originalValues.value.avatar = usingAvatar.value // 更新原始头像值
@@ -525,7 +526,7 @@ function showDeactivateDialog() {
 const questionVisible = ref(userStore.getUser().question_box_perm)
 
 // 监听教师可见性设置变化
-if (userStore.getRole() == 'teacher') {
+if (hasTeacherAbility()) {
     watch(
         () => questionVisible.value,
         () => {
@@ -537,7 +538,7 @@ if (userStore.getRole() == 'teacher') {
     )
 }
 
-if (userStore.getRole() == 'teacher') {
+if (hasTeacherAbility()) {
     watch(
         () => questionVisible.value,
         async () => {

@@ -43,7 +43,7 @@
                 登录以获取更多功能
             </el-button>
             <student-item v-if="role == 'student'" />
-            <teacher-item v-else-if="role == 'teacher'" />
+            <teacher-item v-else-if="hasTeacherAbility()" />
             <default-item v-else-if="role == 'default'" />
         </div>
     </div>
@@ -84,6 +84,7 @@ import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
+import { hasTeacherAbility } from '@/utils/auth'
 
 // 导入全局事件总线
 import { emitter } from '@/utils/emitter'

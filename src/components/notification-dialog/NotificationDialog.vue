@@ -19,7 +19,7 @@
                 class="notification-tab"
                 :class="{ active: radio == NotificationType.QUESTION }"
                 @click="switchTab(NotificationType.QUESTION)"
-                v-if="userStore.getRole() == 'teacher'"
+                v-if="hasTeacherAbility()"
             >
                 提问我的
                 <div v-if="props.questionCount > 0" class="badge">
@@ -50,7 +50,7 @@
                 <div class="notification-container" :key="radio">
                     <div
                         v-if="
-                            radio == NotificationType.QUESTION && userStore.getRole() == 'teacher'
+                            radio == NotificationType.QUESTION && hasTeacherAbility()
                         "
                     >
                         <div v-for="item in newQuestion" :key="item.id" class="notification-item">
@@ -174,6 +174,7 @@ import { NotificationCard } from '@/components/notification-dialog'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UserStore } from '@/store/modules/user'
+import { hasTeacherAbility } from '@/utils/auth'
 
 // 导入全局事件总线
 import { emitter } from '@/utils/emitter'
@@ -239,7 +240,7 @@ const prevRadio = ref(NotificationType.ANSWER)
 const animationName = ref('fade-right')
 
 const NotificationTabList = computed(() => {
-    if (userStore.getRole() === 'teacher') {
+    if (hasTeacherAbility()) {
         return [NotificationType.QUESTION, NotificationType.ANSWER, NotificationType.REPLY]
     } else {
         return [NotificationType.ANSWER, NotificationType.REPLY]

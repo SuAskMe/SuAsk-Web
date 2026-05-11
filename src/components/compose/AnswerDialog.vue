@@ -215,6 +215,7 @@ import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
 import type { AddAnswer, AnswerItem, Question } from '@/model/answer.model'
 import { addAnswerApi } from '@/api/answer/answer.api'
+import { hasTeacherAbility } from '@/utils/auth'
 
 // pinia store
 const userStore = UserStore()
@@ -372,7 +373,7 @@ async function postAnswer() {
                 upvotes: 0,
                 image_urls: imgList,
                 is_upvoted: false,
-                teacher_name: userInfo.role == 'teacher' ? userInfo.name : '',
+                teacher_name: hasTeacherAbility() ? userInfo.name : '',
                 nickname: userInfo.nickname ? userInfo.nickname : '匿名用户',
             }
             emit('answerPosted', ans)
