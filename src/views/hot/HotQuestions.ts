@@ -3,7 +3,7 @@ import { getHotQuestionsApi, type GetHotQuestionsReq } from '@/api/question/hot.
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { ref } from 'vue'
 
-export const currentTimeRange = ref<'week' | 'month' | 'all'>('week')
+export const currentTimeRange = ref<'week' | 'month' | 'all'>('all')
 
 const pagination = usePagination<QuestionItem>({
     fetchData: async (params: PaginationParams) => {
