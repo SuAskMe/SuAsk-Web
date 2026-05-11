@@ -10,7 +10,7 @@
         <control-panel-item
             class="control-panel-item"
             id="hot"
-            icon="fire"
+            icon="hot"
             text="热点问题"
             jump-to-path="/hot"
         />
