@@ -9,7 +9,7 @@
                 search
                 has_sort_upvote
                 sidebar_btn
-                get_keywords_url="/teacher/question/keywords"
+                get_keywords_url="/questions/inbox/keywords"
                 sort_and_search
             />
         </el-header>
