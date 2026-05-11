@@ -109,7 +109,7 @@ onMounted(async () => {
             if (userInfo && Object.keys(userInfo).length > 0) {
                 ControlPanelStore().clearSelectedItem()
                 ElMessage.success('自动登录成功')
-                router.push({ name: 'AskAll' })
+                router.push({ name: 'AskTeacher' })
                 return
             } else {
                 // 如果心跳失败或无法获取用户信息，则重新登录
@@ -155,7 +155,7 @@ const handleLogin = async () => {
 
             ControlPanelStore().clearSelectedItem()
             ElMessage.success('登录成功')
-            router.push({ name: 'AskAll' })
+            router.push({ name: 'AskTeacher' })
         }
     } catch (error) {
         console.error(error)
