@@ -7,6 +7,13 @@
             text="问老师"
             jump-to-path="/ask-teacher"
         />
+        <control-panel-item
+            class="control-panel-item"
+            id="hot"
+            icon="fire"
+            text="热点问题"
+            jump-to-path="/hot"
+        />
         <div class="menu-container">
             <div
                 @click="toggleOpen"

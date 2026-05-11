@@ -1,6 +1,7 @@
 import type { AppRouteRecordRaw } from '../types'
 import { PageNotFound } from './basic'
 import { AskTeacherRoute } from './modules/student-page'
+import { HotQuestionsRoute } from './modules/student-page'
 import { HelpRoute } from './modules/help'
 import HomePage from '@/views/root-page/HomePage.vue'
 import { MyFavoriteRoute } from './modules/student-page'
@@ -43,13 +44,14 @@ export const TestRoute: AppRouteRecordRaw = {
 export const basicRoutes = [LoginRoute, TestRoute, RootRoot, PageNotFound]
 
 // 无登录状态下的路由
-export const defaultRoutes = [HelpRoute, UserRoute, AskTeacherRoute, QuestionDetailRoute]
+export const defaultRoutes = [HelpRoute, UserRoute, AskTeacherRoute, HotQuestionsRoute, QuestionDetailRoute]
 
 // 学生路由
 export const studentRoutes = [
     HelpRoute,
     UserRoute,
     AskTeacherRoute,
+    HotQuestionsRoute,
     QuestionDetailRoute,
     SettingRoute,
     AskHistoryRoute,
@@ -61,6 +63,7 @@ export const teacherRoutes = [
     HelpRoute,
     UserRoute,
     AskTeacherRoute,
+    HotQuestionsRoute,
     QuestionDetailRoute,
     SettingRoute,
     AskHistoryRoute,
