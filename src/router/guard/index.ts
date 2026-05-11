@@ -31,6 +31,11 @@ export function createRoleGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
         const name = to.name?.toString() + 'Root'
         const userRole = UserStore().getRole()
+        // admin 可以访问所有路由
+        if (userRole === 'admin') {
+            next()
+            return
+        }
         const roles = routeMap.get(name)
         if (roles) {
             if (!roles.includes(userRole)) {
