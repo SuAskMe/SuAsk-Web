@@ -35,6 +35,9 @@ export interface UserInfo {
     role: string
     introduction: string
     avatar: string | null
+    // 以下字段仅当 role=teacher 时有值
+    perm?: string
+    responses?: number
 }
 
 export interface SendCodeReq {

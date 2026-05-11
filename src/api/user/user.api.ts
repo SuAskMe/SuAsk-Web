@@ -5,6 +5,7 @@ enum Api {
     UPDATE_PASSWORD = '/user/password',
     USER = '/user',
     GET_USER_BY_ID = '/info/user',
+    DEACTIVATE = '/user/deactivate',
 }
 
 export async function updatePasswordApi(password: string) {
@@ -33,4 +34,9 @@ export async function getUserByIdApi(id: string): Promise<UserInfo> {
             return res.data
         }
     })
+}
+
+// 注销账号
+export async function deactivateAccountApi(password: string) {
+    return request.post(Api.DEACTIVATE, { password })
 }

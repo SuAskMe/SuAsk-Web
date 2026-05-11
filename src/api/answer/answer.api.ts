@@ -5,6 +5,7 @@ enum Api {
     GET = '/answer',
     ADD = '/answer/add',
     UPVOTE = '/answer/upvote',
+    DELETE = '/answer',
 }
 
 export async function getAnswerApi(question_id: number) {
@@ -17,4 +18,8 @@ export async function addAnswerApi(answer: FormData) {
 
 export async function upvoteAnswerApi(answer: UpvoteAnswerReq) {
     return request.post(Api.UPVOTE, answer)
+}
+
+export async function deleteAnswerApi(id: number) {
+    return request.delete(Api.DELETE, { data: { id } })
 }

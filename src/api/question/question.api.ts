@@ -3,9 +3,7 @@ import request from "@/utils/http/request";
 
 enum Api {
     ADD = '/questions/add',
-    GET_QUESTION_PUBLIC = '/questions/public',
-    GET_QUESTION_PUBLIC_BY_KEYWORD = '/questions/public/keywords',
-    SEARCH_QUESTION_PUBLIC = '/questions/public/search',
+    DELETE = '/questions',
 
     GET_QUESTION_TEACHER = '/questions/teacher',
     GET_QUESTION_TEACHER_BY_KEYWORD = '/questions/teacher/keywords',
@@ -17,15 +15,12 @@ export async function addQuestionApi(question: FormData) {
     return request.post(Api.ADD, question);
 }
 
-// 获取问题列表
-export async function getQuestionPublicApi(req: GetQuestionReq): Promise<GetQuestionRes> {
-    return request.get(Api.GET_QUESTION_PUBLIC, { params: req }).then((res) => {
-        if (res) {
-            return res.data
-        }
-    })
+// 删除问题
+export async function deleteQuestionApi(id: number) {
+    return request.delete(Api.DELETE, { data: { id } });
 }
 
+// 获取老师问题列表
 export async function getQuestionTeacherApi(req: GetQuestionReq): Promise<GetQuestionRes> {
     return request.get(Api.GET_QUESTION_TEACHER, { params: req }).then((res) => {
         if (res) {
@@ -34,24 +29,16 @@ export async function getQuestionTeacherApi(req: GetQuestionReq): Promise<GetQue
     })
 }
 
-// 获取问题关键字
+// 获取问题关键字（老师问题）
 export async function getQuestionKeywordApi(req: GetKeywordReq): Promise<GetKeywordRes> {
-    return request.get(Api.GET_QUESTION_PUBLIC_BY_KEYWORD, { params: req }).then((res) => {
+    return request.get(Api.GET_QUESTION_TEACHER_BY_KEYWORD, { params: req }).then((res) => {
         if (res) {
             return res.data
         }
     })
 }
 
-// 搜索问题
-export async function searchQuestionPublicApi(req: SearchQuestionReq): Promise<SearchQuestionRes> {
-    return request.get(Api.SEARCH_QUESTION_PUBLIC, { params: req }).then((res) => {
-        if (res) {
-            return res.data
-        }
-    })
-}
-
+// 搜索问题（老师问题）
 export async function searchQuestionTeacherApi(req: SearchQuestionReq): Promise<SearchQuestionRes> {
     return request.get(Api.SEARCH_QUESTION_TEACHER, { params: req }).then((res) => {
         if (res) {

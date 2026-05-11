@@ -242,6 +242,9 @@
                         <p class="danger-option" @click="showLogoutDialog">
                             <SwitchButton class="danger-icon" /> 退出登录
                         </p>
+                        <p class="danger-option deactivate" @click="showDeactivateDialog">
+                            <WarningFilled class="danger-icon" /> 注销账号
+                        </p>
                     </div>
                 </div>
                 <div style="height: 50px"></div>
@@ -249,6 +252,7 @@
         </el-scrollbar>
         <reset-password-dialog v-model:visible="showResetPassword" />
         <logout-dialog v-model:visible="showLogout" />
+        <deactivate-dialog v-model:visible="showDeactivate" />
     </el-container>
 </template>
 
@@ -265,10 +269,11 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import ThemeImage from './ThemeImage.vue'
 import ResetPasswordDialog from './ResetPasswordDialog.vue'
 import LogoutDialog from './LogoutDialog.vue'
+import DeactivateDialog from './DeactivateDialog.vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
-import { View, Lock, TurnOff, SwitchButton } from '@element-plus/icons-vue'
+import { View, Lock, TurnOff, SwitchButton, WarningFilled } from '@element-plus/icons-vue'
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })
@@ -509,6 +514,12 @@ const showLogout = ref(false)
 
 function showLogoutDialog() {
     showLogout.value = true
+}
+
+const showDeactivate = ref(false)
+
+function showDeactivateDialog() {
+    showDeactivate.value = true
 }
 
 const questionVisible = ref(userStore.getUser().question_box_perm)

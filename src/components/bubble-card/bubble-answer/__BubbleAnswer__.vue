@@ -20,17 +20,21 @@ interface BubbleAnswerProps {
     teacherName?: string
     imageUrls?: string[]
     bubbleKey?: any
+    showDelete?: boolean
     clickAvatar?: (key: any) => void
     clickLike?: (key: any) => void
     clickQuote?: (key: any) => void
     clickCard?: (key: any) => void
+    clickDelete?: (key: any) => void
 }
 
 const props = withDefaults(defineProps<BubbleAnswerProps>(), {
+    showDelete: false,
     clickAvatar: () => {},
     clickLike: () => {},
     clickQuote: () => {},
     clickCard: () => {},
+    clickDelete: () => {},
 })
 
 const Quote = computed(() =>
@@ -155,6 +159,9 @@ const showDefaultAvatar = () => {
                         />
                     </div>
                     <span class="counts">{{ likeCount }}</span>
+                </div>
+                <div v-if="showDelete" class="delete-action" @click.stop="clickDelete(key)">
+                    <svg-icon icon="delete-round" size="16" color="#ff4d4f" />
                 </div>
                 <div class="time">{{ timeStr }}</div>
             </div>

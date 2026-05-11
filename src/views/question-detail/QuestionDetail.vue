@@ -22,10 +22,12 @@
                         :image-urls="question.image_urls"
                         :show-favorite="true"
                         :is-favorite="question.is_favorite"
+                        :show-delete="canDeleteQuestion"
                         :width="deviceType.isMobile ? '80vw' : '45vw'"
                         style="margin-top: 24px"
                         :click-card="() => {}"
                         :click-favorite="favorite"
+                        :click-delete="deleteQuestion"
                     >
                     </BubbleCard>
                 </Transition>
@@ -46,6 +48,7 @@
                         :image-urls="item.image_urls"
                         :is-teacher="item.teacher_name != ''"
                         :teacher-name="item.teacher_name"
+                        :show-delete="canDeleteAnswer(item.user_id)"
                         :bubble-key="{
                             idx: index,
                             quoteId: item.in_reply_to,
@@ -57,6 +60,7 @@
                         :click-like="upvote"
                         :click-card="openDialog"
                         :click-avatar="navigateToUser"
+                        :click-delete="deleteAnswer"
                     >
                     </BubbleAnswer>
                 </TransitionGroup>
@@ -86,10 +90,11 @@ import { scrollToQuote } from './QuestionDetail'
 import { computed, nextTick, onMounted, provide, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { router } from '@/router'
-import { getAnswerApi, upvoteAnswerApi } from '@/api/answer/answer.api'
+import { getAnswerApi, upvoteAnswerApi, deleteAnswerApi } from '@/api/answer/answer.api'
+import { deleteQuestionApi } from '@/api/question/question.api'
 import type { AnswerItem, Question, UpvoteAnswerReq, UpvoteAnswerRes } from '@/model/answer.model'
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { favoriteApi } from '@/api/question/favorite.api'
 import { storeToRefs } from 'pinia'
 import { SyncStore } from '@/store/modules/question-detail'
@@ -329,6 +334,59 @@ const question = ref<Question>({
 })
 const canReply = ref<boolean>(false)
 const userId = userInfo.value ? userInfo.value.id : 0
+const userRole = userInfo.value ? userInfo.value.role : ''
+
+// 删除权限判断
+const canDeleteQuestion = computed(() => {
+    if (!userId || userId === 1) return false // 默认用户不能删
+    if (userRole === 'admin') return true
+    // 问题的 src_user_id 或 dst_user_id 等于当前用户
+    // 由于我们没有 src_user_id 在前端，简化为：老师（dst）可删 + admin 可删
+    // 实际权限由后端兜底
+    return userRole === 'teacher' || userRole === 'admin'
+})
+
+function canDeleteAnswer(answerUserId: number): boolean {
+    if (!userId || userId === 1) return false
+    if (userRole === 'admin') return true
+    return answerUserId === userId
+}
+
+async function deleteQuestion() {
+    try {
+        await ElMessageBox.confirm('确定要删除这个问题吗？此操作不可恢复。', '删除确认', {
+            confirmButtonText: '删除',
+            cancelButtonText: '取消',
+            type: 'warning',
+            confirmButtonClass: 'el-button--danger',
+        })
+        const res = await deleteQuestionApi(question.value.id)
+        if (res) {
+            ElMessage.success('问题已删除')
+            navigateBack()
+        }
+    } catch {
+        // 用户取消
+    }
+}
+
+async function deleteAnswer(key: { answerId: number }) {
+    try {
+        await ElMessageBox.confirm('确定要删除这条回答吗？', '删除确认', {
+            confirmButtonText: '删除',
+            cancelButtonText: '取消',
+            type: 'warning',
+            confirmButtonClass: 'el-button--danger',
+        })
+        const res = await deleteAnswerApi(key.answerId)
+        if (res) {
+            ElMessage.success('回答已删除')
+            answerList.value = answerList.value.filter((a) => a.id !== key.answerId)
+        }
+    } catch {
+        // 用户取消
+    }
+}
 
 provide('question', question)
 provide('quote', quote)

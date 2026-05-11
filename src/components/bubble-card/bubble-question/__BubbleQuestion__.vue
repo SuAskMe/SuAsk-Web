@@ -18,15 +18,19 @@ interface BubbleQuestionProps {
     avatars?: string[]
     isFavorite?: boolean
     showFavorite?: boolean
+    showDelete?: boolean
     clickCard?: (key: any) => void
     clickFavorite?: (key: any) => void
     clickFooter?: (key: any) => void
+    clickDelete?: (key: any) => void
 }
 const props = withDefaults(defineProps<BubbleQuestionProps>(), {
     showFavorite: true,
+    showDelete: false,
     clickCard: () => {},
     clickFavorite: () => {},
     clickFooter: () => {},
+    clickDelete: () => {},
 })
 const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => {
@@ -106,6 +110,14 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
                 </el-avatar>
                 <div class="text">{{ answerNum }} 个回答</div>
                 <div
+                    v-if="showDelete"
+                    class="delete-action"
+                    data-tips="删除"
+                    @click.stop="clickDelete(key)"
+                >
+                    <svg-icon icon="delete-round" size="20" color="#ff4d4f" />
+                </div>
+                <div
                     v-if="showFavorite"
                     class="favorite"
                     :data-tips="isFavorite ? '取消收藏' : '收藏'"
@@ -122,6 +134,14 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
             <div v-else class="card-footer">
                 <svg-icon class="msg-icon" icon="communicate_message" size="24" color="#66b0ff" />
                 <div class="text" @click.stop="clickFooter(key)">发表一个回答...</div>
+                <div
+                    v-if="showDelete"
+                    class="delete-action"
+                    data-tips="删除"
+                    @click.stop="clickDelete(key)"
+                >
+                    <svg-icon icon="delete-round" size="20" color="#ff4d4f" />
+                </div>
                 <div
                     v-if="showFavorite"
                     class="favorite"

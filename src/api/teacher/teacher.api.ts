@@ -4,7 +4,8 @@ import request from "@/utils/http/request";
 enum Api {
     GET_TEACHER = '/info/teacher',
     GET_TEACHER_PIN = '/info/teacher/pin',
-    UPDATE_PERM = '/teacher/perm'
+    // 旧接口保留兼容，新版建议用 PUT /user 里的 question_box_perm 字段
+    UPDATE_PERM = '/teacher/perm',
 }
 
 export async function getTeacherApi() {

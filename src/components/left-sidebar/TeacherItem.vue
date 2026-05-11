@@ -2,13 +2,6 @@
     <div class="control-panel-items">
         <control-panel-item
             class="control-panel-item"
-            id="ask-all"
-            icon="group"
-            text="问大家"
-            jump-to-path="/ask-all"
-        />
-        <control-panel-item
-            class="control-panel-item"
             id="ask-teacher"
             icon="graduation-cap"
             text="问老师"

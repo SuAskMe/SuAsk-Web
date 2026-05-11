@@ -3,7 +3,7 @@ import { ref } from "vue";
 
 export const ControlPanelStore = defineStore("controlPanel",
     () => {
-        const Item = ref<string>('ask-all')
+        const Item = ref<string>('ask-teacher')
 
         function setSelectedItem(item: string) {
             Item.value = item
@@ -14,7 +14,7 @@ export const ControlPanelStore = defineStore("controlPanel",
         }
 
         function clearSelectedItem() {
-            Item.value = 'ask-all'
+            Item.value = 'ask-teacher'
         }
 
         return { Item, setSelectedItem, getSelectedItem, clearSelectedItem }
