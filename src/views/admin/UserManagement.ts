@@ -79,9 +79,9 @@ export function buildEditData(form: {
         nickname: form.nickname,
         email: form.email,
         role: form.role,
+        introduction: form.introduction || '',
     }
     if (form.role === 'teacher') {
-        data.introduction = form.introduction || ''
         data.perm = form.perm || 'public'
     }
     return data

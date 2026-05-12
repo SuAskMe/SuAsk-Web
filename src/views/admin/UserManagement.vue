@@ -1,11 +1,11 @@
 <template>
-    <div class="admin-page">
-        <header class="admin-header">
+    <el-container class="admin-page">
+        <el-header class="admin-header">
             <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
             <h2>用户管理</h2>
-        </header>
+        </el-header>
 
-        <main class="admin-content">
+        <el-scrollbar class="admin-content">
             <!-- 工具栏 -->
             <div class="toolbar">
                 <div class="search-box">
@@ -38,12 +38,12 @@
                 <div class="user-card" v-for="user in userList" :key="user.id">
                     <div class="user-info">
                         <img
+                            v-if="user.avatar"
                             class="user-avatar-img"
                             :src="user.avatar"
                             :alt="user.nickname"
-                            @error="(e: Event) => (e.target as HTMLImageElement).style.display = 'none'"
                         />
-                        <div class="user-avatar-fallback" v-if="!user.avatar || user.avatar === 'default-avatar'">
+                        <div v-else class="user-avatar-fallback">
                             {{ user.nickname.charAt(0) }}
                         </div>
                         <div class="user-detail">
@@ -84,7 +84,7 @@
                 <button class="page-btn" :disabled="currentPage >= Math.ceil(totalCount / pageSize)" @click="onPageChange(currentPage + 1)">›</button>
                 <span class="page-total">共 {{ totalCount }} 条</span>
             </div>
-        </main>
+        </el-scrollbar>
 
         <!-- 遮罩层 -->
         <Transition name="fade">
@@ -192,6 +192,10 @@
                         <input v-model="editForm.email" type="email" placeholder="请输入邮箱" />
                     </div>
                     <div class="form-group">
+                        <label>简介</label>
+                        <textarea v-model="editForm.introduction" placeholder="请输入用户简介" maxlength="500" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
                         <label>角色</label>
                         <div class="role-select">
                             <button
@@ -203,10 +207,6 @@
                         </div>
                     </div>
                     <template v-if="editForm.role === 'teacher'">
-                        <div class="form-group">
-                            <label>教师简介</label>
-                            <textarea v-model="editForm.introduction" placeholder="请输入教师简介" maxlength="500" rows="3"></textarea>
-                        </div>
                         <div class="form-group">
                             <label>提问箱权限</label>
                             <div class="role-select">
@@ -270,7 +270,7 @@
                 </div>
             </div>
         </Transition>
-    </div>
+    </el-container>
 </template>
 
 <script setup lang="ts">
