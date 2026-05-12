@@ -1,4 +1,3 @@
-import { AdminModeStoreWithOut } from '@/store/modules/admin-mode'
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStoreWithOut } from '@/store/modules/user'
 import { Role } from '@/model/user.model'
@@ -62,12 +61,9 @@ request.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`
         }
 
-        // 管理员模式：admin 角色且模式开启时附加 X-Admin-Mode header
+        // 管理员：始终附加 X-Admin-Mode header
         if (userStore.getRole() === Role.ADMIN) {
-            const adminModeStore = AdminModeStoreWithOut()
-            if (adminModeStore.isEnabled()) {
-                config.headers['X-Admin-Mode'] = 'true'
-            }
+            config.headers['X-Admin-Mode'] = 'true'
         }
 
         return config

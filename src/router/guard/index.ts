@@ -1,5 +1,4 @@
 import { UserStore } from '@/store/modules/user'
-import { AdminModeStore } from '@/store/modules/admin-mode'
 import type { Router } from 'vue-router'
 import { basicRoutes, defaultRoutes, studentRoutes, teacherRoutes } from '../routes'
 import type { AppRouteRecordRaw } from '../types'
@@ -39,9 +38,6 @@ export function createRoleGuard(router: Router) {
                 next({ name: 'NotFound' })
                 return
             }
-            // admin 用户访问管理路由时自动开启管理员模式
-            const adminModeStore = AdminModeStore()
-            adminModeStore.enable()
             next()
             return
         }
