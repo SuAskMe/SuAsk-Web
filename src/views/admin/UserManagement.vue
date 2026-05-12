@@ -37,7 +37,15 @@
             <div class="user-list" v-if="!tableLoading && userList.length > 0">
                 <div class="user-card" v-for="user in userList" :key="user.id">
                     <div class="user-info">
-                        <div class="user-avatar">{{ user.nickname.charAt(0) }}</div>
+                        <img
+                            class="user-avatar-img"
+                            :src="user.avatar"
+                            :alt="user.nickname"
+                            @error="(e: Event) => (e.target as HTMLImageElement).style.display = 'none'"
+                        />
+                        <div class="user-avatar-fallback" v-if="!user.avatar || user.avatar === 'default-avatar'">
+                            {{ user.nickname.charAt(0) }}
+                        </div>
                         <div class="user-detail">
                             <div class="user-name">
                                 {{ user.nickname }}
@@ -153,6 +161,24 @@
                     <button class="modal-close" @click="editDialogVisible = false">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <!-- 头像修改 -->
+                    <div class="form-group avatar-upload-group">
+                        <label>头像</label>
+                        <div class="avatar-upload">
+                            <img
+                                v-if="editForm.avatarPreview"
+                                :src="editForm.avatarPreview"
+                                class="avatar-preview"
+                            />
+                            <div v-else class="avatar-preview avatar-placeholder">
+                                {{ editForm.nickname.charAt(0) }}
+                            </div>
+                            <label class="upload-btn">
+                                更换头像
+                                <input type="file" accept="image/*" hidden @change="onAvatarFileChange" />
+                            </label>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>用户名</label>
                         <input :value="editForm.name" type="text" disabled class="disabled" />
@@ -257,6 +283,7 @@ import {
     updateAdminUser,
     resetAdminUserPassword,
     deleteAdminUser,
+    updateAdminUserAvatar,
     type AdminUserItem,
 } from '@/api/admin/admin.api'
 import { UserStore } from '@/store/modules/user'
@@ -381,11 +408,19 @@ async function handleCreate() {
 
 // ==================== 编辑用户 ====================
 const editLoading = ref(false)
-const editForm = reactive({ id: 0, name: '', nickname: '', email: '', role: '', introduction: '', perm: 'public' })
+const editForm = reactive({ id: 0, name: '', nickname: '', email: '', role: '', introduction: '', perm: 'public', avatarPreview: '', avatarFile: null as File | null })
 
 function openEditDialog(user: AdminUserItem) {
-    Object.assign(editForm, initEditForm(user))
+    Object.assign(editForm, { ...initEditForm(user), avatarPreview: user.avatar || '', avatarFile: null })
     editDialogVisible.value = true
+}
+
+function onAvatarFileChange(e: Event) {
+    const input = e.target as HTMLInputElement
+    if (input.files && input.files[0]) {
+        editForm.avatarFile = input.files[0]
+        editForm.avatarPreview = URL.createObjectURL(input.files[0])
+    }
 }
 
 async function handleEdit() {
@@ -393,6 +428,10 @@ async function handleEdit() {
     if (err) { ElMessage.error(err); return }
     editLoading.value = true
     try {
+        // 如果有新头像，先上传
+        if (editForm.avatarFile) {
+            await updateAdminUserAvatar(editForm.id, editForm.avatarFile)
+        }
         await updateAdminUser(editForm.id, buildEditData(editForm))
         ElMessage.success('用户信息更新成功')
         editDialogVisible.value = false

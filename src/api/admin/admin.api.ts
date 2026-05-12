@@ -10,6 +10,7 @@ export interface AdminUserItem {
     email: string
     role: 'admin' | 'teacher' | 'student'
     introduction: string
+    avatar: string
     created_at: string
 }
 
@@ -98,6 +99,19 @@ export async function resetAdminUserPassword(id: number, password: string): Prom
 /** 删除用户 */
 export async function deleteAdminUser(id: number): Promise<AdminIdRes> {
     return request.delete(`${Api.USERS}/${id}`).then((res) => {
+        if (res) {
+            return res.data
+        }
+    })
+}
+
+/** 修改用户头像 */
+export async function updateAdminUserAvatar(id: number, file: File): Promise<{ id: number; avatar: string }> {
+    const formData = new FormData()
+    formData.append('avatar', file)
+    return request.put(`${Api.USERS}/${id}/avatar`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    }).then((res) => {
         if (res) {
             return res.data
         }
