@@ -38,6 +38,8 @@
     flex-direction: column;
     gap: 12px;
     padding: 12px 16px;
+    position: relative;
+    z-index: 2;
 
     .search-bar {
         .search-wrapper {
@@ -133,6 +135,8 @@
     overflow: hidden;
     flex-direction: column;
     padding: 0;
+    --el-main-padding: 0;
+    border: none;
 
     .background-img {
         position: absolute;
@@ -165,6 +169,18 @@
     flex: 1 1 0;
     min-height: 0;
     height: auto;
+}
+
+.main-container :deep(.el-scrollbar__bar.is-horizontal) {
+    display: none !important;
+}
+
+.main-container :deep(.el-scrollbar__wrap) {
+    border-top: none;
+    outline: none;
+    // 顶部渐隐遮罩：卡片滚动到顶部时平滑淡出，避免硬截断
+    mask-image: linear-gradient(to bottom, transparent, black 24px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 24px);
 }
 
 // 空状态淡入

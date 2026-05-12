@@ -17,6 +17,7 @@ const pagination = usePagination<QuestionItem>({
     },
     // 热点默认按浏览量排序，sort_type 不影响后端（后端固定按 views 排）
     initialSortType: 0,
+    initialPage: 0,
 })
 
 const {
