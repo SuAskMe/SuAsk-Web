@@ -17,7 +17,7 @@
         <control-panel-item
             class="control-panel-item"
             id="admin-users"
-            icon="user"
+            icon="manage"
             text="用户管理"
             jump-to-path="/admin/users"
         />
