@@ -45,6 +45,18 @@
             <student-item v-if="role == 'student'" />
             <teacher-item v-else-if="hasTeacherAbility()" />
             <default-item v-else-if="role == 'default'" />
+
+            <!-- 管理员模式开关 -->
+            <div v-if="role === 'admin'" class="admin-mode-section">
+                <el-switch
+                    v-model="adminModeEnabled"
+                    active-text="管理模式"
+                />
+                <div v-if="adminModeEnabled" class="admin-nav-link" @click="navigateToAdminUsers">
+                    <svg-icon icon="user" color="#71B6FF" size="16px" />
+                    <span>用户管理</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -81,6 +93,7 @@ import { ElMessage } from 'element-plus'
 import { getNotificationCountApi } from '@/api/notification/notification.api'
 import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
 import { UserStore } from '@/store/modules/user'
+import { AdminModeStore } from '@/store/modules/admin-mode'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
@@ -96,6 +109,19 @@ const userStore = UserStore()
 const userInfo = computed(() => userStore.getUser())
 
 const role = ref(userStore.getRole())
+
+// 管理员模式
+const adminModeStore = AdminModeStore()
+const adminModeEnabled = computed({
+    get: () => adminModeStore.enabled,
+    set: (val: boolean) => {
+        if (val) {
+            adminModeStore.enable()
+        } else {
+            adminModeStore.disable()
+        }
+    },
+})
 
 const sidebarStore = SidebarStore()
 
@@ -189,6 +215,13 @@ function navigateToUserInfo() {
 
 function navigateToLogin() {
     router.push('/login')
+}
+
+function navigateToAdminUsers() {
+    if (deviceTypeStore.isMobile) {
+        sidebarStore.toggle()
+    }
+    router.push('/admin/users')
 }
 </script>
 
@@ -305,6 +338,29 @@ function navigateToLogin() {
             cursor: pointer;
             height: 40px;
             border-radius: 20px;
+        }
+
+        .admin-mode-section {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .admin-nav-link {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 12px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+                color: #333;
+                font-size: 14px;
+
+                &:hover {
+                    background-color: #f0f7ff;
+                }
+            }
         }
     }
 }

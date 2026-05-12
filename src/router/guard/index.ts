@@ -1,4 +1,5 @@
 import { UserStore } from '@/store/modules/user'
+import { AdminModeStore } from '@/store/modules/admin-mode'
 import type { Router } from 'vue-router'
 import { basicRoutes, defaultRoutes, studentRoutes, teacherRoutes } from '../routes'
 import type { AppRouteRecordRaw } from '../types'
@@ -31,6 +32,20 @@ export function createRoleGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
         const name = to.name?.toString() + 'Root'
         const userRole = UserStore().getRole()
+
+        // 检查 requiresAdmin meta：非 admin 用户重定向到 404
+        if (to.meta.requiresAdmin) {
+            if (userRole !== 'admin') {
+                next({ name: 'NotFound' })
+                return
+            }
+            // admin 用户访问管理路由时自动开启管理员模式
+            const adminModeStore = AdminModeStore()
+            adminModeStore.enable()
+            next()
+            return
+        }
+
         // admin 可以访问所有路由
         if (userRole === 'admin') {
             next()
