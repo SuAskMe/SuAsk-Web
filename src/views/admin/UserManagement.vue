@@ -37,15 +37,7 @@
             <div class="user-list" v-if="!tableLoading && userList.length > 0">
                 <div class="user-card" v-for="user in userList" :key="user.id">
                     <div class="user-info">
-                        <img
-                            v-if="user.avatar"
-                            class="user-avatar-img"
-                            :src="user.avatar"
-                            :alt="user.nickname"
-                        />
-                        <div v-else class="user-avatar-fallback">
-                            {{ user.nickname.charAt(0) }}
-                        </div>
+                        <UserAvatar :src="user.avatar" :name="user.nickname" :size="38" />
                         <div class="user-detail">
                             <div class="user-name">
                                 {{ user.nickname }}
@@ -165,14 +157,7 @@
                     <div class="form-group avatar-upload-group">
                         <label>头像</label>
                         <div class="avatar-upload">
-                            <img
-                                v-if="editForm.avatarPreview"
-                                :src="editForm.avatarPreview"
-                                class="avatar-preview"
-                            />
-                            <div v-else class="avatar-preview avatar-placeholder">
-                                {{ editForm.nickname.charAt(0) }}
-                            </div>
+                            <UserAvatar :src="editForm.avatarPreview" :name="editForm.nickname" :size="56" />
                             <label class="upload-btn">
                                 更换头像
                                 <input type="file" accept="image/*" hidden @change="onAvatarFileChange" />
@@ -289,6 +274,7 @@ import {
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import { UserAvatar } from '@/components/user-avatar'
 import {
     roleOptions, roleChoices, permChoices, pageSize,
     getRoleLabel, formatDate,

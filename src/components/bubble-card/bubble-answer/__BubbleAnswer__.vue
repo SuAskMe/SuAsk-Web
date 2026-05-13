@@ -1,8 +1,9 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { DeviceTypeStore } from '@/store/modules/device-type'
+import { UserAvatar } from '@/components/user-avatar'
 import { getImgStyle, getTimeStr } from '../bubble-card'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 interface BubbleAnswerProps {
     isMine?: boolean
     avatar: string
@@ -70,11 +71,6 @@ const avatarMargin = computed(() => {
     const margin = props.isMine ? 'margin-right: 30px;' : 'margin-left: 24px;'
     return deviceType.isMobile ? '' : margin
 })
-const _avatar = ref(props.avatar ? props.avatar : '/src/assets/default-avatar.png')
-const showDefaultAvatar = () => {
-    // console.log("showDefaultAvatar");
-    _avatar.value = '/src/assets/default-avatar.png'
-}
 </script>
 <template>
     <div
@@ -91,16 +87,14 @@ const showDefaultAvatar = () => {
             class="avatar"
             :style="isMine ? 'margin-right: 24px;' : 'margin-left: 24px;'"
         /> -->
-        <el-avatar
+        <UserAvatar
             @click.stop="clickAvatar(key)"
-            :src="_avatar"
-            class="avatar"
+            :src="avatar"
+            :name="nickName"
             :size="40"
+            class="avatar"
             :style="avatarMargin"
-            @error="showDefaultAvatar"
-        >
-            <img src="@/assets/default-avatar.png" />
-        </el-avatar>
+        />
         <div class="card-container" :style="containerStyle" @click.stop="clickCard(key)">
             <div class="ans-title">
                 <div class="nickname">{{ nickName }}</div>

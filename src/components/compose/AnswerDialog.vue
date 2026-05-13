@@ -19,9 +19,7 @@
                     <div v-if="quote?.in_replay_to != 0" class="quote-container">
                         <div class="quote">
                             <div class="avatar">
-                                <el-avatar :src="quote?.avatar" :size="40">
-                                    <img src="@/assets/default-avatar.png" />
-                                </el-avatar>
+                                <UserAvatar :src="quote?.avatar" :name="quote?.author" :size="40" />
                             </div>
                             <div class="content">
                                 <div class="author">{{ quote?.author }}</div>
@@ -35,9 +33,7 @@
                     </div>
                     <div class="input-container">
                         <div class="avatar">
-                            <el-avatar :src="userInfo.avatar" :size="40">
-                                <img src="@/assets/default-avatar.png" />
-                            </el-avatar>
+                            <UserAvatar :src="userInfo.avatar" :name="userInfo.nickname" :size="40" />
                         </div>
                         <div class="content">
                             <el-input
@@ -209,6 +205,7 @@ import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
 import { ElMessage } from 'element-plus'
 import SvgIcon from '@/components/svg-icon'
+import { UserAvatar } from '@/components/user-avatar'
 import { inject, ref, type Ref } from 'vue'
 import { db, type Answer } from './db'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'

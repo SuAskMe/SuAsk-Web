@@ -12,9 +12,7 @@
                                 <p>个人信息</p>
                             </div>
                             <div class="user-profile">
-                                <el-avatar class="user-avatar" :size="200" :src="userInfo.avatar">
-                                    <img src="@/assets/default-avatar.png" />
-                                </el-avatar>
+                                <UserAvatar class="user-avatar" :src="userInfo.avatar" :name="userInfo.nickname" :size="200" />
                                 <p class="nickname">{{ userInfo.nickname }}</p>
                                 <p class="name">@{{ userInfo.name }}</p>
                                 <p class="role" :style="{ backgroundColor: roleColor }">
@@ -69,6 +67,7 @@
 import { getUserByIdApi } from '@/api/user/user.api'
 import type { UserInfo } from '@/model/user.model'
 import { BubbleCard } from '@/components/bubble-card'
+import { UserAvatar } from '@/components/user-avatar'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { MdPreview } from 'md-editor-v3'

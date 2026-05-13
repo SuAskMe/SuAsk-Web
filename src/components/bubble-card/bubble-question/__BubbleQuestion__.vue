@@ -1,6 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { computed } from 'vue'
+import { UserAvatar } from '@/components/user-avatar'
 import { getImgStyle, getTimeStr } from '../bubble-card'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
@@ -95,7 +96,7 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
                 </div>
             </div>
             <div v-if="answerNum && answerNum > 0" class="card-footer">
-                <el-avatar
+                <UserAvatar
                     v-for="(avatar, index) in avatars"
                     :key="index"
                     :src="avatar"
@@ -105,9 +106,7 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
                         zIndex: 10 - index,
                     }"
                     class="avatar"
-                >
-                    <img src="/src/assets/default-avatar.png" />
-                </el-avatar>
+                />
                 <div class="text">{{ answerNum }} 个回答</div>
                 <div
                     v-if="showDelete"

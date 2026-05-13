@@ -22,9 +22,7 @@
             />
         </div>
         <div class="avatar-and-id" @click="navigateToUserInfo">
-            <el-avatar :size="120" :src="userInfo.avatar">
-                <img src="@/assets/default-avatar.png" />
-            </el-avatar>
+            <UserAvatar :src="userInfo.avatar" :name="userInfo.nickname" :size="120" />
             <div class="user-name">
                 <span>{{ userInfo.nickname }}</span>
             </div>
@@ -82,6 +80,7 @@ import DefaultItem from './DefaultItem.vue'
 import { ElMessage } from 'element-plus'
 import { getNotificationCountApi } from '@/api/notification/notification.api'
 import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
+import { UserAvatar } from '@/components/user-avatar'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
@@ -268,12 +267,12 @@ function navigateToLogin() {
     .avatar-and-id {
         padding: 0 15%;
 
-        .el-avatar {
+        .user-avatar {
             cursor: pointer;
             transition: transform 0.3s ease;
         }
 
-        .el-avatar:hover {
+        .user-avatar:hover {
             transform: scale(1.1);
         }
 

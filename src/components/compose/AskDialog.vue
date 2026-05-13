@@ -20,9 +20,7 @@
                 </div>
                 <div class="main">
                     <div class="title">
-                        <el-avatar :src="avatarURL" :size="40">
-                            <img src="@/assets/default-avatar.png" />
-                        </el-avatar>
+                        <UserAvatar :src="avatarURL" :name="userStore.getUser().nickname" :size="40" />
                         <el-input
                             v-model="questionContent.title"
                             placeholder="问题标题"
@@ -203,6 +201,7 @@ import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
 import { ElMessage } from 'element-plus'
 import SvgIcon from '@/components/svg-icon'
+import { UserAvatar } from '@/components/user-avatar'
 import { inject, ref, type Ref } from 'vue'
 import { addQuestionApi } from '@/api/question/question.api'
 import { db, type Question } from './db'
