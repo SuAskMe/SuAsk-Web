@@ -4,6 +4,23 @@
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
         </el-header>
         <el-scrollbar>
+            <!-- Guest 用户：只显示升级入口 -->
+            <el-main v-if="isGuest" class="main-container">
+                <div class="setting-card guest-upgrade-card">
+                    <div class="title">
+                        <h2>账号升级</h2>
+                    </div>
+                    <p style="color: #666; margin-bottom: 20px;">
+                        您当前为临时用户，升级为正式账号后可解锁全部功能（修改头像、昵称、通知设置等）。
+                    </p>
+                    <p style="color: #909399; font-size: 14px;">
+                        请点击侧边栏中的「登录以获取全部功能」进行升级。
+                    </p>
+                </div>
+            </el-main>
+
+            <!-- 正式用户：完整设置页 -->
+            <template v-else>
             <el-alert
                 v-if="showSaveReminder"
                 class="save-reminder"
@@ -258,6 +275,7 @@
                 </div>
                 <div style="height: 50px"></div>
             </el-main>
+            </template>
         </el-scrollbar>
         <reset-password-dialog v-model:visible="showResetPassword" />
         <logout-dialog v-model:visible="showLogout" />

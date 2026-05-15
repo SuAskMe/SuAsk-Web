@@ -51,16 +51,6 @@ export function createRoleGuard(router: Router) {
             return
         }
 
-        // 检查 requiresGuest meta：非 guest 用户重定向到首页
-        if (to.meta.requiresGuest) {
-            if (userRole !== 'guest') {
-                next({ name: 'AskTeacher' })
-                return
-            }
-            next()
-            return
-        }
-
         // admin 可以访问所有路由
         if (userRole === 'admin') {
             next()
@@ -69,11 +59,6 @@ export function createRoleGuard(router: Router) {
         const roles = routeMap.get(name)
         if (roles) {
             if (!roles.includes(userRole)) {
-                // guest 尝试访问受限路由时，重定向到升级页面
-                if (userRole === 'guest') {
-                    next({ name: 'GuestUpgrade' })
-                    return
-                }
                 next({ name: 'NotFound' })
                 return
             }

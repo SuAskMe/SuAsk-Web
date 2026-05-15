@@ -40,38 +40,10 @@ export const TestRoute: AppRouteRecordRaw = {
     },
 }
 
-// Guest 升级页面路由
-export const GuestUpgradeRoute: AppRouteRecordRaw = {
-    path: '/guest/upgrade',
-    name: 'GuestUpgradeRoot',
-    meta: {
-        title: '升级正式账号',
-        requiresGuest: true,
-    },
-    props: {
-        userType: 'guest',
-    },
-    component: () => import('@/layout/home/WebHome.vue'),
-    children: [
-        {
-            path: '',
-            name: 'GuestUpgrade',
-            meta: {
-                title: '升级正式账号',
-                requiresGuest: true,
-            },
-            components: {
-                default: () => import('@/views/guest/GuestUpgrade.vue'),
-                left_side: () => import('@/components/left-sidebar/LeftSidebar.vue'),
-            },
-        },
-    ],
-}
-
 // 最基础的路由
 export const basicRoutes = [LoginRoute, TestRoute, RootRoot, PageNotFound]
 
-// Guest 路由（含所有原 default 路由）
+// Guest 路由
 export const guestRoutes = [
     HelpRoute,
     UserRoute,
@@ -80,7 +52,6 @@ export const guestRoutes = [
     QuestionDetailRoute,
     SettingRoute,
     AskHistoryRoute,
-    GuestUpgradeRoute,
 ]
 
 // 学生路由

@@ -56,17 +56,5 @@ import ControlPanelItem from '@/components/control-panel-item'
     .control-panel-item:hover {
         transform: translateX(10px);
     }
-
-    @keyframes slide-in-left {
-        0% {
-            transform: translateX(100px);
-            opacity: 0;
-        }
-
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
 }
 </style>
