@@ -16,6 +16,20 @@
         />
         <control-panel-item
             class="control-panel-item"
+            id="ask-history"
+            icon="chat-history"
+            text="历史提问"
+            jump-to-path="/ask-history"
+        />
+        <control-panel-item
+            class="control-panel-item"
+            id="settings"
+            icon="settings"
+            text="设置"
+            jump-to-path="/setting"
+        />
+        <control-panel-item
+            class="control-panel-item"
             id="help"
             icon="question"
             text="帮助"

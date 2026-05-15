@@ -1,4 +1,5 @@
 import { heartbeatApi, loginApi, logoutApi } from '@/api/user/login.api'
+import { guestLoginApi } from '@/api/guest/guest.api'
 import { getUserInfoApi } from '@/api/user/user.api'
 import { Role, type LoginReq, type User } from '@/model/user.model'
 import { defineStore } from 'pinia'
@@ -10,7 +11,6 @@ export const UserStore = defineStore(
     () => {
         const userInfo = ref<User | null>(null);
         const token = ref<string | null>(null)
-        // const role = ref<string>(Role.DEFAULT)
 
         function getUser(): User {
             return userInfo.value || ({} as User)
@@ -21,7 +21,7 @@ export const UserStore = defineStore(
         }
 
         function getRole(): string {
-            return userInfo.value?.role || Role.DEFAULT
+            return userInfo.value?.role || ''
         }
 
         function setToken(_token: string) {
@@ -37,19 +37,7 @@ export const UserStore = defineStore(
         // }
 
         function resetState() {
-            userInfo.value = {
-                id: 0,
-                name: 'susu',
-                nickname: 'susu',
-                email: '',
-                role: Role.DEFAULT,
-                introduction: '',
-                avatar: null,
-                themeId: 1,
-                question_box_perm: '',
-                notifySwitch: false,
-                notifyEmail: '',
-            }
+            userInfo.value = null
             token.value = ''
         }
 
@@ -91,6 +79,20 @@ export const UserStore = defineStore(
             return user
         }
 
+        async function guestLogin(): Promise<User | null> {
+            const res = await guestLoginApi()
+            if (!res) {
+                return null
+            }
+            setToken(res.token)
+            const user = await getUserInfo()
+            return user
+        }
+
+        function isGuest(): boolean {
+            return userInfo.value?.role === Role.GUEST
+        }
+
         async function logout(): Promise<unknown> {
             if (getToken()) {
                 const res = await logoutApi()
@@ -115,6 +117,9 @@ export const UserStore = defineStore(
             resetState,
             login,
             autoLogin,
+            getUserInfo,
+            guestLogin,
+            isGuest,
             logout,
         }
     },

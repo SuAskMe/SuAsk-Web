@@ -7,9 +7,9 @@
 
 import { UserStore } from '@/store/modules/user'
 
-/** 当前用户是否已登录（非匿名） */
+/** 当前用户是否已登录（持有有效 token） */
 export function isLoggedIn(): boolean {
-    return UserStore().getRole() !== 'default'
+    return !!UserStore().getToken()
 }
 
 /** 当前用户是否是管理员 */

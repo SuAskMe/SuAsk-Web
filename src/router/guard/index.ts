@@ -1,6 +1,6 @@
 import { UserStore } from '@/store/modules/user'
 import type { Router } from 'vue-router'
-import { basicRoutes, defaultRoutes, studentRoutes, teacherRoutes } from '../routes'
+import { basicRoutes, guestRoutes, studentRoutes, teacherRoutes } from '../routes'
 import type { AppRouteRecordRaw } from '../types'
 
 export const routeMap = new Map<string, string[]>()
@@ -22,7 +22,7 @@ export function createRoleMap() {
     }
 
     addRoutesToMap(basicRoutes, 'basic')
-    addRoutesToMap(defaultRoutes, 'default')
+    addRoutesToMap(guestRoutes, 'guest')
     addRoutesToMap(studentRoutes, 'student')
     addRoutesToMap(teacherRoutes, 'teacher')
 }
@@ -30,12 +30,31 @@ export function createRoleMap() {
 export function createRoleGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
         const name = to.name?.toString() + 'Root'
-        const userRole = UserStore().getRole()
+        const userStore = UserStore()
+        const userRole = userStore.getRole()
+        const token = userStore.getToken()
+
+        // 未登录（无 token）且不是基础路由 → 重定向到登录页
+        const isBasicRoute = basicRoutes.some((r) => r.name === name || r.name === to.name?.toString())
+        if (!token && !isBasicRoute) {
+            next({ name: 'Login' })
+            return
+        }
 
         // 检查 requiresAdmin meta：非 admin 用户重定向到 404
         if (to.meta.requiresAdmin) {
             if (userRole !== 'admin') {
                 next({ name: 'NotFound' })
+                return
+            }
+            next()
+            return
+        }
+
+        // 检查 requiresGuest meta：非 guest 用户重定向到首页
+        if (to.meta.requiresGuest) {
+            if (userRole !== 'guest') {
+                next({ name: 'AskTeacher' })
                 return
             }
             next()
@@ -50,6 +69,11 @@ export function createRoleGuard(router: Router) {
         const roles = routeMap.get(name)
         if (roles) {
             if (!roles.includes(userRole)) {
+                // guest 尝试访问受限路由时，重定向到升级页面
+                if (userRole === 'guest') {
+                    next({ name: 'GuestUpgrade' })
+                    return
+                }
                 next({ name: 'NotFound' })
                 return
             }

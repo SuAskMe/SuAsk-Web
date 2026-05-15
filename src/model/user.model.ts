@@ -2,7 +2,7 @@ export enum Role {
     ADMIN = 'admin',
     TEACHER = 'teacher',
     STUDENT = 'student',
-    DEFAULT = 'default',
+    GUEST = 'guest',
 }
 
 export interface UpdateUser {

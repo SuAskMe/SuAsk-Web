@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <div class="title">
-            <div v-if="role != 'default'" class="message">
+            <div class="message">
                 <svg-icon
                     @click="openDrawer"
                     class="message-icon"
@@ -31,19 +31,24 @@
             </div>
         </div>
         <div class="control-panel">
-            <el-button
-                v-if="role == 'default'"
-                type="info"
-                text
-                class="login"
-                @click="navigateToLogin"
-            >
-                登录以获取更多功能
-            </el-button>
+            <!-- Guest 临时用户横幅 -->
+            <div v-if="role == 'guest'" class="guest-banner">
+                <div class="guest-banner-content">
+                    <span class="guest-banner-label">临时用户</span>
+                    <el-button
+                        type="primary"
+                        size="small"
+                        class="guest-upgrade-btn"
+                        @click="navigateToUpgrade"
+                    >
+                        升级正式账号
+                    </el-button>
+                </div>
+            </div>
             <student-item v-if="role == 'student'" />
             <teacher-item v-else-if="role == 'teacher'" />
             <admin-item v-else-if="role == 'admin'" />
-            <default-item v-else-if="role == 'default'" />
+            <guest-item v-else-if="role == 'guest'" />
         </div>
     </div>
 
@@ -76,8 +81,7 @@ import { computed, onMounted, ref, onUnmounted, watch } from 'vue'
 import StudentItem from './StudentItem.vue'
 import TeacherItem from './TeacherItem.vue'
 import AdminItem from './AdminItem.vue'
-import DefaultItem from './DefaultItem.vue'
-import { ElMessage } from 'element-plus'
+import GuestItem from './GuestItem.vue'
 import { getNotificationCountApi } from '@/api/notification/notification.api'
 import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
 import { UserAvatar } from '@/components/user-avatar'
@@ -133,17 +137,12 @@ watch(drawer, (val) => {
 const handleQuestionDetailOpened = async () => {
     // 延迟一小段时间确保后端已经处理完标记为已读的操作
     setTimeout(() => {
-        // 更新通知计数
-        if (role.value != 'default') {
-            getNotificationCount()
-        }
+        getNotificationCount()
     }, 1500)
 }
 
 onMounted(() => {
-    if (role.value != 'default') {
-        getNotificationCount()
-    }
+    getNotificationCount()
     // 监听问题详情页打开事件
     emitter.on('questionDetailOpened', handleQuestionDetailOpened)
 })
@@ -176,19 +175,17 @@ async function getNotificationCount() {
 const router = useRouter()
 
 function navigateToUserInfo() {
-    if (userStore.getRole() != 'default') {
-        if (deviceTypeStore.isMobile) {
-            sidebarStore.toggle()
-        }
-        router.push(`/user/${userInfo.value.id}`)
-    } else {
-        ElMessage.info('请登录')
-        router.push('/login')
+    if (deviceTypeStore.isMobile) {
+        sidebarStore.toggle()
     }
+    router.push(`/user/${userInfo.value.id}`)
 }
 
-function navigateToLogin() {
-    router.push('/login')
+function navigateToUpgrade() {
+    if (deviceTypeStore.isMobile) {
+        sidebarStore.toggle()
+    }
+    router.push('/guest/upgrade')
 }
 </script>
 
@@ -300,11 +297,31 @@ function navigateToLogin() {
     .control-panel {
         padding: 0 15%;
 
-        .login {
+        .guest-banner {
             margin-top: 20px;
-            cursor: pointer;
-            height: 40px;
-            border-radius: 20px;
+            margin-bottom: 10px;
+            padding: 12px 14px;
+            background: linear-gradient(135deg, #fff7e6 0%, #ffe4b5 100%);
+            border: 1px solid #ffd07a;
+            border-radius: 10px;
+
+            .guest-banner-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+
+                .guest-banner-label {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #b87a00;
+                }
+
+                .guest-upgrade-btn {
+                    width: 100%;
+                    border-radius: 6px;
+                }
+            }
         }
     }
 }

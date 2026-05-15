@@ -1,6 +1,7 @@
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStoreWithOut } from '@/store/modules/user'
 import { Role } from '@/model/user.model'
+import { getDeviceId } from '@/utils/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { containsChineseCharacters } from '../ischinese'
@@ -65,6 +66,9 @@ request.interceptors.request.use(
         if (userStore.getRole() === Role.ADMIN) {
             config.headers['X-Admin-Mode'] = 'true'
         }
+
+        // 附加设备标识
+        config.headers['X-Device-Id'] = getDeviceId()
 
         return config
     },

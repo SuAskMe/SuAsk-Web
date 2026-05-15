@@ -170,10 +170,10 @@ const navigateTo = (key: any) => {
             grouping: true,
         })
         return
-    } else if (key.perm == TeacherPerm.Protected && userStore.getRole() == Role.DEFAULT) {
+    } else if (key.perm == TeacherPerm.Protected && userStore.getRole() == Role.GUEST) {
         ElMessage({
             showClose: true,
-            message: '该老师提问箱需要您登录之后才能进入',
+            message: '该老师提问箱需要正式账号才能进入',
             type: 'success',
             plain: true,
             duration: 4000,

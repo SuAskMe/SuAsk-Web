@@ -75,15 +75,23 @@
                     <div class="title">
                         <h2>基础信息</h2>
                     </div>
+                    <el-alert
+                        v-if="isGuest"
+                        type="warning"
+                        title="临时用户无法修改个人信息，请先升级为正式账号"
+                        show-icon
+                        :closable="false"
+                        style="margin-bottom: 16px"
+                    />
                     <div class="name-bio-avatar">
                         <div class="name-bio">
                             <div class="field-group">
                                 <label>昵称</label>
-                                <el-input v-model="basicInfo.nickname" placeholder="请输入昵称" />
+                                <el-input v-model="basicInfo.nickname" placeholder="请输入昵称" :disabled="isGuest" />
                             </div>
                             <div class="field-group">
                                 <label>简介</label>
-                                <bio-panel v-model="basicInfo.introduction" />
+                                <bio-panel v-model="basicInfo.introduction" :disabled="isGuest" />
                             </div>
                         </div>
                         <div class="avatar-id">
@@ -100,6 +108,7 @@
                                         @change="pickImageImpl"
                                     />
                                     <el-button
+                                        v-if="!isGuest"
                                         @click.stop="pickImage"
                                         class="upload-btn"
                                         type="primary"
@@ -171,7 +180,7 @@
                     </div>
                 </div>
 
-                <div class="button-container">
+                <div v-if="!isGuest" class="button-container">
                     <el-button
                         @click="updateUserInfo"
                         type="primary"
@@ -231,7 +240,7 @@
                     </div>
                 </div>
 
-                <div class="setting-card danger-zone">
+                <div v-if="!isGuest" class="setting-card danger-zone">
                     <div class="title">
                         <h2>账号设置</h2>
                     </div>
@@ -275,6 +284,8 @@ import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
 import { View, Lock, TurnOff, SwitchButton, WarningFilled } from '@element-plus/icons-vue'
 import { hasTeacherAbility } from '@/utils/auth'
+
+const isGuest = computed(() => userStore.getRole() === 'guest')
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })

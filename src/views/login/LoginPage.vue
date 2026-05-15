@@ -62,7 +62,7 @@
                         placement="bottom"
                         effect="light"
                     >
-                        <el-button type="info" text large @click="navigateToUnlogin"
+                        <el-button type="info" text large :loading="guestLoading" @click="navigateToUnlogin"
                             >暂不登录
                         </el-button>
                     </el-tooltip>
@@ -165,10 +165,39 @@ const handleLogin = async () => {
     }
 }
 
-function navigateToUnlogin() {
-    userStore.resetState()
-    ControlPanelStore().setSelectedItem('ask-teacher')
-    router.push({ name: 'AskTeacher' })
+const guestLoading = ref(false)
+
+async function navigateToUnlogin() {
+    guestLoading.value = true
+    try {
+        // 如果 localStorage 已有 token，尝试 autoLogin
+        if (userStore.getToken()) {
+            const userInfo = await userStore.autoLogin()
+            if (userInfo && Object.keys(userInfo).length > 0) {
+                ControlPanelStore().clearSelectedItem()
+                ElMessage.success('自动登录成功')
+                router.push({ name: 'AskTeacher' })
+                return
+            }
+        }
+        // 无 token 或 autoLogin 失败，调用 guestLogin
+        const userInfo = await userStore.guestLogin()
+        if (userInfo) {
+            ControlPanelStore().clearSelectedItem()
+            router.push({ name: 'AskTeacher' })
+        } else {
+            ElMessage.error('临时登录失败，请稍后再试')
+        }
+    } catch (error: any) {
+        // 处理 429 限流错误
+        if (error?.response?.status === 429 || error?.code === 429) {
+            ElMessage.error('请求过于频繁，请稍后再试')
+        } else {
+            ElMessage.error('临时登录失败，请稍后再试')
+        }
+    } finally {
+        guestLoading.value = false
+    }
 }
 
 const openForgetPassword = () => {
