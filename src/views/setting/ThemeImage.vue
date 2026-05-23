@@ -1,20 +1,24 @@
 <template>
     <div class="theme-images-container">
         <div
-            v-for="(src, index) in src"
-            :key="src"
+            v-for="(imgSrc, index) in src"
+            :key="imgSrc"
             class="theme-image-wrapper"
             :class="{ selected: selectIndex - 1 == index }"
             @click="selectImg(index)"
             :style="{ width: width }"
         >
-            <img class="theme-image" :src="src" :alt="`主题 ${index + 1}`" />
-            <div class="selection-indicator"></div>
+            <img class="theme-image" :src="imgSrc" :alt="`主题 ${index + 1}`" />
+            <div class="selection-indicator">
+                <component :is="Check" class="check-icon" />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { Check } from '@element-plus/icons-vue'
+
 defineProps<{
     src: string[]
     width: string
@@ -29,11 +33,8 @@ const selectImg = (index: number) => {
 <style lang="scss" scoped>
 .theme-images-container {
     display: flex;
-    gap: 1em;
+    gap: 1.25rem;
     flex-wrap: wrap;
-    // @media screen and (max-width: 768px) {
-    //     gap: 0.75em;
-    // }
 }
 
 .theme-image-wrapper {
@@ -41,23 +42,33 @@ const selectImg = (index: number) => {
     cursor: pointer;
     border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    max-width: calc((100% - 3em) / 4);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: calc((100% - 3.75rem) / 4);
+    background-color: #f1f5f9;
+
+    @media screen and (max-width: 768px) {
+        max-width: calc((100% - 1.25rem) / 2);
+    }
 
     &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        
+        .theme-image {
+            filter: brightness(0.95);
+        }
     }
 
     &.selected {
-        outline: 2px solid $su-blue;
-        outline-offset: -2px;
-        transform: translateY(-3px);
-        box-shadow: 0 6px 14px rgba(113, 182, 255, 0.35);
+        outline: 3px solid $su-blue;
+        outline-offset: -3px;
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 10px 24px rgba(113, 182, 255, 0.3);
 
         .selection-indicator {
             opacity: 1;
+            transform: scale(1);
         }
     }
 
@@ -67,21 +78,33 @@ const selectImg = (index: number) => {
         object-fit: cover;
         width: 100%;
         height: auto;
+        transition: all 0.4s ease;
     }
 
     .selection-indicator {
         position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 20px;
-        height: 20px;
+        top: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
         background-color: $su-blue;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
-        font-size: 12px;
+        opacity: 0;
+        transform: scale(0.6);
+        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 2px 8px rgba(113, 182, 255, 0.5);
+
+        .check-icon {
+            width: 14px;
+            height: 14px;
+            color: #ffffff;
+            stroke: #ffffff;
+            stroke-width: 2;
+        }
     }
 }
 </style>
+

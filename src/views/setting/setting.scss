@@ -1,434 +1,223 @@
-.container {
+// 基础布局与主容器
+.setting-page-container {
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8fafc;
+    background-image: 
+        radial-gradient(circle at 5% 10%, rgba(113, 182, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 95% 90%, rgba(113, 182, 255, 0.04) 0%, transparent 40%),
+        linear-gradient(rgba(113, 182, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(113, 182, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+}
 
-    .header {
-        border-bottom: solid 1px $su-border;
-        height: 60px;
-        position: relative;
+.header {
+    border-bottom: solid 1px rgba(17, 24, 39, 0.05);
+    height: 60px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.setting-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        width: 6px;
     }
 
-    .main-container {
-        position: relative;
-        background-color: #f8f9fa;
-        max-height: 100%;
-        overflow-y: auto;
-        padding: 2rem 10%;
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(113, 182, 255, 0.2);
+        border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+}
 
-        @media (max-width: 768px) {
-            padding: 1rem 5%;
+.main-container {
+    position: relative;
+    max-height: 100%;
+    padding: 3rem 14%;
+    box-sizing: border-box;
+
+    @media (max-width: 1200px) {
+        padding: 2.5rem 8%;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem 5%;
+    }
+}
+
+// Settings Hero 欢迎区
+.settings-hero {
+    margin-bottom: 2.25rem;
+    animation: heroFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+
+    .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.8px;
+    }
+
+    .hero-desc {
+        font-size: 0.92rem;
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.5;
+        letter-spacing: 0.1px;
+    }
+}
+
+// 自定义底部保存提示浮条 (Toast)
+.save-reminder-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(230, 162, 60, 0.35);
+    padding: 0.8rem 1.6rem;
+    border-radius: 12px; // 与卡片圆角相衬
+    box-shadow: 
+        0 10px 30px rgba(15, 23, 42, 0.08),
+        0 4px 12px rgba(230, 162, 60, 0.04),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+
+    .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        white-space: nowrap;
+    }
+
+    .toast-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #d97706;
+        letter-spacing: 0.2px;
+    }
+
+    .toast-save-btn {
+        height: 32px;
+        padding: 0 1.25rem;
+        border-radius: 8px;
+        background-color: #71b6ff;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        box-shadow: 0 4px 10px rgba(113, 182, 255, 0.25);
+
+        &:hover {
+            background-color: #4891e0;
+            box-shadow: 0 6px 14px rgba(113, 182, 255, 0.4);
+            transform: translateY(-1px);
         }
 
-        .setting-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 1em;
-            margin-bottom: 1.5em;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}
 
-            &:hover {
-                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-                transform: translateY(-2px);
-            }
+// 按钮容器与大保存按钮
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 2.5rem 0;
 
-            &.danger-zone {
-                border-left: 4px solid #ff4d4f;
-            }
+    .save-button-custom {
+        min-width: 200px;
+        height: 46px;
+        border-radius: 10px; // 与卡片更加和谐的圆角
+        background: linear-gradient(135deg, #71b6ff, #449eff);
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(113, 182, 255, 0.25);
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 
-            .title {
-                margin-bottom: 1em;
-
-                h2 {
-                    font-size: 1.25em;
-                    font-weight: 600;
-                    color: #333;
-                    margin: 0;
-                    padding-bottom: 0.25em;
-                    border-bottom: 1px solid $su-border;
-                }
-            }
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(113, 182, 255, 0.38);
+            filter: brightness(1.03);
         }
 
-        .field-group {
-            margin-bottom: 1.2rem;
-
-            label {
-                display: block;
-                font-size: 0.9rem;
-                font-weight: 500;
-                color: #606266;
-                margin-bottom: 0.5rem;
-            }
+        &:active {
+            transform: translateY(0);
         }
+    }
+}
 
-        .crop-dialog {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+// 头像裁剪相关
+.cropper-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-        .cropper-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            // background-color: antiquewhite;
-        }
+// 动画
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .name-bio-avatar {
-            display: flex;
-            justify-content: space-between;
-            gap: 2rem;
+// Vue Transition 动画类
+.toast-slide-enter-active {
+    animation: toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-            .name-bio {
-                flex: 1;
-            }
+.toast-slide-leave-active {
+    animation: toastSlideOut 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
 
-            .avatar-id {
-                width: 40%;
-                display: flex;
-                justify-content: center;
+@keyframes toastSlideIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 30px) scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+}
 
-                .avatar-container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-
-                    .avatar {
-                        position: relative;
-                        margin-bottom: 1rem;
-
-                        .el-avatar {
-                            border: 3px solid white;
-                            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-                            transition: all 0.3s ease;
-
-                            &:hover {
-                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-                            }
-                        }
-
-                        .upload-btn {
-                            position: absolute;
-                            left: 50%;
-                            bottom: 0;
-                            transform: translateX(-50%);
-                            border-radius: 20px;
-                            opacity: 1;
-                            transition: opacity 0.3s ease;
-                        }
-                    }
-
-                    .id {
-                        font-size: 1.1rem;
-                        color: $su-grey;
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            @media (max-width: 768px) {
-                flex-direction: column-reverse;
-
-                .name-bio,
-                .avatar-id {
-                    width: 100%;
-                }
-            }
-        }
-
-        .theme-picker {
-            overflow-x: auto;
-            padding: 0 0.5em;
-            scrollbar-width: thin;
-
-            &::-webkit-scrollbar {
-                height: 6px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background-color: rgba(0, 0, 0, 0.2);
-                border-radius: 3px;
-            }
-
-            .theme {
-                display: flex;
-                // gap: 1rem;
-                padding: 0.5em 0;
-            }
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            margin: 1.5rem 0;
-
-            .save-button {
-                min-width: 180px;
-                border-radius: 25px;
-                font-weight: 500;
-                padding: 0.75rem 2rem;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(113, 182, 255, 0.4);
-                }
-            }
-        }
-
-        .password-logout {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-
-            p {
-                margin: 0;
-            }
-
-            .danger-option {
-                font-size: 1em;
-                color: #ff4d4f;
-                cursor: pointer;
-                padding: 0.5em 1em;
-                border-radius: 8px;
-                transition: all 0.2s ease;
-                display: flex;
-                align-items: center;
-
-                .danger-icon {
-                    width: 1.2em;
-                    margin-right: 0.25em;
-                }
-
-                &:hover {
-                    background-color: rgba(255, 77, 79, 0.1);
-                    font-weight: bold;
-                }
-            }
-        }
-
-        .visibility-selector {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5em;
-            margin: 0 auto;
-            padding: 0.5em;
-
-            .visibility-card {
-                position: relative;
-                height: 100%;
-                width: calc((100% - 4em) / 3);
-                max-width: 300px;
-                @media (max-width: 768px) {
-                    width: 100%;
-                    max-width: 768px;
-                }
-                min-height: 160px;
-                border-radius: 14px;
-                background: linear-gradient(145deg, #ffffff, #f8f8f8);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                cursor: pointer;
-                transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-                overflow: hidden;
-                border: 2px solid transparent;
-                display: flex;
-                flex-direction: column;
-
-                &:hover {
-                    transform: translateY(-6px);
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
-                }
-
-                &.active {
-                    border-color: $su-blue;
-                    box-shadow: 0 8px 20px rgba(113, 182, 255, 0.25);
-                    background: linear-gradient(
-                        165deg,
-                        rgba(113, 182, 255, 0.05),
-                        rgba(113, 182, 255, 0.12)
-                    );
-                    transform: translateY(-6px) scale(1.02);
-
-                    .icon-container {
-                        background: $su-blue;
-                        color: white;
-                        transform: scale(1.1);
-                        box-shadow: 0 6px 12px rgba(113, 182, 255, 0.4);
-                    }
-
-                    .option-title {
-                        color: $su-blue;
-                    }
-                }
-
-                .card-content {
-                    padding: 1em;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    text-align: center;
-                    height: 100%;
-                }
-
-                .icon-container {
-                    width: 2em;
-                    height: 2em;
-                    padding: 0.5em;
-                    border-radius: 50%;
-                    background: #f0f0f0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 1.8em;
-                    color: #a0a0a0;
-                    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-                }
-
-                .option-title {
-                    font-size: 1.2em;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 0.25em;
-                    transition: color 0.3s ease;
-                }
-
-                .option-desc {
-                    margin: 0;
-                    font-size: 0.9em;
-                    color: #606266;
-                    line-height: 1.5;
-                }
-
-                .selection-mark {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    width: 30px;
-                    height: 30px;
-                    background-color: $su-blue;
-                    clip-path: polygon(100% 0, 0 0, 100% 100%);
-                    opacity: 0;
-                    transform: translate(-50%, -50%) scale(0);
-                    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-                }
-            }
-        }
-
-        .notification-settings {
-            .field-group {
-                background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-                border-radius: 12px;
-                padding: 1em;
-                margin-bottom: 0.7em;
-                border: 1px solid rgba(113, 182, 255, 0.1);
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 4px;
-                    height: 100%;
-                    background: $su-blue;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                }
-
-                &:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 25px rgba(113, 182, 255, 0.15);
-                    border-color: rgba(113, 182, 255, 0.3);
-
-                    &::before {
-                        opacity: 1;
-                    }
-                }
-
-                label {
-                    display: flex;
-                    align-items: center;
-                    font-size: 1em;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 0.5em;
-                    position: relative;
-
-                    &::before {
-                        content: '';
-                        width: 8px;
-                        height: 8px;
-                        border-radius: 50%;
-                        background: linear-gradient(45deg, $su-blue, #4caf50);
-                        margin-right: 0.75rem;
-                        box-shadow: 0 2px 4px rgba(113, 182, 255, 0.3);
-                    }
-                }
-
-                .switch-container {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0.35em 0.75em;
-                    background: rgba(255, 255, 255, 0.7);
-                    border-radius: 10px;
-                    border: 1px solid rgba(113, 182, 255, 0.2);
-                    transition: all 0.3s ease;
-                    max-width: 500px;
-
-                    &:hover {
-                        background: rgba(255, 255, 255, 0.9);
-                        border-color: rgba(113, 182, 255, 0.4);
-                    }
-
-                    .switch-label {
-                        font-size: 0.9rem;
-                        color: #606266;
-                        font-weight: 500;
-                    }
-                }
-
-                &.email-setting {
-                    background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
-                    border-color: rgba(255, 152, 0, 0.2);
-
-                    &:hover {
-                        border-color: rgba(255, 152, 0, 0.4);
-                        box-shadow: 0 8px 25px rgba(255, 152, 0, 0.15);
-                    }
-
-                    &::before {
-                        background: linear-gradient(180deg, #ff9800, #f57c00);
-                    }
-
-                    label::before {
-                        background: linear-gradient(45deg, #ff9800, #f57c00);
-                        box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
-                    }
-                }
-            }
-
-            @keyframes pulse {
-                0% {
-                    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
-                }
-                70% {
-                    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
-                }
-                100% {
-                    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-                }
-            }
-        }
-
-        .change-perm {
-            display: none;
-        }
+@keyframes toastSlideOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 20px) scale(0.95);
     }
 }

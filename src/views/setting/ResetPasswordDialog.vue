@@ -8,7 +8,7 @@
             :fullscreen="deviceTypeStore.isMobile"
         >
             <div class="dialog-card">
-                <div class="title-content">
+                <div class="title-container">
                     <h2 class="title">重置密码</h2>
                     <div class="title-underline"></div>
                 </div>

@@ -1,5 +1,9 @@
 <template>
-    <SettingSectionCard title="主题" description="主题会同步影响主背景和部分列表页面的视觉氛围。">
+    <SettingSectionCard
+        title="主题"
+        description="主题会同步影响主背景和部分列表页面的视觉氛围。"
+        :icon="icon"
+    >
         <div class="theme-picker">
             <div class="theme">
                 <ThemeImage
@@ -14,12 +18,14 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from 'vue'
 import ThemeImage from '../ThemeImage.vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
 defineProps<{
     imgList: string[]
     themeId: number
+    icon?: string
 }>()
 
 defineEmits(['update:themeId'])
@@ -28,7 +34,7 @@ defineEmits(['update:themeId'])
 <style scoped lang="scss">
 .theme-picker {
     overflow-x: auto;
-    padding: 0 0.5em;
+    padding: 0.25rem 0.5rem;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar {
@@ -36,7 +42,7 @@ defineEmits(['update:themeId'])
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.15);
         border-radius: 3px;
     }
 }
@@ -46,3 +52,4 @@ defineEmits(['update:themeId'])
     padding: 0.5em 0;
 }
 </style>
+

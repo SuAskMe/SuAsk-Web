@@ -2,10 +2,11 @@
     <SettingSectionCard
         title="通知设置"
         description="控制邮件提醒是否启用，以及通知发送到哪个邮箱。"
+        :icon="icon"
     >
         <div class="notification-settings">
             <div class="field-group">
-                <label>邮件通知开关</label>
+                <label class="field-label">邮件通知开关</label>
                 <div class="switch-container">
                     <span class="switch-label">
                         {{ settings.notifySwitch ? '已启用邮件通知' : '邮件通知已关闭' }}
@@ -21,12 +22,13 @@
             </div>
 
             <div class="field-group email-setting">
-                <label>通知邮箱地址</label>
-                <el-input
+                <label class="field-label">通知邮箱地址</label>
+                <input
                     v-model="settings.notifyEmail"
+                    type="email"
                     placeholder="请输入接收通知的邮箱地址"
                     :disabled="!settings.notifySwitch"
-                    clearable
+                    class="su-input"
                 />
             </div>
         </div>
@@ -34,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from 'vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
 defineProps<{
@@ -41,6 +44,7 @@ defineProps<{
         notifySwitch: boolean
         notifyEmail: string
     }
+    icon?: string
 }>()
 </script>
 
@@ -48,10 +52,10 @@ defineProps<{
 .notification-settings .field-group {
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     border-radius: 12px;
-    padding: 1em;
-    margin-bottom: 0.7em;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
     border: 1px solid rgba(113, 182, 255, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     position: relative;
     overflow: hidden;
 }
@@ -70,30 +74,30 @@ defineProps<{
 
 .notification-settings .field-group:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(113, 182, 255, 0.15);
-    border-color: rgba(113, 182, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(113, 182, 255, 0.1);
+    border-color: rgba(113, 182, 255, 0.25);
 }
 
 .notification-settings .field-group:hover::before {
     opacity: 1;
 }
 
-.notification-settings label {
+.notification-settings .field-label {
     display: flex;
     align-items: center;
-    font-size: 1em;
+    font-size: 0.95rem;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 0.5em;
+    color: #374151;
+    margin-bottom: 0.75rem;
 }
 
-.notification-settings label::before {
+.notification-settings .field-label::before {
     content: '';
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: linear-gradient(45deg, $su-blue, #4caf50);
-    margin-right: 0.75rem;
+    margin-right: 0.6rem;
     box-shadow: 0 2px 4px rgba(113, 182, 255, 0.3);
 }
 
@@ -101,41 +105,80 @@ defineProps<{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.35em 0.75em;
-    background: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 10px;
-    border: 1px solid rgba(113, 182, 255, 0.2);
+    border: 1px solid rgba(113, 182, 255, 0.15);
     transition: all 0.3s ease;
     max-width: 500px;
 }
 
 .switch-container:hover {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(113, 182, 255, 0.4);
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(113, 182, 255, 0.3);
 }
 
 .switch-label {
     font-size: 0.9rem;
-    color: #606266;
+    color: #4b5563;
     font-weight: 500;
 }
 
 .email-setting {
-    background: linear-gradient(135deg, #fff8f0 0%, #ffffff 100%);
-    border-color: rgba(255, 152, 0, 0.2);
+    background: linear-gradient(135deg, #fffcf6 0%, #ffffff 100%);
+    border-color: rgba(255, 152, 0, 0.15);
 }
 
 .email-setting:hover {
-    border-color: rgba(255, 152, 0, 0.4);
-    box-shadow: 0 8px 25px rgba(255, 152, 0, 0.15);
+    border-color: rgba(255, 152, 0, 0.35);
+    box-shadow: 0 8px 20px rgba(255, 152, 0, 0.08);
 }
 
 .email-setting::before {
     background: linear-gradient(180deg, #ff9800, #f57c00);
 }
 
-.email-setting label::before {
+.email-setting .field-label::before {
     background: linear-gradient(45deg, #ff9800, #f57c00);
     box-shadow: 0 2px 4px rgba(255, 152, 0, 0.3);
 }
+
+.su-input {
+    width: 100%;
+    max-width: 500px;
+    height: 42px;
+    padding: 0.5rem 1rem;
+    background-color: #ffffff;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+    border-radius: 10px;
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+
+    &::placeholder {
+        color: #9ca3af;
+    }
+
+    &:hover:not(:disabled) {
+        border-color: rgba(255, 152, 0, 0.5);
+        background-color: #fffdfa;
+    }
+
+    &:focus:not(:disabled) {
+        border-color: #ff9800;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.15);
+    }
+
+    &:disabled {
+        background-color: #f3f4f6;
+        border-color: #e5e7eb;
+        color: #9ca3af;
+        cursor: not-allowed;
+    }
+}
 </style>
+

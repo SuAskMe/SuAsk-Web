@@ -1,38 +1,35 @@
 <template>
-    <el-container class="container">
+    <div class="setting-page-container">
         <el-header class="header">
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
         </el-header>
-        <el-scrollbar>
-            <el-main v-if="isGuest" class="main-container">
+        <div class="setting-scroll-area">
+            <main v-if="isGuest" class="main-container">
                 <GuestUpgradeNotice />
-            </el-main>
+            </main>
 
             <template v-else>
-                <el-alert
-                    v-if="showSaveReminder"
-                    class="save-reminder"
-                    title="您有未保存的更改"
-                    type="warning"
-                    show-icon
-                    closable
-                    @close="showSaveReminder = false"
-                >
-                    <template #default>
-                        <div class="alert-content">
-                            <span>您已修改了设置，请记得保存更改</span>
-                            <el-button
+                <!-- 自定义保存悬浮提示条 -->
+                <transition name="toast-slide">
+                    <div v-if="showSaveReminder" class="save-reminder-toast">
+                        <div class="toast-content">
+                            <span class="toast-text">您已修改了设置，请记得保存更改</span>
+                            <button
                                 @click="updateUserInfo"
-                                type="primary"
-                                size="small"
-                                class="alert-save-btn"
+                                class="toast-save-btn"
                             >
                                 保存更改
-                            </el-button>
+                            </button>
                         </div>
-                    </template>
-                </el-alert>
-                <el-main class="main-container">
+                    </div>
+                </transition>
+
+                <main class="main-container">
+                    <div class="settings-hero">
+                        <h1 class="hero-title">设置</h1>
+                        <p class="hero-desc">在这里管理您的账户基础信息、提问箱可见性、邮件通知偏好及账户安全设置</p>
+                    </div>
+
                     <el-dialog
                         v-model="cropVisible"
                         title="裁剪头像"
@@ -83,44 +80,45 @@
                         :is-guest="isGuest"
                         :basic-info="basicInfo"
                         :avatar-url="usingAvatar"
+                        icon="setting-user"
                         @pick-image="pickImageImpl"
                     />
 
                     <ThemeSection
                         :img-list="imgList"
                         :theme-id="basicInfo.themeId"
+                        icon="setting-brush"
                         @update:theme-id="basicInfo.themeId = $event"
                     />
 
-                    <NotificationSection :settings="notificationSettings" />
+                    <NotificationSection :settings="notificationSettings" icon="setting-bell" />
 
                     <div v-if="!isGuest" class="button-container">
-                        <el-button
+                        <button
                             @click="updateUserInfo"
-                            type="primary"
-                            size="large"
-                            class="save-button"
+                            class="save-button-custom"
                         >
                             保存更改
-                        </el-button>
+                        </button>
                     </div>
 
-                    <VisibilitySection v-if="hasTeacherAbility()" v-model="questionVisible" />
+                    <VisibilitySection v-if="hasTeacherAbility()" v-model="questionVisible" icon="setting-eye" />
 
                     <AccountActionsSection
                         v-if="!isGuest"
+                        icon="setting-lock"
                         @reset-password="resetPassword"
                         @logout="showLogoutDialog"
                         @deactivate="showDeactivateDialog"
                     />
                     <div style="height: 50px"></div>
-                </el-main>
+                </main>
             </template>
-        </el-scrollbar>
+        </div>
         <reset-password-dialog v-model:visible="showResetPassword" />
         <logout-dialog v-model:visible="showLogout" />
         <deactivate-dialog v-model:visible="showDeactivate" />
-    </el-container>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -147,6 +145,7 @@ import VisibilitySection from './sections/VisibilitySection.vue'
 import AccountActionsSection from './sections/AccountActionsSection.vue'
 
 const isGuest = computed(() => userStore.getRole() === 'guest')
+
 
 const imgList = ref<string[]>([])
 const images = import.meta.glob('../../assets/bg_imgs/*.jpg', { eager: true })
@@ -424,67 +423,15 @@ if (hasTeacherAbility()) {
 <style lang="scss" scoped src="./setting.scss"></style>
 
 <style lang="scss" scoped>
-.save-reminder {
-    position: absolute;
-    top: 0;
-    z-index: 1000;
-    margin: 2em;
-    margin-top: 0.5em;
-    width: calc(100% - 4em);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-    :deep(.el-alert__content) {
-        width: 100%;
-    }
-
-    .alert-content {
-        display: flex;
-        align-items: center;
-        width: 100%;
-
-        .alert-save-btn {
-            margin-left: 15px;
-            border-radius: 6px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .alert-content {
-            flex-direction: column;
-            gap: 10px;
-            align-items: flex-start;
-
-            .alert-save-btn {
-                margin-left: 0;
-            }
-        }
-    }
-}
-
 :deep(.el-dialog) {
-    border-radius: 15px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
     overflow: hidden;
-}
-
-:deep(.el-input__wrapper) {
-    border-radius: 10px;
-    transition: all 0.3s;
-
-    &:hover,
-    &:focus {
-        box-shadow: 0 0 0 1px $su-blue inset;
-    }
-}
-
-:deep(.el-radio-button__inner) {
-    transition: all 0.3s ease;
 }
 
 :deep(.el-switch) {
     height: 24px;
-    --el-switch-on-color: #409eff;
+    --el-switch-on-color: #4CAF50;
     --el-switch-off-color: #dcdfe6;
     --el-switch-core-border-radius: 12px;
 
@@ -495,7 +442,7 @@ if (hasTeacherAbility()) {
         transition: all 0.3s ease;
 
         &:hover {
-            box-shadow: 0 0 4px rgba(64, 158, 255, 0.5);
+            box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
         }
 
         .el-switch__action {
@@ -506,40 +453,6 @@ if (hasTeacherAbility()) {
 
     &.is-checked .el-switch__core .el-switch__action {
         left: calc(100% - 22px);
-    }
-}
-
-.notification-settings .field-group:last-child {
-    :deep(.el-input) {
-        .el-input__wrapper {
-            max-width: 500px;
-            border-radius: 12px;
-            box-shadow: 0 0 0 1px #fae9d1 inset;
-            transition: all 0.3s ease;
-
-            &.is-focus {
-                box-shadow: 0 0 0 2px #ffa621 inset;
-            }
-
-            &:hover {
-                box-shadow: 0 0 0 1px #f5b24e inset;
-            }
-
-            .el-input__inner {
-                padding-left: 0;
-
-                &::placeholder {
-                    color: #a8abb2;
-                }
-            }
-        }
-
-        &.is-disabled {
-            .el-input__wrapper {
-                background-color: #f5f7fa;
-                box-shadow: 0 0 0 1px #e4e7ed inset;
-            }
-        }
     }
 }
 </style>
