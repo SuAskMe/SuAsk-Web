@@ -108,10 +108,13 @@ const options = [
         .icon-container {
             color: #ffffff;
             transform: scale(1.05);
+<<<<<<< HEAD
 
             svg {
                 transform: scale(1.08);
             }
+=======
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         }
 
         .selection-mark {
@@ -122,7 +125,11 @@ const options = [
 }
 
 .visibility-card--public {
+<<<<<<< HEAD
     &:not(.active):hover {
+=======
+    &:hover {
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(72, 145, 224, 0.45);
         .icon-container {
             background-color: rgba(72, 145, 224, 0.08);
@@ -154,7 +161,11 @@ const options = [
 }
 
 .visibility-card--protected {
+<<<<<<< HEAD
     &:not(.active):hover {
+=======
+    &:hover {
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(230, 162, 60, 0.45);
         .icon-container {
             background-color: rgba(230, 162, 60, 0.08);
@@ -186,7 +197,11 @@ const options = [
 }
 
 .visibility-card--private {
+<<<<<<< HEAD
     &:not(.active):hover {
+=======
+    &:hover {
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(245, 108, 108, 0.45);
         .icon-container {
             background-color: rgba(245, 108, 108, 0.08);
@@ -236,13 +251,22 @@ const options = [
 }
 
 .icon-container {
+<<<<<<< HEAD
     width: 2.4rem;
     height: 2.4rem;
+=======
+    width: 2.5rem;
+    height: 2.5rem;
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
     border-radius: 12px;
     background: rgba(17, 24, 39, 0.04);
     display: flex;
     justify-content: center;
     align-items: center;
+<<<<<<< HEAD
+=======
+    font-size: 1.25rem;
+>>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
     color: #9ca3af;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     margin-bottom: 0.75rem;
