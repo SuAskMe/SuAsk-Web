@@ -1,8 +1,10 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { computed } from 'vue'
-import { UserAvatar } from '@/components/user-avatar'
-import { getImgStyle, getTimeStr } from '../bubble-card'
+import { getTimeStr } from '../bubble-card'
+import CardMediaGrid from '../shared/CardMediaGrid.vue'
+import CardMetaRow from '../shared/CardMetaRow.vue'
+import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
 interface BubbleQuestionProps {
@@ -40,7 +42,6 @@ const key = computed(() => {
 const containerStyle = computed(() => {
     return { width: props.width ? props.width : '450px' }
 })
-const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
 
 // const showDefaultAvatar = (index: number) => {
 //     if (props.avatars && props.avatars[index]) {
@@ -59,102 +60,20 @@ const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
                     <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
                         <MdPreview id="preview-only" :model-value="text" class="md-preview" />
                     </div>
-                    <div v-if="imageContainer.hasImages" class="photos-container">
-                        <div
-                            class="preview-group"
-                            :style="{
-                                width: imageContainer.containerWidth,
-                                gap: imageContainer.gap + ' ' + imageContainer.gap,
-                            }"
-                        >
-                            <el-image
-                                @click.stop
-                                v-for="(img, index) in imageUrls"
-                                :key="img"
-                                :src="img"
-                                :style="{
-                                    width: imageContainer.size,
-                                    height: imageContainer.size,
-                                    borderRadius: '6px',
-                                }"
-                                :preview-src-list="imageUrls"
-                                :initial-index="index"
-                                fit="cover"
-                                lazy
-                                infinite
-                                preview-teleported
-                            ></el-image>
-                        </div>
-                    </div>
+                    <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
                 </div>
-                <div class="q-footer">
-                    <div class="looks">
-                        <svg-icon icon="eye" size="16" color="#818181" />
-                        <span class="counts">{{ views }}</span>
-                    </div>
-                    <div class="time">{{ timeStr }}</div>
-                </div>
+                <CardMetaRow :views="views" :time-label="timeStr" />
             </div>
-            <div v-if="answerNum && answerNum > 0" class="card-footer">
-                <UserAvatar
-                    v-for="(avatar, index) in avatars"
-                    :key="index"
-                    :src="avatar"
-                    :size="32"
-                    :style="{
-                        marginLeft: index === 0 ? '16px' : '-14px',
-                        zIndex: 10 - index,
-                    }"
-                    class="avatar"
-                />
-                <div class="text">{{ answerNum }} 个回答</div>
-                <div
-                    v-if="showDelete"
-                    class="delete-action"
-                    data-tips="删除"
-                    @click.stop="clickDelete(key)"
-                >
-                    <svg-icon icon="delete-round" size="20" color="#ff4d4f" />
-                </div>
-                <div
-                    v-if="showFavorite"
-                    class="favorite"
-                    :data-tips="isFavorite ? '取消收藏' : '收藏'"
-                    @click.stop="clickFavorite(key)"
-                >
-                    <svg-icon
-                        icon="bookmark"
-                        size="24"
-                        :color="isFavorite ? '#FFC107' : '#66b0ff'"
-                        :filled="isFavorite"
-                    />
-                </div>
-            </div>
-            <div v-else class="card-footer">
-                <svg-icon class="msg-icon" icon="communicate_message" size="24" color="#66b0ff" />
-                <div class="text" @click.stop="clickFooter(key)">发表一个回答...</div>
-                <div
-                    v-if="showDelete"
-                    class="delete-action"
-                    data-tips="删除"
-                    @click.stop="clickDelete(key)"
-                >
-                    <svg-icon icon="delete-round" size="20" color="#ff4d4f" />
-                </div>
-                <div
-                    v-if="showFavorite"
-                    class="favorite"
-                    :data-tips="isFavorite ? '取消收藏' : '收藏'"
-                    @click.stop="clickFavorite(key)"
-                >
-                    <svg-icon
-                        icon="bookmark"
-                        size="24"
-                        :color="isFavorite ? '#FFC107' : '#66b0ff'"
-                        :filled="isFavorite"
-                    />
-                </div>
-            </div>
+            <QuestionCardFooter
+                :answer-num="answerNum"
+                :avatars="avatars"
+                :show-delete="showDelete"
+                :show-favorite="showFavorite"
+                :is-favorite="isFavorite"
+                @favorite="clickFavorite(key)"
+                @delete="clickDelete(key)"
+                @footer="clickFooter(key)"
+            />
         </div>
     </div>
 </template>

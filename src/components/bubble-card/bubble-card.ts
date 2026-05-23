@@ -7,23 +7,29 @@ function splitStr(str: string) {
     return { val: parseFloat(str), unit: '' }
 }
 
+// 卡片预览最多只展示前 8 张图。这里保持纯函数，避免在布局计算时直接修改
+// 调用方传入的数组，否则后续排查“为什么预览数和渲染数对不上”会很混乱。
+export function getVisibleImageUrls(photos: string[] | undefined, maxCount = 8) {
+    if (!photos || photos.length === 0) {
+        return []
+    }
+    return photos.slice(0, maxCount)
+}
+
 export function getImgStyle(photos: string[] | undefined, MAX_SIZE = '450px') {
     let { val, unit } = splitStr(MAX_SIZE)
     val *= 0.97 // 留出一点边距
     let hasImages = false
     let sizew: number | string = 0
     let containerWidth: number | string = 0
-    if (!photos || photos.length === 0) {
+    const visiblePhotos = getVisibleImageUrls(photos)
+    if (visiblePhotos.length === 0) {
         // 没有图片
         return { size: '0px', hasImages, containerWidth, gap: 0 }
     }
-    if (photos.length > 8) {
-        // 最多显示8张图片
-        photos.length = 8
-    }
     hasImages = true
     const col = 4
-    // let row = Math.ceil(photos.length / col); // 图片行数
+    // let row = Math.ceil(visiblePhotos.length / col); // 图片行数
     const width = (100 - (col - 1) * 2) / col // 图片宽度百分比
     sizew = (width / 100) * val // 图片大小
     containerWidth = ((width * col + (col - 1) * 2) / 100) * val // 图片容器宽度

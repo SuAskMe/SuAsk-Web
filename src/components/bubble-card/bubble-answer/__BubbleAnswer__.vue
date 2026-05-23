@@ -2,7 +2,10 @@
 <script setup lang="ts">
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { UserAvatar } from '@/components/user-avatar'
-import { getImgStyle, getTimeStr } from '../bubble-card'
+import { getTimeStr } from '../bubble-card'
+import AnswerMetaRow from '../shared/AnswerMetaRow.vue'
+import AnswerQuoteBlock from '../shared/AnswerQuoteBlock.vue'
+import CardMediaGrid from '../shared/CardMediaGrid.vue'
 import { computed } from 'vue'
 interface BubbleAnswerProps {
     isMine?: boolean
@@ -38,21 +41,23 @@ const props = withDefaults(defineProps<BubbleAnswerProps>(), {
     clickDelete: () => {},
 })
 
-const Quote = computed(() =>
-    props.quote && props.quote.text && props.quote.author
-        ? {
-              hasQuote: true,
-              text: props.quote.text,
-              author: props.quote.author,
-          }
-        : { hasQuote: false },
-)
+const quoteData = computed(() => {
+    if (props.quote && props.quote.text && props.quote.author) {
+        return {
+            text: props.quote.text,
+            author: props.quote.author,
+        }
+    }
+    return null
+})
 const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => (props.bubbleKey ? props.bubbleKey : null))
 const deviceType = DeviceTypeStore()
 const containerStyle = computed(() => {
     const margin = deviceType.isMobile ? '2vw' : '12px'
     const width = props.width ? props.width : '450px'
+    // 回答卡片的左右边距和底色都在这里切换，后续如果出现“本人回答跑到左侧”
+    // 这类问题，优先先看 isMine 和这里的样式分支是否一致。
     const style1 = {
         marginRight: margin,
         backgroundColor: '#e5f0fc',
@@ -66,9 +71,9 @@ const containerStyle = computed(() => {
     }
     return props.isMine ? style1 : style2
 })
-const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
 const avatarMargin = computed(() => {
     const margin = props.isMine ? 'margin-right: 30px;' : 'margin-left: 24px;'
+    // 移动端整体走居中布局，不再额外给头像预留桌面端边距。
     return deviceType.isMobile ? '' : margin
 })
 </script>
@@ -103,62 +108,23 @@ const avatarMargin = computed(() => {
                 </div>
             </div>
             <div class="ans-body">
-                <div v-if="Quote.hasQuote" class="quote-container" @click.stop="clickQuote(key)">
-                    <div class="author">{{ Quote.author }}</div>
-                    <div class="sep">:</div>
-                    <div class="quote-text">{{ Quote.text }}</div>
-                </div>
+                <AnswerQuoteBlock
+                    v-if="quoteData"
+                    :author="quoteData.author"
+                    :text="quoteData.text"
+                    @quote="clickQuote(key)"
+                />
                 <div class="text">{{ text }}</div>
-                <div v-if="imageContainer.hasImages" class="photos-container">
-                    <div
-                        class="preview-group"
-                        :style="{
-                            width: imageContainer.containerWidth,
-                            gap: imageContainer.gap + ' ' + imageContainer.gap,
-                        }"
-                    >
-                        <el-image
-                            @click.stop
-                            v-for="(img, index) in imageUrls"
-                            :key="img"
-                            :src="img"
-                            :style="{
-                                width: imageContainer.size,
-                                height: imageContainer.size,
-                                borderRadius: '6px',
-                            }"
-                            :preview-src-list="imageUrls"
-                            :initial-index="index"
-                            fit="cover"
-                            lazy
-                            infinite
-                            preview-teleported
-                            style="cursor: zoom-in"
-                        ></el-image>
-                    </div>
-                </div>
+                <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
             </div>
-            <div class="ans-footer">
-                <div class="looks">
-                    <div
-                        class="like"
-                        :data-tips="isLiked ? '取消点赞' : '点赞'"
-                        @click.stop="clickLike(key)"
-                    >
-                        <svg-icon
-                            icon="heart"
-                            size="16"
-                            :color="isLiked ? '#FF5F96' : '#818181'"
-                            :filled="isLiked"
-                        />
-                    </div>
-                    <span class="counts">{{ likeCount }}</span>
-                </div>
-                <div v-if="showDelete" class="delete-action" @click.stop="clickDelete(key)">
-                    <svg-icon icon="delete-round" size="16" color="#ff4d4f" />
-                </div>
-                <div class="time">{{ timeStr }}</div>
-            </div>
+            <AnswerMetaRow
+                :like-count="likeCount"
+                :is-liked="isLiked"
+                :show-delete="showDelete"
+                :time-label="timeStr"
+                @like="clickLike(key)"
+                @delete="clickDelete(key)"
+            />
         </div>
     </div>
 </template>

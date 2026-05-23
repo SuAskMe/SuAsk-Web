@@ -1,9 +1,10 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getImgStyle, getTimeStr } from '../bubble-card'
+import { getTimeStr } from '../bubble-card'
+import CardMediaGrid from '../shared/CardMediaGrid.vue'
+import CardMetaRow from '../shared/CardMetaRow.vue'
 import { MdPreview } from 'md-editor-v3'
-import SvgIcon from '@/components/svg-icon'
 import 'md-editor-v3/lib/preview.css'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 interface BubbleCardProps {
@@ -49,7 +50,6 @@ const containerStyle = computed(() => {
         }
     }
 })
-const imageContainer = computed(() => getImgStyle(props.imageUrls, props.width))
 const tagStyle = computed(() => {
     switch (props.tag) {
         case '置顶':
@@ -97,56 +97,17 @@ const tagStyle = computed(() => {
                     <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
                         <MdPreview id="preview-only" :model-value="text" class="md-preview" />
                     </div>
-                    <div v-if="imageContainer.hasImages" class="photos-container">
-                        <div
-                            class="preview-group"
-                            :style="{
-                                width: imageContainer.containerWidth,
-                                gap: imageContainer.gap + ' ' + imageContainer.gap,
-                            }"
-                        >
-                            <el-image
-                                @click.stop
-                                v-for="(img, index) in imageUrls"
-                                :key="img"
-                                :src="img"
-                                :style="{
-                                    width: imageContainer.size,
-                                    height: imageContainer.size,
-                                    borderRadius: '6px',
-                                }"
-                                :preview-src-list="imageUrls"
-                                :initial-index="index"
-                                fit="cover"
-                                lazy
-                                infinite
-                                preview-teleported
-                                style="cursor: zoom-in"
-                            ></el-image>
-                        </div>
-                    </div>
+                    <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
                 </div>
-                <div class="q-footer">
-                    <div v-if="tag !== undefined" class="tag" :style="tagStyle">
-                        {{ tag }}
-                    </div>
-                    <div class="looks">
-                        <svg-icon icon="eye" size="16" color="#818181" />
-                        <span class="counts">{{ views }}</span>
-                    </div>
-                    <div class="time">{{ timeStr }}</div>
-                    <svg
-                        v-if="showFavorite"
-                        :width="18"
-                        :height="18"
-                        :fill="isFavorite ? '#FFC107' : '#808080'"
-                        style="cursor: pointer"
-                        @click.stop="clickFavorite(key)"
-                        :class="isFavorite ? '' : 'icon'"
-                    >
-                        <use :href="`#icon-bookmark${isFavorite ? '-fill' : ''}`"></use>
-                    </svg>
-                </div>
+                <CardMetaRow
+                    :tag="tag"
+                    :tag-style="tagStyle"
+                    :views="views"
+                    :time-label="timeStr"
+                    :show-favorite="showFavorite"
+                    :is-favorite="isFavorite"
+                    @favorite="clickFavorite(key)"
+                />
             </div>
         </div>
     </div>
