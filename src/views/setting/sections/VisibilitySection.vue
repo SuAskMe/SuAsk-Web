@@ -8,8 +8,7 @@
             <div
                 v-for="option in options"
                 :key="option.value"
-                class="visibility-card"
-                :class="{ active: modelValue === option.value }"
+                :class="['visibility-card', 'visibility-card--' + option.value, { active: modelValue === option.value }]"
                 @click="$emit('update:modelValue', option.value)"
             >
                 <div class="card-content">
@@ -76,49 +75,71 @@ const options = [
     position: relative;
     width: calc((100% - 2.5rem) / 3);
     max-width: 300px;
-    min-height: 150px;
-    border-radius: 14px;
-    background: #ffffff;
-    border: 1.5px solid rgba(17, 24, 39, 0.06);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    min-height: 155px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    box-shadow: 
+        0 4px 12px rgba(15, 23, 42, 0.01),
+        0 1px 0 rgba(255, 255, 255, 0.8) inset;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 
     @media (max-width: 768px) {
         width: 100%;
         max-width: 100%;
-        min-height: 120px;
+        min-height: 100px;
     }
 
     &:hover {
         transform: translateY(-4px);
-        border-color: rgba(113, 182, 255, 0.4);
-        box-shadow: 0 8px 20px rgba(113, 182, 255, 0.08);
+        box-shadow: 
+            0 12px 24px rgba(15, 23, 42, 0.04),
+            0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    }
+
+    &.active {
+        transform: translateY(-4px) scale(1.02);
 
         .icon-container {
-            background-color: rgba(113, 182, 255, 0.1);
-            color: #71b6ff;
+            color: #ffffff;
+            transform: scale(1.05);
+
+            svg {
+                transform: scale(1.08);
+            }
+        }
+
+        .selection-mark {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}
+
+.visibility-card--public {
+    &:not(.active):hover {
+        border-color: rgba(72, 145, 224, 0.45);
+        .icon-container {
+            background-color: rgba(72, 145, 224, 0.08);
+            color: #4891e0;
         }
     }
 
     &.active {
-        border-color: $su-blue;
-        box-shadow: 0 8px 24px rgba(113, 182, 255, 0.18);
-        background: linear-gradient(
-            165deg,
-            rgba(113, 182, 255, 0.02),
-            rgba(113, 182, 255, 0.08)
-        );
-        transform: translateY(-4px) scale(1.02);
+        border-color: #4891e0;
+        background: linear-gradient(135deg, rgba(72, 145, 224, 0.04) 0%, rgba(72, 145, 224, 0.01) 100%);
+        box-shadow: 
+            0 10px 24px rgba(72, 145, 224, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
         .icon-container {
-            background: $su-blue;
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(113, 182, 255, 0.3);
+            background: #4891e0;
+            box-shadow: 0 4px 10px rgba(72, 145, 224, 0.25);
         }
 
         .option-title {
@@ -126,8 +147,72 @@ const options = [
         }
 
         .selection-mark {
-            opacity: 1;
-            transform: scale(1);
+            background-color: #4891e0;
+            box-shadow: 0 2px 6px rgba(72, 145, 224, 0.35);
+        }
+    }
+}
+
+.visibility-card--protected {
+    &:not(.active):hover {
+        border-color: rgba(230, 162, 60, 0.45);
+        .icon-container {
+            background-color: rgba(230, 162, 60, 0.08);
+            color: #e6a23c;
+        }
+    }
+
+    &.active {
+        border-color: #e6a23c;
+        background: linear-gradient(135deg, rgba(230, 162, 60, 0.04) 0%, rgba(230, 162, 60, 0.01) 100%);
+        box-shadow: 
+            0 10px 24px rgba(230, 162, 60, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        .icon-container {
+            background: #e6a23c;
+            box-shadow: 0 4px 10px rgba(230, 162, 60, 0.25);
+        }
+
+        .option-title {
+            color: #d97706;
+        }
+
+        .selection-mark {
+            background-color: #e6a23c;
+            box-shadow: 0 2px 6px rgba(230, 162, 60, 0.35);
+        }
+    }
+}
+
+.visibility-card--private {
+    &:not(.active):hover {
+        border-color: rgba(245, 108, 108, 0.45);
+        .icon-container {
+            background-color: rgba(245, 108, 108, 0.08);
+            color: #f56c6c;
+        }
+    }
+
+    &.active {
+        border-color: #f56c6c;
+        background: linear-gradient(135deg, rgba(245, 108, 108, 0.04) 0%, rgba(245, 108, 108, 0.01) 100%);
+        box-shadow: 
+            0 10px 24px rgba(245, 108, 108, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+        .icon-container {
+            background: #f56c6c;
+            box-shadow: 0 4px 10px rgba(245, 108, 108, 0.25);
+        }
+
+        .option-title {
+            color: #f56c6c;
+        }
+
+        .selection-mark {
+            background-color: #f56c6c;
+            box-shadow: 0 2px 6px rgba(245, 108, 108, 0.35);
         }
     }
 }
@@ -151,18 +236,23 @@ const options = [
 }
 
 .icon-container {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background: #f3f4f6;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.04);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.3rem;
     color: #9ca3af;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     margin-bottom: 0.75rem;
     flex-shrink: 0;
+
+    svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        transition: transform 0.3s ease;
+    }
 
     @media (max-width: 768px) {
         margin-bottom: 0;
@@ -190,7 +280,6 @@ const options = [
     right: 10px;
     width: 18px;
     height: 18px;
-    background-color: $su-blue;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -198,7 +287,6 @@ const options = [
     opacity: 0;
     transform: scale(0.5);
     transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 2px 6px rgba(113, 182, 255, 0.4);
 
     @media (max-width: 768px) {
         top: auto;
@@ -215,4 +303,3 @@ const options = [
     }
 }
 </style>
-
