@@ -8,7 +8,11 @@
             <div
                 v-for="option in options"
                 :key="option.value"
-                :class="['visibility-card', 'visibility-card--' + option.value, { active: modelValue === option.value }]"
+                :class="[
+                    'visibility-card',
+                    'visibility-card--' + option.value,
+                    { active: modelValue === option.value },
+                ]"
                 @click="$emit('update:modelValue', option.value)"
             >
                 <div class="card-content">
@@ -79,7 +83,7 @@ const options = [
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.85);
     border: 1px solid rgba(17, 24, 39, 0.06);
-    box-shadow: 
+    box-shadow:
         0 4px 12px rgba(15, 23, 42, 0.01),
         0 1px 0 rgba(255, 255, 255, 0.8) inset;
     cursor: pointer;
@@ -97,7 +101,7 @@ const options = [
 
     &:hover {
         transform: translateY(-4px);
-        box-shadow: 
+        box-shadow:
             0 12px 24px rgba(15, 23, 42, 0.04),
             0 1px 0 rgba(255, 255, 255, 0.8) inset;
     }
@@ -108,13 +112,6 @@ const options = [
         .icon-container {
             color: #ffffff;
             transform: scale(1.05);
-<<<<<<< HEAD
-
-            svg {
-                transform: scale(1.08);
-            }
-=======
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         }
 
         .selection-mark {
@@ -125,11 +122,7 @@ const options = [
 }
 
 .visibility-card--public {
-<<<<<<< HEAD
     &:not(.active):hover {
-=======
-    &:hover {
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(72, 145, 224, 0.45);
         .icon-container {
             background-color: rgba(72, 145, 224, 0.08);
@@ -139,13 +132,18 @@ const options = [
 
     &.active {
         border-color: #4891e0;
-        background: linear-gradient(135deg, rgba(72, 145, 224, 0.04) 0%, rgba(72, 145, 224, 0.01) 100%);
-        box-shadow: 
+        background: linear-gradient(
+            135deg,
+            rgba(72, 145, 224, 0.04) 0%,
+            rgba(72, 145, 224, 0.01) 100%
+        );
+        box-shadow:
             0 10px 24px rgba(72, 145, 224, 0.12),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
         .icon-container {
             background: #4891e0;
+            color: #ffffff;
             box-shadow: 0 4px 10px rgba(72, 145, 224, 0.25);
         }
 
@@ -161,11 +159,7 @@ const options = [
 }
 
 .visibility-card--protected {
-<<<<<<< HEAD
     &:not(.active):hover {
-=======
-    &:hover {
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(230, 162, 60, 0.45);
         .icon-container {
             background-color: rgba(230, 162, 60, 0.08);
@@ -175,13 +169,18 @@ const options = [
 
     &.active {
         border-color: #e6a23c;
-        background: linear-gradient(135deg, rgba(230, 162, 60, 0.04) 0%, rgba(230, 162, 60, 0.01) 100%);
-        box-shadow: 
+        background: linear-gradient(
+            135deg,
+            rgba(230, 162, 60, 0.04) 0%,
+            rgba(230, 162, 60, 0.01) 100%
+        );
+        box-shadow:
             0 10px 24px rgba(230, 162, 60, 0.12),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
         .icon-container {
             background: #e6a23c;
+            color: #ffffff;
             box-shadow: 0 4px 10px rgba(230, 162, 60, 0.25);
         }
 
@@ -197,11 +196,7 @@ const options = [
 }
 
 .visibility-card--private {
-<<<<<<< HEAD
     &:not(.active):hover {
-=======
-    &:hover {
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
         border-color: rgba(245, 108, 108, 0.45);
         .icon-container {
             background-color: rgba(245, 108, 108, 0.08);
@@ -211,13 +206,18 @@ const options = [
 
     &.active {
         border-color: #f56c6c;
-        background: linear-gradient(135deg, rgba(245, 108, 108, 0.04) 0%, rgba(245, 108, 108, 0.01) 100%);
-        box-shadow: 
+        background: linear-gradient(
+            135deg,
+            rgba(245, 108, 108, 0.04) 0%,
+            rgba(245, 108, 108, 0.01) 100%
+        );
+        box-shadow:
             0 10px 24px rgba(245, 108, 108, 0.12),
             inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
         .icon-container {
             background: #f56c6c;
+            color: #ffffff;
             box-shadow: 0 4px 10px rgba(245, 108, 108, 0.25);
         }
 
@@ -251,22 +251,14 @@ const options = [
 }
 
 .icon-container {
-<<<<<<< HEAD
-    width: 2.4rem;
-    height: 2.4rem;
-=======
     width: 2.5rem;
     height: 2.5rem;
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
     border-radius: 12px;
     background: rgba(17, 24, 39, 0.04);
     display: flex;
     justify-content: center;
     align-items: center;
-<<<<<<< HEAD
-=======
     font-size: 1.25rem;
->>>>>>> 93ad7ccb06cd34988735b62f14de806d925b2745
     color: #9ca3af;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     margin-bottom: 0.75rem;
