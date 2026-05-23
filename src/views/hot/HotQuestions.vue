@@ -76,15 +76,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref } from 'vue'
 import { BubbleCard } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
-import { UserStore } from '@/store/modules/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import { SyncStore } from '@/store/modules/question-detail'
+import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
+import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
+import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { SidebarStore } from '@/store/modules/sidebar'
-import { useRouter } from 'vue-router'
 import {
     questionList,
     InitStatus,
@@ -96,14 +96,14 @@ import {
 } from './HotQuestions'
 
 const loading = ref(false)
-const listPage = ref<InstanceType<typeof QuestionListPage>>()
 const searchKeyword = ref('')
 const listKey = ref(0)
 
 const deviceType = DeviceTypeStore()
-const userStore = UserStore()
 const sidebarStore = SidebarStore()
-const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
+const bg_img_index = useThemeBackgroundIndex()
+const { listPage, resetScrollPosition } = useQuestionListPageShell()
+const { navigateTo } = useQuestionDetailNavigation(questionList)
 
 function toggleSidebar() {
     sidebarStore.toggle()
@@ -158,23 +158,6 @@ const handleReachBottom = async () => {
         await getNextQuestions()
         loading.value = false
     }
-}
-
-const resetScrollPosition = () => {
-    nextTick(() => {
-        listPage.value?.scrollToTop()
-    })
-}
-
-const router = useRouter()
-const syncStore = SyncStore()
-
-const navigateTo = (key: number) => {
-    key = Number(key)
-    syncStore.SetSync(key, questionList[key].id, questionList[key].views)
-    router.push({
-        path: `/question-detail/${questionList[key].id}`,
-    })
 }
 
 onMounted(async () => {

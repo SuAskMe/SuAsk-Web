@@ -41,24 +41,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import QuestionHeader from '@/components/question-header'
 import { ElMessage } from 'element-plus'
 import { BubbleQuestion } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
+import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
+import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
+import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { Favorite, questionList, InitStatus, getNextQuestions, refresh } from './myFavorite'
-import { UserStore } from '@/store/modules/user'
-import { useRouter } from 'vue-router'
-import { SyncStore } from '@/store/modules/question-detail'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 const loading = ref(false)
-const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const deviceType = DeviceTypeStore()
-// 背景图片
-const userStore = UserStore()
-const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
+const bg_img_index = useThemeBackgroundIndex()
+const { listPage, resetScrollPosition } = useQuestionListPageShell()
+const { navigateTo } = useQuestionDetailNavigation(questionList)
 
 const Init = async () => {
     if (questionList.length === 0) {
@@ -97,13 +96,6 @@ const changeSort = async (sortType: number) => {
     loading.value = false
 }
 
-// 重置滚动位置到顶部
-const resetScrollPosition = () => {
-    nextTick(() => {
-        listPage.value?.scrollToTop()
-    })
-}
-
 const favorite = async (key: number) => {
     key = Number(key)
     const res = await Favorite(questionList[key].id)
@@ -113,44 +105,6 @@ const favorite = async (key: number) => {
     }
     questionList[key].is_favorite = res.is_favorite
 }
-
-const router = useRouter()
-
-let record = {
-    index: -2,
-    id: -2,
-    views: -1,
-}
-const syncStore = SyncStore()
-watch(
-    () => {
-        return syncStore.Views
-    },
-    () => {
-        if (
-            record.index === syncStore.IndexOf &&
-            record.id === syncStore.QuestionID &&
-            record.views !== syncStore.Views
-        ) {
-            questionList[record.index].views = syncStore.Views
-            record.views = syncStore.Views
-        }
-    },
-)
-
-const navigateTo = (key: number) => {
-    key = Number(key)
-    record = {
-        index: key,
-        id: questionList[key].id,
-        views: questionList[key].views,
-    }
-    syncStore.SetSync(key, questionList[key].id, questionList[key].views)
-    router.push({
-        path: `/question-detail/${questionList[key].id}`,
-    })
-}
-
 onMounted(() => {
     Init()
 })

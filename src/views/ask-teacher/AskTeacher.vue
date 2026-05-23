@@ -50,15 +50,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
+import { nextTick, onMounted, provide, ref } from 'vue'
 import QuestionListPage from '@/components/question-list-page'
 import { BubbleCard } from '@/components/bubble-card'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
+import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
+import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import type { QuestionItem } from '@/model/question.model'
 import { useRoute, useRouter } from 'vue-router'
-import { UserStore } from '@/store/modules/user'
-import { SyncStore } from '@/store/modules/question-detail'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ComposeDialog from '@/components/compose/ComposeDialog.vue'
@@ -74,12 +75,11 @@ import {
 
 // const showDialog = ref(false);
 const loading = ref(false)
-const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const deviceType = DeviceTypeStore()
-// 背景图片
-const userStore = UserStore()
-const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
+const bg_img_index = useThemeBackgroundIndex()
+const { listPage, resetScrollPosition } = useQuestionListPageShell()
+const { navigateTo } = useQuestionDetailNavigation(questionList)
 
 const composeDialogStore = ComposeDialogStore()
 
@@ -140,50 +140,7 @@ const cancelSearch = async () => {
     resetScrollPosition()
     loading.value = false
 }
-
-let record: { index: number; id: number; views: number } = {
-    index: -2,
-    id: -2,
-    views: -1,
-}
-const syncStore = SyncStore()
-watch(
-    () => {
-        return syncStore.Views
-    },
-    () => {
-        if (
-            record.index === syncStore.IndexOf &&
-            record.id === syncStore.QuestionID &&
-            record.views !== syncStore.Views
-        ) {
-            questionList[record.index].views = syncStore.Views
-            record.views = syncStore.Views
-        }
-    },
-)
-
-// 重置滚动位置到顶部
-const resetScrollPosition = () => {
-    nextTick(() => {
-        listPage.value?.scrollToTop()
-    })
-}
-
 const router = useRouter()
-
-const navigateTo = (key: number) => {
-    key = Number(key)
-    record = {
-        index: key,
-        id: questionList[key].id,
-        views: questionList[key].views,
-    }
-    syncStore.SetSync(key, questionList[key].id, questionList[key].views)
-    router.push({
-        path: `/question-detail/${questionList[key].id}`,
-    })
-}
 
 const navigateBack = () => {
     router.back()
