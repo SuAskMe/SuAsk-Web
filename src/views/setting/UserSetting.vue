@@ -4,277 +4,117 @@
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
         </el-header>
         <el-scrollbar>
-            <!-- Guest 用户：只显示升级入口 -->
             <el-main v-if="isGuest" class="main-container">
-                <div class="setting-card guest-upgrade-card">
-                    <div class="title">
-                        <h2>账号升级</h2>
-                    </div>
-                    <p style="color: #666; margin-bottom: 20px;">
-                        您当前为临时用户，升级为正式账号后可解锁全部功能（修改头像、昵称、通知设置等）。
-                    </p>
-                    <p style="color: #909399; font-size: 14px;">
-                        请点击侧边栏中的「登录以获取全部功能」进行升级。
-                    </p>
-                </div>
+                <GuestUpgradeNotice />
             </el-main>
 
-            <!-- 正式用户：完整设置页 -->
             <template v-else>
-            <el-alert
-                v-if="showSaveReminder"
-                class="save-reminder"
-                title="您有未保存的更改"
-                type="warning"
-                show-icon
-                closable
-                @close="showSaveReminder = false"
-            >
-                <template #default>
-                    <div class="alert-content">
-                        <span>您已修改了设置，请记得保存更改</span>
+                <el-alert
+                    v-if="showSaveReminder"
+                    class="save-reminder"
+                    title="您有未保存的更改"
+                    type="warning"
+                    show-icon
+                    closable
+                    @close="showSaveReminder = false"
+                >
+                    <template #default>
+                        <div class="alert-content">
+                            <span>您已修改了设置，请记得保存更改</span>
+                            <el-button
+                                @click="updateUserInfo"
+                                type="primary"
+                                size="small"
+                                class="alert-save-btn"
+                            >
+                                保存更改
+                            </el-button>
+                        </div>
+                    </template>
+                </el-alert>
+                <el-main class="main-container">
+                    <el-dialog
+                        v-model="cropVisible"
+                        title="裁剪头像"
+                        center
+                        align-center
+                        :style="{
+                            height: deviceTypeStore.isMobile ? '100vh' : '90vh',
+                            width: '100vw',
+                            maxWidth: '768px',
+                        }"
+                        class="crop-dialog"
+                    >
+                        <div
+                            ref="cropperContainer"
+                            class="cropper-container"
+                            :style="{
+                                height: deviceTypeStore.isMobile ? '80vh' : '70vh',
+                                width: '92vw',
+                                maxWidth: '720px',
+                            }"
+                        >
+                            <div
+                                :style="{
+                                    width: imgSize.width + 'px',
+                                    height: imgSize.height + 'px',
+                                }"
+                            >
+                                <vue-cropper
+                                    ref="cropper"
+                                    :img="cropImg"
+                                    :auto-crop="true"
+                                    :fixed="true"
+                                    :fixed-number="[1, 1]"
+                                    :center-box="true"
+                                    outputType="png"
+                                />
+                            </div>
+                        </div>
+                        <template #footer>
+                            <el-button @click="cropVisible = false" style="margin-right: 15vw"
+                                >取消</el-button
+                            >
+                            <el-button type="primary" @click="confirmCrop">确认</el-button>
+                        </template>
+                    </el-dialog>
+
+                    <ProfileSection
+                        :is-guest="isGuest"
+                        :basic-info="basicInfo"
+                        :avatar-url="usingAvatar"
+                        @pick-image="pickImageImpl"
+                    />
+
+                    <ThemeSection
+                        :img-list="imgList"
+                        :theme-id="basicInfo.themeId"
+                        @update:theme-id="basicInfo.themeId = $event"
+                    />
+
+                    <NotificationSection :settings="notificationSettings" />
+
+                    <div v-if="!isGuest" class="button-container">
                         <el-button
                             @click="updateUserInfo"
                             type="primary"
-                            size="small"
-                            class="alert-save-btn"
+                            size="large"
+                            class="save-button"
                         >
                             保存更改
                         </el-button>
                     </div>
-                </template>
-            </el-alert>
-            <el-main class="main-container">
-                <el-dialog
-                    v-model="cropVisible"
-                    title="裁剪头像"
-                    center
-                    align-center
-                    :style="{
-                        height: deviceTypeStore.isMobile ? '100vh' : '90vh',
-                        width: '100vw',
-                        maxWidth: '768px',
-                    }"
-                    class="crop-dialog"
-                >
-                    <div
-                        ref="cropperContainer"
-                        class="cropper-container"
-                        :style="{
-                            height: deviceTypeStore.isMobile ? '80vh' : '70vh',
-                            width: '92vw',
-                            maxWidth: '720px',
-                        }"
-                    >
-                        <div
-                            :style="{ width: imgSize.width + 'px', height: imgSize.height + 'px' }"
-                        >
-                            <vue-cropper
-                                ref="cropper"
-                                :img="cropImg"
-                                :auto-crop="true"
-                                :fixed="true"
-                                :fixed-number="[1, 1]"
-                                :center-box="true"
-                                outputType="png"
-                            />
-                        </div>
-                    </div>
-                    <template #footer>
-                        <el-button @click="cropVisible = false" style="margin-right: 15vw"
-                            >取消</el-button
-                        >
-                        <el-button type="primary" @click="confirmCrop">确认</el-button>
-                    </template>
-                </el-dialog>
 
-                <div class="setting-card">
-                    <div class="title">
-                        <h2>基础信息</h2>
-                    </div>
-                    <el-alert
-                        v-if="isGuest"
-                        type="warning"
-                        title="临时用户无法修改个人信息，请先升级为正式账号"
-                        show-icon
-                        :closable="false"
-                        style="margin-bottom: 16px"
+                    <VisibilitySection v-if="hasTeacherAbility()" v-model="questionVisible" />
+
+                    <AccountActionsSection
+                        v-if="!isGuest"
+                        @reset-password="resetPassword"
+                        @logout="showLogoutDialog"
+                        @deactivate="showDeactivateDialog"
                     />
-                    <div class="name-bio-avatar">
-                        <div class="name-bio">
-                            <div class="field-group">
-                                <label>昵称</label>
-                                <el-input v-model="basicInfo.nickname" placeholder="请输入昵称" :disabled="isGuest" />
-                            </div>
-                            <div class="field-group">
-                                <label>简介</label>
-                                <bio-panel v-model="basicInfo.introduction" :disabled="isGuest" />
-                            </div>
-                        </div>
-                        <div class="avatar-id">
-                            <div class="avatar-container">
-                                <div class="avatar">
-                                    <el-avatar :size="150" :src="usingAvatar">
-                                        <img src="@/assets/default-avatar.png" />
-                                    </el-avatar>
-                                    <input
-                                        type="file"
-                                        ref="imgPicker"
-                                        accept="image/png,image/jpeg,image/jpg"
-                                        style="display: none"
-                                        @change="pickImageImpl"
-                                    />
-                                    <el-button
-                                        v-if="!isGuest"
-                                        @click.stop="pickImage"
-                                        class="upload-btn"
-                                        type="primary"
-                                        size="small"
-                                    >
-                                        <template #icon>
-                                            <svg-icon icon="edit" color="#ffffff" />
-                                        </template>
-                                        编辑
-                                    </el-button>
-                                </div>
-                                <p class="id">@{{ basicInfo.name }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="setting-card">
-                    <div class="title">
-                        <h2>主题</h2>
-                    </div>
-                    <div class="theme-picker">
-                        <div class="theme">
-                            <theme-image
-                                v-model="basicInfo.themeId"
-                                :src="imgList"
-                                :width="'150px'"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="setting-card">
-                    <div class="title">
-                        <h2>通知设置</h2>
-                    </div>
-                    <div class="notification-settings">
-                        <div class="field-group">
-                            <label>邮件通知开关</label>
-                            <div class="switch-container">
-                                <span class="switch-label">
-                                    {{
-                                        notificationSettings.notifySwitch
-                                            ? '已启用邮件通知'
-                                            : '邮件通知已关闭'
-                                    }}
-                                </span>
-                                <el-switch
-                                    v-model="notificationSettings.notifySwitch"
-                                    active-text="开启"
-                                    inactive-text="关闭"
-                                    :active-color="'#4CAF50'"
-                                    :inactive-color="'#dcdfe6'"
-                                />
-                            </div>
-                        </div>
-
-                        <div class="field-group email-setting">
-                            <label>通知邮箱地址</label>
-                            <el-input
-                                v-model="notificationSettings.notifyEmail"
-                                placeholder="请输入接收通知的邮箱地址"
-                                :disabled="!notificationSettings.notifySwitch"
-                                @focus="emailInputFocused = true"
-                                @blur="emailInputFocused = false"
-                                clearable
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="!isGuest" class="button-container">
-                    <el-button
-                        @click="updateUserInfo"
-                        type="primary"
-                        size="large"
-                        class="save-button"
-                    >
-                        保存更改
-                    </el-button>
-                </div>
-
-                <div v-if="hasTeacherAbility()" class="setting-card">
-                    <div class="title">
-                        <h2>提问箱可见性</h2>
-                    </div>
-                    <div class="visibility-selector">
-                        <div
-                            class="visibility-card"
-                            :class="{ active: questionVisible === 'public' }"
-                            @click="questionVisible = 'public'"
-                        >
-                            <div class="card-content">
-                                <div class="icon-container">
-                                    <View />
-                                </div>
-                                <h3 class="option-title">公开</h3>
-                                <p class="option-desc">任何人都可以访问提问箱</p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="visibility-card"
-                            :class="{ active: questionVisible === 'protected' }"
-                            @click="questionVisible = 'protected'"
-                        >
-                            <div class="card-content">
-                                <div class="icon-container">
-                                    <Lock />
-                                </div>
-                                <h3 class="option-title">需登录</h3>
-                                <p class="option-desc">仅登录用户可以访问提问箱</p>
-                            </div>
-                        </div>
-
-                        <div
-                            class="visibility-card"
-                            :class="{ active: questionVisible === 'private' }"
-                            @click="questionVisible = 'private'"
-                        >
-                            <div class="card-content">
-                                <div class="icon-container">
-                                    <TurnOff />
-                                </div>
-                                <h3 class="option-title">关闭</h3>
-                                <p class="option-desc">暂时关闭提问箱，无法访问</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="!isGuest" class="setting-card danger-zone">
-                    <div class="title">
-                        <h2>账号设置</h2>
-                    </div>
-                    <div class="password-logout">
-                        <p class="danger-option" @click="resetPassword">
-                            <Lock class="danger-icon" /> 重置密码
-                        </p>
-                        <p class="danger-option" @click="showLogoutDialog">
-                            <SwitchButton class="danger-icon" /> 退出登录
-                        </p>
-                        <p class="danger-option deactivate" @click="showDeactivateDialog">
-                            <WarningFilled class="danger-icon" /> 注销账号
-                        </p>
-                    </div>
-                </div>
-                <div style="height: 50px"></div>
-            </el-main>
+                    <div style="height: 50px"></div>
+                </el-main>
             </template>
         </el-scrollbar>
         <reset-password-dialog v-model:visible="showResetPassword" />
@@ -291,22 +131,25 @@ import { UserStore } from '@/store/modules/user'
 import { updateTeacherPermApi } from '@/api/teacher/teacher.api'
 import QuestionHeader from '@/components/question-header'
 import { SidebarStore } from '@/store/modules/sidebar'
-import BioPanel from '@/components/bio-panel/BioPanel.vue'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import ThemeImage from './ThemeImage.vue'
 import ResetPasswordDialog from './ResetPasswordDialog.vue'
 import LogoutDialog from './LogoutDialog.vue'
 import DeactivateDialog from './DeactivateDialog.vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
-import { View, Lock, TurnOff, SwitchButton, WarningFilled } from '@element-plus/icons-vue'
 import { hasTeacherAbility } from '@/utils/auth'
+import GuestUpgradeNotice from './sections/GuestUpgradeNotice.vue'
+import ProfileSection from './sections/ProfileSection.vue'
+import ThemeSection from './sections/ThemeSection.vue'
+import NotificationSection from './sections/NotificationSection.vue'
+import VisibilitySection from './sections/VisibilitySection.vue'
+import AccountActionsSection from './sections/AccountActionsSection.vue'
 
 const isGuest = computed(() => userStore.getRole() === 'guest')
 
 const imgList = ref<string[]>([])
-const images = import.meta.glob('@/assets/bg_imgs/*.jpg', { eager: true })
+const images = import.meta.glob('../../assets/bg_imgs/*.jpg', { eager: true })
 imgList.value = Object.values(images).map((module) => (module as { default: string }).default)
 
 const deviceTypeStore = DeviceTypeStore()
@@ -315,14 +158,6 @@ const sidebarStore = SidebarStore()
 
 function sidebar() {
     sidebarStore.toggle()
-}
-
-const imgPicker = ref<HTMLInputElement>()
-
-function pickImage() {
-    if (imgPicker.value) {
-        imgPicker.value.click()
-    }
 }
 
 const avatarFile = ref<File | null>(null)
@@ -468,9 +303,6 @@ const notificationSettings = ref({
     notifySwitch: userStore.getUser().notifySwitch || false,
     notifyEmail: userStore.getUser().notifyEmail || '',
 })
-
-// 邮箱输入框聚焦状态
-const emailInputFocused = ref(false)
 
 // 监听通知设置变化
 watch(
