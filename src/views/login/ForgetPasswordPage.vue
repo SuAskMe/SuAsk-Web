@@ -94,7 +94,7 @@ const confirmPassword = ref('')
 const verifyStatus = reactive<{
     disabled: boolean
     duration: number
-    timer: number | undefined
+    timer: ReturnType<typeof setInterval> | undefined
 }>({
     disabled: false,
     duration: 60,

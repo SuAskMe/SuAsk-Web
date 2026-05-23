@@ -51,11 +51,7 @@
                             class="code-btn"
                             :disabled="verifyStatus.disabled"
                         >
-                            {{
-                                verifyStatus.disabled
-                                    ? verifyStatus.duration + 's'
-                                    : '获取验证码'
-                            }}
+                            {{ verifyStatus.disabled ? verifyStatus.duration + 's' : '获取验证码' }}
                         </el-button>
                     </div>
 
@@ -138,7 +134,7 @@ function closed() {
 const verifyStatus = reactive<{
     disabled: boolean
     duration: number
-    timer: number | undefined
+    timer: ReturnType<typeof setInterval> | undefined
 }>({
     disabled: false,
     duration: 60,

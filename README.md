@@ -37,3 +37,17 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Unit Tests
+
+```sh
+npm run test
+```
+
+Run once:
+
+```sh
+npm run test:run
+```
+
+Test files live under `tests/unit/`.

@@ -61,17 +61,23 @@ export function usePagination<T>(options: PaginationOptions<T>): UsePaginationRe
         // 使用 hasOwnProperty 来检查是否传入了排序参数
         const hasSortType = sortType_ !== undefined
         const hasKeyword = keyword_ !== undefined
-        
-        if (hasSortType && sortType_ !== sortType) {
-            currentPage = 1
+
+        const shouldResetPage =
+            cancelSearch ||
+            (hasSortType && sortType_ !== sortType) ||
+            (hasKeyword && keyword_ !== keyword) ||
+            data.length === 0
+
+        if (hasSortType) {
             sortType = sortType_
-            isEnd = false
-        } else if (hasKeyword && keyword_ !== keyword) {
-            currentPage = 1
-            keyword = keyword_ || ''
-            isEnd = false
-        } else if (cancelSearch) {
+        }
+        if (cancelSearch) {
             keyword = ''
+        } else if (hasKeyword) {
+            keyword = keyword_ || ''
+        }
+
+        if (shouldResetPage) {
             currentPage = 1
             isEnd = false
         } else {
@@ -120,15 +126,8 @@ export function usePagination<T>(options: PaginationOptions<T>): UsePaginationRe
         // 在刷新时总是清空数据
         data.length = 0
         isEnd = false
-        
-        if (sortType_ !== undefined) {
-            sortType = sortType_
-        }
-        if (keyword_ !== undefined) {
-            keyword = keyword_
-        }
-        currentPage = 1
-        await loadMore(sortType, keyword)
+
+        await loadMore(sortType_, keyword_)
     }
 
     const search = async (keyword_: string) => {
@@ -156,6 +155,6 @@ export function usePagination<T>(options: PaginationOptions<T>): UsePaginationRe
         refresh,
         search,
         cancelSearch,
-        resetScroll
+        resetScroll,
     }
 }
