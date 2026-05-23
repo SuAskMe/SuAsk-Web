@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import QuestionHeader from '@/components/question-header'
 import { ElMessage } from 'element-plus'
 import { BubbleQuestion } from '@/components/bubble-card'
@@ -53,8 +53,14 @@ import QuestionListPage from '@/components/question-list-page'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
-import { Favorite, getNextQuestions } from './AskHistory'
-import type { FavoriteItem } from '@/model/favorite.model'
+import {
+    Favorite,
+    questionList,
+    InitStatus,
+    getNextQuestions,
+    onSearch,
+    onCancelSearch,
+} from './AskHistory'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 const loading = ref(false)
@@ -65,8 +71,9 @@ const { listPage, resetScrollPosition } = useQuestionListPageShell()
 
 const Init = async () => {
     if (questionList.length === 0) {
+        InitStatus()
         loading.value = true
-        questionList.push(...(await getNextQuestions(0)))
+        await getNextQuestions(0)
         loading.value = false
     }
 }
@@ -74,7 +81,7 @@ const Init = async () => {
 const handleReachBottom = async () => {
     if (loading.value === false) {
         loading.value = true
-        questionList.push(...(await getNextQuestions()))
+        await getNextQuestions()
         loading.value = false
     }
 }
@@ -94,29 +101,25 @@ const changeSort = async (sortType: number) => {
     }
     sort_type = sortType
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(sortType)))
+    await getNextQuestions(sortType)
     loading.value = false
     resetScrollPosition()
 }
 
 const search = async (keyword: string) => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(undefined, keyword)))
+    await onSearch(keyword)
     loading.value = false
     resetScrollPosition()
 }
 
 const cancelSearch = async () => {
     loading.value = true
-    questionList.length = 0
-    questionList.push(...(await getNextQuestions(undefined, undefined, true)))
+    await onCancelSearch()
     loading.value = false
     resetScrollPosition()
 }
 
-const questionList: FavoriteItem[] = reactive([])
 const { navigateTo } = useQuestionDetailNavigation(questionList)
 
 const favorite = async (key: number) => {

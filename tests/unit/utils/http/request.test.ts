@@ -65,7 +65,7 @@ describe('request interceptors', () => {
         mocks.getToken.mockReturnValue('token-abc')
         mocks.getRole.mockReturnValue(Role.ADMIN)
 
-        const request = (await import('./request')).default
+        const request = (await import('@/utils/http/request')).default
         const handler = (request.interceptors.request as any).handlers[0].fulfilled
 
         const config = await handler({ headers: {} })
@@ -76,7 +76,7 @@ describe('request interceptors', () => {
     })
 
     it('returns payload data on successful business responses', async () => {
-        const request = (await import('./request')).default
+        const request = (await import('@/utils/http/request')).default
         const handler = (request.interceptors.response as any).handlers[0].fulfilled
 
         const result = await handler({
@@ -94,7 +94,7 @@ describe('request interceptors', () => {
     })
 
     it('handles login timeout by showing an error and scheduling redirect cleanup', async () => {
-        const request = (await import('./request')).default
+        const request = (await import('@/utils/http/request')).default
         const handler = (request.interceptors.response as any).handlers[0].fulfilled
 
         const result = await handler({
@@ -117,7 +117,7 @@ describe('request interceptors', () => {
     })
 
     it('shows backend Chinese messages and returns null for handled business errors', async () => {
-        const request = (await import('./request')).default
+        const request = (await import('@/utils/http/request')).default
         const handler = (request.interceptors.response as any).handlers[0].fulfilled
 
         const result = await handler({
@@ -133,7 +133,7 @@ describe('request interceptors', () => {
     })
 
     it('returns false and shows a generic message on transport errors', async () => {
-        const request = (await import('./request')).default
+        const request = (await import('@/utils/http/request')).default
         const handler = (request.interceptors.response as any).handlers[0].rejected
 
         const result = await handler(new Error('network down'))
