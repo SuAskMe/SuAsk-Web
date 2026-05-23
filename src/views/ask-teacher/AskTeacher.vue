@@ -1,6 +1,11 @@
 <template>
-    <el-container class="container">
-        <el-header style="height: auto">
+    <QuestionListPage
+        ref="listPage"
+        :img-index="bg_img_index"
+        :loading="loading"
+        @reach-bottom="handleReachBottom"
+    >
+        <template #header>
             <QuestionHeader
                 @change-sort="changeSort"
                 @search="search"
@@ -14,50 +19,40 @@
                 :teacher_id="teacherId"
                 sort_and_search
             />
-        </el-header>
-        <el-main class="main-container">
-            <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-                <TransitionGroup name="question">
-                    <BubbleCard
-                        v-for="(question, index) in questionList"
-                        :id="`question-${question.id}`"
-                        :key="question.id"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :bubble-key="index"
-                        :click-card="navigateTo"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :style="{
-                            marginTop: index === 0 ? '24px' : '0',
-                        }"
-                    />
-                </TransitionGroup>
-            </el-scrollbar>
-            <!-- <AskDialog
-                v-model:visible="showDialog"
-                :teacher="{ teacherId: teacherId, teacherName: teacherName }"
-                @question-posted="handleQuestionPosted"
-                :fullscreen="deviceType.isMobile"
-            /> -->
+        </template>
+        <TransitionGroup name="question">
+            <BubbleCard
+                v-for="(question, index) in questionList"
+                :id="`question-${question.id}`"
+                :key="question.id"
+                :title="question.title"
+                :text="question.contents"
+                :views="question.views"
+                :time-stamp="question.created_at"
+                :image-urls="question.image_urls"
+                :bubble-key="index"
+                :click-card="navigateTo"
+                :width="deviceType.isMobile ? '80vw' : '45vw'"
+                :style="{
+                    marginTop: index === 0 ? '24px' : '0',
+                }"
+            />
+        </TransitionGroup>
+        <template #floating>
             <div class="ask-btn" @click.stop="composeDialogStore.open()">
                 <el-icon size="30" color="#fff">
                     <Plus />
                 </el-icon>
             </div>
-        </el-main>
-    </el-container>
+        </template>
+    </QuestionListPage>
     <compose-dialog type="ask" @question-posted="handleQuestionPosted" />
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, provide, ref, watch } from 'vue'
-import { ElScrollbar } from 'element-plus'
+import QuestionListPage from '@/components/question-list-page'
 import { BubbleCard } from '@/components/bubble-card'
-import BackgroundImg from '@/components/background-img'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import type { QuestionItem } from '@/model/question.model'
@@ -79,7 +74,7 @@ import {
 
 // const showDialog = ref(false);
 const loading = ref(false)
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const deviceType = DeviceTypeStore()
 // 背景图片
@@ -108,22 +103,11 @@ const Init = async () => {
     }
 }
 
-const handleScroll = async () => {
-    if (scrollBar.value) {
-        const scrollTop = scrollBar.value.wrapRef?.scrollTop
-        const clientHeight = scrollBar.value.wrapRef?.clientHeight
-        const scrollHeight = scrollBar.value.wrapRef?.scrollHeight
-        if (
-            scrollTop &&
-            clientHeight &&
-            scrollHeight &&
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
-            loading.value === false
-        ) {
-            loading.value = true
-            await getNextQuestions()
-            loading.value = false
-        }
+const handleReachBottom = async () => {
+    if (loading.value === false) {
+        loading.value = true
+        await getNextQuestions()
+        loading.value = false
     }
 }
 
@@ -182,9 +166,7 @@ watch(
 // 重置滚动位置到顶部
 const resetScrollPosition = () => {
     nextTick(() => {
-        if (scrollBar.value && scrollBar.value.wrapRef) {
-            scrollBar.value.wrapRef.scrollTop = 0
-        }
+        listPage.value?.scrollToTop()
     })
 }
 

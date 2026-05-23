@@ -1,6 +1,11 @@
 <template>
-    <el-container class="container">
-        <el-header style="height: auto">
+    <QuestionListPage
+        ref="listPage"
+        :img-index="bg_img_index"
+        :loading="loading"
+        @reach-bottom="handleReachBottom"
+    >
+        <template #header>
             <QuestionHeader
                 @change-sort="changeSort"
                 @search="search"
@@ -12,56 +17,39 @@
                 :return_btn="false"
                 sort_and_search
             />
-        </el-header>
-        <el-main class="main-container">
-            <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-                <TransitionGroup
-                    name="question"
-                    tag="div"
-                    :style="
-                        deviceType.isMobile
-                            ? {
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                              }
-                            : {}
-                    "
-                >
-                    <BubbleQuestion
-                        v-for="(question, index) in questionList"
-                        :key="question.id"
-                        :title="question.title"
-                        :id="'question-' + question.id"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :answer-num="question.answer_num"
-                        :avatars="question.answer_avatars"
-                        :bubble-key="index"
-                        :click-card="navigateTo"
-                        :click-favorite="favorite"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :style="{
-                            marginTop: index === 0 ? '24px' : '0',
-                            marginLeft: deviceType.isMobile ? '0' : '24px',
-                        }"
-                        :show-favorite="false"
-                    />
-                </TransitionGroup>
-            </el-scrollbar>
-        </el-main>
-    </el-container>
+        </template>
+        <TransitionGroup name="question" tag="div">
+            <BubbleQuestion
+                v-for="(question, index) in questionList"
+                :id="'question-' + question.id"
+                :key="question.id"
+                :title="question.title"
+                :text="question.contents"
+                :views="question.views"
+                :time-stamp="question.created_at"
+                :image-urls="question.image_urls"
+                :answer-num="question.answer_num"
+                :avatars="question.answer_avatars"
+                :bubble-key="index"
+                :click-card="navigateTo"
+                :click-favorite="favorite"
+                :width="deviceType.isMobile ? '80vw' : '45vw'"
+                :style="{
+                    marginTop: index === 0 ? '24px' : '0',
+                    marginLeft: deviceType.isMobile ? '0' : '24px',
+                }"
+                :show-favorite="false"
+            />
+        </TransitionGroup>
+    </QuestionListPage>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import QuestionHeader from '@/components/question-header'
-import { ElMessage, ElScrollbar } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { BubbleQuestion } from '@/components/bubble-card'
-import BackgroundImg from '@/components/background-img'
+import QuestionListPage from '@/components/question-list-page'
 import { Favorite, getNextQuestions } from './AskHistory'
 import type { FavoriteItem } from '@/model/favorite.model'
 import { UserStore } from '@/store/modules/user'
@@ -70,7 +58,7 @@ import { SyncStore } from '@/store/modules/question-detail'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 const loading = ref(false)
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const deviceType = DeviceTypeStore()
 
@@ -86,22 +74,11 @@ const Init = async () => {
     }
 }
 
-const handleScroll = async () => {
-    if (scrollBar.value) {
-        const scrollTop = scrollBar.value.wrapRef?.scrollTop
-        const clientHeight = scrollBar.value.wrapRef?.clientHeight
-        const scrollHeight = scrollBar.value.wrapRef?.scrollHeight
-        if (
-            scrollTop &&
-            clientHeight &&
-            scrollHeight &&
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
-            loading.value === false
-        ) {
-            loading.value = true
-            questionList.push(...(await getNextQuestions()))
-            loading.value = false
-        }
+const handleReachBottom = async () => {
+    if (loading.value === false) {
+        loading.value = true
+        questionList.push(...(await getNextQuestions()))
+        loading.value = false
     }
 }
 
@@ -114,6 +91,12 @@ const sidebar = () => {
 
 let sort_type = 0
 
+const resetScrollPosition = () => {
+    nextTick(() => {
+        listPage.value?.scrollToTop()
+    })
+}
+
 const changeSort = async (sortType: number) => {
     if (sortType === sort_type) {
         return
@@ -123,6 +106,7 @@ const changeSort = async (sortType: number) => {
     questionList.length = 0
     questionList.push(...(await getNextQuestions(sortType)))
     loading.value = false
+    resetScrollPosition()
 }
 
 const search = async (keyword: string) => {
@@ -130,6 +114,7 @@ const search = async (keyword: string) => {
     questionList.length = 0
     questionList.push(...(await getNextQuestions(undefined, keyword)))
     loading.value = false
+    resetScrollPosition()
 }
 
 const cancelSearch = async () => {
@@ -137,6 +122,7 @@ const cancelSearch = async () => {
     questionList.length = 0
     questionList.push(...(await getNextQuestions(undefined, undefined, true)))
     loading.value = false
+    resetScrollPosition()
 }
 
 const questionList: FavoriteItem[] = reactive([])
@@ -203,22 +189,5 @@ onMounted(() => {
 .question-leave-to {
     opacity: 0;
     transform: translateX(-100px);
-}
-
-.container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    .main-container {
-        position: relative;
-        border-top: solid 1px $su-border;
-        padding: 0;
-    }
-}
-
-.background-img {
-    position: absolute;
-    //   top: 0;
 }
 </style>

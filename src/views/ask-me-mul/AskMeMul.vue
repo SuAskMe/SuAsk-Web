@@ -1,6 +1,11 @@
 <template>
-    <el-container class="container">
-        <el-header style="height: auto">
+    <QuestionListPage
+        ref="listPage"
+        :img-index="bg_img_index"
+        :loading="loading"
+        @reach-bottom="handleReachBottom"
+    >
+        <template #header>
             <QuestionHeader
                 @change-sort="changeSort"
                 :title="title"
@@ -9,39 +14,34 @@
                 @sidebar="sidebar"
                 sidebar_btn
             />
-        </el-header>
-        <el-main class="main-container">
-            <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-pinned="question.is_pinned"
-                    :bubble-key="index"
-                    :tag="question.tag"
-                    show-pin
-                    :style="{
-                        marginTop: index === 0 ? '24px' : '0',
-                    }"
-                    :width="deviceType.isMobile ? '80vw' : '45vw'"
-                    :click-card="navigateTo"
-                    :click-pin="pin"
-                ></BubbleCard>
-            </el-scrollbar>
-        </el-main>
-    </el-container>
+        </template>
+        <BubbleCard
+            v-for="(question, index) in questionList"
+            :key="question.id"
+            :title="question.title"
+            :text="question.contents"
+            :views="question.views"
+            :time-stamp="question.created_at"
+            :image-urls="question.image_urls"
+            :is-pinned="question.is_pinned"
+            :bubble-key="index"
+            :tag="question.tag"
+            show-pin
+            :style="{
+                marginTop: index === 0 ? '24px' : '0',
+            }"
+            :width="deviceType.isMobile ? '80vw' : '45vw'"
+            :click-card="navigateTo"
+            :click-pin="pin"
+        ></BubbleCard>
+    </QuestionListPage>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { ElMessage, ElScrollbar } from 'element-plus'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 import { BubbleCard } from '@/components/bubble-card'
-import BackgroundImg from '@/components/background-img'
+import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header'
 import {
     Pin,
@@ -57,7 +57,7 @@ import { SyncStore } from '@/store/modules/question-detail'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 const loading = ref(false)
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const sidebarStore = SidebarStore()
 const sidebar = () => {
@@ -97,26 +97,21 @@ const Init = async () => {
     }
 }
 
-const handleScroll = async () => {
-    if (scrollBar.value) {
-        const scrollTop = scrollBar.value.wrapRef?.scrollTop
-        const clientHeight = scrollBar.value.wrapRef?.clientHeight
-        const scrollHeight = scrollBar.value.wrapRef?.scrollHeight
-        if (
-            scrollTop &&
-            clientHeight &&
-            scrollHeight &&
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
-            loading.value === false
-        ) {
-            loading.value = true
-            await getNextQuestions()
-            loading.value = false
-        }
+const handleReachBottom = async () => {
+    if (loading.value === false) {
+        loading.value = true
+        await getNextQuestions()
+        loading.value = false
     }
 }
 
 let sort_type = 0
+
+const resetScrollPosition = () => {
+    nextTick(() => {
+        listPage.value?.scrollToTop()
+    })
+}
 
 const changeSort = async (sortType: number) => {
     if (sortType === sort_type) {
@@ -126,6 +121,7 @@ const changeSort = async (sortType: number) => {
     loading.value = true
     await refresh(sortType)
     loading.value = false
+    resetScrollPosition()
 }
 
 const pin = async (key: number) => {

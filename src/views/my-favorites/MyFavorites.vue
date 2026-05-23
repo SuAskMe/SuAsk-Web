@@ -1,6 +1,11 @@
 <template>
-    <el-container class="container">
-        <el-header style="height: auto">
+    <QuestionListPage
+        ref="listPage"
+        :img-index="bg_img_index"
+        :loading="loading"
+        @reach-bottom="handleReachBottom"
+    >
+        <template #header>
             <QuestionHeader
                 @change-sort="changeSort"
                 get_keywords_url="/favorites/keywords"
@@ -8,56 +13,39 @@
                 @sidebar="sidebar"
                 sort_and_search
             />
-        </el-header>
-        <el-main class="main-container">
-            <BackgroundImg :img_index="bg_img_index" class="background-img" />
-            <el-scrollbar v-loading="loading" ref="scrollBar" @scroll="handleScroll">
-                <TransitionGroup
-                    name="favorite"
-                    tag="div"
-                    :style="
-                        deviceType.isMobile
-                            ? {
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                              }
-                            : {}
-                    "
-                >
-                    <BubbleQuestion
-                        v-for="(question, index) in questionList"
-                        :key="question.id"
-                        :title="question.title"
-                        :id="'question-' + question.id"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-favorite="question.is_favorite"
-                        :answer-num="question.answer_num"
-                        :avatars="question.answer_avatars"
-                        :bubble-key="index"
-                        :click-card="navigateTo"
-                        :click-favorite="favorite"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :style="{
-                            marginTop: index === 0 ? '24px' : '0',
-                            marginLeft: deviceType.isMobile ? '0' : '24px',
-                        }"
-                    />
-                </TransitionGroup>
-            </el-scrollbar>
-        </el-main>
-    </el-container>
+        </template>
+        <TransitionGroup name="favorite" tag="div">
+            <BubbleQuestion
+                v-for="(question, index) in questionList"
+                :id="'question-' + question.id"
+                :key="question.id"
+                :title="question.title"
+                :text="question.contents"
+                :views="question.views"
+                :time-stamp="question.created_at"
+                :image-urls="question.image_urls"
+                :is-favorite="question.is_favorite"
+                :answer-num="question.answer_num"
+                :avatars="question.answer_avatars"
+                :bubble-key="index"
+                :click-card="navigateTo"
+                :click-favorite="favorite"
+                :width="deviceType.isMobile ? '80vw' : '45vw'"
+                :style="{
+                    marginTop: index === 0 ? '24px' : '0',
+                    marginLeft: deviceType.isMobile ? '0' : '24px',
+                }"
+            />
+        </TransitionGroup>
+    </QuestionListPage>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import QuestionHeader from '@/components/question-header'
-import { ElMessage, ElScrollbar } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { BubbleQuestion } from '@/components/bubble-card'
-import BackgroundImg from '@/components/background-img'
+import QuestionListPage from '@/components/question-list-page'
 import { Favorite, questionList, InitStatus, getNextQuestions, refresh } from './myFavorite'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
@@ -65,7 +53,7 @@ import { SyncStore } from '@/store/modules/question-detail'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 const loading = ref(false)
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const listPage = ref<InstanceType<typeof QuestionListPage>>()
 
 const deviceType = DeviceTypeStore()
 // 背景图片
@@ -81,22 +69,11 @@ const Init = async () => {
     }
 }
 
-const handleScroll = async () => {
-    if (scrollBar.value) {
-        const scrollTop = scrollBar.value.wrapRef?.scrollTop
-        const clientHeight = scrollBar.value.wrapRef?.clientHeight
-        const scrollHeight = scrollBar.value.wrapRef?.scrollHeight
-        if (
-            scrollTop &&
-            clientHeight &&
-            scrollHeight &&
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
-            loading.value === false
-        ) {
-            loading.value = true
-            await getNextQuestions()
-            loading.value = false
-        }
+const handleReachBottom = async () => {
+    if (loading.value === false) {
+        loading.value = true
+        await getNextQuestions()
+        loading.value = false
     }
 }
 
@@ -123,9 +100,7 @@ const changeSort = async (sortType: number) => {
 // 重置滚动位置到顶部
 const resetScrollPosition = () => {
     nextTick(() => {
-        if (scrollBar.value && scrollBar.value.wrapRef) {
-            scrollBar.value.wrapRef.scrollTop = 0
-        }
+        listPage.value?.scrollToTop()
     })
 }
 
@@ -192,35 +167,18 @@ onMounted(() => {
     opacity: 0;
     transform: translateX(-100px);
 }
-.container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    .main-container {
-        position: relative;
-        border-top: solid 1px $su-border;
-        padding: 0;
-
-        .favorite-enter-active,
-        favorite-leave-active {
-            transition: all 0.5s ease;
-        }
-
-        .favorite-enter-from,
-        .favorite-leave-to {
-            opacity: 0;
-            transform: translateX(-100px);
-        }
-
-        .favorite-leave-active {
-            position: absolute;
-        }
-    }
+.favorite-enter-active,
+.favorite-leave-active {
+    transition: all 0.5s ease;
 }
 
-.background-img {
+.favorite-enter-from,
+.favorite-leave-to {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+.favorite-leave-active {
     position: absolute;
-    //   top: 0;
 }
 </style>

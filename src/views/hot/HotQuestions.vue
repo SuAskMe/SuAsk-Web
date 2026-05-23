@@ -1,13 +1,22 @@
 <template>
-    <el-container class="container">
-        <el-header class="hot-header-bar">
-            <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
-            <div class="hot-title">
-                <p>热点问题</p>
+    <QuestionListPage
+        ref="listPage"
+        class="hot-page"
+        :img-index="bg_img_index"
+        :loading="loading"
+        :border-top="false"
+        scroll-mask
+        @reach-bottom="handleReachBottom"
+    >
+        <template #header>
+            <div class="hot-header-bar">
+                <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
+                <div class="hot-title">
+                    <p>热点问题</p>
+                </div>
             </div>
-        </el-header>
-        <el-main class="main-container">
-            <BackgroundImg :img_index="bg_img_index" class="background-img" />
+        </template>
+        <template #toolbar>
             <div class="hot-filter">
                 <div class="search-bar">
                     <div class="search-wrapper">
@@ -19,11 +28,9 @@
                             @keyup.enter="handleSearch"
                             class="search-native-input"
                         />
-                        <span
-                            v-if="searchKeyword"
-                            class="search-clear"
-                            @click="handleCancelSearch"
-                        >&times;</span>
+                        <span v-if="searchKeyword" class="search-clear" @click="handleCancelSearch"
+                            >&times;</span
+                        >
                     </div>
                 </div>
                 <div class="time-filter">
@@ -39,42 +46,39 @@
                     </div>
                 </div>
             </div>
-            <el-scrollbar ref="scrollBar" @scroll="handleScroll">
-                <Transition name="fade">
-                    <div v-if="questionList.length === 0 && !loading" class="empty-state">
-                        <el-empty description="暂无热点问题" />
-                    </div>
-                </Transition>
-                <Transition :name="slideDirection" mode="out-in">
-                    <div :key="listKey" v-loading="loading" class="question-list">
-                        <BubbleCard
-                            v-for="(question, index) in questionList"
-                            :id="`question-${question.id}`"
-                            :key="question.id"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :bubble-key="index"
-                            :click-card="navigateTo"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :style="{
-                                marginTop: index === 0 ? '16px' : '0',
-                            }"
-                        />
-                    </div>
-                </Transition>
-            </el-scrollbar>
-        </el-main>
-    </el-container>
+        </template>
+        <Transition name="fade">
+            <div v-if="questionList.length === 0 && !loading" class="empty-state">
+                <el-empty description="暂无热点问题" />
+            </div>
+        </Transition>
+        <Transition :name="slideDirection" mode="out-in">
+            <div :key="listKey" class="question-list">
+                <BubbleCard
+                    v-for="(question, index) in questionList"
+                    :id="`question-${question.id}`"
+                    :key="question.id"
+                    :title="question.title"
+                    :text="question.contents"
+                    :views="question.views"
+                    :time-stamp="question.created_at"
+                    :image-urls="question.image_urls"
+                    :bubble-key="index"
+                    :click-card="navigateTo"
+                    :width="deviceType.isMobile ? '80vw' : '45vw'"
+                    :style="{
+                        marginTop: index === 0 ? '16px' : '0',
+                    }"
+                />
+            </div>
+        </Transition>
+    </QuestionListPage>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, nextTick } from 'vue'
-import { ElScrollbar } from 'element-plus'
 import { BubbleCard } from '@/components/bubble-card'
-import BackgroundImg from '@/components/background-img'
+import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import { UserStore } from '@/store/modules/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
@@ -92,7 +96,7 @@ import {
 } from './HotQuestions'
 
 const loading = ref(false)
-const scrollBar = ref<InstanceType<typeof ElScrollbar>>()
+const listPage = ref<InstanceType<typeof QuestionListPage>>()
 const searchKeyword = ref('')
 const listKey = ref(0)
 
@@ -148,30 +152,17 @@ const handleCancelSearch = async () => {
     loading.value = false
 }
 
-const handleScroll = async () => {
-    if (scrollBar.value) {
-        const scrollTop = scrollBar.value.wrapRef?.scrollTop
-        const clientHeight = scrollBar.value.wrapRef?.clientHeight
-        const scrollHeight = scrollBar.value.wrapRef?.scrollHeight
-        if (
-            scrollTop &&
-            clientHeight &&
-            scrollHeight &&
-            Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
-            !loading.value
-        ) {
-            loading.value = true
-            await getNextQuestions()
-            loading.value = false
-        }
+const handleReachBottom = async () => {
+    if (!loading.value) {
+        loading.value = true
+        await getNextQuestions()
+        loading.value = false
     }
 }
 
 const resetScrollPosition = () => {
     nextTick(() => {
-        if (scrollBar.value && scrollBar.value.wrapRef) {
-            scrollBar.value.wrapRef.scrollTop = 0
-        }
+        listPage.value?.scrollToTop()
     })
 }
 
