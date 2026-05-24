@@ -16,14 +16,25 @@
                         placeholder="搜索用户名、昵称或邮箱..."
                         @input="onSearchInput"
                     />
-                    <span v-if="searchKeyword" class="clear-btn" @click="searchKeyword = ''; onSearchInput()">&times;</span>
+                    <span
+                        v-if="searchKeyword"
+                        class="clear-btn"
+                        @click="
+                            searchKeyword = '';
+                            onSearchInput();
+                        "
+                        >&times;</span
+                    >
                 </div>
                 <div class="role-tabs">
                     <button
                         v-for="opt in roleOptions"
                         :key="opt.value"
                         :class="['role-tab', { active: filterRole === opt.value }]"
-                        @click="filterRole = opt.value; onRoleFilterChange()"
+                        @click="
+                            filterRole = opt.value;
+                            onRoleFilterChange();
+                        "
                     >
                         {{ opt.label }}
                     </button>
@@ -45,14 +56,22 @@
                             </div>
                             <div class="user-email">{{ user.email }}</div>
                         </div>
-                        <span :class="['role-badge', `role-${user.role}`]">{{ getRoleLabel(user.role) }}</span>
+                        <span :class="['role-badge', `role-${user.role}`]">{{
+                            getRoleLabel(user.role)
+                        }}</span>
                     </div>
                     <div class="user-meta">
                         <span class="meta-time">{{ formatDate(user.created_at) }}</span>
                         <div class="user-actions">
-                            <button class="action-btn edit" @click="openEditDialog(user)">编辑</button>
-                            <button class="action-btn reset" @click="openResetPasswordDialog(user)">重置密码</button>
-                            <button class="action-btn delete" @click="openDeleteDialog(user)">删除</button>
+                            <button class="action-btn edit" @click="openEditDialog(user)">
+                                编辑
+                            </button>
+                            <button class="action-btn reset" @click="openResetPasswordDialog(user)">
+                                重置密码
+                            </button>
+                            <button class="action-btn delete" @click="openDeleteDialog(user)">
+                                删除
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -71,9 +90,23 @@
 
             <!-- 分页 -->
             <div class="pagination" v-if="totalCount > pageSize">
-                <button class="page-btn" :disabled="currentPage <= 1" @click="onPageChange(currentPage - 1)">‹</button>
-                <span class="page-info">{{ currentPage }} / {{ Math.ceil(totalCount / pageSize) }}</span>
-                <button class="page-btn" :disabled="currentPage >= Math.ceil(totalCount / pageSize)" @click="onPageChange(currentPage + 1)">›</button>
+                <button
+                    class="page-btn"
+                    :disabled="currentPage <= 1"
+                    @click="onPageChange(currentPage - 1)"
+                >
+                    ‹
+                </button>
+                <span class="page-info"
+                    >{{ currentPage }} / {{ Math.ceil(totalCount / pageSize) }}</span
+                >
+                <button
+                    class="page-btn"
+                    :disabled="currentPage >= Math.ceil(totalCount / pageSize)"
+                    @click="onPageChange(currentPage + 1)"
+                >
+                    ›
+                </button>
                 <span class="page-total">共 {{ totalCount }} 条</span>
             </div>
         </el-scrollbar>
@@ -88,16 +121,54 @@
             <div v-if="createDialogVisible" class="modal-panel">
                 <div class="modal-header">
                     <h3>创建用户</h3>
-                    <button class="modal-close" @click="createDialogVisible = false">&times;</button>
+                    <button class="modal-close" @click="createDialogVisible = false">
+                        &times;
+                    </button>
                 </div>
                 <div class="modal-body">
+                    <div class="form-group avatar-upload-group">
+                        <label>头像</label>
+                        <div class="avatar-upload">
+                            <UserAvatar
+                                :src="createForm.avatarPreview"
+                                :name="createForm.nickname || createForm.name || '新用户'"
+                                :size="56"
+                            />
+                            <label class="upload-btn">
+                                {{ createForm.avatarFile ? '重新选择' : '上传头像' }}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    @change="onCreateAvatarFileChange"
+                                />
+                            </label>
+                            <button
+                                v-if="createForm.avatarFile"
+                                type="button"
+                                class="clear-avatar-btn"
+                                @click="clearCreateAvatar"
+                            >
+                                留空默认头像
+                            </button>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label>用户名</label>
-                        <input v-model="createForm.name" type="text" placeholder="请输入用户名" maxlength="50" />
+                        <input
+                            v-model="createForm.name"
+                            type="text"
+                            placeholder="请输入用户名"
+                            maxlength="50"
+                        />
                     </div>
                     <div class="form-group">
                         <label>密码</label>
-                        <input v-model="createForm.password" type="password" placeholder="请输入密码（至少6位）" />
+                        <input
+                            v-model="createForm.password"
+                            type="password"
+                            placeholder="请输入密码（至少6位）"
+                        />
                     </div>
                     <div class="form-group">
                         <label>邮箱</label>
@@ -111,17 +182,29 @@
                                 :key="r.value"
                                 :class="['role-option', { selected: createForm.role === r.value }]"
                                 @click="createForm.role = r.value"
-                            >{{ r.label }}</button>
+                            >
+                                {{ r.label }}
+                            </button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>昵称</label>
-                        <input v-model="createForm.nickname" type="text" placeholder="请输入昵称" maxlength="50" />
+                        <input
+                            v-model="createForm.nickname"
+                            type="text"
+                            placeholder="请输入昵称"
+                            maxlength="50"
+                        />
                     </div>
                     <template v-if="createForm.role === 'teacher'">
                         <div class="form-group">
                             <label>教师简介</label>
-                            <textarea v-model="createForm.introduction" placeholder="请输入教师简介" maxlength="500" rows="3"></textarea>
+                            <textarea
+                                v-model="createForm.introduction"
+                                placeholder="请输入教师简介"
+                                maxlength="500"
+                                rows="3"
+                            ></textarea>
                         </div>
                         <div class="form-group">
                             <label>提问箱权限</label>
@@ -129,9 +212,14 @@
                                 <button
                                     v-for="p in permChoices"
                                     :key="p.value"
-                                    :class="['role-option', { selected: createForm.perm === p.value }]"
+                                    :class="[
+                                        'role-option',
+                                        { selected: createForm.perm === p.value },
+                                    ]"
                                     @click="createForm.perm = p.value"
-                                >{{ p.label }}</button>
+                                >
+                                    {{ p.label }}
+                                </button>
                             </div>
                         </div>
                     </template>
@@ -157,10 +245,19 @@
                     <div class="form-group avatar-upload-group">
                         <label>头像</label>
                         <div class="avatar-upload">
-                            <UserAvatar :src="editForm.avatarPreview" :name="editForm.nickname" :size="56" />
+                            <UserAvatar
+                                :src="editForm.avatarPreview"
+                                :name="editForm.nickname"
+                                :size="56"
+                            />
                             <label class="upload-btn">
                                 更换头像
-                                <input type="file" accept="image/*" hidden @change="onAvatarFileChange" />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    @change="onAvatarFileChange"
+                                />
                             </label>
                         </div>
                     </div>
@@ -170,7 +267,12 @@
                     </div>
                     <div class="form-group">
                         <label>昵称</label>
-                        <input v-model="editForm.nickname" type="text" placeholder="请输入昵称" maxlength="50" />
+                        <input
+                            v-model="editForm.nickname"
+                            type="text"
+                            placeholder="请输入昵称"
+                            maxlength="50"
+                        />
                     </div>
                     <div class="form-group">
                         <label>邮箱</label>
@@ -178,7 +280,12 @@
                     </div>
                     <div class="form-group">
                         <label>简介</label>
-                        <textarea v-model="editForm.introduction" placeholder="请输入用户简介" maxlength="500" rows="3"></textarea>
+                        <textarea
+                            v-model="editForm.introduction"
+                            placeholder="请输入用户简介"
+                            maxlength="500"
+                            rows="3"
+                        ></textarea>
                     </div>
                     <div class="form-group">
                         <label>角色</label>
@@ -188,7 +295,9 @@
                                 :key="r.value"
                                 :class="['role-option', { selected: editForm.role === r.value }]"
                                 @click="editForm.role = r.value"
-                            >{{ r.label }}</button>
+                            >
+                                {{ r.label }}
+                            </button>
                         </div>
                     </div>
                     <template v-if="editForm.role === 'teacher'">
@@ -198,9 +307,14 @@
                                 <button
                                     v-for="p in permChoices"
                                     :key="p.value"
-                                    :class="['role-option', { selected: editForm.perm === p.value }]"
+                                    :class="[
+                                        'role-option',
+                                        { selected: editForm.perm === p.value },
+                                    ]"
                                     @click="editForm.perm = p.value"
-                                >{{ p.label }}</button>
+                                >
+                                    {{ p.label }}
+                                </button>
                             </div>
                         </div>
                     </template>
@@ -219,18 +333,32 @@
             <div v-if="resetPasswordDialogVisible" class="modal-panel modal-sm">
                 <div class="modal-header">
                     <h3>重置密码</h3>
-                    <button class="modal-close" @click="resetPasswordDialogVisible = false">&times;</button>
+                    <button class="modal-close" @click="resetPasswordDialogVisible = false">
+                        &times;
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-hint">为用户 <strong>{{ resetPasswordForm.name }}</strong> 设置新密码</p>
+                    <p class="modal-hint">
+                        为用户 <strong>{{ resetPasswordForm.name }}</strong> 设置新密码
+                    </p>
                     <div class="form-group">
                         <label>新密码</label>
-                        <input v-model="resetPasswordForm.password" type="password" placeholder="请输入新密码（至少6位）" />
+                        <input
+                            v-model="resetPasswordForm.password"
+                            type="password"
+                            placeholder="请输入新密码（至少6位）"
+                        />
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn-cancel" @click="resetPasswordDialogVisible = false">取消</button>
-                    <button class="btn-confirm" :disabled="resetPasswordLoading" @click="handleResetPassword">
+                    <button class="btn-cancel" @click="resetPasswordDialogVisible = false">
+                        取消
+                    </button>
+                    <button
+                        class="btn-confirm"
+                        :disabled="resetPasswordLoading"
+                        @click="handleResetPassword"
+                    >
                         {{ resetPasswordLoading ? '重置中...' : '确认重置' }}
                     </button>
                 </div>
@@ -242,10 +370,15 @@
             <div v-if="deleteDialogVisible" class="modal-panel modal-sm">
                 <div class="modal-header">
                     <h3>确认删除</h3>
-                    <button class="modal-close" @click="deleteDialogVisible = false">&times;</button>
+                    <button class="modal-close" @click="deleteDialogVisible = false">
+                        &times;
+                    </button>
                 </div>
                 <div class="modal-body">
-                    <p class="modal-hint">确定要删除用户 <strong>{{ deleteTarget?.name }}</strong> 吗？此操作不可恢复。</p>
+                    <p class="modal-hint">
+                        确定要删除用户
+                        <strong>{{ deleteTarget?.name }}</strong> 吗？此操作不可恢复。
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-cancel" @click="deleteDialogVisible = false">取消</button>
@@ -276,11 +409,19 @@ import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import { UserAvatar } from '@/components/user-avatar'
 import {
-    roleOptions, roleChoices, permChoices, pageSize,
-    getRoleLabel, formatDate,
-    buildCreateData, buildEditData,
-    validateCreateForm, validateEditForm, validatePassword,
-    initCreateForm, initEditForm,
+    roleOptions,
+    roleChoices,
+    permChoices,
+    pageSize,
+    getRoleLabel,
+    formatDate,
+    buildCreateData,
+    buildEditData,
+    validateCreateForm,
+    validateEditForm,
+    validatePassword,
+    initCreateForm,
+    initEditForm,
 } from './UserManagement'
 
 // ==================== 权限检查 ====================
@@ -355,9 +496,12 @@ const editDialogVisible = ref(false)
 const resetPasswordDialogVisible = ref(false)
 const deleteDialogVisible = ref(false)
 
-const showModal = computed(() =>
-    createDialogVisible.value || editDialogVisible.value ||
-    resetPasswordDialogVisible.value || deleteDialogVisible.value
+const showModal = computed(
+    () =>
+        createDialogVisible.value ||
+        editDialogVisible.value ||
+        resetPasswordDialogVisible.value ||
+        deleteDialogVisible.value,
 )
 
 function closeModal() {
@@ -376,13 +520,45 @@ function openCreateDialog() {
     createDialogVisible.value = true
 }
 
+function onCreateAvatarFileChange(e: Event) {
+    const input = e.target as HTMLInputElement
+    if (input.files && input.files[0]) {
+        createForm.avatarFile = input.files[0]
+        createForm.avatarPreview = URL.createObjectURL(input.files[0])
+    }
+}
+
+function clearCreateAvatar() {
+    createForm.avatarFile = null
+    createForm.avatarPreview = ''
+}
+
 async function handleCreate() {
     const err = validateCreateForm(createForm)
-    if (err) { ElMessage.error(err); return }
+    if (err) {
+        ElMessage.error(err)
+        return
+    }
     createLoading.value = true
     try {
-        await createAdminUser(buildCreateData(createForm))
-        ElMessage.success('用户创建成功')
+        const created = await createAdminUser(buildCreateData(createForm))
+        let avatarUploadFailed = false
+
+        // 创建接口与头像接口目前还是分开的：先建用户拿到 id，再按需补传头像。
+        // 如果管理员没有选择头像，这里会自然跳过，不会创建任何头像记录。
+        if (created?.id && createForm.avatarFile) {
+            try {
+                await updateAdminUserAvatar(created.id, createForm.avatarFile)
+            } catch {
+                avatarUploadFailed = true
+            }
+        }
+
+        if (avatarUploadFailed) {
+            ElMessage.warning('用户已创建，但头像上传失败')
+        } else {
+            ElMessage.success('用户创建成功')
+        }
         createDialogVisible.value = false
         fetchUserList()
     } catch {
@@ -394,10 +570,24 @@ async function handleCreate() {
 
 // ==================== 编辑用户 ====================
 const editLoading = ref(false)
-const editForm = reactive({ id: 0, name: '', nickname: '', email: '', role: '', introduction: '', perm: 'public', avatarPreview: '', avatarFile: null as File | null })
+const editForm = reactive({
+    id: 0,
+    name: '',
+    nickname: '',
+    email: '',
+    role: '',
+    introduction: '',
+    perm: 'public',
+    avatarPreview: '',
+    avatarFile: null as File | null,
+})
 
 function openEditDialog(user: AdminUserItem) {
-    Object.assign(editForm, { ...initEditForm(user), avatarPreview: user.avatar || '', avatarFile: null })
+    Object.assign(editForm, {
+        ...initEditForm(user),
+        avatarPreview: user.avatar || '',
+        avatarFile: null,
+    })
     editDialogVisible.value = true
 }
 
@@ -411,7 +601,10 @@ function onAvatarFileChange(e: Event) {
 
 async function handleEdit() {
     const err = validateEditForm(editForm)
-    if (err) { ElMessage.error(err); return }
+    if (err) {
+        ElMessage.error(err)
+        return
+    }
     editLoading.value = true
     try {
         // 如果有新头像，先上传
@@ -440,7 +633,10 @@ function openResetPasswordDialog(user: AdminUserItem) {
 
 async function handleResetPassword() {
     const err = validatePassword(resetPasswordForm.password)
-    if (err) { ElMessage.error(err); return }
+    if (err) {
+        ElMessage.error(err)
+        return
+    }
     resetPasswordLoading.value = true
     try {
         await resetAdminUserPassword(resetPasswordForm.id, resetPasswordForm.password)

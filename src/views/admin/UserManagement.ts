@@ -27,7 +27,12 @@ export const pageSize = 20
 // ==================== 工具函数 ====================
 
 export function getRoleLabel(role: string): string {
-    const map: Record<string, string> = { admin: '管理员', teacher: '教师', student: '学生', guest: '游客' }
+    const map: Record<string, string> = {
+        admin: '管理员',
+        teacher: '教师',
+        student: '学生',
+        guest: '游客',
+    }
     return map[role] || role
 }
 
@@ -130,6 +135,8 @@ export function initCreateForm() {
         nickname: '',
         introduction: '',
         perm: 'public',
+        avatarPreview: '',
+        avatarFile: null as File | null,
     }
 }
 
