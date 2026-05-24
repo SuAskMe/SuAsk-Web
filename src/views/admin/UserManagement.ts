@@ -7,6 +7,7 @@ export const roleOptions = [
     { label: '管理员', value: 'admin' },
     { label: '教师', value: 'teacher' },
     { label: '学生', value: 'student' },
+    { label: '游客', value: 'guest' },
 ]
 
 export const roleChoices = [
@@ -26,7 +27,7 @@ export const pageSize = 20
 // ==================== 工具函数 ====================
 
 export function getRoleLabel(role: string): string {
-    const map: Record<string, string> = { admin: '管理员', teacher: '教师', student: '学生' }
+    const map: Record<string, string> = { admin: '管理员', teacher: '教师', student: '学生', guest: '游客' }
     return map[role] || role
 }
 

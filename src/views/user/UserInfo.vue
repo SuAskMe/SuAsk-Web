@@ -163,6 +163,9 @@ function roleFormat(role: string) {
         case 'admin':
             roleColor.value = '#fc4f43;'
             return '管理员'
+        case 'guest':
+            roleColor.value = '#e6a23c'
+            return '游客'
         default:
             return '未知'
     }

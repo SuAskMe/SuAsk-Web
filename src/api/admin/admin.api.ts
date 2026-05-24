@@ -8,7 +8,7 @@ export interface AdminUserItem {
     name: string
     nickname: string
     email: string
-    role: 'admin' | 'teacher' | 'student'
+    role: 'admin' | 'teacher' | 'student' | 'guest'
     introduction: string
     avatar: string
     created_at: string
