@@ -23,6 +23,13 @@
         />
         <control-panel-item
             class="control-panel-item"
+            id="admin-questions"
+            icon="question"
+            text="内容管理"
+            jump-to-path="/admin/questions"
+        />
+        <control-panel-item
+            class="control-panel-item"
             id="ask-history"
             icon="chat-history"
             text="历史提问"

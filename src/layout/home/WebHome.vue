@@ -23,6 +23,7 @@ const toggleSidebar = (event: MouseEvent) => {
                 <keep-alive
                     :exclude="[
                         'QuestionDetail',
+                        'QuestionManagementDetail',
                         'UserRoot',
                         'UserInfo',
                         'AskTeacherRoot',
