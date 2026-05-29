@@ -50,7 +50,9 @@
                         show-password
                     >
                         <template #prefix>
-                            <el-icon color="#71B6FF" size="20px"><Lock /></el-icon>
+                            <el-icon color="#71B6FF" size="20px">
+                                <component :is="Lock" />
+                            </el-icon>
                         </template>
                     </el-input>
                     <el-input
@@ -61,7 +63,9 @@
                         show-password
                     >
                         <template #prefix>
-                            <el-icon color="#71B6FF" size="20px"><Lock /></el-icon>
+                            <el-icon color="#71B6FF" size="20px">
+                                <component :is="Lock" />
+                            </el-icon>
                         </template>
                     </el-input>
                     <div class="button-container">

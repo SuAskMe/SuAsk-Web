@@ -4,45 +4,56 @@
             <div class="overlay" @click.stop="close" v-if="composeDialogStore.visible" />
         </transition>
         <transition name="dialog" mode="out-in" v-if="props.type === 'ask'">
-            <ask-dialog class="post-compose" v-if="composeDialogStore.visible" ref="dialogRef"
-                @question-posted="handleQuestionPosted" />
+            <AskDialog
+                class="post-compose"
+                v-if="composeDialogStore.visible"
+                ref="dialogRef"
+                @question-posted="handleQuestionPosted"
+            />
         </transition>
         <transition name="dialog" mode="out-in" v-if="props.type === 'answer'">
-            <answer-dialog class="post-compose" v-if="composeDialogStore.visible" ref="dialogRef"
-                @answer-posted="handleAnswerPosted" />
+            <AnswerDialog
+                class="post-compose"
+                v-if="composeDialogStore.visible"
+                ref="dialogRef"
+                @answer-posted="handleAnswerPosted"
+            />
         </transition>
     </div>
 </template>
 
-<script setup lang='ts'>
-import { ComposeDialogStore } from '@/store/modules/compose-dialog';
-import AskDialog from './AskDialog.vue';
-import AnswerDialog from './AnswerDialog.vue';
-import { ref } from 'vue';
-import type { QuestionItem } from '@/model/question.model';
-import type { AnswerItem } from '@/model/answer.model';
+<script setup lang="ts">
+import { ComposeDialogStore } from '@/store/modules/compose-dialog'
+import { defineAsyncComponent, ref } from 'vue'
+import type { QuestionItem } from '@/model/question.model'
+import type { AnswerItem } from '@/model/answer.model'
 
-const composeDialogStore = ComposeDialogStore();
+const AskDialog = defineAsyncComponent(() => import('./AskDialog.vue'))
+const AnswerDialog = defineAsyncComponent(() => import('./AnswerDialog.vue'))
 
-const dialogRef = ref<InstanceType<typeof AskDialog>>()
+const composeDialogStore = ComposeDialogStore()
+
+const dialogRef = ref<{
+    closeDialog: () => void
+} | null>(null)
 
 function close() {
-    dialogRef.value?.closeDialog();
+    dialogRef.value?.closeDialog()
 }
 
-const emit = defineEmits(['question-posted', 'answer-posted']);
+const emit = defineEmits(['question-posted', 'answer-posted'])
 
 function handleQuestionPosted(question: QuestionItem) {
-    emit('question-posted', question);
+    emit('question-posted', question)
 }
 
 function handleAnswerPosted(answer: AnswerItem) {
-    emit('answer-posted', answer);
+    emit('answer-posted', answer)
 }
 
 const props = defineProps<{
-    type: string
-}>();
+    type: 'ask' | 'answer'
+}>()
 </script>
 
 <style lang="scss" scoped>

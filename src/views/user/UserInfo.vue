@@ -24,7 +24,7 @@
                             <div class="section-title">
                                 <p>简介</p>
                             </div>
-                            <MdPreview class="md" :id="id" :modelValue="userInfo.introduction" />
+                            <MarkdownPreview class="md" :model-value="userInfo.introduction" />
                         </div>
                     </div>
                     <div v-if="userInfo.role == 'teacher'" class="teacher-item">
@@ -70,16 +70,13 @@ import { BubbleCard } from '@/components/bubble-card'
 import { UserAvatar } from '@/components/user-avatar'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
-import { MdPreview } from 'md-editor-v3'
-import 'md-editor-v3/lib/preview.css'
+import MarkdownPreview from '@/components/markdown-preview'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import QuestionHeader from '@/components/question-header'
 import { router } from '@/router'
 import { getTeacherPinApi } from '@/api/teacher/teacher.api'
 import type { TeacherPinItem } from '@/model/teacher.model'
 // import { DeviceTypeStore } from '@/store/modules/device-type'
-
-const id = 'preview-only'
 
 // const deviceTypeStore = DeviceTypeStore()
 

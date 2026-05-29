@@ -35,6 +35,7 @@
                         title="裁剪头像"
                         center
                         align-center
+                        @closed="clearCropImage"
                         :style="{
                             height: deviceTypeStore.isMobile ? '100vh' : '90vh',
                             width: '100vw',
@@ -57,14 +58,10 @@
                                     height: imgSize.height + 'px',
                                 }"
                             >
-                                <vue-cropper
+                                <AvatarCropper
+                                    v-if="cropVisible"
                                     ref="cropper"
                                     :img="cropImg"
-                                    :auto-crop="true"
-                                    :fixed="true"
-                                    :fixed-number="[1, 1]"
-                                    :center-box="true"
-                                    outputType="png"
                                 />
                             </div>
                         </div>
@@ -128,7 +125,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { ref, computed, watch, onMounted, nextTick, defineAsyncComponent, onUnmounted } from 'vue'
 import { ElLoading } from 'element-plus/es/components/loading/index.mjs'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api'
@@ -140,8 +137,6 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import ResetPasswordDialog from './ResetPasswordDialog.vue'
 import LogoutDialog from './LogoutDialog.vue'
 import DeactivateDialog from './DeactivateDialog.vue'
-import 'vue-cropper/dist/index.css'
-import { VueCropper } from 'vue-cropper'
 import { compressionBlob } from '@/utils/imgCompress'
 import { hasTeacherAbility } from '@/utils/auth'
 import GuestUpgradeNotice from './sections/GuestUpgradeNotice.vue'
@@ -153,6 +148,7 @@ import AccountActionsSection from './sections/AccountActionsSection.vue'
 
 const isGuest = computed(() => userStore.getRole() === 'guest')
 
+const AvatarCropper = defineAsyncComponent(() => import('./AvatarCropper.vue'))
 
 const deviceTypeStore = DeviceTypeStore()
 
@@ -166,9 +162,30 @@ const avatarFile = ref<File | null>(null)
 const cropVisible = ref(false)
 const cropImg = ref('')
 const imgSize = ref({ width: 0, height: 0 })
-const cropper = ref<typeof VueCropper | null>(null)
+const cropper = ref<{
+    getCropBlob: (callback: (blob: Blob) => void) => void
+} | null>(null)
 const avatarFileType = ref('')
 const cropperContainer = ref<HTMLDivElement | null>(null)
+const cropObjectUrl = ref('')
+const avatarPreviewObjectUrl = ref('')
+
+function revokeObjectUrl(url: string) {
+    if (url.startsWith('blob:')) {
+        URL.revokeObjectURL(url)
+    }
+}
+
+function clearCropImage() {
+    revokeObjectUrl(cropObjectUrl.value)
+    cropObjectUrl.value = ''
+    cropImg.value = ''
+}
+
+function clearAvatarPreview() {
+    revokeObjectUrl(avatarPreviewObjectUrl.value)
+    avatarPreviewObjectUrl.value = ''
+}
 
 async function pickImageImpl(event: Event) {
     if (event == null) return
@@ -186,7 +203,9 @@ async function pickImageImpl(event: Event) {
         return
     }
     avatarFileType.value = file.type
-    cropImg.value = URL.createObjectURL(file)
+    clearCropImage()
+    cropObjectUrl.value = URL.createObjectURL(file)
+    cropImg.value = cropObjectUrl.value
     const img = await new Promise<HTMLImageElement>((resolve) => {
         const img = new Image()
         img.onload = () => resolve(img)
@@ -227,7 +246,9 @@ const confirmCrop = async () => {
         avatarFile.value = new File([resizedBlob], name, {
             type: avatarFileType.value,
         })
-        usingAvatar.value = URL.createObjectURL(avatarFile.value)
+        clearAvatarPreview()
+        avatarPreviewObjectUrl.value = URL.createObjectURL(avatarFile.value)
+        usingAvatar.value = avatarPreviewObjectUrl.value
         cropVisible.value = false
         imgLoading.close()
 
@@ -323,7 +344,9 @@ async function updateUserInfo() {
     formData.append('nickname', basicInfo.value.nickname)
     formData.append('introduction', basicInfo.value.introduction)
     formData.append('themeId', basicInfo.value.themeId.toString())
-    formData.append('avatar', avatarFile.value!)
+    if (avatarFile.value) {
+        formData.append('avatar', avatarFile.value)
+    }
     formData.append('notifySwitch', notificationSettings.value.notifySwitch.toString())
     if (notificationSettings.value.notifyEmail) {
         formData.append('notifyEmail', notificationSettings.value.notifyEmail)
@@ -339,17 +362,19 @@ async function updateUserInfo() {
                 originalValues.value.themeId = basicInfo.value.themeId
                 originalValues.value.notifySwitch = notificationSettings.value.notifySwitch
                 originalValues.value.notifyEmail = notificationSettings.value.notifyEmail
-                basicInfo.value.avatar = usingAvatar.value
                 if (hasTeacherAbility()) {
                     originalValues.value.question_box_perm = questionVisible.value
                 }
-                originalValues.value.avatar = usingAvatar.value // 更新原始头像值
                 showSaveReminder.value = false
                 hasUnsavedChanges = false
 
                 await getUserInfoApi().then((res) => {
                     if (res) {
                         userStore.setUser(res)
+                        usingAvatar.value = res.avatar ? res.avatar : ''
+                        originalValues.value.avatar = usingAvatar.value
+                        avatarFile.value = null
+                        clearAvatarPreview()
                         // 更新通知设置
                         notificationSettings.value.notifySwitch = res.notifySwitch
                         notificationSettings.value.notifyEmail = res.notifyEmail
@@ -420,6 +445,11 @@ if (hasTeacherAbility()) {
         },
     )
 }
+
+onUnmounted(() => {
+    clearCropImage()
+    clearAvatarPreview()
+})
 </script>
 
 <style lang="scss" scoped src="./setting.scss"></style>

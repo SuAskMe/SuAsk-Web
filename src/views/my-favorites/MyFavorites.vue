@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onActivated, onMounted, ref } from 'vue'
 import QuestionHeader from '@/components/question-header'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleQuestion } from '@/components/bubble-card'
@@ -83,6 +83,7 @@ const sidebar = () => {
 }
 
 let sort_type: number | null = null
+let activatedOnce = false
 
 const changeSort = async (sortType: number) => {
     if (sort_type !== null && sortType === sort_type) {
@@ -104,8 +105,33 @@ const favorite = async (key: number) => {
     }
     questionList[key].is_favorite = res.is_favorite
 }
+
+const refreshOnActivated = async () => {
+    if (!activatedOnce) {
+        activatedOnce = true
+        return
+    }
+
+    loading.value = true
+    try {
+        if (questionList.length === 0) {
+            InitStatus()
+            await getNextQuestions(sort_type ?? 0)
+        } else {
+            await refresh(sort_type ?? undefined)
+        }
+        resetScrollPosition()
+    } finally {
+        loading.value = false
+    }
+}
+
 onMounted(() => {
     Init()
+})
+
+onActivated(() => {
+    refreshOnActivated()
 })
 </script>
 

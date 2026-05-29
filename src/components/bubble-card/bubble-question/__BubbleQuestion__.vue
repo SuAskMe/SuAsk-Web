@@ -5,8 +5,8 @@ import { getTimeStr } from '../bubble-card'
 import CardMediaGrid from '../shared/CardMediaGrid.vue'
 import CardMetaRow from '../shared/CardMetaRow.vue'
 import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
-import { MdPreview } from 'md-editor-v3'
-import 'md-editor-v3/lib/preview.css'
+import MarkdownPreview from '@/components/markdown-preview'
+
 interface BubbleQuestionProps {
     title: string
     text: string
@@ -58,7 +58,7 @@ const containerStyle = computed(() => {
                 <div class="q-body">
                     <div v-if="!isMarkdown" class="text">{{ text }}</div>
                     <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
-                        <MdPreview id="preview-only" :model-value="text" class="md-preview" />
+                        <MarkdownPreview :model-value="text" class="md-preview" />
                     </div>
                     <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
                 </div>

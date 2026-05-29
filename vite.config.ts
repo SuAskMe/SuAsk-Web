@@ -44,7 +44,7 @@ export default defineConfig(({ command }) => {
         },
         plugins: [
             vue(),
-            vueDevTools(),
+            command === 'serve' ? vueDevTools() : undefined,
             createSvgIconsPlugin({
                 iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
                 symbolId: 'icon-[name]',
@@ -69,24 +69,11 @@ export default defineConfig(({ command }) => {
                     manualChunks(id) {
                         if (id.includes('node_modules')) {
                             const packageName = getPackageName(id)
-                            if (packageName === '@codemirror/lint') {
-                                return
-                            }
-                            if (packageName.startsWith('@codemirror/')) {
-                                return chunkNameForPackage(packageName)
-                            }
-                            if (packageName.startsWith('@lezer/')) {
-                                return chunkNameForPackage(packageName)
-                            }
-                            if (packageName.startsWith('markdown-it-')) {
-                                return 'markdown-it-plugins'
-                            }
                             if (
                                 [
                                     'dexie',
                                     'element-plus',
                                     'markdown-it',
-                                    'md-editor-v3',
                                     'vue-cropper',
                                 ].includes(packageName)
                             ) {

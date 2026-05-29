@@ -4,9 +4,9 @@ import { computed } from 'vue'
 import { getTimeStr } from '../bubble-card'
 import CardMediaGrid from '../shared/CardMediaGrid.vue'
 import CardMetaRow from '../shared/CardMetaRow.vue'
-import { MdPreview } from 'md-editor-v3'
-import 'md-editor-v3/lib/preview.css'
 import { DeviceTypeStore } from '@/store/modules/device-type'
+import MarkdownPreview from '@/components/markdown-preview'
+
 interface BubbleCardProps {
     title: string
     text: string
@@ -95,7 +95,7 @@ const tagStyle = computed(() => {
                 <div class="q-body">
                     <div v-if="!isMarkdown" class="text">{{ text }}</div>
                     <div v-else :class="'md-container' + (showAllMarkdown ? '-all' : '')">
-                        <MdPreview id="preview-only" :model-value="text" class="md-preview" />
+                        <MarkdownPreview :model-value="text" class="md-preview" />
                     </div>
                     <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
                 </div>
