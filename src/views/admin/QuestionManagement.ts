@@ -1,24 +1,27 @@
 import type {
+    AdminDeletedStatusFilter,
     AdminQuestionItem,
-    AdminQuestionStatus,
-    AdminQuestionVisibility,
+    AdminQuestionListStatus,
 } from '@/api/admin/admin.api'
 
 export const pageSize = 20
 
-export const statusOptions: Array<{ label: string; value: '' | 'all' | AdminQuestionStatus }> = [
-    { label: '全部', value: '' },
+export type AdminQuestionListFilter = AdminQuestionListStatus
+
+export const statusOptions: Array<{ label: string; value: AdminQuestionListFilter }> = [
+    { label: '全部', value: 'all' },
     { label: '已回答', value: 'answered' },
     { label: '未回答', value: 'unanswered' },
+    { label: '已删除', value: 'deleted' },
 ]
 
-export const visibilityOptions: Array<{
+export const deletedStatusOptions: Array<{
     label: string
-    value: '' | 'all' | AdminQuestionVisibility
+    value: AdminDeletedStatusFilter
 }> = [
-    { label: '全部', value: '' },
-    { label: '公开', value: 'public' },
-    { label: '私密', value: 'private' },
+    { label: '全部', value: 'all' },
+    { label: '已删除', value: 'deleted' },
+    { label: '未删除', value: 'undeleted' },
 ]
 
 export function formatAdminTime(time: number): string {
@@ -50,10 +53,6 @@ export function getRoleLabel(role: string): string {
         guest: '游客',
     }
     return map[role] || '未知用户'
-}
-
-export function getVisibilityLabel(question: AdminQuestionItem): string {
-    return question.is_private ? '私密' : '公开'
 }
 
 export function getTeacherLabel(question: AdminQuestionItem): string {

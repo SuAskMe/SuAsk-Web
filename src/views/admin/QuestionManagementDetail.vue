@@ -1,19 +1,29 @@
 <template>
-    <el-container class="admin-content-page admin-question-detail-page">
-        <el-header class="admin-content-header">
+    <el-container class="admin-page admin-question-detail-page">
+        <el-header class="admin-header">
             <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
             <h2>问题详情</h2>
         </el-header>
 
-        <el-scrollbar class="admin-content-scroll">
-            <div class="detail-toolbar">
+        <el-scrollbar class="admin-content">
+            <div class="toolbar detail-toolbar">
                 <button type="button" class="back-btn" @click="router.push('/admin/questions')">
                     ← 返回列表
                 </button>
-                <label class="include-deleted-toggle">
-                    <input v-model="includeDeleted" type="checkbox" @change="fetchDetail(true)" />
-                    <span>包含已删除回答</span>
-                </label>
+                <div class="filter-group">
+                    <span class="filter-group-label">回答删除状态</span>
+                    <div class="filter-tabs">
+                        <button
+                            v-for="opt in deletedStatusOptions"
+                            :key="opt.value"
+                            type="button"
+                            :class="['filter-tab', { active: deletedStatusFilter === opt.value }]"
+                            @click="setDeletedStatusFilter(opt.value)"
+                        >
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div v-if="loading" class="loading-state">
@@ -22,94 +32,146 @@
             </div>
 
             <template v-else-if="question">
-                <section :class="['question-detail-panel', { deleted: question.is_deleted }]">
-                    <div class="question-title-row">
-                        <h3>{{ question.title }}</h3>
-                        <div class="question-badges">
-                            <span :class="['status-badge', question.status]">
-                                {{ getStatusLabel(question.status) }}
-                            </span>
-                            <span :class="['visibility-badge', { private: question.is_private }]">
-                                {{ getVisibilityLabel(question) }}
-                            </span>
-                            <span v-if="question.is_deleted" class="deleted-badge">已删除</span>
-                        </div>
-                    </div>
-
-                    <p class="question-full-content">{{ question.contents }}</p>
-
-                    <div class="question-meta-grid">
-                        <span>提问者：{{ getQuestionAuthorLabel(question) }}</span>
-                        <span>目标教师：{{ getTeacherLabel(question) }}</span>
-                        <span>回答：{{ question.answer_count }}</span>
-                        <span>浏览：{{ question.views }}</span>
-                        <span>创建：{{ formatAdminTime(question.created_at) }}</span>
-                        <span v-if="question.deleted_at"
-                            >删除：{{ formatAdminTime(question.deleted_at) }}</span
-                        >
-                    </div>
-
-                    <div class="detail-actions">
-                        <button
-                            type="button"
-                            class="action-btn delete"
-                            :disabled="question.is_deleted"
-                            @click="openDeleteQuestion"
-                        >
-                            删除问题
-                        </button>
-                    </div>
-                </section>
-
-                <section class="answer-section">
-                    <div class="section-title-row">
-                        <h3>回答</h3>
-                        <span>{{ answers.length }} 条</span>
-                    </div>
-
-                    <div v-if="answers.length > 0" class="answer-admin-list">
-                        <article
-                            v-for="answer in answers"
-                            :key="answer.id"
-                            :class="['answer-admin-card', { deleted: answer.is_deleted }]"
-                        >
-                            <div class="answer-card-header">
-                                <div class="answer-author">
-                                    <span class="answer-author-name">
-                                        {{
-                                            answer.user_nickname ||
-                                            answer.user_name ||
-                                            '未知用户'
-                                        }}
+                <!-- 问题详情卡片 -->
+                <section
+                    :class="[
+                        'question-card',
+                        'question-detail-panel',
+                        `status-${question.status}`,
+                        { deleted: question.is_deleted },
+                    ]"
+                >
+                    <div class="question-info">
+                        <div class="question-detail">
+                            <div class="question-title-row">
+                                <h3 class="question-title">{{ question.title }}</h3>
+                                <div class="question-badges">
+                                    <span :class="['badge', `status-${question.status}`]">
+                                        <span class="status-dot"></span>
+                                        {{ getStatusLabel(question.status) }}
                                     </span>
-                                    <span class="role-chip">{{
-                                        getRoleLabel(answer.user_role)
-                                    }}</span>
-                                    <span v-if="answer.is_deleted" class="deleted-badge"
+                                    <span v-if="question.is_deleted" class="badge deleted-badge"
                                         >已删除</span
                                     >
                                 </div>
-                                <button
-                                    type="button"
-                                    class="action-btn delete"
-                                    :disabled="answer.is_deleted"
-                                    @click="openDeleteAnswer(answer)"
-                                >
-                                    删除回答
-                                </button>
+                            </div>
+                            <p class="question-full-content">{{ question.contents }}</p>
+                        </div>
+                    </div>
+
+                    <div class="question-meta">
+                        <div class="meta-details">
+                            <span class="meta-item">
+                                <svg-icon icon="user" color="#8b96a8" size="13px" />
+                                提问者：{{ getQuestionAuthorLabel(question) }}
+                            </span>
+                            <span class="meta-item">
+                                <svg-icon icon="graduation-cap" color="#8b96a8" size="13px" />
+                                目标教师：{{ getTeacherLabel(question) }}
+                            </span>
+                            <span class="meta-item">
+                                <svg-icon icon="message" color="#8b96a8" size="13px" />
+                                回答：{{ question.answer_count }}
+                            </span>
+                            <span class="meta-item">
+                                <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                浏览：{{ question.views }}
+                            </span>
+                            <span class="meta-item time"
+                                >创建：{{ formatAdminTime(question.created_at) }}</span
+                            >
+                            <span v-if="question.deleted_at" class="meta-item time"
+                                >删除：{{ formatAdminTime(question.deleted_at) }}</span
+                            >
+                        </div>
+                        <div class="question-actions">
+                            <button
+                                type="button"
+                                :class="['action-btn', question.is_deleted ? 'restore' : 'delete']"
+                                @click="
+                                    question.is_deleted
+                                        ? handleRestoreQuestion()
+                                        : openDeleteQuestion()
+                                "
+                            >
+                                {{ question.is_deleted ? '恢复问题' : '删除问题' }}
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 回答列表 -->
+                <section class="answer-section">
+                    <div class="section-title-row">
+                        <h3 class="section-title">回答列表</h3>
+                        <span class="section-subtitle">{{ answers.length }} 条回答</span>
+                    </div>
+
+                    <div v-if="answers.length > 0" class="answer-list">
+                        <article
+                            v-for="answer in answers"
+                            :key="answer.id"
+                            :class="['answer-card', { deleted: answer.is_deleted }]"
+                        >
+                            <div class="answer-info">
+                                <div class="answer-author-detail">
+                                    <div class="answer-author-header">
+                                        <span class="answer-author-name">
+                                            {{
+                                                answer.user_nickname ||
+                                                answer.user_name ||
+                                                '未知用户'
+                                            }}
+                                        </span>
+                                        <span :class="['role-badge', `role-${answer.user_role}`]">{{
+                                            getRoleLabel(answer.user_role)
+                                        }}</span>
+                                        <span v-if="answer.is_deleted" class="badge deleted-badge"
+                                            >已删除</span
+                                        >
+                                    </div>
+                                </div>
+                                <div class="answer-actions">
+                                    <button
+                                        type="button"
+                                        :class="[
+                                            'action-btn',
+                                            answer.is_deleted ? 'restore' : 'delete',
+                                        ]"
+                                        @click="
+                                            answer.is_deleted
+                                                ? handleRestoreAnswer(answer)
+                                                : openDeleteAnswer(answer)
+                                        "
+                                    >
+                                        {{ answer.is_deleted ? '恢复回答' : '删除回答' }}
+                                    </button>
+                                </div>
                             </div>
 
                             <p class="answer-content">{{ answer.contents }}</p>
 
                             <div class="answer-meta">
-                                <span>创建：{{ formatAdminTime(answer.created_at) }}</span>
-                                <span>点赞：{{ answer.upvotes }}</span>
-                                <span v-if="answer.in_reply_to"
-                                    >回复 #{{ answer.in_reply_to }}</span
-                                >
-                                <span v-if="answer.deleted_at"
-                                    >删除：{{ formatAdminTime(answer.deleted_at) }}</span
-                                >
+                                <div class="meta-details">
+                                    <span class="meta-item"
+                                        >创建：{{ formatAdminTime(answer.created_at) }}</span
+                                    >
+                                    <span class="meta-item">
+                                        <svg-icon icon="heart" color="#8b96a8" size="12px" />
+                                        点赞：{{ answer.upvotes }}
+                                    </span>
+                                    <span v-if="answer.in_reply_to" class="meta-item">
+                                        <svg-icon
+                                            icon="communicate_message"
+                                            color="#8b96a8"
+                                            size="12px"
+                                        />
+                                        回复 #{{ answer.in_reply_to }}
+                                    </span>
+                                    <span v-if="answer.deleted_at" class="meta-item time"
+                                        >删除：{{ formatAdminTime(answer.deleted_at) }}</span
+                                    >
+                                </div>
                             </div>
                         </article>
                     </div>
@@ -125,6 +187,7 @@
             </div>
         </el-scrollbar>
 
+        <!-- 遮罩层 -->
         <Transition name="fade">
             <div
                 v-if="deleteDialogVisible"
@@ -133,6 +196,7 @@
             ></div>
         </Transition>
 
+        <!-- 删除确认弹窗 -->
         <Transition name="slide-up">
             <div v-if="deleteDialogVisible" class="modal-panel modal-sm">
                 <div class="modal-header">
@@ -170,7 +234,7 @@
 <script setup lang="ts">
 import { computed, onActivated, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
@@ -178,16 +242,19 @@ import {
     deleteAdminQuestion,
     deleteAdminQuestionAnswer,
     getAdminQuestionDetail,
+    restoreAdminQuestion,
+    restoreAdminQuestionAnswer,
+    type AdminDeletedStatusFilter,
     type AdminQuestionAnswerItem,
     type AdminQuestionItem,
 } from '@/api/admin/admin.api'
 import {
+    deletedStatusOptions,
     formatAdminTime,
     getQuestionAuthorLabel,
     getRoleLabel,
     getStatusLabel,
     getTeacherLabel,
-    getVisibilityLabel,
     summarizeContent,
 } from './QuestionManagement'
 
@@ -208,7 +275,7 @@ const questionId = computed(() => Number(route.params.id))
 const question = ref<AdminQuestionItem | null>(null)
 const answers = ref<AdminQuestionAnswerItem[]>([])
 const loading = ref(false)
-const includeDeleted = ref(false)
+const deletedStatusFilter = ref<AdminDeletedStatusFilter>('undeleted')
 const lastFetchKey = ref('')
 
 const deleteDialogVisible = ref(false)
@@ -244,6 +311,11 @@ watch(
     },
 )
 
+function setDeletedStatusFilter(value: AdminDeletedStatusFilter) {
+    deletedStatusFilter.value = value
+    fetchDetail(true)
+}
+
 async function fetchDetail(force = false) {
     const id = questionId.value
     if (!Number.isFinite(id) || id <= 0) {
@@ -253,13 +325,13 @@ async function fetchDetail(force = false) {
     }
     if (userStore.getRole() !== 'admin') return
 
-    const fetchKey = `${id}:${includeDeleted.value}`
+    const fetchKey = `${id}:${deletedStatusFilter.value}`
     if (!force && fetchKey === lastFetchKey.value && question.value) return
     lastFetchKey.value = fetchKey
 
     loading.value = true
     try {
-        const res = await getAdminQuestionDetail(id, includeDeleted.value)
+        const res = await getAdminQuestionDetail(id, deletedStatusFilter.value)
         if (res) {
             question.value = res.question
             answers.value = res.answers || []
@@ -281,6 +353,32 @@ function openDeleteQuestion() {
     deleteDialogVisible.value = true
 }
 
+async function handleRestoreQuestion() {
+    if (!question.value || !question.value.is_deleted) return
+
+    try {
+        await ElMessageBox.confirm(
+            `确定要恢复问题“${question.value.title}”吗？恢复后它会重新出现在正常列表中。`,
+            '恢复确认',
+            {
+                confirmButtonText: '确认恢复',
+                cancelButtonText: '取消',
+                type: 'warning',
+            },
+        )
+    } catch {
+        return
+    }
+
+    try {
+        await restoreAdminQuestion(question.value.id)
+        ElMessage.success('问题已恢复')
+        await fetchDetail(true)
+    } catch {
+        ElMessage.error('恢复问题失败')
+    }
+}
+
 function openDeleteAnswer(answer: AdminQuestionAnswerItem) {
     if (answer.is_deleted) return
     deleteTarget.value = {
@@ -289,6 +387,32 @@ function openDeleteAnswer(answer: AdminQuestionAnswerItem) {
         title: summarizeContent(answer.contents, 120),
     }
     deleteDialogVisible.value = true
+}
+
+async function handleRestoreAnswer(answer: AdminQuestionAnswerItem) {
+    if (!answer.is_deleted) return
+
+    try {
+        await ElMessageBox.confirm(
+            `确定要恢复这条回答吗？恢复后它会重新出现在问题详情中。`,
+            '恢复确认',
+            {
+                confirmButtonText: '确认恢复',
+                cancelButtonText: '取消',
+                type: 'warning',
+            },
+        )
+    } catch {
+        return
+    }
+
+    try {
+        await restoreAdminQuestionAnswer(questionId.value, answer.id)
+        ElMessage.success('回答已恢复')
+        await fetchDetail(true)
+    } catch {
+        ElMessage.error('恢复回答失败')
+    }
 }
 
 async function handleDelete() {

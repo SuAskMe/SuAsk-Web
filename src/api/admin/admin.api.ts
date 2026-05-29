@@ -42,6 +42,9 @@ export interface UpdateAdminUserReq {
 }
 
 export type AdminQuestionStatus = 'answered' | 'unanswered'
+export type AdminQuestionListStatus = 'all' | AdminQuestionStatus | 'deleted'
+export type AdminDeletedStatus = 'deleted' | 'undeleted'
+export type AdminDeletedStatusFilter = 'all' | AdminDeletedStatus
 export type AdminQuestionVisibility = 'public' | 'private'
 
 /** 管理员问题列表项 */
@@ -70,10 +73,9 @@ export interface AdminQuestionItem {
 export interface AdminQuestionListParams {
     page: number
     keyword?: string
-    status?: '' | 'all' | AdminQuestionStatus
+    status?: AdminQuestionListStatus
     visibility?: '' | 'all' | AdminQuestionVisibility
     teacher_id?: number
-    include_deleted?: boolean
 }
 
 /** 管理员问题列表响应 */
@@ -200,10 +202,10 @@ export async function getAdminQuestionList(
 /** 获取管理员问题详情 */
 export async function getAdminQuestionDetail(
     id: number,
-    includeDeleted?: boolean,
+    deletedStatus?: AdminDeletedStatusFilter,
 ): Promise<AdminQuestionDetailRes> {
     return request
-        .get(`${Api.QUESTIONS}/${id}`, { params: { include_deleted: includeDeleted } })
+        .get(`${Api.QUESTIONS}/${id}`, { params: { deleted_status: deletedStatus } })
         .then((res) => {
             if (res) {
                 return res.data
@@ -220,12 +222,31 @@ export async function deleteAdminQuestion(id: number): Promise<AdminIdRes> {
     })
 }
 
+/** 管理员恢复已删除问题 */
+export async function restoreAdminQuestion(id: number): Promise<AdminIdRes> {
+    return request.put(`${Api.QUESTIONS}/${id}/restore`).then((res) => {
+        if (res) {
+            return res.data
+        }
+    })
+}
+
 /** 管理员删除问题下的回答 */
 export async function deleteAdminQuestionAnswer(
     questionId: number,
     answerId: number,
 ): Promise<AdminIdRes> {
     return request.delete(`${Api.QUESTIONS}/${questionId}/answers/${answerId}`).then((res) => {
+        if (res) return res.data
+    })
+}
+
+/** 管理员恢复问题下的已删除回答 */
+export async function restoreAdminQuestionAnswer(
+    questionId: number,
+    answerId: number,
+): Promise<AdminIdRes> {
+    return request.put(`${Api.QUESTIONS}/${questionId}/answers/${answerId}/restore`).then((res) => {
         if (res) return res.data
     })
 }
