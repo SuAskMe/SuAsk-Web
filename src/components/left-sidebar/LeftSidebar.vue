@@ -99,8 +99,8 @@ async function getNotificationCount() {
                 newReplyCount.value = res.new_reply_count
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            // 通知计数只影响侧边栏徽标，失败时保持旧值。
         })
 }
 

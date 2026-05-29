@@ -203,7 +203,7 @@
 <script setup lang="ts">
 import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import SvgIcon from '@/components/svg-icon'
 import { UserAvatar } from '@/components/user-avatar'
 import { inject, ref, type Ref } from 'vue'
@@ -329,17 +329,12 @@ function deleteImage(index: number) {
 }
 
 async function postAnswer() {
-    // let userId = getUserInfo().id ? getUserInfo().id : null;
-    // console.log(answerContent.value.fileList);
-
     const formData = new FormData()
     const imgList: string[] = []
     answerContent.value.fileList.forEach((file: File) => {
         formData.append('files', file)
         imgList.push(URL.createObjectURL(file))
     })
-
-    console.log('question', question)
 
     const req: AddAnswer = {
         question_id: question.value.id,
@@ -395,7 +390,6 @@ function handleDeleteMod() {
 }
 
 function useDraft(draft: Answer) {
-    // unchanged
     if (deleteMod.value) return
     answerContent.value.content = draft.content
     answerContent.value.fileList = []
@@ -419,7 +413,6 @@ function handleCheckAllChange() {
         deleteDrafts.value = []
     }
     isSelectAll.value = !isSelectAll.value
-    // console.log(deleteDrafts.value);
 }
 
 async function addDraft() {
@@ -428,25 +421,23 @@ async function addDraft() {
         imgList.push(file)
     }
     try {
-        const id = await db.answers.add({
+        await db.answers.add({
             time: new Date(),
             imgList: imgList,
             content: answerContent.value.content,
             question_id: question.value.id,
             in_reply_to: quote?.value.in_replay_to,
         })
-        console.log('Draft added with id', id)
-    } catch (error) {
-        console.error('Error adding draft', error)
+    } catch {
+        ElMessage.error('保存草稿失败')
     }
 }
 
 async function getDrafts() {
     try {
         drafts.value = await db.answers.reverse().toArray()
-        console.log('Drafts got', drafts.value)
-    } catch (error) {
-        console.error('Error getting drafts', error)
+    } catch {
+        ElMessage.error('读取草稿失败')
     }
 }
 
@@ -454,16 +445,14 @@ async function deleteDraft(id: number | number[]) {
     try {
         if (typeof id === 'number') {
             await db.answers.delete(id)
-            console.log('Draft deleted with id', id)
         } else {
             for (const draftId of id) {
                 await db.answers.delete(draftId)
-                console.log('Draft deleted with id', draftId)
             }
         }
         await getDrafts()
-    } catch (error) {
-        console.error('Error deleting drafts', error)
+    } catch {
+        ElMessage.error('删除草稿失败')
     }
 }
 

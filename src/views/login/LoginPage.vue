@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { User as UserIcon, Lock } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { useRouter } from 'vue-router'
 import ForgetPasswordPage from './ForgetPasswordPage.vue'
 import RegisterPage from './RegisterPage.vue'
@@ -116,8 +116,7 @@ onMounted(async () => {
                 await userStore.logout()
                 throw new Error('无法获取用户信息，请重新登录')
             }
-        } catch (error) {
-            console.error('自动登录失败:', error)
+        } catch {
             ElMessage.error('自动登录失败，请手动登录')
         } finally {
             loading.value = false
@@ -157,8 +156,7 @@ const handleLogin = async () => {
             ElMessage.success('登录成功')
             router.push({ name: 'AskTeacher' })
         }
-    } catch (error) {
-        console.error(error)
+    } catch {
         ElMessage.error('登录失败，请检查用户名和密码')
     } finally {
         loading.value = false
@@ -188,9 +186,9 @@ async function navigateToUnlogin() {
         } else {
             ElMessage.error('临时登录失败，请稍后再试')
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         // 处理 429 限流错误
-        if (error?.response?.status === 429 || error?.code === 429) {
+        if (isRateLimitError(error)) {
             ElMessage.error('请求过于频繁，请稍后再试')
         } else {
             ElMessage.error('临时登录失败，请稍后再试')
@@ -207,9 +205,22 @@ const openForgetPassword = () => {
 const openRegister = () => {
     registerVisible.value = true
 }
+
+function isRateLimitError(error: unknown): boolean {
+    if (typeof error !== 'object' || error === null) {
+        return false
+    }
+    const maybeError = error as {
+        response?: { status?: number }
+        code?: number | string
+    }
+    return maybeError.response?.status === 429 || Number(maybeError.code) === 429
+}
 </script>
 
 <style scoped lang="scss">
+@use "sass:color";
+
 .login-container {
     display: flex;
     justify-content: center;
@@ -333,7 +344,7 @@ const openRegister = () => {
             transition: color 0.3s;
 
             &:hover {
-                color: darken(#71b6ff, 10%);
+                color: color.adjust(#71b6ff, $lightness: -10%);
                 text-decoration: underline;
             }
         }

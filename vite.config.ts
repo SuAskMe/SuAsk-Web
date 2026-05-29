@@ -6,6 +6,20 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import path from 'path'
 
+function getPackageName(id: string) {
+    const normalizedId = id.replace(/\\/g, '/')
+    const packagePath = normalizedId.split('/node_modules/')[1]
+    if (!packagePath) {
+        return ''
+    }
+    const parts = packagePath.split('/')
+    return parts[0].startsWith('@') ? `${parts[0]}/${parts[1]}` : parts[0]
+}
+
+function chunkNameForPackage(packageName: string) {
+    return packageName.replace('@', '').replace('/', '-')
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ command }) => {
     const shanghaiBuildTime = new Intl.DateTimeFormat('sv-SE', {
@@ -54,7 +68,30 @@ export default defineConfig(({ command }) => {
                 output: {
                     manualChunks(id) {
                         if (id.includes('node_modules')) {
-                            return id.toString().split('node_modules/')[1].split('/')[0]
+                            const packageName = getPackageName(id)
+                            if (packageName === '@codemirror/lint') {
+                                return
+                            }
+                            if (packageName.startsWith('@codemirror/')) {
+                                return chunkNameForPackage(packageName)
+                            }
+                            if (packageName.startsWith('@lezer/')) {
+                                return chunkNameForPackage(packageName)
+                            }
+                            if (packageName.startsWith('markdown-it-')) {
+                                return 'markdown-it-plugins'
+                            }
+                            if (
+                                [
+                                    'dexie',
+                                    'element-plus',
+                                    'markdown-it',
+                                    'md-editor-v3',
+                                    'vue-cropper',
+                                ].includes(packageName)
+                            ) {
+                                return chunkNameForPackage(packageName)
+                            }
                         }
                     },
                 },

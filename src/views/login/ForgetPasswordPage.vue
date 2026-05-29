@@ -76,7 +76,8 @@ import { sendCodeApi, forgetPasswordApi } from '@/api/user/reset_password.api'
 import type { ResetPassword } from '@/model/user.model'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck } from '@/utils/login/register'
-import { ElMessage } from 'element-plus'
+import { Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { reactive, ref } from 'vue'
 
 const deviceTypeStore = DeviceTypeStore()
@@ -122,14 +123,11 @@ function getCode() {
                         clearInterval(verifyStatus.timer)
                     }
                 }, 1000)
-                // console.log(res);
             } else {
                 ElMessage.error(res.msg)
             }
         })
-        .catch((err) => {
-            console.log(err)
-        })
+        .catch(() => {})
 }
 
 function resetPassword() {
@@ -164,9 +162,7 @@ function resetPassword() {
                 visible.value = false
             }
         })
-        .catch((err) => {
-            console.log(err)
-        })
+        .catch(() => {})
 }
 </script>
 

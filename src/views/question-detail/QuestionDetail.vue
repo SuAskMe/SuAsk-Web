@@ -95,7 +95,8 @@ import { deleteQuestionApi } from '@/api/question/question.api'
 import { canDelete, hasTeacherAbility } from '@/utils/auth'
 import type { AnswerItem, Question, UpvoteAnswerReq, UpvoteAnswerRes } from '@/model/answer.model'
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import { favoriteApi } from '@/api/question/favorite.api'
 import { storeToRefs } from 'pinia'
 import { SyncStore } from '@/store/modules/question-detail'
@@ -169,7 +170,6 @@ onMounted(async () => {
         syncStore.ChangViews(question.value.views)
     }
     if (route.hash) {
-        // console.log(parseInt(route.hash.replace("#", "")));
         scrollToAnswer(parseInt(route.hash.replace('#', '')))
     }
 
@@ -219,8 +219,8 @@ async function getAnswerList() {
                 navigateBack()
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            ElMessage.error('获取问题详情失败')
         })
 }
 
@@ -268,8 +268,6 @@ function openDialog(key?: { answerId: number }) {
 }
 
 async function handleAnswerPosted(answer: AnswerItem) {
-    // console.log(answer_id);
-    // await getAnswerList();
     answerList.value.push(answer)
     changeSort(sort_type)
     nextTick(() => {
@@ -306,11 +304,11 @@ async function upvote(key: { answerId: number }) {
                     return answer
                 })
             } else {
-                console.log('Error', res)
+                ElMessage.error('点赞失败')
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            ElMessage.error('点赞失败')
         })
 }
 

@@ -87,12 +87,12 @@
 
 <script setup lang="ts">
 import { onUnmounted, reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { Lock, User } from '@element-plus/icons-vue'
 import { guestSendCodeApi, guestUpgradeApi } from '@/api/guest/guest.api'
 import { UserStore } from '@/store/modules/user'
 
-const props = defineProps<{
+defineProps<{
     modelValue: boolean
 }>()
 

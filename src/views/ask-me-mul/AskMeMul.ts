@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import type { GetQFMRes, QFMItem } from '@/model/teacher-self.model'
 import {
     getQFMAnsweredApi,

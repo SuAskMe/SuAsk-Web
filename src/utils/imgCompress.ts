@@ -1,7 +1,10 @@
-const fileToDataURL = (file: Blob): Promise<any> => {
+const fileToDataURL = (file: Blob): Promise<string> => {
     return new Promise((resolve) => {
         const reader = new FileReader()
-        reader.onloadend = (e) => resolve((e.target as FileReader).result)
+        reader.onloadend = (e) => {
+            const result = (e.target as FileReader).result
+            resolve(typeof result === 'string' ? result : '')
+        }
         reader.readAsDataURL(file)
     })
 }

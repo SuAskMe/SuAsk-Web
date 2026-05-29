@@ -9,6 +9,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
+defineOptions({
+    name: 'NotFoundPage',
+})
+
 const router = useRouter()
 
 function navigateToHome() {

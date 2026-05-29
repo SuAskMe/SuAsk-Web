@@ -121,7 +121,6 @@ async function clickReply() {
 
 function clickDelete() {
     emit('openDeleteDialog', { id: props.id, type: props.type })
-    console.log('clickDelete', props.id)
 }
 </script>
 

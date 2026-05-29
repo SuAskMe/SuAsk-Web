@@ -21,8 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from 'vue'
-
 withDefaults(
     defineProps<{
         title: string
@@ -175,4 +173,3 @@ withDefaults(
     }
 }
 </style>
-

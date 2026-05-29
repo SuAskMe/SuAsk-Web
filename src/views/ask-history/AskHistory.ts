@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import type { GetHistoryRes, HistoryItem } from '@/model/history.model'
 import { favoriteApi } from '@/api/question/favorite.api'
 import { getHistoryApi, searchHistoryApi } from '@/api/question/history.api'

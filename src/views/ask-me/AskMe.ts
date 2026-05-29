@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import type { GetQFMRes, QFMItem } from '@/model/teacher-self.model'
 import { getQFMAllApi, pinQFMApi, searchQFMApi } from '@/api/question/teacher-self.api'
 import { usePagination, type PaginationParams } from '@/utils/pagination'

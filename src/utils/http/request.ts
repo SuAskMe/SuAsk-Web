@@ -3,7 +3,7 @@ import { UserStoreWithOut } from '@/store/modules/user'
 import { Role } from '@/model/user.model'
 import { getDeviceId } from '@/utils/device'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { containsChineseCharacters } from '../ischinese'
 
 const request = axios.create({
@@ -23,7 +23,6 @@ const returnToLogin = () => {
 request.interceptors.response.use(
     (res) => {
         if (res.status === 200) {
-            // console.log(res.data);
             if (res.data.code == 0) {
                 return res.data
             } else if (res.data.code == 401) {
@@ -38,18 +37,15 @@ request.interceptors.response.use(
                 } else if (containsChineseCharacters(res.data.message)) {
                     ElMessage.error(res.data.message)
                 }
-                console.log('错误:\n', res.data)
                 return null
             }
         } else {
             ElMessage.error('请求错误')
-            console.log('请求错误:', res.data)
             return res.data
         }
     },
-    (error) => {
+    () => {
         ElMessage.error('请求无响应')
-        console.log('请求无响应:', error)
         return false
     },
 )

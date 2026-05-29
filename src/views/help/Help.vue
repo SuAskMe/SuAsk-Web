@@ -74,6 +74,10 @@ const sidebar = () => {
     sidebarStore.toggle()
 }
 
+defineOptions({
+    name: 'HelpPage',
+})
+
 const qaItems = ref([
     {
         question: 'Q: 为什么要创建这个项目？',

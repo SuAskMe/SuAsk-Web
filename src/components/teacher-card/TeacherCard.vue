@@ -53,7 +53,6 @@ const style = computed(() => {
         width: props.width,
     }
 })
-// console.log(props.teacher.avatarUrl);
 </script>
 <style scoped lang="scss">
 .teacher-card {

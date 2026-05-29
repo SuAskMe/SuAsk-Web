@@ -91,7 +91,6 @@ import {
     getNextQuestions,
     onSearch,
     onCancelSearch,
-    refresh,
     currentTimeRange,
 } from './HotQuestions'
 

@@ -80,7 +80,8 @@ import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api'
 import type { ResetPassword } from '@/model/user.model'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { UserStore } from '@/store/modules/user'
-import { ElMessage } from 'element-plus'
+import { Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { computed, reactive, ref } from 'vue'
 
 const visible = defineModel('visible', { type: Boolean, default: true })
@@ -108,7 +109,6 @@ function getCode() {
         .then((res) => {
             if (res.msg === '200') {
                 ElMessage.success('验证码已发送')
-                // console.log(res);
                 verifyStatus.disabled = true
                 if (verifyStatus.timer) clearInterval(verifyStatus.timer)
                 verifyStatus.timer = setInterval(() => {
@@ -123,9 +123,7 @@ function getCode() {
                 ElMessage.error(res.msg)
             }
         })
-        .catch((err) => {
-            console.log(err)
-        })
+        .catch(() => {})
 }
 
 function resetPassword() {
@@ -160,9 +158,7 @@ function resetPassword() {
                 visible.value = false
             }
         })
-        .catch((err) => {
-            console.log(err)
-        })
+        .catch(() => {})
 }
 </script>
 

@@ -2,9 +2,16 @@ import { nextTick, reactive } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 
+type SyncStoreStub = {
+    Views: number
+    IndexOf: number
+    QuestionID: number
+    SetSync: ReturnType<typeof vi.fn>
+}
+
 const shared = vi.hoisted(() => ({
     push: vi.fn(),
-    syncStore: null as any,
+    syncStore: null as unknown as SyncStoreStub | null,
 }))
 
 const syncStore = reactive({

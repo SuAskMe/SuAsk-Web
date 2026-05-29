@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .help-container {
     width: 100%;
     height: 100%;
@@ -123,7 +125,7 @@
 
                         &:hover {
                             text-decoration: underline;
-                            color: darken($su-blue, 10%);
+                            color: color.adjust($su-blue, $lightness: -10%);
                         }
                     }
                 }

@@ -5,14 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import request from '@/utils/http/request';
-
-
+import request from '@/utils/http/request'
 
 function hello() {
-    request.get('/hello').then((res) => {
-        console.log(res);
-    });
+    request.get('/hello')
 }
 </script>
 

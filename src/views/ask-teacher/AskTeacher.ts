@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import type { GetQuestionRes, QuestionItem } from '@/model/question.model'
 import { favoriteApi } from '@/api/question/favorite.api'
 import { getQuestionTeacherApi, searchQuestionTeacherApi } from '@/api/question/question.api'

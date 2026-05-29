@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElScrollbar } from 'element-plus'
+import { ElScrollbar } from 'element-plus/es/components/scrollbar/index.mjs'
 import { nextTick, ref } from 'vue'
 import BackgroundImg from '@/components/background-img'
 import { DeviceTypeStore } from '@/store/modules/device-type'

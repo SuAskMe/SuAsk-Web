@@ -1,12 +1,12 @@
 import type { UpvoteAnswerReq } from '@/model/answer.model'
 import request from '@/utils/http/request'
 
-enum Api {
-    GET = '/answer',
-    ADD = '/answer/add',
-    UPVOTE = '/answer/upvote',
-    DELETE = '/answer',
-}
+const Api = {
+    GET: '/answer',
+    ADD: '/answer/add',
+    UPVOTE: '/answer/upvote',
+    DELETE: '/answer',
+} as const
 
 export async function getAnswerApi(question_id: number) {
     return request.get(Api.GET, { params: { question_id } })

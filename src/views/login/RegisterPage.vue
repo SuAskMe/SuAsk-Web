@@ -101,7 +101,8 @@ import type { RegisterReq } from '@/model/register.model'
 import { router } from '@/router'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register'
-import { ElMessage } from 'element-plus'
+import { Lock, User } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { reactive, ref } from 'vue'
 
 const deviceTypeStore = DeviceTypeStore()

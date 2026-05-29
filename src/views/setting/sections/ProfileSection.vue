@@ -18,7 +18,7 @@
                     <div class="field-group">
                         <label class="field-label">昵称</label>
                         <input
-                            v-model="basicInfo.nickname"
+                            v-model="nickname"
                             placeholder="请输入昵称"
                             :disabled="isGuest"
                             class="su-input"
@@ -26,7 +26,7 @@
                     </div>
                     <div class="field-group">
                         <label class="field-label">简介</label>
-                        <BioPanel v-model="basicInfo.introduction" :disabled="isGuest" />
+                        <BioPanel v-model="introduction" :disabled="isGuest" />
                     </div>
                 </div>
                 <div class="profile-section__aside">
@@ -68,12 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Component } from 'vue'
+import { computed, ref } from 'vue'
 import BioPanel from '@/components/bio-panel/BioPanel.vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 import defaultAvatar from '@/assets/default-avatar.png'
 
-defineProps<{
+const props = defineProps<{
     isGuest: boolean
     basicInfo: {
         name: string
@@ -84,9 +84,23 @@ defineProps<{
     icon?: string
 }>()
 
-defineEmits(['pick-image'])
+const emit = defineEmits<{
+    'pick-image': [event: Event]
+    'update:nickname': [value: string]
+    'update:introduction': [value: string]
+}>()
 
 const imgPicker = ref<HTMLInputElement>()
+
+const nickname = computed({
+    get: () => props.basicInfo.nickname,
+    set: (value: string) => emit('update:nickname', value),
+})
+
+const introduction = computed({
+    get: () => props.basicInfo.introduction,
+    set: (value: string) => emit('update:introduction', value),
+})
 
 const onAvatarError = (e: Event) => {
     const target = e.target as HTMLImageElement
@@ -294,4 +308,3 @@ const onAvatarError = (e: Event) => {
     }
 }
 </style>
-

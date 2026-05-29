@@ -1,5 +1,5 @@
 import { favoriteApi } from '@/api/question/favorite.api'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 
 let skipLock = false
 

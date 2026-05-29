@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { type Component } from 'vue'
 import { Lock, TurnOff, View, Check } from '@element-plus/icons-vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 

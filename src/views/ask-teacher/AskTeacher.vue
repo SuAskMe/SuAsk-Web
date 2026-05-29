@@ -167,7 +167,6 @@ const handleQuestionPosted = (question: QuestionItem) => {
         const el = document.getElementById(`question-${question.id}`)
         if (el) {
             el.style['opacity'] = '0.8'
-            // console.log(el.style);
             el.scrollIntoView({ behavior: 'smooth', block: 'center' })
             observe.observe(el)
             setTimeout(() => {

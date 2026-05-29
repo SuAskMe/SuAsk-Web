@@ -72,7 +72,7 @@ import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/preview.css'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import QuestionHeader from '@/components/question-header'
 import { router } from '@/router'
 import { getTeacherPinApi } from '@/api/teacher/teacher.api'
@@ -101,13 +101,12 @@ async function getUserInfo(userId: string) {
         .then((res) => {
             if (res) {
                 userInfo.value = res
-                console.log(userInfo.value)
             } else {
                 ElMessage.error('获取用户信息失败')
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            ElMessage.error('获取用户信息失败')
         })
 }
 
@@ -148,8 +147,8 @@ async function getPinQuestion() {
                 ElMessage.error('获取置顶问题失败')
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            ElMessage.error('获取置顶问题失败')
         })
 }
 

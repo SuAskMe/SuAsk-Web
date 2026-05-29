@@ -234,7 +234,8 @@
 <script setup lang="ts">
 import { computed, onActivated, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'

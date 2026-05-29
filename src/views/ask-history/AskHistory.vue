@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import QuestionHeader from '@/components/question-header'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleQuestion } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
@@ -89,7 +89,6 @@ const handleReachBottom = async () => {
 const sidebarStore = SidebarStore()
 
 const sidebar = () => {
-    // console.log("sidebar");
     sidebarStore.toggle()
 }
 

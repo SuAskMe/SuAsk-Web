@@ -17,7 +17,9 @@ export function getVisibleImageUrls(photos: string[] | undefined, maxCount = 8) 
 }
 
 export function getImgStyle(photos: string[] | undefined, MAX_SIZE = '450px') {
-    let { val, unit } = splitStr(MAX_SIZE)
+    const parsedSize = splitStr(MAX_SIZE)
+    let val = parsedSize.val
+    const unit = parsedSize.unit
     val *= 0.97 // 留出一点边距
     let hasImages = false
     let sizew: number | string = 0

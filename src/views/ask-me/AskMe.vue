@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleCard } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header'

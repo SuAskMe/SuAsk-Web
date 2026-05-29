@@ -199,7 +199,7 @@
 import type { AddQuestionReq, QuestionItem } from '@/model/question.model'
 import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import SvgIcon from '@/components/svg-icon'
 import { UserAvatar } from '@/components/user-avatar'
 import { inject, ref, type Ref } from 'vue'
@@ -285,8 +285,6 @@ const emit = defineEmits(['questionPosted', 'closeDialog'])
 
 // methods
 function closeDialog() {
-    console.log('closeDialog')
-
     if (draftVisible.value) {
         composeDialogStore.close()
         setTimeout(() => {
@@ -353,8 +351,6 @@ async function postQuestion() {
         formData.append('files', file)
         imgList.push(URL.createObjectURL(file))
     })
-
-    console.log('teacher', teacher)
 
     const req: AddQuestionReq = {
         dst_user_id: teacher ? teacher.teacherId.value : null,
@@ -434,7 +430,6 @@ function handleCheckAllChange() {
         deleteDrafts.value = []
     }
     isSelectAll.value = !isSelectAll.value
-    // console.log(deleteDrafts.value);
 }
 
 async function addDraft() {
@@ -443,24 +438,22 @@ async function addDraft() {
         imgList.push(file)
     }
     try {
-        const id = await db.questions.add({
+        await db.questions.add({
             title: questionContent.value.title,
             content: questionContent.value.content,
             imgList: imgList,
             time: new Date(),
         })
-        console.log('Draft added with id', id)
-    } catch (error) {
-        console.error('Error adding draft', error)
+    } catch {
+        ElMessage.error('保存草稿失败')
     }
 }
 
 async function getDrafts() {
     try {
         drafts.value = await db.questions.reverse().toArray()
-        console.log('Drafts got', drafts.value)
-    } catch (error) {
-        console.error('Error getting drafts', error)
+    } catch {
+        ElMessage.error('读取草稿失败')
     }
 }
 
@@ -468,16 +461,14 @@ async function deleteDraft(id: number | number[]) {
     try {
         if (typeof id === 'number') {
             await db.questions.delete(id)
-            console.log('Draft deleted with id', id)
         } else {
             for (const draftId of id) {
                 await db.questions.delete(draftId)
-                console.log('Draft deleted with id', draftId)
             }
         }
         await getDrafts()
-    } catch (error) {
-        console.error('Error deleting drafts', error)
+    } catch {
+        ElMessage.error('删除草稿失败')
     }
 }
 

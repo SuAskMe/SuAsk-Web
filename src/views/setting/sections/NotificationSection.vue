@@ -12,7 +12,7 @@
                         {{ settings.notifySwitch ? '已启用邮件通知' : '邮件通知已关闭' }}
                     </span>
                     <el-switch
-                        v-model="settings.notifySwitch"
+                        v-model="notifySwitch"
                         active-text="开启"
                         inactive-text="关闭"
                         :active-color="'#4CAF50'"
@@ -24,7 +24,7 @@
             <div class="field-group email-setting">
                 <label class="field-label">通知邮箱地址</label>
                 <input
-                    v-model="settings.notifyEmail"
+                    v-model="notifyEmail"
                     type="email"
                     placeholder="请输入接收通知的邮箱地址"
                     :disabled="!settings.notifySwitch"
@@ -36,16 +36,31 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from 'vue'
+import { computed } from 'vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
-defineProps<{
+const props = defineProps<{
     settings: {
         notifySwitch: boolean
         notifyEmail: string
     }
     icon?: string
 }>()
+
+const emit = defineEmits<{
+    'update:notifySwitch': [value: boolean]
+    'update:notifyEmail': [value: string]
+}>()
+
+const notifySwitch = computed({
+    get: () => props.settings.notifySwitch,
+    set: (value: boolean) => emit('update:notifySwitch', value),
+})
+
+const notifyEmail = computed({
+    get: () => props.settings.notifyEmail,
+    set: (value: string) => emit('update:notifyEmail', value),
+})
 </script>
 
 <style scoped lang="scss">
@@ -181,4 +196,3 @@ defineProps<{
     }
 }
 </style>
-

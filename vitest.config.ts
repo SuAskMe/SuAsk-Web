@@ -1,13 +1,22 @@
-// @ts-nocheck
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
-import { defineConfig } from 'vitest/config'
+import { defineConfig, type UserConfig } from 'vitest/config'
+
+type VitestPlugin = NonNullable<UserConfig['plugins']>[number]
 
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [vue() as unknown as VitestPlugin],
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url)),
+        },
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler',
+                additionalData: `@use "@/styles/global.scss" as *;`,
+            },
         },
     },
     test: {

@@ -62,7 +62,7 @@ import TeacherCard from '@/components/teacher-card'
 import { getTeacherApi } from '@/api/teacher/teacher.api'
 import { TeacherPerm, type TeacherItem } from '@/model/teacher.model'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { UserStore } from '@/store/modules/user'
 import { Role } from '@/model/user.model'
 import { DeviceTypeStore } from '@/store/modules/device-type'
@@ -85,7 +85,6 @@ async function getTeacherList() {
             if (res) {
                 teacherList.value = res.teachers
                 sortTeachers(teacherList.value)
-                // console.log(teacherList.value);
             }
         })
         .then(() => {
@@ -142,7 +141,6 @@ const checkStickyHeader = () => {
 }
 
 const resetList = (value: string | number) => {
-    // console.log(value);
     if (value === '') {
         teacherList.value = JSON.parse(teachersStr)
     }

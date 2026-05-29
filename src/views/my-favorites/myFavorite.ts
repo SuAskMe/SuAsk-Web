@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { favoriteApi, getFavoriteApi, searchFavoriteApi } from '@/api/question/favorite.api'
 import type { FavoriteItem, GetFavoriteRes } from '@/model/favorite.model'
 import { usePagination, type PaginationParams } from '@/utils/pagination'

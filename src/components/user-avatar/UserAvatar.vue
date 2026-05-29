@@ -56,6 +56,8 @@ const fallbackChar = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@use "sass:color";
+
 .user-avatar {
     border-radius: 50%;
     flex-shrink: 0;
@@ -65,7 +67,7 @@ const fallbackChar = computed(() => {
     }
 
     &--fallback {
-        background: linear-gradient(135deg, $su-blue, lighten($su-blue, 15%));
+        background: linear-gradient(135deg, $su-blue, color.adjust($su-blue, $lightness: 15%));
         color: #fff;
         display: flex;
         align-items: center;

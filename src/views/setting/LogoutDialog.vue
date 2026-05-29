@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStore } from '@/store/modules/user'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { useRouter } from 'vue-router'
 
 const visible = defineModel('visible', { type: Boolean, default: true })
@@ -42,10 +42,8 @@ async function logout() {
         const res = await userStore.logout()
         sidebarStore.clearSelectedItem()
 
-        // console.log(res);
         if (res) {
             ElMessage.success('退出登录成功')
-            // console.log(res);
             router.push({ name: 'Login' })
         } else {
             ElMessage.error('退出登录失败')

@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from 'vue'
 import ThemeImage from '../ThemeImage.vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
@@ -52,4 +51,3 @@ defineEmits(['update:themeId'])
     padding: 0.5em 0;
 }
 </style>
-

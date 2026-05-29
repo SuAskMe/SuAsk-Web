@@ -172,16 +172,13 @@ import { deleteNotificationApi, getNotificationApi } from '@/api/notification/no
 import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model'
 import { NotificationCard } from '@/components/notification-dialog'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import { UserStore } from '@/store/modules/user'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { hasTeacherAbility } from '@/utils/auth'
 
 // 导入全局事件总线
 import { emitter } from '@/utils/emitter'
 
 const deleteDialogVisible = ref(false)
-
-const userStore = UserStore()
 
 const deleteMessage = ref<deleteMessage>({
     id: 0,
@@ -199,9 +196,7 @@ function openDeleteDialog(_deleteMessage: deleteMessage) {
 }
 
 async function deleteNotification() {
-    console.log('delete')
     deleteDialogVisible.value = false
-    console.log(deleteMessage.value)
 
     await deleteNotificationApi(deleteMessage.value.id).then((res) => {
         if (res != null) {
@@ -278,8 +273,8 @@ async function loadNotification() {
             newAnswer.value = res.new_answer
             newReply.value = res.new_reply
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
+            ElMessage.error('获取通知失败')
         })
 }
 

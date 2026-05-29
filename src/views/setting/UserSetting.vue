@@ -82,6 +82,8 @@
                         :avatar-url="usingAvatar"
                         icon="setting-user"
                         @pick-image="pickImageImpl"
+                        @update:nickname="basicInfo.nickname = $event"
+                        @update:introduction="basicInfo.introduction = $event"
                     />
 
                     <ThemeSection
@@ -91,7 +93,12 @@
                         @update:theme-id="basicInfo.themeId = $event"
                     />
 
-                    <NotificationSection :settings="notificationSettings" icon="setting-bell" />
+                    <NotificationSection
+                        :settings="notificationSettings"
+                        icon="setting-bell"
+                        @update:notify-switch="notificationSettings.notifySwitch = $event"
+                        @update:notify-email="notificationSettings.notifyEmail = $event"
+                    />
 
                     <div v-if="!isGuest" class="button-container">
                         <button
@@ -123,7 +130,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
-import { ElLoading, ElMessage } from 'element-plus'
+import { ElLoading } from 'element-plus/es/components/loading/index.mjs'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'
 import { updateTeacherPermApi } from '@/api/teacher/teacher.api'
@@ -358,8 +366,7 @@ async function updateUserInfo() {
                 ElMessage.error('保存失败2')
             }
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
             ElMessage.error('保存失败3')
             return
         })

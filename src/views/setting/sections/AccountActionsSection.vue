@@ -42,7 +42,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from 'vue'
 import { Lock, SwitchButton, WarningFilled, ArrowRight } from '@element-plus/icons-vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
@@ -217,4 +216,3 @@ defineEmits(['resetPassword', 'logout', 'deactivate'])
     }
 }
 </style>
-

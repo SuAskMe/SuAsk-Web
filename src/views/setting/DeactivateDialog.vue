@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { WarningFilled } from '@element-plus/icons-vue'
 import { deactivateAccountApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'
@@ -70,8 +70,9 @@ async function confirmDeactivate() {
         } else {
             ElMessage.error('注销失败')
         }
-    } catch (e: any) {
-        ElMessage.error(e?.message || '注销失败，请检查密码是否正确')
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : '注销失败，请检查密码是否正确'
+        ElMessage.error(message)
     } finally {
         loading.value = false
         password.value = ''
