@@ -87,7 +87,6 @@
                     />
 
                     <ThemeSection
-                        :img-list="imgList"
                         :theme-id="basicInfo.themeId"
                         icon="setting-brush"
                         @update:theme-id="basicInfo.themeId = $event"
@@ -154,10 +153,6 @@ import AccountActionsSection from './sections/AccountActionsSection.vue'
 
 const isGuest = computed(() => userStore.getRole() === 'guest')
 
-
-const imgList = ref<string[]>([])
-const images = import.meta.glob('../../assets/bg_imgs/*.jpg', { eager: true })
-imgList.value = Object.values(images).map((module) => (module as { default: string }).default)
 
 const deviceTypeStore = DeviceTypeStore()
 

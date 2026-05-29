@@ -1,32 +1,44 @@
 <template>
     <div class="theme-images-container">
-        <div
-            v-for="(imgSrc, index) in src"
-            :key="imgSrc"
+        <button
+            v-for="themeIndex in themeIndexes"
+            :key="themeIndex"
+            type="button"
             class="theme-image-wrapper"
-            :class="{ selected: selectIndex - 1 == index }"
-            @click="selectImg(index)"
+            :class="{ selected: selectIndex === themeIndex }"
+            :aria-pressed="selectIndex === themeIndex"
+            :title="`主题 ${themeIndex}`"
+            @click="selectImg(themeIndex)"
             :style="{ width: width }"
         >
-            <img class="theme-image" :src="imgSrc" :alt="`主题 ${index + 1}`" />
+            <BackgroundImg class="theme-image" :img_index="themeIndex" />
             <div class="selection-indicator">
                 <component :is="Check" class="check-icon" />
             </div>
-        </div>
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
 import { Check } from '@element-plus/icons-vue'
+import { computed } from 'vue'
+import BackgroundImg from '@/components/background-img'
 
-defineProps<{
-    src: string[]
+const props = withDefaults(defineProps<{
     width: string
-}>()
+    count?: number
+}>(), {
+    count: 5,
+})
 
 const selectIndex = defineModel<number>({ default: 1 })
-const selectImg = (index: number) => {
-    selectIndex.value = index + 1
+
+const themeIndexes = computed(() =>
+    Array.from({ length: props.count }, (_, index) => index + 1),
+)
+
+const selectImg = (themeIndex: number) => {
+    selectIndex.value = themeIndex
 }
 </script>
 
@@ -40,8 +52,11 @@ const selectImg = (index: number) => {
 .theme-image-wrapper {
     position: relative;
     cursor: pointer;
+    aspect-ratio: 4 / 3;
+    border: 0;
     border-radius: 12px;
     overflow: hidden;
+    padding: 0;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     max-width: calc((100% - 3.75rem) / 4);
@@ -56,7 +71,7 @@ const selectImg = (index: number) => {
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
         
         .theme-image {
-            filter: brightness(0.95);
+            filter: saturate(1.06);
         }
     }
 
@@ -75,9 +90,8 @@ const selectImg = (index: number) => {
     .theme-image {
         border-radius: 10px;
         display: block;
-        object-fit: cover;
         width: 100%;
-        height: auto;
+        height: 100%;
         transition: all 0.4s ease;
     }
 
@@ -107,4 +121,3 @@ const selectImg = (index: number) => {
     }
 }
 </style>
-

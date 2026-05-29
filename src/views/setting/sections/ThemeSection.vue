@@ -8,7 +8,6 @@
             <div class="theme">
                 <ThemeImage
                     :model-value="themeId"
-                    :src="imgList"
                     :width="'150px'"
                     @update:model-value="$emit('update:themeId', $event)"
                 />
@@ -22,7 +21,6 @@ import ThemeImage from '../ThemeImage.vue'
 import SettingSectionCard from './SettingSectionCard.vue'
 
 defineProps<{
-    imgList: string[]
     themeId: number
     icon?: string
 }>()
