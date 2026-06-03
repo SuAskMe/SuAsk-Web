@@ -1,3 +1,35 @@
+:root {
+    // Brand colors (Restored exact original colors)
+    --su-blue: #71b6ff;
+    --su-blue-dark: #449eff;
+    --su-blue-light: #a9d9ff;
+    --su-yellow: #ffc107;
+    --su-red: #fc4f43;
+    --su-grey: #808080;
+
+    // Typography
+    --su-text-primary: #000000;
+    --su-text-secondary: #555555;
+    --su-text-muted: #808080;
+
+    // Backgrounds
+    --su-bg-app: #ffffff;
+    --su-bg-card: #ffffff;
+    --su-bg-sidebar: #ffffff;
+    --su-bg-hover: #f8f9fa;
+
+    // Borders & Shadows
+    --su-border: #e5e5e5;
+    --su-card-border: #e5e5e5;
+    --su-shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --su-shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.1);
+
+    // Transitions
+    --su-transition-smooth: all 0.2s ease-in-out;
+    --su-transition-fast: all 0.15s ease-in-out;
+}
+
+// Keep the SCSS variables exactly as original
 $su-blue: #71b6ff;
 $su-blue-dark: #449eff;
 $su-blue-light: #a9d9ff;

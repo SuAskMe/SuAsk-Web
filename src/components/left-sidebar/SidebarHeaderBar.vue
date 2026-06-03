@@ -1,18 +1,22 @@
 <template>
     <div class="sidebar-header">
         <div class="message" @click="$emit('openDrawer')">
-            <svg-icon class="message-icon" icon="message-1" color="#71B6FF" size="24px" />
+            <svg-icon class="message-icon" icon="message-1" color="#71B6FF" size="26px" />
             <div v-if="hasUnread" class="red-dot" />
         </div>
-        <svg-icon
+        <div
             v-if="isMobile"
-            class="sidebar-btn"
-            icon="sidebar"
-            color="#71B6FF"
-            size="24px"
-            :filled="isSidebarOpen"
+            class="sidebar-btn-container"
             @click="$emit('toggleSidebar')"
-        />
+        >
+            <svg-icon
+                class="sidebar-btn"
+                icon="sidebar"
+                color="#71B6FF"
+                size="26px"
+                :filled="isSidebarOpen"
+            />
+        </div>
     </div>
 </template>
 
@@ -36,6 +40,7 @@ defineEmits(['openDrawer', 'toggleSidebar'])
 
     @media (max-width: 768px) {
         justify-content: space-between;
+        padding-top: 10px;
     }
 
     @media (min-width: 768px) {
@@ -43,14 +48,29 @@ defineEmits(['openDrawer', 'toggleSidebar'])
     }
 }
 
-.sidebar-btn {
+.sidebar-btn-container {
     cursor: pointer;
     padding: 5px;
     transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none !important;
+    border: none !important;
+    background: transparent !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.sidebar-btn:hover {
+.sidebar-btn-container:hover {
     transform: scale(1.1);
+}
+
+.sidebar-btn {
+    width: 26px !important;
+    height: 26px !important;
+    outline: none !important;
+    border: none !important;
+    background: transparent !important;
 }
 
 .message {
@@ -58,6 +78,18 @@ defineEmits(['openDrawer', 'toggleSidebar'])
     cursor: pointer;
     padding: 5px;
     transition: transform 0.3s ease;
+    outline: none !important;
+    border: none !important;
+    background: transparent !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.message-icon {
+    width: 26px !important;
+    height: 26px !important;
+    outline: none !important;
+    border: none !important;
+    background: transparent !important;
 }
 
 .message:hover {

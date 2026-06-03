@@ -64,8 +64,9 @@ const handleScroll = () => {
     if (!wrap || props.loading) {
         return
     }
+    // 增加 10px 的触底容差，规避手机端高 DPI 小数像素及弹性滚动边缘未达标的情况
     const reachedBottom =
-        Math.ceil(wrap.scrollTop + wrap.clientHeight + props.bottomThreshold) >= wrap.scrollHeight
+        wrap.scrollTop + wrap.clientHeight + props.bottomThreshold + 10 >= wrap.scrollHeight
     if (reachedBottom) {
         emit('reachBottom')
     }

@@ -33,6 +33,11 @@
     gap: 5px;
     padding: 24px 0 12px 0;
 
+    @media (min-width: 768px) {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+
     .search-teacher-btn {
       display: flex;
       align-items: center;
@@ -64,4 +69,9 @@
   align-items: center;
   justify-content: center;
   gap: 20px 20px;
+
+  @media (min-width: 768px) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
 }

@@ -20,6 +20,7 @@ export interface QuestionItem {
     is_favorite: boolean
     answer_num: number
     answer_avatars: string[]
+    is_pinned?: boolean
 }
 
 export interface GetQuestionReq {

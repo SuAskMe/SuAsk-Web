@@ -68,7 +68,8 @@ const toggleSidebar = (event: MouseEvent) => {
     top: 0;
     bottom: 0;
     z-index: 10;
-    background: white;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
 }
 
 .container {

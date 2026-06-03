@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import '@/styles/main.scss'
 // import '../mock/index.js'
 import 'virtual:svg-icons-register'
 import SvgIcon from '@/components/svg-icon'

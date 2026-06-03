@@ -52,7 +52,7 @@ defineEmits(['openProfile'])
     cursor: pointer;
     text-align: left;
     font-size: 13px;
-    color: #808080;
+    color: var(--su-text-muted);
     margin-top: 10px;
 }
 </style>

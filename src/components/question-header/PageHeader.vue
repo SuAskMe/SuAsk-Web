@@ -29,6 +29,7 @@ withDefaults(
     justify-content: space-between;
     align-items: center;
     height: 60px;
+    padding: 0 24px;
     margin-left: auto;
     gap: 10px;
     user-select: none;
@@ -41,8 +42,10 @@ withDefaults(
 }
 
 .page-header__title {
-    color: $su-blue-dark;
-    font-weight: bold;
+    color: var(--su-blue-dark);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .page-header__right {

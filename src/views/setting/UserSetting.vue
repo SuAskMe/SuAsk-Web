@@ -105,7 +105,7 @@
                         </button>
                     </div>
 
-                    <VisibilitySection v-if="hasTeacherAbility()" v-model="questionVisible" icon="setting-eye" />
+                    <VisibilitySection v-if="isTeacher()" v-model="questionVisible" icon="setting-eye" />
 
                     <AccountActionsSection
                         v-if="!isGuest"
@@ -140,7 +140,7 @@ import ResetPasswordDialog from './ResetPasswordDialog.vue'
 import LogoutDialog from './LogoutDialog.vue'
 import DeactivateDialog from './DeactivateDialog.vue'
 import { compressionBlob } from '@/utils/imgCompress'
-import { hasTeacherAbility } from '@/utils/auth'
+import { hasTeacherAbility, isTeacher } from '@/utils/auth'
 import GuestUpgradeNotice from './sections/GuestUpgradeNotice.vue'
 import ProfileSection from './sections/ProfileSection.vue'
 import ThemeSection from './sections/ThemeSection.vue'
@@ -364,7 +364,7 @@ async function updateUserInfo() {
                 originalValues.value.themeId = basicInfo.value.themeId
                 originalValues.value.notifySwitch = notificationSettings.value.notifySwitch
                 originalValues.value.notifyEmail = notificationSettings.value.notifyEmail
-                if (hasTeacherAbility()) {
+                if (isTeacher()) {
                     originalValues.value.question_box_perm = questionVisible.value
                 }
                 showSaveReminder.value = false
@@ -415,7 +415,7 @@ function showDeactivateDialog() {
 const questionVisible = ref(userStore.getUser().question_box_perm)
 
 // 监听教师可见性设置变化
-if (hasTeacherAbility()) {
+if (isTeacher()) {
     watch(
         () => questionVisible.value,
         () => {
@@ -427,7 +427,7 @@ if (hasTeacherAbility()) {
     )
 }
 
-if (hasTeacherAbility()) {
+if (isTeacher()) {
     watch(
         () => questionVisible.value,
         async () => {

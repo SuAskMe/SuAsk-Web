@@ -34,9 +34,7 @@ defineEmits(['like', 'delete'])
             </div>
             <span class="counts">{{ likeCount }}</span>
         </div>
-        <div v-if="showDelete" class="delete-action" @click.stop="$emit('delete')">
-            <SvgIcon icon="delete-round" size="16" color="#ff4d4f" />
-        </div>
+
         <div class="time">{{ timeLabel }}</div>
     </div>
 </template>

@@ -37,9 +37,7 @@ defineEmits(['favorite', 'delete', 'footer'])
             class="avatar"
         />
         <div class="text">{{ answerNum }} 个回答</div>
-        <div v-if="showDelete" class="delete-action" data-tips="删除" @click.stop="$emit('delete')">
-            <SvgIcon icon="delete-round" size="20" color="#ff4d4f" />
-        </div>
+
         <div
             v-if="showFavorite"
             class="favorite"
@@ -57,9 +55,7 @@ defineEmits(['favorite', 'delete', 'footer'])
     <div v-else class="card-footer">
         <SvgIcon class="msg-icon" icon="communicate_message" size="24" color="#66b0ff" />
         <div class="text" @click.stop="$emit('footer')">发表一个回答...</div>
-        <div v-if="showDelete" class="delete-action" data-tips="删除" @click.stop="$emit('delete')">
-            <SvgIcon icon="delete-round" size="20" color="#ff4d4f" />
-        </div>
+
         <div
             v-if="showFavorite"
             class="favorite"

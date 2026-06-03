@@ -16,24 +16,40 @@
                     <p v-if="teacher && teacher.teacherName" class="ask-teacher">
                         问 <span>{{ teacher.teacherName }}</span> 老师
                     </p>
-                    <el-button @click.stop="openDraft" type="primary" round text>草稿</el-button>
+                    <div class="header-right">
+                        <el-button @click.stop="openDraft" type="primary" round text class="draft-trigger">草稿</el-button>
+                        <el-button
+                            v-if="deviceType.isMobile"
+                            @click.stop="postQuestion"
+                            type="primary"
+                            round
+                            class="post-btn-mobile"
+                            color="#71b6ff"
+                            style="color: white; margin-left: 8px;"
+                            >发布</el-button
+                        >
+                    </div>
                 </div>
                 <div class="main">
-                    <div class="title">
+                    <div class="title" :class="{ 'is-focused': isTitleFocused }">
                         <UserAvatar :src="avatarURL" :name="userStore.getUser().nickname" :size="40" />
                         <el-input
                             v-model="questionContent.title"
                             placeholder="问题标题"
-                            style="width: 87%"
-                            :input-attrs="{ style: 'font-size: 16px;' }"
+                            style="flex: 1"
+                            :input-attrs="{ style: 'font-size: 16px; font-weight: 600;' }"
+                            @focus="isTitleFocused = true"
+                            @blur="isTitleFocused = false"
                         />
                     </div>
-                    <div class="content">
+                    <div class="content" :class="{ 'is-focused': isContentFocused }">
                         <el-input
                             v-model="questionContent.content"
                             :autosize="{ minRows: 6, maxRows: 18 }"
                             type="textarea"
                             placeholder="问题内容"
+                            @focus="isContentFocused = true"
+                            @blur="isContentFocused = false"
                         />
                         <div class="image-container">
                             <div
@@ -81,6 +97,7 @@
                         multiple
                     />
                     <el-button
+                        v-if="!deviceType.isMobile"
                         @click="postQuestion"
                         type="primary"
                         round
@@ -198,6 +215,7 @@
 <script setup lang="ts">
 import type { AddQuestionReq, QuestionItem } from '@/model/question.model'
 import { UserStore } from '@/store/modules/user'
+import { DeviceTypeStore } from '@/store/modules/device-type'
 import { GenId } from '@/views/question-detail/QuestionDetail'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
@@ -221,8 +239,11 @@ import {
 
 // pinia store
 const userStore = UserStore()
-
+const deviceType = DeviceTypeStore()
 const composeDialogStore = ComposeDialogStore()
+
+const isTitleFocused = ref(false)
+const isContentFocused = ref(false)
 
 // interface
 export interface Ask {

@@ -37,17 +37,10 @@ const timeStr = computed(() => getTimeStr(props.timeStamp))
 const key = computed(() => (props.bubbleKey ? props.bubbleKey : null))
 const deviceType = DeviceTypeStore()
 const containerStyle = computed(() => {
-    if (props.center) {
-        return {
-            width: props.width ? props.width : '450px',
-            marginLeft: 0,
-            display: 'flex',
-        }
-    } else {
-        return {
-            width: props.width ? props.width : '450px',
-            marginLeft: deviceType.isMobile ? '0' : '24px',
-        }
+    return {
+        width: '100%',
+        maxWidth: props.width ? props.width : '100%',
+        marginLeft: props.center || deviceType.isMobile ? '0' : '24px',
     }
 })
 const tagStyle = computed(() => {
@@ -87,6 +80,19 @@ const tagStyle = computed(() => {
                     :fill="isPinned ? '#FFC107' : '#808080'"
                 >
                     <use :href="`#icon-pushpin${isPinned ? '-fill' : ''}`"></use>
+                </svg>
+            </div>
+            <div
+                v-else-if="isPinned"
+                class="pin-static"
+            >
+                <svg
+                    :width="20"
+                    :height="20"
+                    color="#FFC107"
+                    fill="#FFC107"
+                >
+                    <use href="#icon-pushpin-fill"></use>
                 </svg>
             </div>
             <div class="card-body">

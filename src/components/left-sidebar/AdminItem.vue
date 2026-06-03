@@ -24,7 +24,7 @@
         <control-panel-item
             class="control-panel-item"
             id="admin-questions"
-            icon="question"
+            icon="manage-2"
             text="内容管理"
             jump-to-path="/admin/questions"
         />

@@ -109,7 +109,7 @@ function handleUpgraded() {
 .sidebar {
     height: 100%;
     width: 300px;
-    border-right: 1px solid $su-border;
+    border-right: none;
     overflow: hidden;
     @media (max-width: 768px) and (min-width: 300px) {
         width: 80vw;

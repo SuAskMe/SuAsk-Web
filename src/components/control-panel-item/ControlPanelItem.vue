@@ -1,13 +1,13 @@
 <template>
-    <div @click="handleClick" class="control-item">
+    <div @click="handleClick" class="control-item" :class="{ 'control-item-active': clicked }">
         <svg-icon
             v-if="icon"
             :icon="props.icon"
-            color="#71B6FF"
-            :size="size ? size : '24px'"
+            :color="clicked ? 'var(--su-blue)' : 'var(--su-grey)'"
+            :size="size ? size : '22px'"
             :filled="clicked"
         />
-        <div v-if="text" style="padding-left: 20px"></div>
+        <div v-if="text" style="padding-left: 14px"></div>
         <p v-if="text" :class="{ text: !clicked, 'text-clicked': clicked }">{{ text }}</p>
     </div>
 </template>
@@ -46,27 +46,43 @@ const handleClick = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .control-item {
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    height: 30px;
-
-    color: black;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 8px;
+    transition: var(--su-transition-smooth);
+    color: var(--su-text-secondary);
     text-decoration: none;
+    background: transparent;
+    width: 100%;
+
+    &:hover {
+        background-color: var(--su-bg-hover);
+        color: var(--su-text-primary);
+    }
+}
+
+.control-item-active {
+    background-color: rgba(113, 182, 255, 0.12) !important;
+    color: var(--su-blue) !important;
+    font-weight: 600;
 }
 
 .text {
-    line-height: 30px;
-    font-size: 18px;
+    line-height: normal;
+    font-size: 15px;
+    transition: var(--su-transition-smooth);
 }
 
 .text-clicked {
-    line-height: 30px;
-    font-size: 18px;
-    color: #71b6ff;
-    font-weight: bold;
+    line-height: normal;
+    font-size: 15px;
+    color: var(--su-blue);
+    font-weight: 600;
+    transition: var(--su-transition-smooth);
 }
 </style>

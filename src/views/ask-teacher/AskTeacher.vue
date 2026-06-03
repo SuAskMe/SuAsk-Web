@@ -30,6 +30,8 @@
                 :views="question.views"
                 :time-stamp="question.created_at"
                 :image-urls="question.image_urls"
+                :is-pinned="question.is_pinned"
+                :tag="question.is_pinned ? '置顶' : ''"
                 :bubble-key="index"
                 :click-card="navigateTo"
                 :width="deviceType.isMobile ? '80vw' : '45vw'"

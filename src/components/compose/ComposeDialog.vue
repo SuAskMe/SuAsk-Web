@@ -57,20 +57,17 @@ const props = defineProps<{
 </script>
 
 <style lang="scss" scoped>
-@media (min-width: 768px) {
-    .overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(30px);
-        z-index: 99;
-    }
-
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    z-index: 99;
 }
-
 
 .post-compose {
     position: fixed;
@@ -79,23 +76,36 @@ const props = defineProps<{
     transform: translate(-50%, -50%);
     z-index: 100;
     background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 
+        0 20px 60px -12px rgba(15, 23, 42, 0.12),
+        0 10px 25px -5px rgba(15, 23, 42, 0.06),
+        0 0 0 1px rgba(113, 182, 255, 0.12);
+    border-radius: 24px;
     width: 600px;
-    // max-width: 90%;
+    box-sizing: border-box;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 
     @media (max-width: 768px) {
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
         border-radius: 0;
+        transform: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        box-shadow: none;
+        transition: transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1), opacity 0.35s ease;
     }
 }
 
-
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.25s ease;
 }
 
 .fade-enter-from,
@@ -103,25 +113,34 @@ const props = defineProps<{
     opacity: 0;
 }
 
-.fade-enter-to,
-.fade-leave-from {
-    opacity: 1;
-}
-
 .dialog-enter-active,
 .dialog-leave-active {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    
+    @media (max-width: 768px) {
+        transition: transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1), opacity 0.35s ease;
+    }
 }
 
 .dialog-enter-from,
 .dialog-leave-to {
-    transform: translate(-50%, -50%) translateY(50px);
+    transform: translate(-50%, -50%) translateY(30px);
     opacity: 0;
+
+    @media (max-width: 768px) {
+        transform: translateY(100%);
+        opacity: 0.8;
+    }
 }
 
 .dialog-enter-to,
 .dialog-leave-from {
     transform: translate(-50%, -50%) translateY(0);
     opacity: 1;
+
+    @media (max-width: 768px) {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 </style>
