@@ -48,11 +48,7 @@
         <el-scrollbar>
             <Transition :name="animationName" mode="out-in">
                 <div class="notification-container" :key="radio">
-                    <div
-                        v-if="
-                            radio == NotificationType.QUESTION && hasTeacherAbility()
-                        "
-                    >
+                    <div v-if="radio == NotificationType.QUESTION && hasTeacherAbility()">
                         <div v-for="item in newQuestion" :key="item.id" class="notification-item">
                             <NotificationCard
                                 type="question"
@@ -168,8 +164,6 @@
 </template>
 
 <script setup lang="ts">
-import { deleteNotificationApi, getNotificationApi } from '@/api/notification/notification.api'
-import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.model'
 import { NotificationCard } from '@/components/notification-dialog'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
@@ -184,6 +178,8 @@ import {
 } from '@element-plus/icons-vue'
 import 'element-plus/es/components/dialog/style/css'
 import { hasTeacherAbility } from '@/utils/auth'
+import { NotificationStore } from '@/store/modules/notification'
+import { storeToRefs } from 'pinia'
 
 // 导入全局事件总线
 import { emitter } from '@/utils/emitter'
@@ -208,18 +204,11 @@ function openDeleteDialog(_deleteMessage: deleteMessage) {
 async function deleteNotification() {
     deleteDialogVisible.value = false
 
-    await deleteNotificationApi(deleteMessage.value.id).then((res) => {
-        if (res != null) {
-            ElMessage.success('删除成功')
-        }
-    })
-
-    if (deleteMessage.value.type == NotificationType.QUESTION) {
-        newQuestion.value = newQuestion.value.filter((item) => item.id !== deleteMessage.value.id)
-    } else if (deleteMessage.value.type == NotificationType.ANSWER) {
-        newAnswer.value = newAnswer.value.filter((item) => item.id !== deleteMessage.value.id)
-    } else if (deleteMessage.value.type == NotificationType.REPLY) {
-        newReply.value = newReply.value.filter((item) => item.id !== deleteMessage.value.id)
+    try {
+        await notificationStore.deleteNotification(deleteMessage.value.id, deleteMessage.value.type)
+        ElMessage.success('删除成功')
+    } catch {
+        ElMessage.error('删除失败')
     }
 }
 
@@ -272,20 +261,15 @@ function closeDrawer() {
     emit('closeDrawer')
 }
 
-const newQuestion = ref<NewQuestion[]>([])
-const newAnswer = ref<NewAnswer[]>([])
-const newReply = ref<NewReply[]>([])
+const notificationStore = NotificationStore()
+const { newQuestion, newAnswer, newReply } = storeToRefs(notificationStore)
 
-async function loadNotification() {
-    await getNotificationApi(props.user_id)
-        .then((res) => {
-            newQuestion.value = res.new_question
-            newAnswer.value = res.new_answer
-            newReply.value = res.new_reply
-        })
-        .catch(() => {
-            ElMessage.error('获取通知失败')
-        })
+async function loadNotification(force = false) {
+    try {
+        await notificationStore.loadNotifications(props.user_id, force)
+    } catch {
+        ElMessage.error('获取通知失败')
+    }
 }
 
 onMounted(async () => {
@@ -302,30 +286,7 @@ onUnmounted(() => {
 
 // 定义事件处理函数
 const handleQuestionDetailOpened = async (data: { questionId: number }) => {
-    // 直接在前端更新相关通知的状态为已读
-    // 更新提问通知
-    newQuestion.value = newQuestion.value.map((item) => {
-        if (item.question_id === data.questionId) {
-            return { ...item, is_read: true }
-        }
-        return item
-    })
-
-    // 更新回答通知
-    newAnswer.value = newAnswer.value.map((item) => {
-        if (item.question_id === data.questionId) {
-            return { ...item, is_read: true }
-        }
-        return item
-    })
-
-    // 更新回复通知
-    newReply.value = newReply.value.map((item) => {
-        if (item.question_id === data.questionId) {
-            return { ...item, is_read: true }
-        }
-        return item
-    })
+    notificationStore.markQuestionRead(data.questionId)
 }
 </script>
 

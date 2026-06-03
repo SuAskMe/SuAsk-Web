@@ -226,7 +226,7 @@ async function getAnswerList() {
 }
 
 function getQuote(in_reply_to: number) {
-    const answer = answerList.value.find((item) => item.id === in_reply_to)
+    const answer = answerMap.value.get(in_reply_to)
     if (!answer) return undefined
     return {
         text: answer.contents,
@@ -323,6 +323,7 @@ async function favorite() {
 }
 
 const answerList = ref<AnswerItem[]>([])
+const answerMap = computed(() => new Map(answerList.value.map((answer) => [answer.id, answer])))
 const question = ref<Question>({
     id: 0,
     title: '',

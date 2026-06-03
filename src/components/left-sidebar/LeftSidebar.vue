@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
         <SidebarHeaderBar
-            :has-unread="newQuestionCount + newAnswerCount + newReplyCount > 0"
+            :has-unread="notificationStore.unreadCount > 0"
             :is-mobile="deviceTypeStore.isMobile"
             :is-sidebar-open="sidebarStore.IsOpen"
             @open-drawer="drawer = true"
@@ -24,9 +24,9 @@
     <SidebarNotificationDrawer
         v-model="drawer"
         :is-mobile="deviceTypeStore.isMobile"
-        :question-count="newQuestionCount"
-        :answer-count="newAnswerCount"
-        :reply-count="newReplyCount"
+        :question-count="notificationStore.newQuestionCount"
+        :answer-count="notificationStore.newAnswerCount"
+        :reply-count="notificationStore.newReplyCount"
         :user-id="userInfo.id"
     />
     <GuestUpgradeModal v-model="showUpgradeDialog" @upgraded="handleUpgraded" />
@@ -43,11 +43,11 @@ import SidebarUserSummary from './SidebarUserSummary.vue'
 import GuestUpgradePrompt from './GuestUpgradePrompt.vue'
 import SidebarNotificationDrawer from './SidebarNotificationDrawer.vue'
 import GuestUpgradeModal from './GuestUpgradeModal.vue'
-import { getNotificationCountApi } from '@/api/notification/notification.api'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
+import { NotificationStore } from '@/store/modules/notification'
 
 // 导入全局事件总线
 import { emitter } from '@/utils/emitter'
@@ -66,12 +66,13 @@ function toggleSidebar() {
 }
 
 const deviceTypeStore = DeviceTypeStore()
+const notificationStore = NotificationStore()
 
 const handleQuestionDetailOpened = async () => {
     // 问题详情页里“已读”写回后端不是同步完成的，这里保留一个短延迟，
     // 避免侧边栏未读红点先刷新、后端计数还没更新，导致用户看到状态回弹。
     setTimeout(() => {
-        getNotificationCount()
+        getNotificationCount(true)
     }, 1500)
 }
 
@@ -86,22 +87,8 @@ onUnmounted(() => {
     emitter.off('questionDetailOpened', handleQuestionDetailOpened)
 })
 
-const newQuestionCount = ref(0)
-const newAnswerCount = ref(0)
-const newReplyCount = ref(0)
-
-async function getNotificationCount() {
-    await getNotificationCountApi(userInfo.value.id)
-        .then((res) => {
-            if (res != null) {
-                newQuestionCount.value = res.new_question_count
-                newAnswerCount.value = res.new_answer_count
-                newReplyCount.value = res.new_reply_count
-            }
-        })
-        .catch(() => {
-            // 通知计数只影响侧边栏徽标，失败时保持旧值。
-        })
+async function getNotificationCount(force = false) {
+    await notificationStore.loadCount(userInfo.value.id, force)
 }
 
 const router = useRouter()
