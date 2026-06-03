@@ -204,15 +204,26 @@
 import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import { ElImage } from 'element-plus/es/components/image/index.mjs'
+import { ArrowLeft, Close } from '@element-plus/icons-vue'
+import 'element-plus/es/components/dialog/style/css'
+import 'element-plus/es/components/image/style/css'
 import SvgIcon from '@/components/svg-icon'
 import { UserAvatar } from '@/components/user-avatar'
-import { inject, ref, type Ref } from 'vue'
-import { db, type Answer } from './db'
+import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
+import { loadDraftDb, type Answer } from './draftDb'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
 import type { AddAnswer, AnswerItem, Question } from '@/model/answer.model'
 import { addAnswerApi } from '@/api/answer/answer.api'
 import { hasTeacherAbility } from '@/utils/auth'
+import {
+    createObjectUrlPreview,
+    revokeObjectUrlPreview,
+    revokeObjectUrlPreviews,
+    type ObjectUrlPreview,
+} from './objectUrlPreviews'
 
 // pinia store
 const userStore = UserStore()
@@ -220,11 +231,6 @@ const userStore = UserStore()
 const composeDialogStore = ComposeDialogStore()
 
 // interface
-interface Img {
-    id: number
-    url: string
-}
-
 export interface Quote {
     in_replay_to: number
     avatar: string
@@ -236,7 +242,7 @@ interface Ask {
     draftId?: number
     content: string
     fileList: File[]
-    imageList: Img[]
+    imageList: ObjectUrlPreview[]
 }
 
 // data
@@ -299,9 +305,9 @@ defineExpose({
     closeDialog,
 })
 
-function openDraft() {
+async function openDraft() {
     draftVisible.value = true
-    getDrafts()
+    await getDrafts()
 }
 
 function pickImageImpl(event: Event) {
@@ -314,26 +320,23 @@ function pickImageImpl(event: Event) {
         }
         answerContent.value.fileList.push(...files)
         for (let i = 0; i < files.length; i++) {
-            answerContent.value.imageList.push({
-                id: GenId(),
-                url: URL.createObjectURL(files[i]),
-            })
+            answerContent.value.imageList.push(createObjectUrlPreview(files[i], GenId()))
         }
         if (imgPicker.value) imgPicker.value.value = ''
     }
 }
 
 function deleteImage(index: number) {
+    revokeObjectUrlPreview(answerContent.value.imageList[index])
     answerContent.value.fileList.splice(index, 1)
     answerContent.value.imageList.splice(index, 1)
 }
 
 async function postAnswer() {
     const formData = new FormData()
-    const imgList: string[] = []
+    const imgList = answerContent.value.imageList.map((img) => img.url)
     answerContent.value.fileList.forEach((file: File) => {
         formData.append('files', file)
-        imgList.push(URL.createObjectURL(file))
     })
 
     const req: AddAnswer = {
@@ -353,7 +356,7 @@ async function postAnswer() {
             ElMessage.success('回复成功')
             composeDialogStore.close()
             if (answerContent.value.draftId) {
-                deleteDraft(answerContent.value.draftId)
+                void deleteDraft(answerContent.value.draftId)
             }
             const ans: AnswerItem = {
                 id: res.data.id,
@@ -369,14 +372,18 @@ async function postAnswer() {
                 nickname: userInfo.nickname ? userInfo.nickname : '匿名用户',
             }
             emit('answerPosted', ans)
-            clearAnswerContent()
+            clearAnswerContent({ revokeImages: false })
         } else {
             ElMessage.error('回复失败')
         }
     })
 }
 
-function clearAnswerContent() {
+function clearAnswerContent(options: { revokeImages?: boolean } = {}) {
+    if (options.revokeImages !== false) {
+        revokeObjectUrlPreviews(answerContent.value.imageList)
+    }
+    answerContent.value.draftId = undefined
     answerContent.value.content = ''
     answerContent.value.fileList = []
     answerContent.value.imageList = []
@@ -391,14 +398,12 @@ function handleDeleteMod() {
 
 function useDraft(draft: Answer) {
     if (deleteMod.value) return
+    revokeObjectUrlPreviews(answerContent.value.imageList)
     answerContent.value.content = draft.content
     answerContent.value.fileList = []
     answerContent.value.imageList = []
     for (const img of draft.imgList) {
-        answerContent.value.imageList.push({
-            id: GenId(),
-            url: URL.createObjectURL(img),
-        })
+        answerContent.value.imageList.push(createObjectUrlPreview(img, GenId()))
         const file = img as File
         answerContent.value.fileList.push(new File([file], file.name, { type: file.type }))
     }
@@ -421,6 +426,7 @@ async function addDraft() {
         imgList.push(file)
     }
     try {
+        const db = await loadDraftDb()
         await db.answers.add({
             time: new Date(),
             imgList: imgList,
@@ -435,6 +441,7 @@ async function addDraft() {
 
 async function getDrafts() {
     try {
+        const db = await loadDraftDb()
         drafts.value = await db.answers.reverse().toArray()
     } catch {
         ElMessage.error('读取草稿失败')
@@ -443,6 +450,7 @@ async function getDrafts() {
 
 async function deleteDraft(id: number | number[]) {
     try {
+        const db = await loadDraftDb()
         if (typeof id === 'number') {
             await db.answers.delete(id)
         } else {
@@ -456,11 +464,12 @@ async function deleteDraft(id: number | number[]) {
     }
 }
 
-function saveDraft() {
-    addDraft()
+async function saveDraft() {
+    await addDraft()
     innerVisible.value = false
     // visible.value = false;
     composeDialogStore.close()
+    clearAnswerContent()
 }
 
 function cancelSaveDraft() {
@@ -469,6 +478,10 @@ function cancelSaveDraft() {
     composeDialogStore.close()
     clearAnswerContent()
 }
+
+onBeforeUnmount(() => {
+    clearAnswerContent()
+})
 </script>
 
 <style scoped lang="scss" src="./style/index.scss"></style>

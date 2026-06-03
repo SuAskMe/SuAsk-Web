@@ -1,6 +1,6 @@
 <template>
-    <el-container class="container">
-        <el-header style="height: auto">
+    <div class="container">
+        <header class="detail-header">
             <QuestionHeader
                 @change-sort="changeSort"
                 @return="navigateBack"
@@ -9,8 +9,8 @@
                 has_sort_upvote
                 sort_and_search
             />
-        </el-header>
-        <el-main class="main-container">
+        </header>
+        <main class="main-container">
             <BackgroundImg :img_index="bg_img_index" class="background-img" />
             <el-scrollbar>
                 <Transition name="question" appear>
@@ -65,7 +65,7 @@
                     </BubbleAnswer>
                 </TransitionGroup>
             </el-scrollbar>
-        </el-main>
+        </main>
         <!-- <answer-dialog v-model:visible="showDialog" :question-id="question.id" :quote="quote"
             @answer-posted="handleAnswerPosted" :fullscreen="deviceType.isMobile"></answer-dialog> -->
         <div v-if="canReply" class="ask-btn" @click.stop="openDialog(undefined)">
@@ -73,7 +73,7 @@
                 <Plus />
             </el-icon>
         </div>
-    </el-container>
+    </div>
     <compose-dialog
         type="answer"
         :question-id="question.id"
@@ -97,6 +97,7 @@ import type { AnswerItem, Question, UpvoteAnswerReq, UpvoteAnswerRes } from '@/m
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
+import { Plus } from '@element-plus/icons-vue'
 import { favoriteApi } from '@/api/question/favorite.api'
 import { storeToRefs } from 'pinia'
 import { SyncStore } from '@/store/modules/question-detail'

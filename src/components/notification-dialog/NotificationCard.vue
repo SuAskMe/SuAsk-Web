@@ -59,6 +59,7 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
 import { getTimeStr } from '@/utils/time'
+import { Delete } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 
 enum NotificationType {

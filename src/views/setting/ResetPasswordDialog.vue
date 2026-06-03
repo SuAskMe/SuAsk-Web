@@ -86,6 +86,8 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import { UserStore } from '@/store/modules/user'
 import { Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import 'element-plus/es/components/dialog/style/css'
 import { computed, reactive, ref } from 'vue'
 
 const visible = defineModel('visible', { type: Boolean, default: true })

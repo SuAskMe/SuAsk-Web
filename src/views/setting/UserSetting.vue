@@ -1,8 +1,8 @@
 <template>
     <div class="setting-page-container">
-        <el-header class="header">
+        <header class="header">
             <QuestionHeader sidebar_btn @sidebar="sidebar" />
-        </el-header>
+        </header>
         <div class="setting-scroll-area">
             <main v-if="isGuest" class="main-container">
                 <GuestUpgradeNotice />
@@ -128,6 +128,8 @@
 import { ref, computed, watch, onMounted, nextTick, defineAsyncComponent, onUnmounted } from 'vue'
 import { ElLoading } from 'element-plus/es/components/loading/index.mjs'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import 'element-plus/es/components/dialog/style/css'
 import { getUserInfoApi, updateUserInfoApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'
 import { updateTeacherPermApi } from '@/api/teacher/teacher.api'

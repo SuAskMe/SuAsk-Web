@@ -38,6 +38,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import SettingSectionCard from './SettingSectionCard.vue'
+import { ElSwitch } from 'element-plus/es/components/switch/index.mjs'
+import 'element-plus/es/components/switch/style/css'
 
 const props = defineProps<{
     settings: {

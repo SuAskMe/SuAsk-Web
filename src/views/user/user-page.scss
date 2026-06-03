@@ -1,13 +1,23 @@
 .container {
     position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     width: 100%;
+    min-height: 0;
+    overflow: hidden;
     background-color: #f0f2f5; // 添加浅灰色背景增加对比度
 
     .user-header {
+        flex: 0 0 auto;
         border-bottom: 1px solid $su-border;
         background-color: #ffffff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // 添加阴影增强对比
+    }
+
+    .profile-scroll {
+        flex: 1 1 auto;
+        min-height: 0;
     }
 
     .main-container {

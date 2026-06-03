@@ -28,6 +28,8 @@
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStore } from '@/store/modules/user'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import 'element-plus/es/components/dialog/style/css'
 import { useRouter } from 'vue-router'
 
 const visible = defineModel('visible', { type: Boolean, default: true })

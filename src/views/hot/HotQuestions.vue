@@ -85,6 +85,8 @@ import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavi
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { SidebarStore } from '@/store/modules/sidebar'
+import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
+import 'element-plus/es/components/empty/style/css'
 import {
     questionList,
     InitStatus,

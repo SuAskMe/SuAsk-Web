@@ -43,6 +43,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import 'element-plus/es/components/dialog/style/css'
 import { WarningFilled } from '@element-plus/icons-vue'
 import { deactivateAccountApi } from '@/api/user/user.api'
 import { UserStore } from '@/store/modules/user'

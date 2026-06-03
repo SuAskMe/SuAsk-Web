@@ -63,6 +63,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ComposeDialog from '@/components/compose/ComposeDialog.vue'
+import { Plus } from '@element-plus/icons-vue'
 import {
     questionList,
     InitStatus,

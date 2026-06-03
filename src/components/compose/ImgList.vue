@@ -1,21 +1,46 @@
 <template>
     <div class="img-container">
-        <img class="img" v-for="(img, index) in imgSliceList" :key="index" :src="URL.createObjectURL(img)" alt="img"
-            :style="{ right: `${index * 10}px`, zIndex: index }" />
-        <el-tag v-if="imgList.imgList.length != 0" class="count" type="primary" size="small">{{ imgList.imgList.length
-            }}</el-tag>
+        <img
+            class="img"
+            v-for="img in previewImages"
+            :key="img.url"
+            :src="img.url"
+            alt="img"
+            :style="{ right: `${img.index * 10}px`, zIndex: img.index }"
+        />
+        <el-tag v-if="props.imgList.length !== 0" class="count" type="primary" size="small">
+            {{ props.imgList.length }}
+        </el-tag>
     </div>
 </template>
 
-<script setup lang='ts'>
-const imgList = defineProps<{
-    imgList: Blob[];
-}>();
+<script setup lang="ts">
+import { onBeforeUnmount, ref, watch } from 'vue'
+import { createObjectUrlPreview, revokeObjectUrlPreviews } from './objectUrlPreviews'
+import { ElTag } from 'element-plus/es/components/tag/index.mjs'
+import 'element-plus/es/components/tag/style/css'
 
-const imgSliceList: Blob[] = imgList.imgList.slice(0, 3);
+const props = defineProps<{
+    imgList: Blob[]
+}>()
 
-const URL = window.URL || window.webkitURL;
+const previewImages = ref<{ index: number; url: string }[]>([])
 
+watch(
+    () => props.imgList,
+    (imgList) => {
+        revokeObjectUrlPreviews(previewImages.value)
+        previewImages.value = imgList.slice(0, 3).map((img, index) => ({
+            ...createObjectUrlPreview(img, index),
+            index,
+        }))
+    },
+    { immediate: true },
+)
+
+onBeforeUnmount(() => {
+    revokeObjectUrlPreviews(previewImages.value)
+})
 </script>
 
 <style scoped lang="scss">

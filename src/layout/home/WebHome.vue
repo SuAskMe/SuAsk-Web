@@ -12,13 +12,13 @@ const toggleSidebar = (event: MouseEvent) => {
 </script>
 
 <template>
-    <el-container class="container" :class="{ 'sidebar-open': sidebarStore.IsOpen }">
+    <div class="container" :class="{ 'sidebar-open': sidebarStore.IsOpen }">
         <Transition name="sidebar_anime" appear>
-            <el-aside class="sidebar-aside" width="auto" v-show="sidebarStore.IsOpen">
+            <aside class="sidebar-aside" v-show="sidebarStore.IsOpen">
                 <router-view key="$route.fullPath" name="left_side"> </router-view>
-            </el-aside>
+            </aside>
         </Transition>
-        <el-main class="main-content" @click="toggleSidebar">
+        <main class="main-content" @click="toggleSidebar">
             <router-view v-slot="{ Component }">
                 <keep-alive
                     :exclude="[
@@ -35,11 +35,11 @@ const toggleSidebar = (event: MouseEvent) => {
                     <component :is="Component" />
                 </keep-alive>
             </router-view>
-        </el-main>
-        <el-aside width="auto">
+        </main>
+        <aside class="right-aside">
             <router-view name="right_side" />
-        </el-aside>
-    </el-container>
+        </aside>
+    </div>
 </template>
 
 <style scoped lang="scss">
@@ -72,17 +72,26 @@ const toggleSidebar = (event: MouseEvent) => {
 }
 
 .container {
+    display: flex;
     height: 100vh;
     height: calc(var(--vh, 1vh) * 100);
     position: relative;
+    overflow: hidden;
     transition: margin-left 0.5s ease;
 }
 
 .main-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
     margin-left: 300px;
     transition:
         margin-left 0.5s ease,
         filter 0.5s ease;
+}
+
+.right-aside {
+    flex: 0 0 auto;
 }
 
 .container:not(.sidebar-open) .main-content {
@@ -100,20 +109,4 @@ const toggleSidebar = (event: MouseEvent) => {
     }
 }
 
-.el-container {
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
-
-    .el-main {
-        --el-main-padding: 0 !important;
-    }
-
-    .el-header {
-        border-bottom: 1px solid $su-border;
-    }
-
-    .el-footer {
-        border-top: 1px solid $su-border;
-    }
-}
 </style>

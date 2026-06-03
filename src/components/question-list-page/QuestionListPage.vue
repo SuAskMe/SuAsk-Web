@@ -1,15 +1,15 @@
 <template>
-    <el-container
+    <section
         class="question-list-page"
         :class="{
             'question-list-page--borderless': !borderTop,
             'question-list-page--masked': scrollMask,
         }"
     >
-        <el-header class="question-list-page__header">
+        <header class="question-list-page__header">
             <slot name="header" />
-        </el-header>
-        <el-main class="question-list-page__main">
+        </header>
+        <main class="question-list-page__main">
             <BackgroundImg :img_index="imgIndex" class="question-list-page__background" />
             <slot name="toolbar" />
             <el-scrollbar ref="scrollBar" v-loading="loading" @scroll="handleScroll">
@@ -24,8 +24,8 @@
                 </div>
             </el-scrollbar>
             <slot name="floating" />
-        </el-main>
-    </el-container>
+        </main>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -87,6 +87,8 @@ defineExpose({
 <style scoped lang="scss">
 .question-list-page {
     position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -95,17 +97,18 @@ defineExpose({
 
 .question-list-page__header {
     height: auto;
+    flex: 0 0 auto;
 }
 
 .question-list-page__main {
     position: relative;
     display: flex;
+    flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
     flex-direction: column;
     padding: 0;
     border-top: solid 1px $su-border;
-    --el-main-padding: 0;
 }
 
 .question-list-page--borderless {

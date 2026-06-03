@@ -1,12 +1,12 @@
 <template>
-    <el-container class="help-container">
-        <el-header class="help-header">
+    <section class="help-container">
+        <header class="help-header">
             <QuestionHeader @sidebar="sidebar" sidebar_btn> </QuestionHeader>
             <div class="help-title">
                 <p>帮助</p>
             </div>
-        </el-header>
-        <el-main class="help-main">
+        </header>
+        <main class="help-main">
             <el-scrollbar>
                 <div class="help-content">
                     <el-card class="help-card intro-card" shadow="hover">
@@ -59,14 +59,18 @@
                     </el-card>
                 </div>
             </el-scrollbar>
-        </el-main>
-    </el-container>
+        </main>
+    </section>
 </template>
 
 <script setup lang="ts">
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { Check } from '@element-plus/icons-vue'
+import { ElCard } from 'element-plus/es/components/card/index.mjs'
+import { ElImage } from 'element-plus/es/components/image/index.mjs'
+import 'element-plus/es/components/card/style/css'
+import 'element-plus/es/components/image/style/css'
 import { ref } from 'vue'
 
 const sidebarStore = SidebarStore()

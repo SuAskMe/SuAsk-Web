@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { ElImage } from 'element-plus/es/components/image/index.mjs'
+import 'element-plus/es/components/image/style/css'
 import { getImgStyle, getVisibleImageUrls } from '../bubble-card'
 
 const props = defineProps<{

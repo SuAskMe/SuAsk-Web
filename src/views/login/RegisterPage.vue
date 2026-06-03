@@ -109,6 +109,8 @@ import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import 'element-plus/es/components/dialog/style/css'
 import { reactive, ref } from 'vue'
 
 const deviceTypeStore = DeviceTypeStore()

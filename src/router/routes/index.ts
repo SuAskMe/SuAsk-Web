@@ -31,17 +31,8 @@ export const LoginRoute: AppRouteRecordRaw = {
     },
 }
 
-export const TestRoute: AppRouteRecordRaw = {
-    path: '/test',
-    name: 'Test',
-    component: () => import('@/views/TestPage.vue'),
-    meta: {
-        title: '测试',
-    },
-}
-
 // 最基础的路由
-export const basicRoutes = [LoginRoute, TestRoute, RootRoot, PageNotFound]
+export const basicRoutes = [LoginRoute, RootRoot, PageNotFound]
 
 // Guest 路由
 export const guestRoutes = [

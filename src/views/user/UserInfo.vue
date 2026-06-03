@@ -1,10 +1,10 @@
 <template>
-    <el-container style="height: 100%" class="container">
-        <el-header class="user-header" height="auto">
+    <div class="container">
+        <header class="user-header">
             <QuestionHeader @return="navigateBack" :return_btn="true" />
-        </el-header>
-        <el-scrollbar>
-            <el-main class="main-container">
+        </header>
+        <el-scrollbar class="profile-scroll">
+            <main class="main-container">
                 <div class="main">
                     <div class="basic-item">
                         <div class="user-profile-container">
@@ -58,9 +58,9 @@
                         </div>
                     </div>
                 </div>
-            </el-main>
+            </main>
         </el-scrollbar>
-    </el-container>
+    </div>
 </template>
 
 <script setup lang="ts">

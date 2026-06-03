@@ -1,9 +1,9 @@
 <template>
-    <el-container class="admin-page">
-        <el-header class="admin-header">
+    <section class="admin-page">
+        <header class="admin-header">
             <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
             <h2>用户管理</h2>
-        </el-header>
+        </header>
 
         <el-scrollbar class="admin-content">
             <!-- 工具栏 -->
@@ -388,11 +388,11 @@
                 </div>
             </div>
         </Transition>
-    </el-container>
+    </section>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import {
@@ -515,7 +515,14 @@ function closeModal() {
 const createLoading = ref(false)
 const createForm = reactive(initCreateForm())
 
+function revokeObjectUrl(url?: string) {
+    if (url?.startsWith('blob:')) {
+        URL.revokeObjectURL(url)
+    }
+}
+
 function openCreateDialog() {
+    clearCreateAvatar()
     Object.assign(createForm, initCreateForm())
     createDialogVisible.value = true
 }
@@ -523,12 +530,15 @@ function openCreateDialog() {
 function onCreateAvatarFileChange(e: Event) {
     const input = e.target as HTMLInputElement
     if (input.files && input.files[0]) {
+        revokeObjectUrl(createForm.avatarPreview)
         createForm.avatarFile = input.files[0]
         createForm.avatarPreview = URL.createObjectURL(input.files[0])
+        input.value = ''
     }
 }
 
 function clearCreateAvatar() {
+    revokeObjectUrl(createForm.avatarPreview)
     createForm.avatarFile = null
     createForm.avatarPreview = ''
 }
@@ -583,6 +593,7 @@ const editForm = reactive({
 })
 
 function openEditDialog(user: AdminUserItem) {
+    clearEditAvatarPreview()
     Object.assign(editForm, {
         ...initEditForm(user),
         avatarPreview: user.avatar || '',
@@ -594,9 +605,17 @@ function openEditDialog(user: AdminUserItem) {
 function onAvatarFileChange(e: Event) {
     const input = e.target as HTMLInputElement
     if (input.files && input.files[0]) {
+        revokeObjectUrl(editForm.avatarPreview)
         editForm.avatarFile = input.files[0]
         editForm.avatarPreview = URL.createObjectURL(input.files[0])
+        input.value = ''
     }
+}
+
+function clearEditAvatarPreview() {
+    revokeObjectUrl(editForm.avatarPreview)
+    editForm.avatarPreview = ''
+    editForm.avatarFile = null
 }
 
 async function handleEdit() {
@@ -672,5 +691,22 @@ async function handleDelete() {
         deleteLoading.value = false
     }
 }
+
+watch(createDialogVisible, (visible) => {
+    if (!visible) {
+        clearCreateAvatar()
+    }
+})
+
+watch(editDialogVisible, (visible) => {
+    if (!visible) {
+        clearEditAvatarPreview()
+    }
+})
+
+onUnmounted(() => {
+    clearCreateAvatar()
+    clearEditAvatarPreview()
+})
 </script>
 <style scoped lang="scss" src="./UserManagement.scss"></style>

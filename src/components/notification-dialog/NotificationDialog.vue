@@ -173,6 +173,16 @@ import type { NewQuestion, NewAnswer, NewReply } from '@/model/notification.mode
 import { NotificationCard } from '@/components/notification-dialog'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import {
+    ArrowLeft,
+    ChatDotRound,
+    ChatLineRound,
+    Delete,
+    Notification,
+    WarningFilled,
+} from '@element-plus/icons-vue'
+import 'element-plus/es/components/dialog/style/css'
 import { hasTeacherAbility } from '@/utils/auth'
 
 // 导入全局事件总线

@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
-    <el-container class="container">
+    <div class="container">
         <div class="main-container" ref="mainContainer">
             <el-scrollbar @scroll="checkStickyHeader">
                 <div class="header" ref="stickyHeader">
@@ -52,7 +52,7 @@
                 </div>
             </el-scrollbar>
         </div>
-    </el-container>
+    </div>
 </template>
 
 <script setup lang="ts">

@@ -200,13 +200,24 @@ import type { AddQuestionReq, QuestionItem } from '@/model/question.model'
 import { UserStore } from '@/store/modules/user'
 import { GenId } from '@/views/question-detail/QuestionDetail'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
+import { ElImage } from 'element-plus/es/components/image/index.mjs'
+import { ArrowLeft, Close } from '@element-plus/icons-vue'
+import 'element-plus/es/components/dialog/style/css'
+import 'element-plus/es/components/image/style/css'
 import SvgIcon from '@/components/svg-icon'
 import { UserAvatar } from '@/components/user-avatar'
-import { inject, ref, type Ref } from 'vue'
+import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { addQuestionApi } from '@/api/question/question.api'
-import { db, type Question } from './db'
+import { loadDraftDb, type Question } from './draftDb'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
+import {
+    createObjectUrlPreview,
+    revokeObjectUrlPreview,
+    revokeObjectUrlPreviews,
+    type ObjectUrlPreview,
+} from './objectUrlPreviews'
 
 // pinia store
 const userStore = UserStore()
@@ -214,25 +225,20 @@ const userStore = UserStore()
 const composeDialogStore = ComposeDialogStore()
 
 // interface
-interface Img {
-    id: number
-    url: string
-}
-
 export interface Ask {
     draftId?: number
     title: string
     content: string
     isPrivate: boolean
     fileList: File[]
-    imageList: Img[]
+    imageList: ObjectUrlPreview[]
 }
 
 export interface Answer {
     draftId?: number
     content: string
     fileList: File[]
-    imageList: Img[]
+    imageList: ObjectUrlPreview[]
 }
 
 // data
@@ -307,9 +313,9 @@ defineExpose({
     closeDialog,
 })
 
-function openDraft() {
+async function openDraft() {
     draftVisible.value = true
-    getDrafts()
+    await getDrafts()
 }
 
 function pickImageImpl(event: Event) {
@@ -322,16 +328,14 @@ function pickImageImpl(event: Event) {
         }
         questionContent.value.fileList.push(...files)
         for (let i = 0; i < files.length; i++) {
-            questionContent.value.imageList.push({
-                id: GenId(),
-                url: URL.createObjectURL(files[i]),
-            })
+            questionContent.value.imageList.push(createObjectUrlPreview(files[i], GenId()))
         }
         if (imgPicker.value) imgPicker.value.value = ''
     }
 }
 
 function deleteImage(index: number) {
+    revokeObjectUrlPreview(questionContent.value.imageList[index])
     questionContent.value.fileList.splice(index, 1)
     questionContent.value.imageList.splice(index, 1)
 }
@@ -346,10 +350,9 @@ async function postQuestion() {
     }
 
     const formData = new FormData()
-    const imgList: string[] = []
+    const imgList = questionContent.value.imageList.map((img) => img.url)
     questionContent.value.fileList.forEach((file: File) => {
         formData.append('files', file)
-        imgList.push(URL.createObjectURL(file))
     })
 
     const req: AddQuestionReq = {
@@ -370,7 +373,7 @@ async function postQuestion() {
             // visible.value = false;
             composeDialogStore.close()
             if (questionContent.value.draftId) {
-                // deleteDraft(questionContent.value.draftId);
+                void deleteDraft(questionContent.value.draftId)
             }
             const q: QuestionItem = {
                 id: res.data.id,
@@ -384,16 +387,21 @@ async function postQuestion() {
                 answer_avatars: [],
             }
             emit('questionPosted', q)
-            clearQuestionContent()
+            clearQuestionContent({ revokeImages: false })
         } else {
             ElMessage.error('提问失败')
         }
     })
 }
 
-function clearQuestionContent() {
+function clearQuestionContent(options: { revokeImages?: boolean } = {}) {
+    if (options.revokeImages !== false) {
+        revokeObjectUrlPreviews(questionContent.value.imageList)
+    }
+    questionContent.value.draftId = undefined
     questionContent.value.title = ''
     questionContent.value.content = ''
+    questionContent.value.isPrivate = false
     questionContent.value.fileList = []
     questionContent.value.imageList = []
 }
@@ -407,15 +415,13 @@ function handleDeleteMod() {
 
 function useDraft(draft: Question) {
     if (deleteMod.value) return
+    revokeObjectUrlPreviews(questionContent.value.imageList)
     questionContent.value.title = draft.title
     questionContent.value.content = draft.content
     questionContent.value.fileList = []
     questionContent.value.imageList = []
     for (const img of draft.imgList) {
-        questionContent.value.imageList.push({
-            id: GenId(),
-            url: URL.createObjectURL(img),
-        })
+        questionContent.value.imageList.push(createObjectUrlPreview(img, GenId()))
         const file = img as File
         questionContent.value.fileList.push(new File([file], file.name, { type: file.type }))
     }
@@ -438,6 +444,7 @@ async function addDraft() {
         imgList.push(file)
     }
     try {
+        const db = await loadDraftDb()
         await db.questions.add({
             title: questionContent.value.title,
             content: questionContent.value.content,
@@ -451,6 +458,7 @@ async function addDraft() {
 
 async function getDrafts() {
     try {
+        const db = await loadDraftDb()
         drafts.value = await db.questions.reverse().toArray()
     } catch {
         ElMessage.error('读取草稿失败')
@@ -459,6 +467,7 @@ async function getDrafts() {
 
 async function deleteDraft(id: number | number[]) {
     try {
+        const db = await loadDraftDb()
         if (typeof id === 'number') {
             await db.questions.delete(id)
         } else {
@@ -472,11 +481,12 @@ async function deleteDraft(id: number | number[]) {
     }
 }
 
-function saveDraft() {
-    addDraft()
+async function saveDraft() {
+    await addDraft()
     innerVisible.value = false
     // visible.value = false;
     composeDialogStore.close()
+    clearQuestionContent()
 }
 
 function cancelSaveDraft() {
@@ -485,6 +495,10 @@ function cancelSaveDraft() {
     composeDialogStore.close()
     clearQuestionContent()
 }
+
+onBeforeUnmount(() => {
+    clearQuestionContent()
+})
 </script>
 
 <style scoped lang="scss" src="./style/index.scss"></style>

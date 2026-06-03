@@ -1,9 +1,9 @@
 <template>
-    <el-container class="admin-page admin-question-detail-page">
-        <el-header class="admin-header">
+    <section class="admin-page admin-question-detail-page">
+        <header class="admin-header">
             <QuestionHeader @sidebar="toggleSidebar" sidebar_btn />
             <h2>问题详情</h2>
-        </el-header>
+        </header>
 
         <el-scrollbar class="admin-content">
             <div class="toolbar detail-toolbar">
@@ -228,7 +228,7 @@
                 </div>
             </div>
         </Transition>
-    </el-container>
+    </section>
 </template>
 
 <script setup lang="ts">
