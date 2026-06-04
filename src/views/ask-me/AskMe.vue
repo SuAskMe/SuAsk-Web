@@ -40,11 +40,11 @@
                 <!-- 全部 -->
                 <div v-if="activeTab === 'all'" key="all" class="question-list">
                     <template v-if="tabLists.all.length > 0">
-                        <BubbleCard
+                        <div
                             v-for="(question, index) in tabLists.all"
                             :key="question.id"
                             :class="[
-                                'teacher-question-card',
+                                'question-card',
                                 {
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
@@ -52,21 +52,82 @@
                                     'status-deleted': question.tag === '已删除',
                                 },
                             ]"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :is-pinned="question.is_pinned"
-                            :bubble-key="index"
-                            show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
                             }"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :click-card="navigateTo"
-                            :click-pin="pin"
-                        ></BubbleCard>
+                            @click="navigateTo(question)"
+                        >
+                            <div class="question-info">
+                                <div class="question-detail">
+                                    <div class="question-title-row">
+                                        <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-badges">
+                                            <span
+                                                :class="[
+                                                    'badge',
+                                                    {
+                                                        'status-answered':
+                                                            question.tag === '已回答',
+                                                        'status-unanswered':
+                                                            question.tag === '未回答',
+                                                        'status-deleted': question.tag === '已删除',
+                                                    },
+                                                ]"
+                                            >
+                                                <span class="status-dot"></span>
+                                                {{ question.tag }}
+                                            </span>
+                                            <span v-if="question.is_pinned" class="badge pin-badge">
+                                                <span class="status-dot"></span>
+                                                已置顶
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="question-summary">{{ question.contents }}</p>
+                                    <CardMediaGrid
+                                        v-if="question.image_urls && question.image_urls.length > 0"
+                                        :image-urls="question.image_urls"
+                                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                                    />
+                                </div>
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-details">
+                                    <span class="meta-item">
+                                        <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                        浏览：{{ question.views }}
+                                    </span>
+                                    <span class="meta-item time">
+                                        {{ getTimeStr(question.created_at) }}
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn view"
+                                        @click.stop="navigateTo(question)"
+                                    >
+                                        查看
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn pin"
+                                        @click.stop="pin(question)"
+                                    >
+                                        {{ question.is_pinned ? '取消置顶' : '置顶' }}
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn delete"
+                                        @click.stop="handleDelete(question)"
+                                    >
+                                        删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <div v-else-if="!loading" class="empty-state">
                         <el-empty description="暂无提问" />
@@ -75,11 +136,11 @@
                 <!-- 已回答 -->
                 <div v-else-if="activeTab === 'answered'" key="answered" class="question-list">
                     <template v-if="tabLists.answered.length > 0">
-                        <BubbleCard
+                        <div
                             v-for="(question, index) in tabLists.answered"
                             :key="question.id"
                             :class="[
-                                'teacher-question-card',
+                                'question-card',
                                 {
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
@@ -87,21 +148,82 @@
                                     'status-deleted': question.tag === '已删除',
                                 },
                             ]"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :is-pinned="question.is_pinned"
-                            :bubble-key="index"
-                            show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
                             }"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :click-card="navigateTo"
-                            :click-pin="pin"
-                        ></BubbleCard>
+                            @click="navigateTo(question)"
+                        >
+                            <div class="question-info">
+                                <div class="question-detail">
+                                    <div class="question-title-row">
+                                        <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-badges">
+                                            <span
+                                                :class="[
+                                                    'badge',
+                                                    {
+                                                        'status-answered':
+                                                            question.tag === '已回答',
+                                                        'status-unanswered':
+                                                            question.tag === '未回答',
+                                                        'status-deleted': question.tag === '已删除',
+                                                    },
+                                                ]"
+                                            >
+                                                <span class="status-dot"></span>
+                                                {{ question.tag }}
+                                            </span>
+                                            <span v-if="question.is_pinned" class="badge pin-badge">
+                                                <span class="status-dot"></span>
+                                                已置顶
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="question-summary">{{ question.contents }}</p>
+                                    <CardMediaGrid
+                                        v-if="question.image_urls && question.image_urls.length > 0"
+                                        :image-urls="question.image_urls"
+                                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                                    />
+                                </div>
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-details">
+                                    <span class="meta-item">
+                                        <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                        浏览：{{ question.views }}
+                                    </span>
+                                    <span class="meta-item time">
+                                        {{ getTimeStr(question.created_at) }}
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn view"
+                                        @click.stop="navigateTo(question)"
+                                    >
+                                        查看
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn pin"
+                                        @click.stop="pin(question)"
+                                    >
+                                        {{ question.is_pinned ? '取消置顶' : '置顶' }}
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn delete"
+                                        @click.stop="handleDelete(question)"
+                                    >
+                                        删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <div v-else-if="!loading" class="empty-state">
                         <el-empty description="暂无提问" />
@@ -110,11 +232,11 @@
                 <!-- 未回答 -->
                 <div v-else-if="activeTab === 'unanswered'" key="unanswered" class="question-list">
                     <template v-if="tabLists.unanswered.length > 0">
-                        <BubbleCard
+                        <div
                             v-for="(question, index) in tabLists.unanswered"
                             :key="question.id"
                             :class="[
-                                'teacher-question-card',
+                                'question-card',
                                 {
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
@@ -122,21 +244,82 @@
                                     'status-deleted': question.tag === '已删除',
                                 },
                             ]"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :is-pinned="question.is_pinned"
-                            :bubble-key="index"
-                            show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
                             }"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :click-card="navigateTo"
-                            :click-pin="pin"
-                        ></BubbleCard>
+                            @click="navigateTo(question)"
+                        >
+                            <div class="question-info">
+                                <div class="question-detail">
+                                    <div class="question-title-row">
+                                        <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-badges">
+                                            <span
+                                                :class="[
+                                                    'badge',
+                                                    {
+                                                        'status-answered':
+                                                            question.tag === '已回答',
+                                                        'status-unanswered':
+                                                            question.tag === '未回答',
+                                                        'status-deleted': question.tag === '已删除',
+                                                    },
+                                                ]"
+                                            >
+                                                <span class="status-dot"></span>
+                                                {{ question.tag }}
+                                            </span>
+                                            <span v-if="question.is_pinned" class="badge pin-badge">
+                                                <span class="status-dot"></span>
+                                                已置顶
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="question-summary">{{ question.contents }}</p>
+                                    <CardMediaGrid
+                                        v-if="question.image_urls && question.image_urls.length > 0"
+                                        :image-urls="question.image_urls"
+                                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                                    />
+                                </div>
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-details">
+                                    <span class="meta-item">
+                                        <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                        浏览：{{ question.views }}
+                                    </span>
+                                    <span class="meta-item time">
+                                        {{ getTimeStr(question.created_at) }}
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn view"
+                                        @click.stop="navigateTo(question)"
+                                    >
+                                        查看
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn pin"
+                                        @click.stop="pin(question)"
+                                    >
+                                        {{ question.is_pinned ? '取消置顶' : '置顶' }}
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn delete"
+                                        @click.stop="handleDelete(question)"
+                                    >
+                                        删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <div v-else-if="!loading" class="empty-state">
                         <el-empty description="暂无提问" />
@@ -145,11 +328,11 @@
                 <!-- 已置顶 -->
                 <div v-else-if="activeTab === 'top'" key="top" class="question-list">
                     <template v-if="tabLists.top.length > 0">
-                        <BubbleCard
+                        <div
                             v-for="(question, index) in tabLists.top"
                             :key="question.id"
                             :class="[
-                                'teacher-question-card',
+                                'question-card',
                                 {
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
@@ -157,21 +340,82 @@
                                     'status-deleted': question.tag === '已删除',
                                 },
                             ]"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :is-pinned="question.is_pinned"
-                            :bubble-key="index"
-                            show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
                             }"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :click-card="navigateTo"
-                            :click-pin="pin"
-                        ></BubbleCard>
+                            @click="navigateTo(question)"
+                        >
+                            <div class="question-info">
+                                <div class="question-detail">
+                                    <div class="question-title-row">
+                                        <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-badges">
+                                            <span
+                                                :class="[
+                                                    'badge',
+                                                    {
+                                                        'status-answered':
+                                                            question.tag === '已回答',
+                                                        'status-unanswered':
+                                                            question.tag === '未回答',
+                                                        'status-deleted': question.tag === '已删除',
+                                                    },
+                                                ]"
+                                            >
+                                                <span class="status-dot"></span>
+                                                {{ question.tag }}
+                                            </span>
+                                            <span v-if="question.is_pinned" class="badge pin-badge">
+                                                <span class="status-dot"></span>
+                                                已置顶
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="question-summary">{{ question.contents }}</p>
+                                    <CardMediaGrid
+                                        v-if="question.image_urls && question.image_urls.length > 0"
+                                        :image-urls="question.image_urls"
+                                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                                    />
+                                </div>
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-details">
+                                    <span class="meta-item">
+                                        <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                        浏览：{{ question.views }}
+                                    </span>
+                                    <span class="meta-item time">
+                                        {{ getTimeStr(question.created_at) }}
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn view"
+                                        @click.stop="navigateTo(question)"
+                                    >
+                                        查看
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn pin"
+                                        @click.stop="pin(question)"
+                                    >
+                                        {{ question.is_pinned ? '取消置顶' : '置顶' }}
+                                    </button>
+                                    <button
+                                        v-if="question.tag !== '已删除'"
+                                        type="button"
+                                        class="action-btn delete"
+                                        @click.stop="handleDelete(question)"
+                                    >
+                                        删除
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <div v-else-if="!loading" class="empty-state">
                         <el-empty description="暂无提问" />
@@ -180,32 +424,80 @@
                 <!-- 已删除 -->
                 <div v-else-if="activeTab === 'deleted'" key="deleted" class="question-list">
                     <template v-if="tabLists.deleted.length > 0">
-                        <BubbleCard
+                        <div
                             v-for="(question, index) in tabLists.deleted"
                             :key="question.id"
                             :class="[
-                                'teacher-question-card',
+                                'question-card',
                                 {
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
                                     'status-deleted': question.tag === '已删除',
                                 },
                             ]"
-                            :title="question.title"
-                            :text="question.contents"
-                            :views="question.views"
-                            :time-stamp="question.created_at"
-                            :image-urls="question.image_urls"
-                            :is-pinned="question.is_pinned"
-                            :bubble-key="index"
-                            show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
                             }"
-                            :width="deviceType.isMobile ? '80vw' : '45vw'"
-                            :click-card="navigateTo"
-                            :click-pin="pin"
-                        ></BubbleCard>
+                            @click="navigateTo(question)"
+                        >
+                            <div class="question-info">
+                                <div class="question-detail">
+                                    <div class="question-title-row">
+                                        <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-badges">
+                                            <span
+                                                :class="[
+                                                    'badge',
+                                                    {
+                                                        'status-answered':
+                                                            question.tag === '已回答',
+                                                        'status-unanswered':
+                                                            question.tag === '未回答',
+                                                        'status-deleted': question.tag === '已删除',
+                                                    },
+                                                ]"
+                                            >
+                                                <span class="status-dot"></span>
+                                                {{ question.tag }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p class="question-summary">{{ question.contents }}</p>
+                                    <CardMediaGrid
+                                        v-if="question.image_urls && question.image_urls.length > 0"
+                                        :image-urls="question.image_urls"
+                                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                                    />
+                                </div>
+                            </div>
+                            <div class="question-meta">
+                                <div class="meta-details">
+                                    <span class="meta-item">
+                                        <svg-icon icon="eye" color="#8b96a8" size="13px" />
+                                        浏览：{{ question.views }}
+                                    </span>
+                                    <span class="meta-item time">
+                                        {{ getTimeStr(question.created_at) }}
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button
+                                        type="button"
+                                        class="action-btn view"
+                                        @click.stop="navigateTo(question)"
+                                    >
+                                        查看
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="action-btn restore"
+                                        @click.stop="handleRestore(question)"
+                                    >
+                                        恢复
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </template>
                     <div v-else-if="!loading" class="empty-state">
                         <el-empty description="暂无提问" />
@@ -218,14 +510,18 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed, watch, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { BubbleCard } from '@/components/bubble-card'
+import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
+import CardMediaGrid from '@/components/bubble-card/shared/CardMediaGrid.vue'
+import { getTimeStr } from '@/utils/time'
 import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { getQFMAllApi, pinQFMApi, searchQFMApi } from '@/api/question/teacher-self.api'
+import { deleteQuestionApi, restoreQuestionApi } from '@/api/question/question.api'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
@@ -280,7 +576,20 @@ const {
     },
 })
 
-const { navigateTo } = useQuestionDetailNavigation(questionList)
+const { navigateTo: origNavigateTo } = useQuestionDetailNavigation(questionList)
+const router = useRouter()
+
+const navigateTo = (question: QFMItem) => {
+    if (!question) return
+    const index = questionList.findIndex((q) => q.id === question.id)
+    if (index !== -1) {
+        origNavigateTo(index)
+    } else {
+        router.push({
+            path: `/question-detail/${question.id}`,
+        })
+    }
+}
 
 // Store separate lists for each tab to prevent double rendering and card drifting during transitions
 const tabLists = reactive<Record<string, QFMItem[]>>({
@@ -296,7 +605,7 @@ watch(
     (newList) => {
         tabLists[activeTab.value] = [...newList]
     },
-    { deep: true, immediate: true }
+    { deep: true, immediate: true },
 )
 
 const Init = async () => {
@@ -347,13 +656,75 @@ const cancelSearch = async () => {
     loading.value = false
 }
 
-const pin = async (key: number) => {
-    key = Number(key)
-    const res = await pinQFMApi({ question_id: questionList[key].id })
+const pin = async (question: QFMItem) => {
+    if (!question) return
+    const res = await pinQFMApi({ question_id: question.id })
     if (res) {
-        questionList[key].is_pinned = res.is_pinned
+        question.is_pinned = res.is_pinned
+        const idx = questionList.findIndex((q) => q.id === question.id)
+        if (idx !== -1) {
+            questionList[idx].is_pinned = res.is_pinned
+        }
     } else {
         ElMessage.error('请求失败')
+    }
+}
+
+const handleDelete = async (question: QFMItem) => {
+    if (!question) return
+    try {
+        await ElMessageBox.confirm(
+            `确定要删除提问“${question.title}”吗？删除后该问题将移入已删除箱。`,
+            '确认删除',
+            {
+                confirmButtonText: '确认删除',
+                cancelButtonText: '取消',
+                type: 'warning',
+            },
+        )
+    } catch {
+        return
+    }
+
+    loading.value = true
+    try {
+        await deleteQuestionApi(question.id)
+        ElMessage.success('删除提问成功')
+        await refresh(sort_type)
+        resetScrollPosition()
+    } catch {
+        ElMessage.error('删除提问失败')
+    } finally {
+        loading.value = false
+    }
+}
+
+const handleRestore = async (question: QFMItem) => {
+    if (!question) return
+    try {
+        await ElMessageBox.confirm(
+            `确定要恢复提问“${question.title}”吗？恢复后它会重新出现在正常列表中。`,
+            '恢复确认',
+            {
+                confirmButtonText: '确认恢复',
+                cancelButtonText: '取消',
+                type: 'warning',
+            },
+        )
+    } catch {
+        return
+    }
+
+    loading.value = true
+    try {
+        await restoreQuestionApi(question.id)
+        ElMessage.success('恢复提问成功')
+        await refresh(sort_type)
+        resetScrollPosition()
+    } catch {
+        ElMessage.error('恢复提问失败')
+    } finally {
+        loading.value = false
     }
 }
 
@@ -443,45 +814,6 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     min-height: 300px;
-}
-
-// ==================== 问题侧边状态颜色条 (内容管理风格) ====================
-.teacher-question-card {
-    :deep(.card-container) {
-        position: relative;
-        padding-left: 28px !important;
-
-        &::before {
-            content: '';
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 28px;
-            border-radius: 2px;
-            background: transparent;
-            transition: all 0.25s ease;
-        }
-    }
-
-    &.status-answered :deep(.card-container)::before {
-        background: #10b981; // 已回答: 绿色
-    }
-
-    &.status-unanswered :deep(.card-container)::before {
-        background: #f59e0b; // 未回答: 橙色
-    }
-
-    // 置顶状态拥有最高优先级配色
-    &.status-pinned :deep(.card-container)::before {
-        background: #ffc107; // 置顶: 金黄色
-    }
-
-    // 已删除状态配色 (红色)
-    &.status-deleted :deep(.card-container)::before {
-        background: #ef4444; // 已删除: 红色
-    }
 }
 
 // 空状态淡入
