@@ -61,28 +61,6 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
-                                        <div class="question-badges">
-                                            <span
-                                                v-if="question.tag"
-                                                :class="[
-                                                    'badge',
-                                                    {
-                                                        'status-answered':
-                                                            question.tag === '已回答',
-                                                        'status-unanswered':
-                                                            question.tag === '未回答',
-                                                        'status-deleted': question.tag === '已删除',
-                                                    },
-                                                ]"
-                                            >
-                                                <span class="status-dot"></span>
-                                                {{ question.tag }}
-                                            </span>
-                                            <span v-if="question.is_pinned" class="badge pin-badge">
-                                                <span class="status-dot"></span>
-                                                已置顶
-                                            </span>
-                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -158,28 +136,6 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
-                                        <div class="question-badges">
-                                            <span
-                                                v-if="question.tag"
-                                                :class="[
-                                                    'badge',
-                                                    {
-                                                        'status-answered':
-                                                            question.tag === '已回答',
-                                                        'status-unanswered':
-                                                            question.tag === '未回答',
-                                                        'status-deleted': question.tag === '已删除',
-                                                    },
-                                                ]"
-                                            >
-                                                <span class="status-dot"></span>
-                                                {{ question.tag }}
-                                            </span>
-                                            <span v-if="question.is_pinned" class="badge pin-badge">
-                                                <span class="status-dot"></span>
-                                                已置顶
-                                            </span>
-                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -255,28 +211,6 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
-                                        <div class="question-badges">
-                                            <span
-                                                v-if="question.tag"
-                                                :class="[
-                                                    'badge',
-                                                    {
-                                                        'status-answered':
-                                                            question.tag === '已回答',
-                                                        'status-unanswered':
-                                                            question.tag === '未回答',
-                                                        'status-deleted': question.tag === '已删除',
-                                                    },
-                                                ]"
-                                            >
-                                                <span class="status-dot"></span>
-                                                {{ question.tag }}
-                                            </span>
-                                            <span v-if="question.is_pinned" class="badge pin-badge">
-                                                <span class="status-dot"></span>
-                                                已置顶
-                                            </span>
-                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -352,28 +286,6 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
-                                        <div class="question-badges">
-                                            <span
-                                                v-if="question.tag"
-                                                :class="[
-                                                    'badge',
-                                                    {
-                                                        'status-answered':
-                                                            question.tag === '已回答',
-                                                        'status-unanswered':
-                                                            question.tag === '未回答',
-                                                        'status-deleted': question.tag === '已删除',
-                                                    },
-                                                ]"
-                                            >
-                                                <span class="status-dot"></span>
-                                                {{ question.tag }}
-                                            </span>
-                                            <span v-if="question.is_pinned" class="badge pin-badge">
-                                                <span class="status-dot"></span>
-                                                已置顶
-                                            </span>
-                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -448,24 +360,6 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
-                                        <div class="question-badges">
-                                            <span
-                                                v-if="question.tag"
-                                                :class="[
-                                                    'badge',
-                                                    {
-                                                        'status-answered':
-                                                            question.tag === '已回答',
-                                                        'status-unanswered':
-                                                            question.tag === '未回答',
-                                                        'status-deleted': question.tag === '已删除',
-                                                    },
-                                                ]"
-                                            >
-                                                <span class="status-dot"></span>
-                                                {{ question.tag }}
-                                            </span>
-                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
