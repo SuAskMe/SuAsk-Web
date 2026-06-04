@@ -23,7 +23,7 @@ defineEmits(['favorite'])
 
 <template>
     <div class="meta-row">
-        <div v-if="tag !== undefined" class="tag" :style="tagStyle">
+        <div v-if="tag" class="tag" :style="tagStyle">
             {{ tag }}
         </div>
         <div class="looks">
