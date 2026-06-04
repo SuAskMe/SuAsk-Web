@@ -46,6 +46,14 @@
                 <BubbleCard
                     v-for="(question, index) in questionList"
                     :key="question.id"
+                    :class="[
+                        'teacher-question-card',
+                        {
+                            'status-answered': question.tag === '已回答',
+                            'status-unanswered': question.tag === '未回答',
+                            'status-pinned': question.is_pinned,
+                        },
+                    ]"
                     :title="question.title"
                     :text="question.contents"
                     :views="question.views"
@@ -270,6 +278,40 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     min-height: 300px;
+}
+
+// ==================== 问题侧边状态颜色条 (内容管理风格) ====================
+.teacher-question-card {
+    :deep(.card-container) {
+        position: relative;
+        padding-left: 28px !important;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 28px;
+            border-radius: 2px;
+            background: transparent;
+            transition: all 0.25s ease;
+        }
+    }
+
+    &.status-answered :deep(.card-container)::before {
+        background: #10b981; // 已回答: 绿色
+    }
+
+    &.status-unanswered :deep(.card-container)::before {
+        background: #f59e0b; // 未回答: 橙色
+    }
+
+    // 置顶状态拥有最高优先级配色
+    &.status-pinned :deep(.card-container)::before {
+        background: #ffc107; // 置顶: 金黄色
+    }
 }
 
 // 空状态淡入
