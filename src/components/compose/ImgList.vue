@@ -47,16 +47,17 @@ onBeforeUnmount(() => {
 .img-container {
     display: flex;
     flex-direction: row;
-    height: 100px;
+    height: 100%;
     position: relative;
     width: 100%;
 
     .img {
         position: absolute;
         top: 0;
-        width: 100px;
-        height: 100px;
+        height: 100%;
+        width: auto;
         aspect-ratio: 1/1;
+        object-fit: cover;
         border-radius: 15%;
         border: solid 2px white;
         background-color: white;
