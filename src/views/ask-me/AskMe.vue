@@ -59,7 +59,6 @@
                             :image-urls="question.image_urls"
                             :is-pinned="question.is_pinned"
                             :bubble-key="index"
-                            :tag="question.tag"
                             show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
@@ -95,7 +94,6 @@
                             :image-urls="question.image_urls"
                             :is-pinned="question.is_pinned"
                             :bubble-key="index"
-                            :tag="question.tag"
                             show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
@@ -131,7 +129,6 @@
                             :image-urls="question.image_urls"
                             :is-pinned="question.is_pinned"
                             :bubble-key="index"
-                            :tag="question.tag"
                             show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
@@ -167,7 +164,6 @@
                             :image-urls="question.image_urls"
                             :is-pinned="question.is_pinned"
                             :bubble-key="index"
-                            :tag="question.tag"
                             show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
@@ -202,7 +198,6 @@
                             :image-urls="question.image_urls"
                             :is-pinned="question.is_pinned"
                             :bubble-key="index"
-                            :tag="question.tag"
                             show-pin
                             :style="{
                                 marginTop: index === 0 ? '16px' : '0',
