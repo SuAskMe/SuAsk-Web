@@ -14,56 +14,13 @@
             text="热点问题"
             jump-to-path="/hot"
         />
-        <div class="menu-container">
-            <div
-                @click="toggleOpen"
-                style="display: flex; align-items: center"
-                class="control-panel-item"
-            >
-                <control-panel-item
-                    id="question"
-                    icon="message"
-                    text="我的提问箱"
-                    jumpToPath="/ask-me"
-                />
-                <svg-icon
-                    v-if="!isOpen"
-                    icon="arrow-left"
-                    color="#808080"
-                    size="24px"
-                    style="padding-top: 2px"
-                />
-                <svg-icon
-                    v-if="isOpen"
-                    icon="arrow-down"
-                    color="#808080"
-                    size="24px"
-                    style="padding-top: 2px"
-                />
-            </div>
-            <div class="submenu-wrapper" :style="{ height: isOpen ? submenuHeight + 'px' : '0' }">
-                <div class="menu-items" ref="menuItemsRef">
-                    <control-panel-item
-                        class="control-panel-item"
-                        id="question-new"
-                        text="新的提问"
-                        jumpToPath="/ask-me/unanswered"
-                    />
-                    <control-panel-item
-                        class="control-panel-item"
-                        id="question-old"
-                        text="已回答提问"
-                        jumpToPath="/ask-me/answered"
-                    />
-                    <control-panel-item
-                        class="control-panel-item"
-                        id="question-top"
-                        text="置顶提问"
-                        jumpToPath="/ask-me/top"
-                    />
-                </div>
-            </div>
-        </div>
+        <control-panel-item
+            class="control-panel-item"
+            id="question"
+            icon="message"
+            text="我的提问箱"
+            jumpToPath="/ask-me"
+        />
         <control-panel-item
             class="control-panel-item"
             id="ask-history"
@@ -96,30 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
 import ControlPanelItem from '@/components/control-panel-item'
-
-const isOpen = ref(false)
-const menuItemsRef = ref()
-const submenuHeight = ref(0)
-
-async function toggleOpen() {
-    isOpen.value = !isOpen.value
-
-    if (isOpen.value) {
-        await nextTick()
-        submenuHeight.value = menuItemsRef.value.scrollHeight
-    } else {
-        submenuHeight.value = 0
-    }
-}
-
-onMounted(async () => {
-    await nextTick()
-    if (menuItemsRef.value) {
-        submenuHeight.value = isOpen.value ? menuItemsRef.value.scrollHeight : 0
-    }
-})
 </script>
 
 <style scoped lang="scss">
@@ -134,23 +68,6 @@ $item-gap: 20px;
 
     .control-panel-item {
         transition: all 0.3s ease;
-    }
-
-    .menu-container {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .submenu-wrapper {
-        overflow: hidden;
-        transition: height 0.3s ease;
-    }
-
-    .menu-items {
-        display: flex;
-        flex-direction: column;
-        gap: $item-gap;
-        padding: 20px 0 0 24px;
     }
 
     .control-panel-item:hover {
