@@ -53,7 +53,7 @@
                             {
                                 'status-answered': question.tag === '已回答',
                                 'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-pinned': question.is_pinned,
                                 'status-deleted': question.tag === '已删除',
                             },
                         ]"
@@ -84,7 +84,7 @@
                             {
                                 'status-answered': question.tag === '已回答',
                                 'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-pinned': question.is_pinned,
                                 'status-deleted': question.tag === '已删除',
                             },
                         ]"
@@ -115,7 +115,7 @@
                             {
                                 'status-answered': question.tag === '已回答',
                                 'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-pinned': question.is_pinned,
                                 'status-deleted': question.tag === '已删除',
                             },
                         ]"
@@ -146,7 +146,7 @@
                             {
                                 'status-answered': question.tag === '已回答',
                                 'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-pinned': question.is_pinned,
                                 'status-deleted': question.tag === '已删除',
                             },
                         ]"
@@ -177,7 +177,6 @@
                             {
                                 'status-answered': question.tag === '已回答',
                                 'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
                                 'status-deleted': question.tag === '已删除',
                             },
                         ]"
