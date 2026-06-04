@@ -11,7 +11,7 @@
                 @search="search"
                 @cancel-search="cancelSearch"
                 @sidebar="sidebar"
-                :title="title"
+                title="我的提问箱"
                 :search="showSearchAndSort"
                 :has_sort_upvote="showSearchAndSort"
                 :sort_and_search="showSearchAndSort"
@@ -19,6 +19,23 @@
                 get_keywords_url="/questions/inbox/keywords"
             />
         </template>
+
+        <template #toolbar>
+            <div class="tabs-container">
+                <div class="tabs-wrapper">
+                    <div
+                        v-for="tab in tabs"
+                        :key="tab.key"
+                        :class="['tab-item', { active: activeTab === tab.key }]"
+                        @click="activeTab = tab.key"
+                    >
+                        <span class="tab-label">{{ tab.label }}</span>
+                        <div class="tab-indicator"></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
         <BubbleCard
             v-for="(question, index) in questionList"
             :key="question.id"
@@ -32,7 +49,7 @@
             :tag="question.tag"
             show-pin
             :style="{
-                marginTop: index === 0 ? '24px' : '0',
+                marginTop: index === 0 ? '16px' : '0',
             }"
             :width="deviceType.isMobile ? '80vw' : '45vw'"
             :click-card="navigateTo"
@@ -56,36 +73,22 @@ import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import type { QFMItem, GetQFMRes } from '@/model/teacher-self.model'
 
-interface AskMeProps {
-    type?: string // 'all' | 'answered' | 'unanswered' | 'top'
-}
+const tabs = [
+    { key: 'all', label: '全部提问' },
+    { key: 'unanswered', label: '新的提问' },
+    { key: 'answered', label: '已回答提问' },
+    { key: 'top', label: '置顶提问' },
+]
 
-const props = withDefaults(defineProps<AskMeProps>(), {
-    type: 'all',
-})
-
+const activeTab = ref('all')
 const loading = ref(false)
 
 const deviceType = DeviceTypeStore()
 const bg_img_index = useThemeBackgroundIndex()
 const { listPage, resetScrollPosition } = useQuestionListPageShell()
 
-// Page title based on props.type
-const title = computed(() => {
-    switch (props.type) {
-        case 'unanswered':
-            return '新的提问'
-        case 'answered':
-            return '已回答提问'
-        case 'top':
-            return '置顶提问'
-        default:
-            return '我的提问箱'
-    }
-})
-
 // Hide search & sort if on 'top' list (consistent with previous behavior)
-const showSearchAndSort = computed(() => props.type !== 'top')
+const showSearchAndSort = computed(() => activeTab.value !== 'top')
 
 // Instantiate pagination locally within the component
 const {
@@ -105,7 +108,7 @@ const {
                 page: params.page,
             })
         } else {
-            const tag = props.type === 'top' ? 'pinned' : props.type
+            const tag = activeTab.value === 'top' ? 'pinned' : activeTab.value
             res = await getQFMAllApi({
                 sort_type: params.sort_type,
                 page: params.page,
@@ -177,9 +180,10 @@ const pin = async (key: number) => {
 }
 
 watch(
-    () => props.type,
+    () => activeTab.value,
     () => {
         Init()
+        resetScrollPosition()
     },
 )
 
@@ -189,3 +193,79 @@ onMounted(() => {
 </script>
 
 <style scoped src="./AskMe.scss"></style>
+
+<style scoped lang="scss">
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.tabs-wrapper {
+    display: flex;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    gap: 4px;
+    z-index: 10;
+}
+
+.tab-item {
+    position: relative;
+    padding: 8px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    &.active {
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(72, 145, 224, 0.12);
+
+        .tab-label {
+            color: #4891e0;
+            font-weight: 600;
+        }
+
+        .tab-indicator {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+    }
+}
+
+.tab-label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.tab-indicator {
+    position: absolute;
+    bottom: 2px;
+    left: 16px;
+    right: 16px;
+    height: 3px;
+    background: #4891e0;
+    border-radius: 2px;
+    transform: scaleX(0);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+</style>
