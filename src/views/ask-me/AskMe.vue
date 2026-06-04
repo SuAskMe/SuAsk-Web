@@ -63,6 +63,7 @@
                                         <h3 class="question-title">{{ question.title }}</h3>
                                         <div class="question-badges">
                                             <span
+                                                v-if="question.tag"
                                                 :class="[
                                                     'badge',
                                                     {
@@ -159,6 +160,7 @@
                                         <h3 class="question-title">{{ question.title }}</h3>
                                         <div class="question-badges">
                                             <span
+                                                v-if="question.tag"
                                                 :class="[
                                                     'badge',
                                                     {
@@ -255,6 +257,7 @@
                                         <h3 class="question-title">{{ question.title }}</h3>
                                         <div class="question-badges">
                                             <span
+                                                v-if="question.tag"
                                                 :class="[
                                                     'badge',
                                                     {
@@ -351,6 +354,7 @@
                                         <h3 class="question-title">{{ question.title }}</h3>
                                         <div class="question-badges">
                                             <span
+                                                v-if="question.tag"
                                                 :class="[
                                                     'badge',
                                                     {
@@ -446,6 +450,7 @@
                                         <h3 class="question-title">{{ question.title }}</h3>
                                         <div class="question-badges">
                                             <span
+                                                v-if="question.tag"
                                                 :class="[
                                                     'badge',
                                                     {
