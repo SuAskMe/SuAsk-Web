@@ -52,26 +52,28 @@
                 <el-empty description="暂无热点问题" />
             </div>
         </Transition>
-        <Transition :name="slideDirection" mode="out-in">
-            <div :key="listKey" class="question-list">
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :id="`question-${question.id}`"
-                    :key="question.id"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :bubble-key="index"
-                    :click-card="navigateTo"
-                    :width="deviceType.isMobile ? '80vw' : '45vw'"
-                    :style="{
-                        marginTop: index === 0 ? '16px' : '0',
-                    }"
-                />
-            </div>
-        </Transition>
+        <div class="question-list-wrapper">
+            <Transition :name="slideDirection" mode="out-in">
+                <div :key="listKey" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in questionList"
+                        :id="`question-${question.id}`"
+                        :key="question.id"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :bubble-key="index"
+                        :click-card="navigateTo"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                    />
+                </div>
+            </Transition>
+        </div>
     </QuestionListPage>
 </template>
 

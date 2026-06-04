@@ -41,38 +41,40 @@
             </div>
         </Transition>
 
-        <Transition :name="slideDirection" mode="out-in">
-            <div :key="listKey" class="question-list">
-                <BubbleCard
-                    v-for="(question, index) in questionList"
-                    :key="question.id"
-                    :class="[
-                        'teacher-question-card',
-                        {
-                            'status-answered': question.tag === '已回答',
-                            'status-unanswered': question.tag === '未回答',
-                            'status-pinned': question.is_pinned && activeTab !== 'deleted',
-                            'status-deleted': question.tag === '已删除',
-                        },
-                    ]"
-                    :title="question.title"
-                    :text="question.contents"
-                    :views="question.views"
-                    :time-stamp="question.created_at"
-                    :image-urls="question.image_urls"
-                    :is-pinned="question.is_pinned"
-                    :bubble-key="index"
-                    :tag="question.tag"
-                    show-pin
-                    :style="{
-                        marginTop: index === 0 ? '16px' : '0',
-                    }"
-                    :width="deviceType.isMobile ? '80vw' : '45vw'"
-                    :click-card="navigateTo"
-                    :click-pin="pin"
-                ></BubbleCard>
-            </div>
-        </Transition>
+        <div class="question-list-wrapper">
+            <Transition :name="slideDirection" mode="out-in">
+                <div :key="listKey" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in questionList"
+                        :key="question.id"
+                        :class="[
+                            'teacher-question-card',
+                            {
+                                'status-answered': question.tag === '已回答',
+                                'status-unanswered': question.tag === '未回答',
+                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-deleted': question.tag === '已删除',
+                            },
+                        ]"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :is-pinned="question.is_pinned"
+                        :bubble-key="index"
+                        :tag="question.tag"
+                        show-pin
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :click-card="navigateTo"
+                        :click-pin="pin"
+                    ></BubbleCard>
+                </div>
+            </Transition>
+        </div>
     </QuestionListPage>
 </template>
 
@@ -267,6 +269,12 @@ onMounted(() => {
         font-weight: 600;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     }
+}
+
+.question-list-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
 }
 
 .question-list {
