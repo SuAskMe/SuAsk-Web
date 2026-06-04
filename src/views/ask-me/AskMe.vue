@@ -29,32 +29,41 @@
                         :class="['tab-item', { active: activeTab === tab.key }]"
                         @click="activeTab = tab.key"
                     >
-                        <span class="tab-label">{{ tab.label }}</span>
-                        <div class="tab-indicator"></div>
+                        {{ tab.label }}
                     </div>
                 </div>
             </div>
         </template>
 
-        <BubbleCard
-            v-for="(question, index) in questionList"
-            :key="question.id"
-            :title="question.title"
-            :text="question.contents"
-            :views="question.views"
-            :time-stamp="question.created_at"
-            :image-urls="question.image_urls"
-            :is-pinned="question.is_pinned"
-            :bubble-key="index"
-            :tag="question.tag"
-            show-pin
-            :style="{
-                marginTop: index === 0 ? '16px' : '0',
-            }"
-            :width="deviceType.isMobile ? '80vw' : '45vw'"
-            :click-card="navigateTo"
-            :click-pin="pin"
-        ></BubbleCard>
+        <Transition name="fade">
+            <div v-if="questionList.length === 0 && !loading" class="empty-state">
+                <el-empty description="暂无提问" />
+            </div>
+        </Transition>
+
+        <Transition :name="slideDirection" mode="out-in">
+            <div :key="listKey" class="question-list">
+                <BubbleCard
+                    v-for="(question, index) in questionList"
+                    :key="question.id"
+                    :title="question.title"
+                    :text="question.contents"
+                    :views="question.views"
+                    :time-stamp="question.created_at"
+                    :image-urls="question.image_urls"
+                    :is-pinned="question.is_pinned"
+                    :bubble-key="index"
+                    :tag="question.tag"
+                    show-pin
+                    :style="{
+                        marginTop: index === 0 ? '16px' : '0',
+                    }"
+                    :width="deviceType.isMobile ? '80vw' : '45vw'"
+                    :click-card="navigateTo"
+                    :click-pin="pin"
+                ></BubbleCard>
+            </div>
+        </Transition>
     </QuestionListPage>
 </template>
 
@@ -72,6 +81,8 @@ import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import type { QFMItem, GetQFMRes } from '@/model/teacher-self.model'
+import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
+import 'element-plus/es/components/empty/style/css'
 
 const tabs = [
     { key: 'all', label: '全部提问' },
@@ -87,7 +98,7 @@ const deviceType = DeviceTypeStore()
 const bg_img_index = useThemeBackgroundIndex()
 const { listPage, resetScrollPosition } = useQuestionListPageShell()
 
-// Hide search & sort if on 'top' list (consistent with previous behavior)
+// Page title based on props.type
 const showSearchAndSort = computed(() => activeTab.value !== 'top')
 
 // Instantiate pagination locally within the component
@@ -179,9 +190,18 @@ const pin = async (key: number) => {
     }
 }
 
+const tabOrder = ['all', 'unanswered', 'answered', 'top']
+const slideDirection = ref('slide-left')
+const listKey = ref(0)
+
 watch(
     () => activeTab.value,
-    () => {
+    (newVal, oldVal) => {
+        const oldIndex = tabOrder.indexOf(oldVal || 'all')
+        const newIndex = tabOrder.indexOf(newVal)
+        slideDirection.value = newIndex > oldIndex ? 'slide-left' : 'slide-right'
+        listKey.value++
+
         Init()
         resetScrollPosition()
     },
@@ -207,65 +227,107 @@ onMounted(() => {
 
 .tabs-wrapper {
     display: flex;
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     gap: 4px;
-    z-index: 10;
+    padding: 4px;
+    background: #f0f2f5;
+    border-radius: 20px;
 }
 
 .tab-item {
-    position: relative;
-    padding: 8px 16px;
+    padding: 6px 18px;
+    border: none;
     border-radius: 16px;
+    background: transparent;
+    font-size: 13px;
+    color: #64748b;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.25s ease;
+    user-select: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.25);
+        color: #1e293b;
     }
 
     &.active {
-        background: #ffffff;
-        box-shadow: 0 4px 12px rgba(72, 145, 224, 0.12);
-
-        .tab-label {
-            color: #4891e0;
-            font-weight: 600;
-        }
-
-        .tab-indicator {
-            transform: scaleX(1);
-            opacity: 1;
-        }
+        background: #fff;
+        color: #4891e0;
+        font-weight: 600;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     }
 }
 
-.tab-label {
-    font-size: 14px;
-    color: #64748b;
-    font-weight: 500;
-    transition: color 0.3s ease;
+.question-list {
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
 }
 
-.tab-indicator {
-    position: absolute;
-    bottom: 2px;
-    left: 16px;
-    right: 16px;
-    height: 3px;
-    background: #4891e0;
-    border-radius: 2px;
-    transform: scaleX(0);
+.empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+// 空状态淡入
+.fade-enter-active {
+    transition: opacity 0.4s ease;
+}
+
+.fade-enter-from {
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+
+.fade-leave-to {
+    opacity: 0;
+}
+
+// 左滑出（切换到右侧标签页时）
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: all 0.35s ease;
+}
+
+.slide-left-enter-from {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.slide-left-leave-active {
+    position: absolute;
+    width: 100%;
+}
+
+// 右滑出（切换到左侧标签页时）
+.slide-right-enter-active,
+.slide-right-leave-active {
+    transition: all 0.35s ease;
+}
+
+.slide-right-enter-from {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.slide-right-leave-to {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.slide-right-leave-active {
+    position: absolute;
+    width: 100%;
 }
 </style>
