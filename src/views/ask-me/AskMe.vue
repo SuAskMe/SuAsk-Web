@@ -51,7 +51,8 @@
                         {
                             'status-answered': question.tag === '已回答',
                             'status-unanswered': question.tag === '未回答',
-                            'status-pinned': question.is_pinned,
+                            'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                            'status-deleted': question.tag === '已删除',
                         },
                     ]"
                     :title="question.title"
@@ -93,10 +94,11 @@ import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
 
 const tabs = [
-    { key: 'all', label: '全部提问' },
-    { key: 'unanswered', label: '新的提问' },
-    { key: 'answered', label: '已回答提问' },
-    { key: 'top', label: '置顶提问' },
+    { key: 'all', label: '全部' },
+    { key: 'answered', label: '已回答' },
+    { key: 'unanswered', label: '未回答' },
+    { key: 'top', label: '已置顶' },
+    { key: 'deleted', label: '已删除' },
 ]
 
 const activeTab = ref('all')
@@ -106,8 +108,8 @@ const deviceType = DeviceTypeStore()
 const bg_img_index = useThemeBackgroundIndex()
 const { listPage, resetScrollPosition } = useQuestionListPageShell()
 
-// Page title based on props.type
-const showSearchAndSort = computed(() => activeTab.value !== 'top')
+// Hide search & sort if on 'top' or 'deleted' list (consistent with previous behavior)
+const showSearchAndSort = computed(() => activeTab.value !== 'top' && activeTab.value !== 'deleted')
 
 // Instantiate pagination locally within the component
 const {
@@ -198,7 +200,7 @@ const pin = async (key: number) => {
     }
 }
 
-const tabOrder = ['all', 'unanswered', 'answered', 'top']
+const tabOrder = ['all', 'answered', 'unanswered', 'top', 'deleted']
 const slideDirection = ref('slide-left')
 const listKey = ref(0)
 
@@ -311,6 +313,11 @@ onMounted(() => {
     // 置顶状态拥有最高优先级配色
     &.status-pinned :deep(.card-container)::before {
         background: #ffc107; // 置顶: 金黄色
+    }
+
+    // 已删除状态配色 (红色)
+    &.status-deleted :deep(.card-container)::before {
+        background: #ef4444; // 已删除: 红色
     }
 }
 
