@@ -5,7 +5,6 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
 
 const AskMe = () => import('@/views/ask-me/AskMe.vue')
-const AskMeMul = () => import('@/views/ask-me-mul/AskMeMul.vue')
 
 export const AskMeRoute: AppRouteRecordRaw = {
     path: '/ask-me',
@@ -29,6 +28,9 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 default: AskMe,
                 left_side: LeftSidebar,
             },
+            props: {
+                default: { type: 'all' },
+            },
         },
         {
             path: 'answered',
@@ -37,7 +39,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 title: '已回答提问',
             },
             components: {
-                default: AskMeMul,
+                default: AskMe,
                 left_side: LeftSidebar,
             },
             props: {
@@ -51,7 +53,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 title: '新的提问',
             },
             components: {
-                default: AskMeMul,
+                default: AskMe,
                 left_side: LeftSidebar,
             },
             props: {
@@ -65,7 +67,7 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 title: '置顶提问',
             },
             components: {
-                default: AskMeMul,
+                default: AskMe,
                 left_side: LeftSidebar,
             },
             props: {
