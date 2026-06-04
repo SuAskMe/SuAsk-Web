@@ -28,51 +28,6 @@ export const AskMeRoute: AppRouteRecordRaw = {
                 default: AskMe,
                 left_side: LeftSidebar,
             },
-            props: {
-                default: { type: 'all' },
-            },
-        },
-        {
-            path: 'answered',
-            name: 'AskMeAnswered',
-            meta: {
-                title: '已回答提问',
-            },
-            components: {
-                default: AskMe,
-                left_side: LeftSidebar,
-            },
-            props: {
-                default: { type: 'answered' },
-            },
-        },
-        {
-            path: 'unanswered',
-            name: 'AskMeUnanswered',
-            meta: {
-                title: '新的提问',
-            },
-            components: {
-                default: AskMe,
-                left_side: LeftSidebar,
-            },
-            props: {
-                default: { type: 'unanswered' },
-            },
-        },
-        {
-            path: 'top',
-            name: 'AskMeTop',
-            meta: {
-                title: '置顶提问',
-            },
-            components: {
-                default: AskMe,
-                left_side: LeftSidebar,
-            },
-            props: {
-                default: { type: 'top' },
-            },
         },
     ],
 }
