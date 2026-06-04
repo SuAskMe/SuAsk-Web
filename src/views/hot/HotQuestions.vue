@@ -48,15 +48,54 @@
             </div>
         </template>
         <Transition name="fade">
-            <div v-if="questionList.length === 0 && !loading" class="empty-state">
+            <div v-if="timeRangeLists[timeRange].length === 0 && !loading" class="empty-state">
                 <el-empty description="暂无热点问题" />
             </div>
         </Transition>
         <div class="question-list-wrapper">
             <Transition :name="slideDirection" mode="out-in">
-                <div :key="listKey" class="question-list">
+                <!-- 全部 -->
+                <div v-if="timeRange === 'all'" key="all" class="question-list">
                     <BubbleCard
-                        v-for="(question, index) in questionList"
+                        v-for="(question, index) in timeRangeLists.all"
+                        :id="`question-${question.id}`"
+                        :key="question.id"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :bubble-key="index"
+                        :click-card="navigateTo"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                    />
+                </div>
+                <!-- 本周 -->
+                <div v-else-if="timeRange === 'week'" key="week" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in timeRangeLists.week"
+                        :id="`question-${question.id}`"
+                        :key="question.id"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :bubble-key="index"
+                        :click-card="navigateTo"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                    />
+                </div>
+                <!-- 本月 -->
+                <div v-else-if="timeRange === 'month'" key="month" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in timeRangeLists.month"
                         :id="`question-${question.id}`"
                         :key="question.id"
                         :title="question.title"
@@ -78,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, reactive, watch } from 'vue'
 import { BubbleCard } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
@@ -89,6 +128,7 @@ import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
+import type { QuestionItem } from '@/model/question.model'
 import {
     questionList,
     InitStatus,
@@ -113,6 +153,21 @@ function toggleSidebar() {
 }
 
 const timeRange = ref<'week' | 'month' | 'all'>('all')
+
+// Store separate lists for each time range tab to prevent double rendering and card drifting during transitions
+const timeRangeLists = reactive<Record<string, QuestionItem[]>>({
+    all: [],
+    week: [],
+    month: [],
+})
+
+watch(
+    questionList,
+    (newList) => {
+        timeRangeLists[timeRange.value] = [...newList]
+    },
+    { deep: true, immediate: true }
+)
 const slideDirection = ref('slide-left')
 const timeOptions = [
     { label: '全部', value: 'all' },

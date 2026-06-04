@@ -168,11 +168,6 @@
     transform: translateX(-40px);
 }
 
-.slide-left-leave-active {
-    position: absolute;
-    width: 100%;
-}
-
 // 右滑出（切换到更小范围时）
 .slide-right-enter-active,
 .slide-right-leave-active {
@@ -187,11 +182,6 @@
 .slide-right-leave-to {
     opacity: 0;
     transform: translateX(40px);
-}
-
-.slide-right-leave-active {
-    position: absolute;
-    width: 100%;
 }
 
 .question-list-wrapper {
