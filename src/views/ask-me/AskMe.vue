@@ -36,16 +36,141 @@
         </template>
 
         <Transition name="fade">
-            <div v-if="questionList.length === 0 && !loading" class="empty-state">
+            <div v-if="tabLists[activeTab].length === 0 && !loading" class="empty-state">
                 <el-empty description="暂无提问" />
             </div>
         </Transition>
 
         <div class="question-list-wrapper">
             <Transition :name="slideDirection" mode="out-in">
-                <div :key="listKey" class="question-list">
+                <!-- 全部 -->
+                <div v-if="activeTab === 'all'" key="all" class="question-list">
                     <BubbleCard
-                        v-for="(question, index) in questionList"
+                        v-for="(question, index) in tabLists.all"
+                        :key="question.id"
+                        :class="[
+                            'teacher-question-card',
+                            {
+                                'status-answered': question.tag === '已回答',
+                                'status-unanswered': question.tag === '未回答',
+                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-deleted': question.tag === '已删除',
+                            },
+                        ]"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :is-pinned="question.is_pinned"
+                        :bubble-key="index"
+                        :tag="question.tag"
+                        show-pin
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :click-card="navigateTo"
+                        :click-pin="pin"
+                    ></BubbleCard>
+                </div>
+                <!-- 已回答 -->
+                <div v-else-if="activeTab === 'answered'" key="answered" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in tabLists.answered"
+                        :key="question.id"
+                        :class="[
+                            'teacher-question-card',
+                            {
+                                'status-answered': question.tag === '已回答',
+                                'status-unanswered': question.tag === '未回答',
+                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-deleted': question.tag === '已删除',
+                            },
+                        ]"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :is-pinned="question.is_pinned"
+                        :bubble-key="index"
+                        :tag="question.tag"
+                        show-pin
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :click-card="navigateTo"
+                        :click-pin="pin"
+                    ></BubbleCard>
+                </div>
+                <!-- 未回答 -->
+                <div v-else-if="activeTab === 'unanswered'" key="unanswered" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in tabLists.unanswered"
+                        :key="question.id"
+                        :class="[
+                            'teacher-question-card',
+                            {
+                                'status-answered': question.tag === '已回答',
+                                'status-unanswered': question.tag === '未回答',
+                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-deleted': question.tag === '已删除',
+                            },
+                        ]"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :is-pinned="question.is_pinned"
+                        :bubble-key="index"
+                        :tag="question.tag"
+                        show-pin
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :click-card="navigateTo"
+                        :click-pin="pin"
+                    ></BubbleCard>
+                </div>
+                <!-- 已置顶 -->
+                <div v-else-if="activeTab === 'top'" key="top" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in tabLists.top"
+                        :key="question.id"
+                        :class="[
+                            'teacher-question-card',
+                            {
+                                'status-answered': question.tag === '已回答',
+                                'status-unanswered': question.tag === '未回答',
+                                'status-pinned': question.is_pinned && activeTab !== 'deleted',
+                                'status-deleted': question.tag === '已删除',
+                            },
+                        ]"
+                        :title="question.title"
+                        :text="question.contents"
+                        :views="question.views"
+                        :time-stamp="question.created_at"
+                        :image-urls="question.image_urls"
+                        :is-pinned="question.is_pinned"
+                        :bubble-key="index"
+                        :tag="question.tag"
+                        show-pin
+                        :style="{
+                            marginTop: index === 0 ? '16px' : '0',
+                        }"
+                        :width="deviceType.isMobile ? '80vw' : '45vw'"
+                        :click-card="navigateTo"
+                        :click-pin="pin"
+                    ></BubbleCard>
+                </div>
+                <!-- 已删除 -->
+                <div v-else-if="activeTab === 'deleted'" key="deleted" class="question-list">
+                    <BubbleCard
+                        v-for="(question, index) in tabLists.deleted"
                         :key="question.id"
                         :class="[
                             'teacher-question-card',
@@ -79,7 +204,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue'
+import { onMounted, ref, computed, watch, reactive } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleCard } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
@@ -143,6 +268,23 @@ const {
 })
 
 const { navigateTo } = useQuestionDetailNavigation(questionList)
+
+// Store separate lists for each tab to prevent double rendering and card drifting during transitions
+const tabLists = reactive<Record<string, QFMItem[]>>({
+    all: [],
+    answered: [],
+    unanswered: [],
+    top: [],
+    deleted: [],
+})
+
+watch(
+    questionList,
+    (newList) => {
+        tabLists[activeTab.value] = [...newList]
+    },
+    { deep: true, immediate: true }
+)
 
 const Init = async () => {
     InitStatus()
@@ -362,11 +504,6 @@ onMounted(() => {
     transform: translateX(-40px);
 }
 
-.slide-left-leave-active {
-    position: absolute;
-    width: 100%;
-}
-
 // 右滑出（切换到左侧标签页时）
 .slide-right-enter-active,
 .slide-right-leave-active {
@@ -381,10 +518,5 @@ onMounted(() => {
 .slide-right-leave-to {
     opacity: 0;
     transform: translateX(40px);
-}
-
-.slide-right-leave-active {
-    position: absolute;
-    width: 100%;
 }
 </style>
