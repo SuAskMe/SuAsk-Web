@@ -20,8 +20,8 @@
                         v-if="searchKeyword"
                         class="clear-btn"
                         @click="
-                            searchKeyword = '';
-                            onSearchInput();
+                            searchKeyword = ''
+                            onSearchInput()
                         "
                         >&times;</span
                     >
@@ -32,8 +32,8 @@
                         :key="opt.value"
                         :class="['role-tab', { active: filterRole === opt.value }]"
                         @click="
-                            filterRole = opt.value;
-                            onRoleFilterChange();
+                            filterRole = opt.value
+                            onRoleFilterChange()
                         "
                     >
                         {{ opt.label }}
