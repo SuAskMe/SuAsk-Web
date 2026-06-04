@@ -35,167 +35,186 @@
             </div>
         </template>
 
-        <Transition name="fade">
-            <div v-if="tabLists[activeTab].length === 0 && !loading" class="empty-state">
-                <el-empty description="暂无提问" />
-            </div>
-        </Transition>
-
         <div class="question-list-wrapper">
             <Transition :name="slideDirection" mode="out-in">
                 <!-- 全部 -->
                 <div v-if="activeTab === 'all'" key="all" class="question-list">
-                    <BubbleCard
-                        v-for="(question, index) in tabLists.all"
-                        :key="question.id"
-                        :class="[
-                            'teacher-question-card',
-                            {
-                                'status-answered': question.tag === '已回答',
-                                'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned,
-                                'status-deleted': question.tag === '已删除',
-                            },
-                        ]"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-pinned="question.is_pinned"
-                        :bubble-key="index"
-                        :tag="question.tag"
-                        show-pin
-                        :style="{
-                            marginTop: index === 0 ? '16px' : '0',
-                        }"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :click-card="navigateTo"
-                        :click-pin="pin"
-                    ></BubbleCard>
+                    <template v-if="tabLists.all.length > 0">
+                        <BubbleCard
+                            v-for="(question, index) in tabLists.all"
+                            :key="question.id"
+                            :class="[
+                                'teacher-question-card',
+                                {
+                                    'status-answered': question.tag === '已回答',
+                                    'status-unanswered': question.tag === '未回答',
+                                    'status-pinned': question.is_pinned,
+                                    'status-deleted': question.tag === '已删除',
+                                },
+                            ]"
+                            :title="question.title"
+                            :text="question.contents"
+                            :views="question.views"
+                            :time-stamp="question.created_at"
+                            :image-urls="question.image_urls"
+                            :is-pinned="question.is_pinned"
+                            :bubble-key="index"
+                            :tag="question.tag"
+                            show-pin
+                            :style="{
+                                marginTop: index === 0 ? '16px' : '0',
+                            }"
+                            :width="deviceType.isMobile ? '80vw' : '45vw'"
+                            :click-card="navigateTo"
+                            :click-pin="pin"
+                        ></BubbleCard>
+                    </template>
+                    <div v-else-if="!loading" class="empty-state">
+                        <el-empty description="暂无提问" />
+                    </div>
                 </div>
                 <!-- 已回答 -->
                 <div v-else-if="activeTab === 'answered'" key="answered" class="question-list">
-                    <BubbleCard
-                        v-for="(question, index) in tabLists.answered"
-                        :key="question.id"
-                        :class="[
-                            'teacher-question-card',
-                            {
-                                'status-answered': question.tag === '已回答',
-                                'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned,
-                                'status-deleted': question.tag === '已删除',
-                            },
-                        ]"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-pinned="question.is_pinned"
-                        :bubble-key="index"
-                        :tag="question.tag"
-                        show-pin
-                        :style="{
-                            marginTop: index === 0 ? '16px' : '0',
-                        }"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :click-card="navigateTo"
-                        :click-pin="pin"
-                    ></BubbleCard>
+                    <template v-if="tabLists.answered.length > 0">
+                        <BubbleCard
+                            v-for="(question, index) in tabLists.answered"
+                            :key="question.id"
+                            :class="[
+                                'teacher-question-card',
+                                {
+                                    'status-answered': question.tag === '已回答',
+                                    'status-unanswered': question.tag === '未回答',
+                                    'status-pinned': question.is_pinned,
+                                    'status-deleted': question.tag === '已删除',
+                                },
+                            ]"
+                            :title="question.title"
+                            :text="question.contents"
+                            :views="question.views"
+                            :time-stamp="question.created_at"
+                            :image-urls="question.image_urls"
+                            :is-pinned="question.is_pinned"
+                            :bubble-key="index"
+                            :tag="question.tag"
+                            show-pin
+                            :style="{
+                                marginTop: index === 0 ? '16px' : '0',
+                            }"
+                            :width="deviceType.isMobile ? '80vw' : '45vw'"
+                            :click-card="navigateTo"
+                            :click-pin="pin"
+                        ></BubbleCard>
+                    </template>
+                    <div v-else-if="!loading" class="empty-state">
+                        <el-empty description="暂无提问" />
+                    </div>
                 </div>
                 <!-- 未回答 -->
                 <div v-else-if="activeTab === 'unanswered'" key="unanswered" class="question-list">
-                    <BubbleCard
-                        v-for="(question, index) in tabLists.unanswered"
-                        :key="question.id"
-                        :class="[
-                            'teacher-question-card',
-                            {
-                                'status-answered': question.tag === '已回答',
-                                'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned,
-                                'status-deleted': question.tag === '已删除',
-                            },
-                        ]"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-pinned="question.is_pinned"
-                        :bubble-key="index"
-                        :tag="question.tag"
-                        show-pin
-                        :style="{
-                            marginTop: index === 0 ? '16px' : '0',
-                        }"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :click-card="navigateTo"
-                        :click-pin="pin"
-                    ></BubbleCard>
+                    <template v-if="tabLists.unanswered.length > 0">
+                        <BubbleCard
+                            v-for="(question, index) in tabLists.unanswered"
+                            :key="question.id"
+                            :class="[
+                                'teacher-question-card',
+                                {
+                                    'status-answered': question.tag === '已回答',
+                                    'status-unanswered': question.tag === '未回答',
+                                    'status-pinned': question.is_pinned,
+                                    'status-deleted': question.tag === '已删除',
+                                },
+                            ]"
+                            :title="question.title"
+                            :text="question.contents"
+                            :views="question.views"
+                            :time-stamp="question.created_at"
+                            :image-urls="question.image_urls"
+                            :is-pinned="question.is_pinned"
+                            :bubble-key="index"
+                            :tag="question.tag"
+                            show-pin
+                            :style="{
+                                marginTop: index === 0 ? '16px' : '0',
+                            }"
+                            :width="deviceType.isMobile ? '80vw' : '45vw'"
+                            :click-card="navigateTo"
+                            :click-pin="pin"
+                        ></BubbleCard>
+                    </template>
+                    <div v-else-if="!loading" class="empty-state">
+                        <el-empty description="暂无提问" />
+                    </div>
                 </div>
                 <!-- 已置顶 -->
                 <div v-else-if="activeTab === 'top'" key="top" class="question-list">
-                    <BubbleCard
-                        v-for="(question, index) in tabLists.top"
-                        :key="question.id"
-                        :class="[
-                            'teacher-question-card',
-                            {
-                                'status-answered': question.tag === '已回答',
-                                'status-unanswered': question.tag === '未回答',
-                                'status-pinned': question.is_pinned,
-                                'status-deleted': question.tag === '已删除',
-                            },
-                        ]"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-pinned="question.is_pinned"
-                        :bubble-key="index"
-                        :tag="question.tag"
-                        show-pin
-                        :style="{
-                            marginTop: index === 0 ? '16px' : '0',
-                        }"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :click-card="navigateTo"
-                        :click-pin="pin"
-                    ></BubbleCard>
+                    <template v-if="tabLists.top.length > 0">
+                        <BubbleCard
+                            v-for="(question, index) in tabLists.top"
+                            :key="question.id"
+                            :class="[
+                                'teacher-question-card',
+                                {
+                                    'status-answered': question.tag === '已回答',
+                                    'status-unanswered': question.tag === '未回答',
+                                    'status-pinned': question.is_pinned,
+                                    'status-deleted': question.tag === '已删除',
+                                },
+                            ]"
+                            :title="question.title"
+                            :text="question.contents"
+                            :views="question.views"
+                            :time-stamp="question.created_at"
+                            :image-urls="question.image_urls"
+                            :is-pinned="question.is_pinned"
+                            :bubble-key="index"
+                            :tag="question.tag"
+                            show-pin
+                            :style="{
+                                marginTop: index === 0 ? '16px' : '0',
+                            }"
+                            :width="deviceType.isMobile ? '80vw' : '45vw'"
+                            :click-card="navigateTo"
+                            :click-pin="pin"
+                        ></BubbleCard>
+                    </template>
+                    <div v-else-if="!loading" class="empty-state">
+                        <el-empty description="暂无提问" />
+                    </div>
                 </div>
                 <!-- 已删除 -->
                 <div v-else-if="activeTab === 'deleted'" key="deleted" class="question-list">
-                    <BubbleCard
-                        v-for="(question, index) in tabLists.deleted"
-                        :key="question.id"
-                        :class="[
-                            'teacher-question-card',
-                            {
-                                'status-answered': question.tag === '已回答',
-                                'status-unanswered': question.tag === '未回答',
-                                'status-deleted': question.tag === '已删除',
-                            },
-                        ]"
-                        :title="question.title"
-                        :text="question.contents"
-                        :views="question.views"
-                        :time-stamp="question.created_at"
-                        :image-urls="question.image_urls"
-                        :is-pinned="question.is_pinned"
-                        :bubble-key="index"
-                        :tag="question.tag"
-                        show-pin
-                        :style="{
-                            marginTop: index === 0 ? '16px' : '0',
-                        }"
-                        :width="deviceType.isMobile ? '80vw' : '45vw'"
-                        :click-card="navigateTo"
-                        :click-pin="pin"
-                    ></BubbleCard>
+                    <template v-if="tabLists.deleted.length > 0">
+                        <BubbleCard
+                            v-for="(question, index) in tabLists.deleted"
+                            :key="question.id"
+                            :class="[
+                                'teacher-question-card',
+                                {
+                                    'status-answered': question.tag === '已回答',
+                                    'status-unanswered': question.tag === '未回答',
+                                    'status-deleted': question.tag === '已删除',
+                                },
+                            ]"
+                            :title="question.title"
+                            :text="question.contents"
+                            :views="question.views"
+                            :time-stamp="question.created_at"
+                            :image-urls="question.image_urls"
+                            :is-pinned="question.is_pinned"
+                            :bubble-key="index"
+                            :tag="question.tag"
+                            show-pin
+                            :style="{
+                                marginTop: index === 0 ? '16px' : '0',
+                            }"
+                            :width="deviceType.isMobile ? '80vw' : '45vw'"
+                            :click-card="navigateTo"
+                            :click-pin="pin"
+                        ></BubbleCard>
+                    </template>
+                    <div v-else-if="!loading" class="empty-state">
+                        <el-empty description="暂无提问" />
+                    </div>
                 </div>
             </Transition>
         </div>
