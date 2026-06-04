@@ -82,16 +82,8 @@ const tagStyle = computed(() => {
                     <use :href="`#icon-pushpin${isPinned ? '-fill' : ''}`"></use>
                 </svg>
             </div>
-            <div
-                v-else-if="isPinned"
-                class="pin-static"
-            >
-                <svg
-                    :width="20"
-                    :height="20"
-                    color="#FFC107"
-                    fill="#FFC107"
-                >
+            <div v-else-if="isPinned" class="pin-static">
+                <svg :width="20" :height="20" color="#FFC107" fill="#FFC107">
                     <use href="#icon-pushpin-fill"></use>
                 </svg>
             </div>

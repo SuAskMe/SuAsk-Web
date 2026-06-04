@@ -77,14 +77,16 @@ const props = defineProps<{
     z-index: 100;
     background-color: #fff;
     padding: 24px;
-    box-shadow: 
+    box-shadow:
         0 20px 60px -12px rgba(15, 23, 42, 0.12),
         0 10px 25px -5px rgba(15, 23, 42, 0.06),
         0 0 0 1px rgba(113, 182, 255, 0.12);
     border-radius: 24px;
     width: 600px;
     box-sizing: border-box;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    transition:
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease;
 
     @media (max-width: 768px) {
         top: 0;
@@ -99,7 +101,9 @@ const props = defineProps<{
         display: flex;
         flex-direction: column;
         box-shadow: none;
-        transition: transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1), opacity 0.35s ease;
+        transition:
+            transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1),
+            opacity 0.35s ease;
     }
 }
 
@@ -115,10 +119,14 @@ const props = defineProps<{
 
 .dialog-enter-active,
 .dialog-leave-active {
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
-    
+    transition:
+        transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease;
+
     @media (max-width: 768px) {
-        transition: transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1), opacity 0.35s ease;
+        transition:
+            transform 0.35s cubic-bezier(0.32, 0.94, 0.6, 1),
+            opacity 0.35s ease;
     }
 }
 

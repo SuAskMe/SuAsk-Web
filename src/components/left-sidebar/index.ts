@@ -1,3 +1,3 @@
-import LeftSidebar from "./LeftSidebar.vue";
+import LeftSidebar from './LeftSidebar.vue'
 
-export { LeftSidebar };
+export { LeftSidebar }

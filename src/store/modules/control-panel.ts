@@ -1,7 +1,8 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const ControlPanelStore = defineStore("controlPanel",
+export const ControlPanelStore = defineStore(
+    'controlPanel',
     () => {
         const Item = ref<string>('ask-teacher')
 
@@ -18,7 +19,8 @@ export const ControlPanelStore = defineStore("controlPanel",
         }
 
         return { Item, setSelectedItem, getSelectedItem, clearSelectedItem }
-    }, {
-    persist: true
-})
-
+    },
+    {
+        persist: true,
+    },
+)

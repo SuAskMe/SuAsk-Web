@@ -96,22 +96,30 @@ withDefaults(
     width: 2.6rem;
     height: 2.6rem;
     border-radius: 14px;
-    background: linear-gradient(135deg, rgba(113, 182, 255, 0.15) 0%, rgba(113, 182, 255, 0.04) 100%);
+    background: linear-gradient(
+        135deg,
+        rgba(113, 182, 255, 0.15) 0%,
+        rgba(113, 182, 255, 0.04) 100%
+    );
     border: 1px solid rgba(113, 182, 255, 0.22);
     color: #4891e0;
     flex-shrink: 0;
     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-    box-shadow: 
+    box-shadow:
         0 0 0 0px rgba(113, 182, 255, 0),
         inset 0 1.5px 2px rgba(255, 255, 255, 0.75),
         0 4px 8px rgba(113, 182, 255, 0.04);
 
     .setting-section-card:hover & {
         transform: scale(1.06) rotate(3deg);
-        background: linear-gradient(135deg, rgba(113, 182, 255, 0.22) 0%, rgba(113, 182, 255, 0.06) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(113, 182, 255, 0.22) 0%,
+            rgba(113, 182, 255, 0.06) 100%
+        );
         border-color: rgba(113, 182, 255, 0.38);
         color: #3b82f6;
-        box-shadow: 
+        box-shadow:
             0 0 0 5px rgba(113, 182, 255, 0.08),
             inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
             0 8px 16px rgba(113, 182, 255, 0.1);
@@ -122,17 +130,21 @@ withDefaults(
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.04) 100%);
     border-color: rgba(239, 68, 68, 0.22);
     color: #ff4d4f;
-    box-shadow: 
+    box-shadow:
         0 0 0 0px rgba(239, 68, 68, 0),
         inset 0 1.5px 2px rgba(255, 255, 255, 0.75),
         0 4px 8px rgba(239, 68, 68, 0.04);
 
     .setting-section-card:hover & {
         transform: scale(1.06) rotate(3deg);
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.22) 0%, rgba(239, 68, 68, 0.06) 100%);
+        background: linear-gradient(
+            135deg,
+            rgba(239, 68, 68, 0.22) 0%,
+            rgba(239, 68, 68, 0.06) 100%
+        );
         border-color: rgba(239, 68, 68, 0.38);
         color: #ef4444;
-        box-shadow: 
+        box-shadow:
             0 0 0 5px rgba(239, 68, 68, 0.08),
             inset 0 1.5px 2px rgba(255, 255, 255, 0.8),
             0 8px 16px rgba(239, 68, 68, 0.1);

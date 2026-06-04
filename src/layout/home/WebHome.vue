@@ -109,5 +109,4 @@ const toggleSidebar = (event: MouseEvent) => {
         }
     }
 }
-
 </style>

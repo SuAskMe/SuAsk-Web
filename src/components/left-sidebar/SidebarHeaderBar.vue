@@ -4,11 +4,7 @@
             <svg-icon class="message-icon" icon="message-1" color="#71B6FF" size="26px" />
             <div v-if="hasUnread" class="red-dot" />
         </div>
-        <div
-            v-if="isMobile"
-            class="sidebar-btn-container"
-            @click="$emit('toggleSidebar')"
-        >
+        <div v-if="isMobile" class="sidebar-btn-container" @click="$emit('toggleSidebar')">
             <svg-icon
                 class="sidebar-btn"
                 icon="sidebar"

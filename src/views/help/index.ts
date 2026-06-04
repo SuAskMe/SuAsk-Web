@@ -1,3 +1,3 @@
-import Help from "./Help.vue";
+import Help from './Help.vue'
 
-export default Help;
+export default Help

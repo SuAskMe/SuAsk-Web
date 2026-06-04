@@ -1,3 +1,3 @@
-import QuestionHeader from './QuestionHeader.vue';
+import QuestionHeader from './QuestionHeader.vue'
 
-export default QuestionHeader;
+export default QuestionHeader

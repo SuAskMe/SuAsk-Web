@@ -1,3 +1,3 @@
-import WebHome from "./home/WebHome.vue";
+import WebHome from './home/WebHome.vue'
 
-export { WebHome };
+export { WebHome }

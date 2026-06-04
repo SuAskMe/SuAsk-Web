@@ -1,5 +1,12 @@
-import type { GetHistoryByKeywordReq, GetHistoryByKeywordRes, GetHistoryReq, GetHistoryRes, SearchHistoryReq, SearchHistoryRes } from "@/model/history.model";
-import request from "@/utils/http/request";
+import type {
+    GetHistoryByKeywordReq,
+    GetHistoryByKeywordRes,
+    GetHistoryReq,
+    GetHistoryRes,
+    SearchHistoryReq,
+    SearchHistoryRes,
+} from '@/model/history.model'
+import request from '@/utils/http/request'
 
 enum Api {
     GET_HISTORY = '/history',
@@ -15,7 +22,9 @@ export async function getHistoryApi(req: GetHistoryReq): Promise<GetHistoryRes> 
     })
 }
 
-export async function getHistoryByKeywordApi(req: GetHistoryByKeywordReq): Promise<GetHistoryByKeywordRes> {
+export async function getHistoryByKeywordApi(
+    req: GetHistoryByKeywordReq,
+): Promise<GetHistoryByKeywordRes> {
     return request.get(Api.GET_HISTORY_BY_KEYWORD, { params: req }).then((res) => {
         if (res) {
             return res.data

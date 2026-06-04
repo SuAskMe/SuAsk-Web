@@ -1,28 +1,27 @@
-import type { AppRouteRecordRaw } from "@/router/types";
-import { isMobile } from "@/utils/device";
+import type { AppRouteRecordRaw } from '@/router/types'
+import { isMobile } from '@/utils/device'
 
-const WebHome = () => import("@/layout/home/WebHome.vue");
+const WebHome = () => import('@/layout/home/WebHome.vue')
 
-const LeftSidebar = () => import("@/components/left-sidebar/LeftSidebar.vue");
+const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
 
-const QuestionDetail = () =>
-    import("@/views/question-detail/QuestionDetail.vue");
+const QuestionDetail = () => import('@/views/question-detail/QuestionDetail.vue')
 
 export const QuestionDetailRoute: AppRouteRecordRaw = {
-    path: "/question-detail",
-    name: "QuestionDetailRoot",
+    path: '/question-detail',
+    name: 'QuestionDetailRoot',
     meta: {
-        title: "加载中...",
+        title: '加载中...',
     },
     props: {
-        userType: "student",
-        deviceType: isMobile() ? "phone" : "desktop",
+        userType: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop',
     },
     component: WebHome,
     children: [
         {
-            path: ":id",
-            name: "QuestionDetail",
+            path: ':id',
+            name: 'QuestionDetail',
             meta: {},
             components: {
                 default: QuestionDetail,
@@ -30,4 +29,4 @@ export const QuestionDetailRoute: AppRouteRecordRaw = {
             },
         },
     ],
-};
+}

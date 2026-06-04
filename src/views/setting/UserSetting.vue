@@ -14,12 +14,7 @@
                     <div v-if="showSaveReminder" class="save-reminder-toast">
                         <div class="toast-content">
                             <span class="toast-text">您已修改了设置，请记得保存更改</span>
-                            <button
-                                @click="updateUserInfo"
-                                class="toast-save-btn"
-                            >
-                                保存更改
-                            </button>
+                            <button @click="updateUserInfo" class="toast-save-btn">保存更改</button>
                         </div>
                     </div>
                 </transition>
@@ -27,7 +22,9 @@
                 <main class="main-container">
                     <div class="settings-hero">
                         <h1 class="hero-title">设置</h1>
-                        <p class="hero-desc">在这里管理您的账户基础信息、提问箱可见性、邮件通知偏好及账户安全设置</p>
+                        <p class="hero-desc">
+                            在这里管理您的账户基础信息、提问箱可见性、邮件通知偏好及账户安全设置
+                        </p>
                     </div>
 
                     <el-dialog
@@ -58,11 +55,7 @@
                                     height: imgSize.height + 'px',
                                 }"
                             >
-                                <AvatarCropper
-                                    v-if="cropVisible"
-                                    ref="cropper"
-                                    :img="cropImg"
-                                />
+                                <AvatarCropper v-if="cropVisible" ref="cropper" :img="cropImg" />
                             </div>
                         </div>
                         <template #footer>
@@ -97,15 +90,14 @@
                     />
 
                     <div v-if="!isGuest" class="button-container">
-                        <button
-                            @click="updateUserInfo"
-                            class="save-button-custom"
-                        >
-                            保存更改
-                        </button>
+                        <button @click="updateUserInfo" class="save-button-custom">保存更改</button>
                     </div>
 
-                    <VisibilitySection v-if="isTeacher()" v-model="questionVisible" icon="setting-eye" />
+                    <VisibilitySection
+                        v-if="isTeacher()"
+                        v-model="questionVisible"
+                        icon="setting-eye"
+                    />
 
                     <AccountActionsSection
                         v-if="!isGuest"
@@ -465,7 +457,7 @@ onUnmounted(() => {
 
 :deep(.el-switch) {
     height: 24px;
-    --el-switch-on-color: #4CAF50;
+    --el-switch-on-color: #4caf50;
     --el-switch-off-color: #dcdfe6;
     --el-switch-core-border-radius: 12px;
 

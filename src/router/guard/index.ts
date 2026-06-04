@@ -35,7 +35,9 @@ export function createRoleGuard(router: Router) {
         const token = userStore.getToken()
 
         // 未登录（无 token）且不是基础路由 → 重定向到登录页
-        const isBasicRoute = basicRoutes.some((r) => r.name === name || r.name === to.name?.toString())
+        const isBasicRoute = basicRoutes.some(
+            (r) => r.name === name || r.name === to.name?.toString(),
+        )
         if (!token && !isBasicRoute) {
             next({ name: 'Login' })
             return

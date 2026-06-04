@@ -6,12 +6,16 @@
     display: flex;
     flex-direction: column;
     background-color: #f8fafc;
-    background-image: 
+    background-image:
         radial-gradient(circle at 5% 10%, rgba(113, 182, 255, 0.06) 0%, transparent 40%),
         radial-gradient(circle at 95% 90%, rgba(113, 182, 255, 0.04) 0%, transparent 40%),
         linear-gradient(rgba(113, 182, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(113, 182, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+    background-size:
+        100% 100%,
+        100% 100%,
+        24px 24px,
+        24px 24px;
 }
 
 .header {
@@ -37,7 +41,7 @@
         background-color: rgba(113, 182, 255, 0.2);
         border-radius: 3px;
     }
-    
+
     &::-webkit-scrollbar-track {
         background-color: transparent;
     }
@@ -93,7 +97,7 @@
     border: 1px solid rgba(230, 162, 60, 0.35);
     padding: 0.8rem 1.6rem;
     border-radius: 12px; // 与卡片圆角相衬
-    box-shadow: 
+    box-shadow:
         0 10px 30px rgba(15, 23, 42, 0.08),
         0 4px 12px rgba(230, 162, 60, 0.04),
         0 0 0 1px rgba(255, 255, 255, 0.5) inset;

@@ -9,7 +9,7 @@ import { pinia } from '..'
 export const UserStore = defineStore(
     'user',
     () => {
-        const userInfo = ref<User | null>(null);
+        const userInfo = ref<User | null>(null)
         const token = ref<string | null>(null)
 
         function getUser(): User {

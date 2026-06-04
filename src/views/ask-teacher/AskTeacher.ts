@@ -11,7 +11,7 @@ const pagination = usePagination<QuestionItem>({
         if (!currentTeacherId.value) {
             throw new Error('Teacher ID is not set')
         }
-        
+
         let res: GetQuestionRes
         if (params.keyword) {
             res = await searchQuestionTeacherApi({

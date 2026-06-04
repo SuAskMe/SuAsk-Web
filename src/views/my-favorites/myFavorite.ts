@@ -13,21 +13,16 @@ const pagination = usePagination<FavoriteItem>({
                 page: params.page,
             })
         } else {
-            res = await getFavoriteApi({ 
-                sort_type: params.sort_type, 
-                page: params.page 
+            res = await getFavoriteApi({
+                sort_type: params.sort_type,
+                page: params.page,
             })
         }
         return res
     },
 })
 
-const {
-    data: questionList,
-    init: InitStatus,
-    loadMore: getNextQuestions,
-    refresh,
-} = pagination
+const { data: questionList, init: InitStatus, loadMore: getNextQuestions, refresh } = pagination
 
 export { questionList, InitStatus, getNextQuestions, refresh }
 

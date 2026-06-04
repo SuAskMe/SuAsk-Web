@@ -1,5 +1,12 @@
-import type { GetKeywordReq, GetKeywordRes, GetQuestionReq, GetQuestionRes, SearchQuestionReq, SearchQuestionRes } from "@/model/question.model";
-import request from "@/utils/http/request";
+import type {
+    GetKeywordReq,
+    GetKeywordRes,
+    GetQuestionReq,
+    GetQuestionRes,
+    SearchQuestionReq,
+    SearchQuestionRes,
+} from '@/model/question.model'
+import request from '@/utils/http/request'
 
 enum Api {
     ADD = '/questions/add',
@@ -12,12 +19,17 @@ enum Api {
 
 // 添加问题
 export async function addQuestionApi(question: FormData) {
-    return request.post(Api.ADD, question);
+    return request.post(Api.ADD, question)
 }
 
 // 删除问题
 export async function deleteQuestionApi(id: number) {
-    return request.delete(Api.DELETE, { data: { id } });
+    return request.delete(Api.DELETE, { data: { id } })
+}
+
+// 恢复问题
+export async function restoreQuestionApi(id: number) {
+    return request.post(`${Api.DELETE}/restore`, { id })
 }
 
 // 获取老师问题列表

@@ -9,9 +9,7 @@
                 <div class="warning-icon-wrap">
                     <svg-icon icon="settings" color="#e6a23c" size="18px" />
                 </div>
-                <div class="warning-message">
-                    临时用户无法修改个人信息，请先升级为正式账号
-                </div>
+                <div class="warning-message">临时用户无法修改个人信息，请先升级为正式账号</div>
             </div>
             <div class="profile-section">
                 <div class="profile-section__fields">
@@ -253,7 +251,7 @@ const onAvatarError = (e: Event) => {
         padding-right: 0.35rem;
         border-right: 1px solid #cbd5e1;
     }
-    
+
     .badge-name {
         letter-spacing: 0.2px;
     }

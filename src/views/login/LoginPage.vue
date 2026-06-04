@@ -62,7 +62,12 @@
                         placement="bottom"
                         effect="light"
                     >
-                        <el-button type="info" text large :loading="guestLoading" @click="navigateToUnlogin"
+                        <el-button
+                            type="info"
+                            text
+                            large
+                            :loading="guestLoading"
+                            @click="navigateToUnlogin"
                             >暂不登录
                         </el-button>
                     </el-tooltip>
@@ -219,7 +224,7 @@ function isRateLimitError(error: unknown): boolean {
 </script>
 
 <style scoped lang="scss">
-@use "sass:color";
+@use 'sass:color';
 
 .login-container {
     display: flex;

@@ -6,7 +6,13 @@ import { createRouterGuard } from './guard'
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [...basicRoutes, ...guestRoutes, ...studentRoutes, ...teacherRoutes, ...adminRoutes] as unknown as RouteRecordRaw[],
+    routes: [
+        ...basicRoutes,
+        ...guestRoutes,
+        ...studentRoutes,
+        ...teacherRoutes,
+        ...adminRoutes,
+    ] as unknown as RouteRecordRaw[],
     strict: true,
     scrollBehavior: () => ({ left: 0, top: 0 }),
 })

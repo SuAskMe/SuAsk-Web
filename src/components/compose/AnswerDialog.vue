@@ -33,7 +33,11 @@
                     </div>
                     <div class="input-container">
                         <div class="avatar">
-                            <UserAvatar :src="userInfo.avatar" :name="userInfo.nickname" :size="40" />
+                            <UserAvatar
+                                :src="userInfo.avatar"
+                                :name="userInfo.nickname"
+                                :size="40"
+                            />
                         </div>
                         <div class="content">
                             <el-input

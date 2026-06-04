@@ -1,2 +1,2 @@
-import TeacherCard from "./TeacherCard.vue";
+import TeacherCard from './TeacherCard.vue'
 export default TeacherCard

@@ -17,7 +17,14 @@
                         问 <span>{{ teacher.teacherName }}</span> 老师
                     </p>
                     <div class="header-right">
-                        <el-button @click.stop="openDraft" type="primary" round text class="draft-trigger">草稿</el-button>
+                        <el-button
+                            @click.stop="openDraft"
+                            type="primary"
+                            round
+                            text
+                            class="draft-trigger"
+                            >草稿</el-button
+                        >
                         <el-button
                             v-if="deviceType.isMobile"
                             @click.stop="postQuestion"
@@ -25,14 +32,18 @@
                             round
                             class="post-btn-mobile"
                             color="#71b6ff"
-                            style="color: white; margin-left: 8px;"
+                            style="color: white; margin-left: 8px"
                             >发布</el-button
                         >
                     </div>
                 </div>
                 <div class="main">
                     <div class="title" :class="{ 'is-focused': isTitleFocused }">
-                        <UserAvatar :src="avatarURL" :name="userStore.getUser().nickname" :size="40" />
+                        <UserAvatar
+                            :src="avatarURL"
+                            :name="userStore.getUser().nickname"
+                            :size="40"
+                        />
                         <el-input
                             v-model="questionContent.title"
                             placeholder="问题标题"

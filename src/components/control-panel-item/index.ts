@@ -1,3 +1,3 @@
-import ControlPanelItem from "./ControlPanelItem.vue";
+import ControlPanelItem from './ControlPanelItem.vue'
 
-export default ControlPanelItem;
+export default ControlPanelItem

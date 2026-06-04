@@ -1,3 +1,3 @@
-import { AskMeRoute } from "./askMe";
+import { AskMeRoute } from './askMe'
 
-export { AskMeRoute };
+export { AskMeRoute }

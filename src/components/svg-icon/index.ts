@@ -1,3 +1,3 @@
-import SvgIcon from "./SvgIcon.vue";
+import SvgIcon from './SvgIcon.vue'
 
-export default SvgIcon;
+export default SvgIcon

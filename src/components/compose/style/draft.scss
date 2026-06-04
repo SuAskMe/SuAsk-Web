@@ -31,7 +31,7 @@
                 cursor: pointer;
                 margin-right: 8px;
                 transition: all 0.2s ease;
-                
+
                 &:hover {
                     color: var(--su-blue-dark);
                     transform: translateX(-2px);
@@ -64,10 +64,14 @@
             &:hover {
                 transform: translateX(4px);
                 border-color: rgba(113, 182, 255, 0.4);
-                box-shadow: 
+                box-shadow:
                     0 4px 16px rgba(113, 182, 255, 0.1),
                     0 1px 3px rgba(113, 182, 255, 0.06);
-                background: linear-gradient(135deg, rgba(113, 182, 255, 0.02), rgba(255, 255, 255, 1));
+                background: linear-gradient(
+                    135deg,
+                    rgba(113, 182, 255, 0.02),
+                    rgba(255, 255, 255, 1)
+                );
             }
 
             &:active {

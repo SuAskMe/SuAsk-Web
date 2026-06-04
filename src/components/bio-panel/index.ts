@@ -1,3 +1,3 @@
-import BioPanel from "./BioPanel.vue";
+import BioPanel from './BioPanel.vue'
 
-export default BioPanel;
+export default BioPanel

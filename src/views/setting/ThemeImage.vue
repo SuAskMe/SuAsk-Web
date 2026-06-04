@@ -24,18 +24,19 @@ import { Check } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import BackgroundImg from '@/components/background-img'
 
-const props = withDefaults(defineProps<{
-    width: string
-    count?: number
-}>(), {
-    count: 5,
-})
+const props = withDefaults(
+    defineProps<{
+        width: string
+        count?: number
+    }>(),
+    {
+        count: 5,
+    },
+)
 
 const selectIndex = defineModel<number>({ default: 1 })
 
-const themeIndexes = computed(() =>
-    Array.from({ length: props.count }, (_, index) => index + 1),
-)
+const themeIndexes = computed(() => Array.from({ length: props.count }, (_, index) => index + 1))
 
 const selectImg = (themeIndex: number) => {
     selectIndex.value = themeIndex
@@ -69,7 +70,7 @@ const selectImg = (themeIndex: number) => {
     &:hover {
         transform: translateY(-4px) scale(1.02);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-        
+
         .theme-image {
             filter: saturate(1.06);
         }

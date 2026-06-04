@@ -30,12 +30,12 @@
                     <component :is="WarningFilled" class="danger-header-icon" />
                     <div class="danger-header-text">
                         <h4 class="danger-title">敏感操作区域</h4>
-                        <p class="danger-desc">请谨慎操作，注销账户将永久清除您的账号信息，此操作不可恢复。</p>
+                        <p class="danger-desc">
+                            请谨慎操作，注销账户将永久清除您的账号信息，此操作不可恢复。
+                        </p>
                     </div>
                 </div>
-                <button class="deactivate-btn" @click="$emit('deactivate')">
-                    注销账号
-                </button>
+                <button class="deactivate-btn" @click="$emit('deactivate')">注销账号</button>
             </div>
         </div>
     </SettingSectionCard>
@@ -84,7 +84,7 @@ defineEmits(['resetPassword', 'logout', 'deactivate'])
 
     &:hover {
         background-color: rgba(113, 182, 255, 0.04);
-        
+
         .action-icon {
             color: #71b6ff;
             transform: scale(1.05);

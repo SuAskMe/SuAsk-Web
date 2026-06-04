@@ -176,7 +176,7 @@ watch(
     (newList) => {
         timeRangeLists[timeRange.value] = [...newList]
     },
-    { deep: true, immediate: true }
+    { deep: true, immediate: true },
 )
 const slideDirection = ref('slide-left')
 const timeOptions = [

@@ -2,12 +2,12 @@
     <el-dropdown class="header-item" @visible-change="handleVisibleChange">
         <span class="dropdown">
             {{ options[currentIndex] }}
-            <svg-icon 
-                class="sort-icon" 
-                :class="{ 'is-open': isOpen }" 
-                icon="sort-down" 
-                color="#71B6FF" 
-                size="22px" 
+            <svg-icon
+                class="sort-icon"
+                :class="{ 'is-open': isOpen }"
+                icon="sort-down"
+                color="#71B6FF"
+                size="22px"
             />
         </span>
         <template #dropdown>
@@ -112,7 +112,7 @@ function changeSort(index: number) {
 :deep(.el-dropdown-menu__item) {
     transition: all 0.2s ease;
     padding: 8px 16px;
-    
+
     &.is-selected {
         color: var(--su-blue-dark) !important;
         background-color: var(--su-blue-light) !important;

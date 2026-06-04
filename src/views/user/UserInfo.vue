@@ -12,7 +12,12 @@
                                 <p>个人信息</p>
                             </div>
                             <div class="user-profile">
-                                <UserAvatar class="user-avatar" :src="userInfo.avatar" :name="userInfo.nickname" :size="200" />
+                                <UserAvatar
+                                    class="user-avatar"
+                                    :src="userInfo.avatar"
+                                    :name="userInfo.nickname"
+                                    :size="200"
+                                />
                                 <p class="nickname">{{ userInfo.nickname }}</p>
                                 <p class="name">@{{ userInfo.name }}</p>
                                 <p class="role" :style="{ backgroundColor: roleColor }">

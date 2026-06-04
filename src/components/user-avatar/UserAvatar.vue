@@ -7,11 +7,7 @@
         :style="avatarStyle"
         @error="imgError = true"
     />
-    <div
-        v-else
-        class="user-avatar user-avatar--fallback"
-        :style="avatarStyle"
-    >
+    <div v-else class="user-avatar user-avatar--fallback" :style="avatarStyle">
         {{ fallbackChar }}
     </div>
 </template>
@@ -41,9 +37,12 @@ const props = withDefaults(
 const imgError = ref(false)
 
 // src 变化时重置错误状态
-watch(() => props.src, () => {
-    imgError.value = false
-})
+watch(
+    () => props.src,
+    () => {
+        imgError.value = false
+    },
+)
 
 const avatarStyle = computed(() => {
     const s = typeof props.size === 'number' ? `${props.size}px` : props.size
@@ -56,7 +55,7 @@ const fallbackChar = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@use "sass:color";
+@use 'sass:color';
 
 .user-avatar {
     border-radius: 50%;

@@ -14,7 +14,8 @@
     cursor: pointer;
     overflow: hidden;
 
-    .pin, .pin-static {
+    .pin,
+    .pin-static {
         position: absolute;
         top: 12px;
         right: 12px;

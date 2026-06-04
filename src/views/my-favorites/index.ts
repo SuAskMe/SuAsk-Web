@@ -1,3 +1,3 @@
-import MyFavorites from "./MyFavorites.vue";
+import MyFavorites from './MyFavorites.vue'
 
-export default MyFavorites;
+export default MyFavorites

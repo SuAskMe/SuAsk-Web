@@ -1,6 +1,6 @@
 export function isMobile(): boolean {
-    const ua = navigator.userAgent;
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const ua = navigator.userAgent
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
 }
 
 const DEVICE_ID_KEY = 'suask_device_id'
