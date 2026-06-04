@@ -19,37 +19,7 @@ enum Api {
 
 export async function getQFMAllApi(req: GetQFMReq): Promise<GetQFMRes> {
     return await request
-        .get(Api.INBOX, { params: { ...req, tag: "all" } })
-        .then((res) => {
-            if (res) {
-                return res.data;
-            }
-        });
-}
-
-export async function getQFMAnsweredApi(req: GetQFMReq): Promise<GetQFMRes> {
-    return await request
-        .get(Api.INBOX, { params: { ...req, tag: "answered" } })
-        .then((res) => {
-            if (res) {
-                return res.data;
-            }
-        });
-}
-
-export async function getQFMUnansweredApi(req: GetQFMReq): Promise<GetQFMRes> {
-    return await request
-        .get(Api.INBOX, { params: { ...req, tag: "unanswered" } })
-        .then((res) => {
-            if (res) {
-                return res.data;
-            }
-        });
-}
-
-export async function getQFMOnTopApi(): Promise<GetQFMRes> {
-    return await request
-        .get(Api.INBOX, { params: { page: 1, sort_type: 0, tag: "pinned" } })
+        .get(Api.INBOX, { params: req })
         .then((res) => {
             if (res) {
                 return res.data;

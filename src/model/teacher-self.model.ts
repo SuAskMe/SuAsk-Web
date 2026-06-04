@@ -12,6 +12,7 @@ export interface QFMItem {
 export interface GetQFMReq {
     page: number
     sort_type: number
+    tag?: string
 }
 
 export interface SearchQFMReq {
