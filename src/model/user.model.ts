@@ -40,21 +40,5 @@ export interface UserInfo {
     responses?: number
 }
 
-export interface LoginReq {
-    name: string
-    email: string
-    password: string
-}
-
-export interface LoginRes {
-    id: number
-    role: string
-    token: string
-    type: string
-}
-
-export interface HeartbeatRes {
-    id: number
-}
-
 export * from '@/entities/password-reset'
+export * from '@/entities/session'

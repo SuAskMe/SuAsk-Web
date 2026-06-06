@@ -31,5 +31,6 @@ export type {
     Word as QuestionWord,
 } from './question/model/question.model'
 export * from './register'
+export * from './session'
 export * from './teacher'
 export * from './teacher-self'

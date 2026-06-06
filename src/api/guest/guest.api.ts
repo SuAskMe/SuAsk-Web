@@ -1,4 +1,4 @@
-import type { LoginRes } from '@/model/user.model'
+import type { LoginRes } from '@/entities/session'
 import request from '@/utils/http/request'
 
 export interface GuestUpgradeReq {
