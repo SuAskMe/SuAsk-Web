@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import type { GetKeywordReq, GetKeywordRes } from '@/model/question.model'
+import type { GetKeywordReq, GetKeywordRes } from '@/entities/question'
 import request from '@/utils/http/request'
 import { ref } from 'vue'
 

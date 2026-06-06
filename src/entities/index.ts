@@ -17,4 +17,16 @@ export type {
     Word as HistoryWord,
 } from './history/model/history.model'
 export * from './notification'
+export type {
+    AddQuestionReq,
+    GetKeywordReq,
+    GetKeywordRes,
+    GetQuestionReq,
+    GetQuestionRes,
+    QuestionItem,
+    SearchQuestionReq,
+    SearchQuestionRes,
+    Teacher,
+    Word as QuestionWord,
+} from './question/model/question.model'
 export * from './teacher'

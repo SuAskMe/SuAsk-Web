@@ -138,7 +138,7 @@ import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
-import type { QuestionItem } from '@/model/question.model'
+import type { QuestionItem } from '@/entities/question'
 import {
     questionList,
     InitStatus,

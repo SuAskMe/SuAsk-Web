@@ -1,4 +1,4 @@
-import type { GetQuestionRes } from '@/model/question.model'
+import type { GetQuestionRes } from '@/entities/question'
 import request from '@/utils/http/request'
 
 export interface GetHotQuestionsReq {

@@ -1,4 +1,4 @@
-import type { GetQuestionRes, QuestionItem } from '@/model/question.model'
+import type { GetQuestionRes, QuestionItem } from '@/entities/question'
 import { getHotQuestionsApi, type GetHotQuestionsReq } from '@/api/question/hot.api'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { ref } from 'vue'

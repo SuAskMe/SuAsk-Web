@@ -5,7 +5,7 @@ import type {
     GetQuestionRes,
     SearchQuestionReq,
     SearchQuestionRes,
-} from '@/model/question.model'
+} from '@/entities/question'
 import request from '@/utils/http/request'
 
 enum Api {

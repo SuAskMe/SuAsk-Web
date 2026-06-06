@@ -224,7 +224,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AddQuestionReq, QuestionItem } from '@/model/question.model'
+import type { AddQuestionReq, QuestionItem } from '@/entities/question'
 import { UserStore } from '@/store/modules/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { GenId } from '@/shared/lib/gen-id'
