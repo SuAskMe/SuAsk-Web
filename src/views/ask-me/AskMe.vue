@@ -419,12 +419,17 @@ import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
-import { getQFMAllApi, pinQFMApi, searchQFMApi } from '@/api/question/teacher-self.api'
+import {
+    getQFMAllApi,
+    pinQFMApi,
+    searchQFMApi,
+    type GetQFMRes,
+    type QFMItem,
+} from '@/entities/teacher-self'
 import { deleteQuestionApi, restoreQuestionApi } from '@/api/question/question.api'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import type { QFMItem, GetQFMRes } from '@/model/teacher-self.model'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
 

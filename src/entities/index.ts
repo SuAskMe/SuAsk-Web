@@ -30,3 +30,4 @@ export type {
     Word as QuestionWord,
 } from './question/model/question.model'
 export * from './teacher'
+export * from './teacher-self'
