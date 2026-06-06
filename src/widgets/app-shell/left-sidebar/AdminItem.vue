@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import ControlPanelItem from '@/components/control-panel-item'
+import ControlPanelItem from './ControlPanelItem.vue'
 import { ADMIN_QUESTIONS_PATH } from '@/entities/admin-question'
 import { ADMIN_USERS_PATH } from '@/entities/admin-user'
 import { ADMIN_ANNOUNCEMENTS_PATH } from '@/entities/announcement'

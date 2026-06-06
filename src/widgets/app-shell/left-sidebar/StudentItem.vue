@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import ControlPanelItem from '@/components/control-panel-item'
+import ControlPanelItem from './ControlPanelItem.vue'
 import { ANNOUNCEMENT_LIST_PATH } from '@/entities/announcement'
 </script>
 

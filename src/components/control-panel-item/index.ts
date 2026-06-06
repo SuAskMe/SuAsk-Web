@@ -1,3 +1,1 @@
-import ControlPanelItem from './ControlPanelItem.vue'
-
-export default ControlPanelItem
+export { ControlPanelItem as default, ControlPanelItem } from '@/widgets/app-shell/left-sidebar'
