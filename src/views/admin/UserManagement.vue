@@ -16,25 +16,14 @@
                         placeholder="搜索用户名、昵称或邮箱..."
                         @input="onSearchInput"
                     />
-                    <span
-                        v-if="searchKeyword"
-                        class="clear-btn"
-                        @click="
-                            searchKeyword = ''
-                            onSearchInput()
-                        "
-                        >&times;</span
-                    >
+                    <span v-if="searchKeyword" class="clear-btn" @click="clearSearch">&times;</span>
                 </div>
                 <div class="role-tabs">
                     <button
                         v-for="opt in roleOptions"
                         :key="opt.value"
                         :class="['role-tab', { active: filterRole === opt.value }]"
-                        @click="
-                            filterRole = opt.value
-                            onRoleFilterChange()
-                        "
+                        @click="selectRoleFilter(opt.value)"
                     >
                         {{ opt.label }}
                     </button>
@@ -458,6 +447,16 @@ function onSearchInput() {
         currentPage.value = 1
         fetchUserList()
     }, 300)
+}
+
+function clearSearch() {
+    searchKeyword.value = ''
+    onSearchInput()
+}
+
+function selectRoleFilter(role: string) {
+    filterRole.value = role
+    onRoleFilterChange()
 }
 
 function onRoleFilterChange() {
