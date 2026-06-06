@@ -111,7 +111,7 @@ import { SyncStore } from '@/store/modules/question-detail'
 
 import { UserStore } from '@/store/modules/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import ComposeDialog from '@/components/compose/ComposeDialog.vue'
+import ComposeDialog from '@/features/question-compose'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 
 // 导入全局事件总线

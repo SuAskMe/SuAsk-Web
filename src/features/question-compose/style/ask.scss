@@ -1,0 +1,88 @@
+@use '@/styles/colors.scss' as *;
+
+.main {
+    .title {
+        display: flex;
+        width: 100%;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        border-radius: 14px;
+        align-items: center;
+        background: rgba(248, 250, 252, 0.6);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &.is-focused {
+            background: rgba(113, 182, 255, 0.04);
+            border-color: rgba(113, 182, 255, 0.3);
+            box-shadow:
+                0 0 0 3px rgba(113, 182, 255, 0.08),
+                0 2px 8px rgba(113, 182, 255, 0.06);
+        }
+
+        .el-avatar {
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        :deep(.el-input) {
+            --el-input-focus-border-color: transparent !important;
+            --el-input-hover-border-color: transparent !important;
+            --el-input-border-color: transparent !important;
+            --el-input-bg-color: transparent !important;
+            box-shadow: none !important;
+            padding: 0;
+
+            .el-input__wrapper {
+                background-color: transparent !important;
+                box-shadow: none !important;
+                padding: 0;
+            }
+        }
+    }
+
+    .content {
+        margin-top: 16px;
+        width: 100%;
+        height: auto;
+        padding: 14px 16px;
+        box-sizing: border-box;
+        border-radius: 14px;
+        background: rgba(248, 250, 252, 0.6);
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &.is-focused {
+            background: rgba(113, 182, 255, 0.04);
+            border-color: rgba(113, 182, 255, 0.3);
+            box-shadow:
+                0 0 0 3px rgba(113, 182, 255, 0.08),
+                0 2px 8px rgba(113, 182, 255, 0.06);
+        }
+
+        :deep(.el-textarea) {
+            --el-input-focus-border-color: transparent !important;
+            --el-input-hover-border-color: transparent !important;
+            --el-input-border-color: transparent !important;
+            --el-input-bg-color: transparent !important;
+            box-shadow: none !important;
+
+            .el-textarea__inner {
+                background-color: transparent !important;
+                box-shadow: none !important;
+                padding: 0;
+                resize: none !important;
+                font-family: inherit;
+                font-size: 15px;
+                line-height: 1.65;
+                color: #334155;
+                letter-spacing: 0.01em;
+
+                &::placeholder {
+                    color: #94a3b8;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}
