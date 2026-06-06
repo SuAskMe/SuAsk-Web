@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TeacherItem } from '@/model/teacher.model'
+import type { TeacherItem } from '@/entities/teacher'
 import { computed } from 'vue'
 import { ElCard } from 'element-plus/es/components/card/index.mjs'
 import 'element-plus/es/components/card/style/css'
