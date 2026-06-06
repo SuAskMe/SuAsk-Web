@@ -29,5 +29,6 @@ export type {
     Teacher,
     Word as QuestionWord,
 } from './question/model/question.model'
+export * from './register'
 export * from './teacher'
 export * from './teacher-self'

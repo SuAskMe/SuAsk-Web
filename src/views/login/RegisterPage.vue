@@ -102,8 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import { registerApi, sendVerificationCodeApi } from '@/api/user/register.api'
-import type { RegisterReq } from '@/model/register.model'
+import { registerApi, sendVerificationCodeApi, type RegisterReq } from '@/entities/register'
 import { router } from '@/router'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register'
