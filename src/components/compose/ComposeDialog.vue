@@ -26,7 +26,7 @@
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import { defineAsyncComponent, ref } from 'vue'
 import type { QuestionItem } from '@/model/question.model'
-import type { AnswerItem } from '@/model/answer.model'
+import type { AnswerItem } from '@/entities/answer'
 
 const AskDialog = defineAsyncComponent(() => import('./AskDialog.vue'))
 const AnswerDialog = defineAsyncComponent(() => import('./AnswerDialog.vue'))

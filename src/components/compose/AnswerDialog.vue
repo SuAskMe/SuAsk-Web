@@ -219,8 +219,7 @@ import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { loadDraftDb, type Answer } from './draftDb'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
-import type { AddAnswer, AnswerItem, Question } from '@/model/answer.model'
-import { addAnswerApi } from '@/api/answer/answer.api'
+import { addAnswerApi, type AddAnswer, type AnswerItem, type Question } from '@/entities/answer'
 import { hasTeacherAbility } from '@/utils/auth'
 import {
     createObjectUrlPreview,

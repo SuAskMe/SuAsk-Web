@@ -90,10 +90,17 @@ import { scrollToQuote } from './QuestionDetail'
 import { computed, nextTick, onMounted, provide, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { router } from '@/router'
-import { getAnswerApi, upvoteAnswerApi, deleteAnswerApi } from '@/api/answer/answer.api'
+import {
+    deleteAnswerApi,
+    getAnswerApi,
+    upvoteAnswerApi,
+    type AnswerItem,
+    type Question,
+    type UpvoteAnswerReq,
+    type UpvoteAnswerRes,
+} from '@/entities/answer'
 import { deleteQuestionApi } from '@/api/question/question.api'
 import { canDelete, hasTeacherAbility } from '@/utils/auth'
-import type { AnswerItem, Question, UpvoteAnswerReq, UpvoteAnswerRes } from '@/model/answer.model'
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
