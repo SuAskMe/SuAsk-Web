@@ -414,10 +414,9 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import CardMediaGrid from '@/components/bubble-card/shared/CardMediaGrid.vue'
 import { getTimeStr } from '@/utils/time'
-import QuestionListPage from '@/components/question-list-page'
+import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
-import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
 import {
     getQFMAllApi,

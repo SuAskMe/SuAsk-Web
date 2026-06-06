@@ -1,3 +1,2 @@
-import QuestionListPage from './QuestionListPage.vue'
-
-export default QuestionListPage
+export { default } from '@/widgets/question-list-page'
+export { QuestionListPage } from '@/widgets/question-list-page'
