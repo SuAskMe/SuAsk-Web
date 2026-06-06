@@ -1,5 +1,9 @@
-import type { GetQuestionRes, QuestionItem } from '@/entities/question'
-import { getHotQuestionsApi, type GetHotQuestionsReq } from '@/api/question/hot.api'
+import {
+    getHotQuestionsApi,
+    type GetHotQuestionsReq,
+    type GetQuestionRes,
+    type QuestionItem,
+} from '@/entities/question'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { ref } from 'vue'
 

@@ -224,7 +224,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AddQuestionReq, QuestionItem } from '@/entities/question'
+import { addQuestionApi, type AddQuestionReq, type QuestionItem } from '@/entities/question'
 import { UserStore } from '@/store/modules/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { GenId } from '@/shared/lib/gen-id'
@@ -237,7 +237,6 @@ import 'element-plus/es/components/image/style/css'
 import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
-import { addQuestionApi } from '@/api/question/question.api'
 import { loadDraftDb, type Question } from './draftDb'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'

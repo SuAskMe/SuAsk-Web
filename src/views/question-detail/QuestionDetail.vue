@@ -99,7 +99,7 @@ import {
     type UpvoteAnswerReq,
     type UpvoteAnswerRes,
 } from '@/entities/answer'
-import { deleteQuestionApi } from '@/api/question/question.api'
+import { deleteQuestionApi } from '@/entities/question'
 import { canDelete, hasTeacherAbility } from '@/utils/auth'
 // import { AnswerDialog } from "@/components/ask-and-answer-dialog";
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'

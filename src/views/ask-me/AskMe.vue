@@ -426,7 +426,7 @@ import {
     type GetQFMRes,
     type QFMItem,
 } from '@/entities/teacher-self'
-import { deleteQuestionApi, restoreQuestionApi } from '@/api/question/question.api'
+import { deleteQuestionApi, restoreQuestionApi } from '@/entities/question'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'

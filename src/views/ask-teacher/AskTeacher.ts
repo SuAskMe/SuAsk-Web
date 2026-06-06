@@ -1,7 +1,11 @@
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import type { GetQuestionRes, QuestionItem } from '@/entities/question'
+import {
+    getQuestionTeacherApi,
+    searchQuestionTeacherApi,
+    type GetQuestionRes,
+    type QuestionItem,
+} from '@/entities/question'
 import { favoriteApi } from '@/entities/favorite'
-import { getQuestionTeacherApi, searchQuestionTeacherApi } from '@/api/question/question.api'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 
 export const currentTeacherId: { value: number | null } = { value: null }
