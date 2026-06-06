@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@/components/svg-icon'
+import SvgIcon from '@/shared/ui/svg-icon'
 import { onMounted, ref } from 'vue'
 import TeacherCard from '@/components/teacher-card'
 import { getTeacherApi } from '@/api/teacher/teacher.api'
