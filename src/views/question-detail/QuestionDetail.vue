@@ -89,7 +89,7 @@ import BackgroundImg from '@/shared/ui/background-img'
 import { scrollToQuote } from './QuestionDetail'
 import { computed, nextTick, onMounted, provide, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { router } from '@/router'
+import { router } from '@/app/router'
 import {
     deleteAnswerApi,
     getAnswerApi,

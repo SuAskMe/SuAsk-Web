@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { inject } from 'vue'
 import Typewriter from './TypeWriter.vue'
-import { router } from '@/router'
+import { router } from '@/app/router'
 
 const isMobile = !(inject('deviceType', 'desktop') == 'desktop')
 

@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { registerApi, sendVerificationCodeApi, type RegisterReq } from '@/entities/register'
-import { router } from '@/router'
+import { router } from '@/app/router'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register'
 import { Lock, User } from '@element-plus/icons-vue'

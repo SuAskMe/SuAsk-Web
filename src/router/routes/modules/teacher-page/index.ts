@@ -1,3 +1,1 @@
-import { AskMeRoute } from './askMe'
-
-export { AskMeRoute }
+export * from '@/app/router/routes/modules/teacher-page/index'

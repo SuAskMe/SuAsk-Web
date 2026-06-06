@@ -77,7 +77,7 @@ import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import QuestionHeader from '@/widgets/question-header'
-import { router } from '@/router'
+import { router } from '@/app/router'
 import { getTeacherPinApi, type TeacherPinItem } from '@/entities/teacher'
 // import { DeviceTypeStore } from '@/store/modules/device-type'
 
