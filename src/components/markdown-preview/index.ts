@@ -1,3 +1,2 @@
-import MarkdownPreview from './MarkdownPreview.vue'
-
-export default MarkdownPreview
+export { default } from '@/shared/ui/markdown-preview'
+export { MarkdownPreview } from '@/shared/ui/markdown-preview'

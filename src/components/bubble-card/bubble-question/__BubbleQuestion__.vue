@@ -5,7 +5,7 @@ import { getTimeStr } from '../bubble-card'
 import CardMediaGrid from '../shared/CardMediaGrid.vue'
 import CardMetaRow from '../shared/CardMetaRow.vue'
 import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
-import MarkdownPreview from '@/components/markdown-preview'
+import MarkdownPreview from '@/shared/ui/markdown-preview'
 
 interface BubbleQuestionProps {
     title: string

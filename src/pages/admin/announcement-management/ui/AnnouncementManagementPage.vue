@@ -211,7 +211,7 @@ import type { AnnouncementItem } from '@/entities/announcement'
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
-import MarkdownPreview from '@/components/markdown-preview/MarkdownPreview.vue'
+import MarkdownPreview from '@/shared/ui/markdown-preview'
 
 const router = useRouter()
 const userStore = UserStore()

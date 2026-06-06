@@ -63,7 +63,7 @@ import { getAnnouncementList } from '@/entities/announcement'
 import type { AnnouncementItem } from '@/entities/announcement'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
-import MarkdownPreview from '@/components/markdown-preview/MarkdownPreview.vue'
+import MarkdownPreview from '@/shared/ui/markdown-preview'
 
 const sidebarStore = SidebarStore()
 const pageSize = 10
