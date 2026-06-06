@@ -9,7 +9,7 @@ import {
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
-const AnnouncementList = () => import('@/views/announcement/AnnouncementList.vue')
+const AnnouncementList = () => import('@/pages/announcement/list')
 
 export const AnnouncementListRoute: AppRouteRecordRaw = {
     path: ANNOUNCEMENT_LIST_PATH,
@@ -58,7 +58,7 @@ export const AdminAnnouncementsRoute: AppRouteRecordRaw = {
                 requiresAdmin: true,
             },
             components: {
-                default: () => import('@/views/admin/AnnouncementManagement.vue'),
+                default: () => import('@/pages/admin/announcement-management'),
                 left_side: LeftSidebar,
             },
         },
