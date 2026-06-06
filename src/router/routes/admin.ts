@@ -1,5 +1,16 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { isMobile } from '@/utils/device'
+import {
+    ADMIN_QUESTION_DETAIL_ROUTE_NAME,
+    ADMIN_QUESTIONS_CHILD_ROUTE_NAME,
+    ADMIN_QUESTIONS_PATH,
+    ADMIN_QUESTIONS_ROUTE_NAME,
+} from '@/entities/admin-question'
+import {
+    ADMIN_USERS_CHILD_ROUTE_NAME,
+    ADMIN_USERS_PATH,
+    ADMIN_USERS_ROUTE_NAME,
+} from '@/entities/admin-user'
 import { AdminAnnouncementsRoute } from './modules/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
@@ -9,8 +20,8 @@ const QuestionManagement = () => import('@/pages/admin/question-management')
 const QuestionManagementDetail = () => import('@/pages/admin/question-management/detail')
 
 export const AdminUsersRoute: AppRouteRecordRaw = {
-    path: '/admin/users',
-    name: 'AdminUsersRoot',
+    path: ADMIN_USERS_PATH,
+    name: ADMIN_USERS_ROUTE_NAME,
     meta: {
         title: '用户管理',
         requiresAdmin: true,
@@ -23,7 +34,7 @@ export const AdminUsersRoute: AppRouteRecordRaw = {
     children: [
         {
             path: '',
-            name: 'AdminUsers',
+            name: ADMIN_USERS_CHILD_ROUTE_NAME,
             meta: {
                 title: '用户管理',
                 requiresAdmin: true,
@@ -37,8 +48,8 @@ export const AdminUsersRoute: AppRouteRecordRaw = {
 }
 
 export const AdminQuestionsRoute: AppRouteRecordRaw = {
-    path: '/admin/questions',
-    name: 'AdminQuestionsRoot',
+    path: ADMIN_QUESTIONS_PATH,
+    name: ADMIN_QUESTIONS_ROUTE_NAME,
     meta: {
         title: '内容管理',
         requiresAdmin: true,
@@ -51,7 +62,7 @@ export const AdminQuestionsRoute: AppRouteRecordRaw = {
     children: [
         {
             path: '',
-            name: 'AdminQuestions',
+            name: ADMIN_QUESTIONS_CHILD_ROUTE_NAME,
             meta: {
                 title: '内容管理',
                 requiresAdmin: true,
@@ -63,7 +74,7 @@ export const AdminQuestionsRoute: AppRouteRecordRaw = {
         },
         {
             path: ':id',
-            name: 'AdminQuestionDetail',
+            name: ADMIN_QUESTION_DETAIL_ROUTE_NAME,
             meta: {
                 title: '问题详情',
                 requiresAdmin: true,

@@ -19,14 +19,14 @@
             id="admin-users"
             icon="manage"
             text="用户管理"
-            jump-to-path="/admin/users"
+            :jump-to-path="ADMIN_USERS_PATH"
         />
         <control-panel-item
             class="control-panel-item"
             id="admin-questions"
             icon="manage-2"
             text="内容管理"
-            jump-to-path="/admin/questions"
+            :jump-to-path="ADMIN_QUESTIONS_PATH"
         />
         <control-panel-item
             class="control-panel-item"
@@ -68,6 +68,8 @@
 
 <script setup lang="ts">
 import ControlPanelItem from '@/components/control-panel-item'
+import { ADMIN_QUESTIONS_PATH } from '@/entities/admin-question'
+import { ADMIN_USERS_PATH } from '@/entities/admin-user'
 import { ADMIN_ANNOUNCEMENTS_PATH } from '@/entities/announcement'
 </script>
 

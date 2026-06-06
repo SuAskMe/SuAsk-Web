@@ -7,7 +7,7 @@
 
         <el-scrollbar class="admin-content">
             <div class="toolbar detail-toolbar">
-                <button type="button" class="back-btn" @click="router.push('/admin/questions')">
+                <button type="button" class="back-btn" @click="router.push(ADMIN_QUESTIONS_PATH)">
                     ← 返回列表
                 </button>
                 <div class="filter-group">
@@ -240,6 +240,7 @@ import QuestionHeader from '@/widgets/question-header'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
 import {
+    ADMIN_QUESTIONS_PATH,
     deleteAdminQuestion,
     deleteAdminQuestionAnswer,
     getAdminQuestionDetail,

@@ -200,6 +200,7 @@ import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
 import {
     deleteAdminQuestion,
+    getAdminQuestionDetailPath,
     getAdminQuestionList,
     restoreAdminQuestion,
     type AdminQuestionItem,
@@ -285,7 +286,7 @@ async function fetchQuestions() {
 }
 
 function goDetail(id: number) {
-    router.push(`/admin/questions/${id}`)
+    router.push(getAdminQuestionDetailPath(id))
 }
 
 const deleteDialogVisible = ref(false)
