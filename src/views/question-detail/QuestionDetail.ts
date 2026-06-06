@@ -1,4 +1,4 @@
-import { favoriteApi } from '@/api/question/favorite.api'
+import { favoriteApi } from '@/entities/favorite'
 import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 

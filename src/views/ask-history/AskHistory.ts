@@ -1,7 +1,6 @@
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import type { GetHistoryRes, HistoryItem } from '@/model/history.model'
-import { favoriteApi } from '@/api/question/favorite.api'
-import { getHistoryApi, searchHistoryApi } from '@/api/question/history.api'
+import { favoriteApi } from '@/entities/favorite'
+import { getHistoryApi, searchHistoryApi, type GetHistoryRes, type HistoryItem } from '@/entities/history'
 import { usePagination, type PaginationParams } from '@/utils/pagination'
 
 const {

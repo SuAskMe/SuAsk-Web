@@ -105,7 +105,7 @@ import { canDelete, hasTeacherAbility } from '@/utils/auth'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import { Plus } from '@element-plus/icons-vue'
-import { favoriteApi } from '@/api/question/favorite.api'
+import { favoriteApi } from '@/entities/favorite'
 import { storeToRefs } from 'pinia'
 import { SyncStore } from '@/store/modules/question-detail'
 
