@@ -68,7 +68,7 @@
 
 <script setup lang="ts">
 import ControlPanelItem from '@/components/control-panel-item'
-import { ADMIN_ANNOUNCEMENTS_PATH } from '@/constants/announcement'
+import { ADMIN_ANNOUNCEMENTS_PATH } from '@/entities/announcement'
 </script>
 
 <style scoped lang="scss">

@@ -59,8 +59,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getAnnouncementList } from '@/api/announcement/announcement.api'
-import type { AnnouncementItem } from '@/model/announcement.model'
+import { getAnnouncementList } from '@/entities/announcement'
+import type { AnnouncementItem } from '@/entities/announcement'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
 import MarkdownPreview from '@/components/markdown-preview/MarkdownPreview.vue'

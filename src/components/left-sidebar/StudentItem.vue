@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import ControlPanelItem from '@/components/control-panel-item'
-import { ANNOUNCEMENT_LIST_PATH } from '@/constants/announcement'
+import { ANNOUNCEMENT_LIST_PATH } from '@/entities/announcement'
 </script>
 
 <style scoped lang="scss">

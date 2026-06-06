@@ -206,8 +206,8 @@ import {
     createAnnouncement,
     updateAnnouncement,
     deleteAnnouncement,
-} from '@/api/announcement/announcement.api'
-import type { AnnouncementItem } from '@/model/announcement.model'
+} from '@/entities/announcement'
+import type { AnnouncementItem } from '@/entities/announcement'
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'

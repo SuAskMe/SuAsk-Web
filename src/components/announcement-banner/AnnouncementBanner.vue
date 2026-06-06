@@ -11,13 +11,13 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { getActiveAnnouncement } from '@/api/announcement/announcement.api'
-import type { ActiveAnnouncementRes } from '@/model/announcement.model'
+import { getActiveAnnouncement } from '@/entities/announcement'
+import type { ActiveAnnouncementRes } from '@/entities/announcement'
 import { UserStore } from '@/store/modules/user'
 import {
     ANNOUNCEMENT_DISMISSED_STORAGE_KEY,
     ANNOUNCEMENT_LIST_PATH,
-} from '@/constants/announcement'
+} from '@/entities/announcement'
 
 const router = useRouter()
 const userStore = UserStore()

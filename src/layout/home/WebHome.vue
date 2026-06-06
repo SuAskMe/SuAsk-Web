@@ -5,7 +5,7 @@ import AnnouncementBanner from '@/components/announcement-banner/AnnouncementBan
 import {
     ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
     ANNOUNCEMENT_LIST_ROUTE_NAME,
-} from '@/constants/announcement'
+} from '@/entities/announcement'
 
 const sidebarStore = SidebarStore()
 const deviceStore = DeviceTypeStore()

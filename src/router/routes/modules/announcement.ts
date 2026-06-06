@@ -5,7 +5,7 @@ import {
     ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
     ANNOUNCEMENT_LIST_PATH,
     ANNOUNCEMENT_LIST_ROUTE_NAME,
-} from '@/constants/announcement'
+} from '@/entities/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
