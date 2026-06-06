@@ -206,7 +206,7 @@
 
 <script setup lang="ts">
 import { UserStore } from '@/store/modules/user'
-import { GenId } from '@/views/question-detail/QuestionDetail'
+import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
 import { ElImage } from 'element-plus/es/components/image/index.mjs'

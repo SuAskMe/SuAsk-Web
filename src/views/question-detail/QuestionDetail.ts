@@ -1,5 +1,8 @@
 import { favoriteApi } from '@/api/question/favorite.api'
+import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+
+export { GenId }
 
 let skipLock = false
 
@@ -29,12 +32,6 @@ export const scrollToQuote = (key: { id: number; quoteId: number; userId: number
             skipLock = false
         }, 2000)
     }
-}
-
-let idSeed = 0
-export const GenId = (): number => {
-    idSeed += 1
-    return idSeed
 }
 
 export async function Favorite(question_id: number): Promise<boolean | null> {
