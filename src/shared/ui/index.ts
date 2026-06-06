@@ -1,4 +1,5 @@
 export * from './background-img'
+export * from './bio-panel'
 export * from './markdown-preview'
 export * from './svg-icon'
 export * from './user-avatar'

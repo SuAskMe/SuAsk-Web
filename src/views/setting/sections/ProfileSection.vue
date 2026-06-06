@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import BioPanel from '@/components/bio-panel/BioPanel.vue'
+import BioPanel from '@/shared/ui/bio-panel'
 import SettingSectionCard from './SettingSectionCard.vue'
 import defaultAvatar from '@/assets/default-avatar.png'
 

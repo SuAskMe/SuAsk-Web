@@ -1,3 +1,2 @@
-import BioPanel from './BioPanel.vue'
-
-export default BioPanel
+export { default } from '@/shared/ui/bio-panel'
+export { BioPanel } from '@/shared/ui/bio-panel'
