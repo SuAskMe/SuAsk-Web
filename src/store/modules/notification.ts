@@ -2,8 +2,10 @@ import {
     deleteNotificationApi,
     getNotificationApi,
     getNotificationCountApi,
-} from '@/api/notification/notification.api'
-import type { NewAnswer, NewQuestion, NewReply } from '@/model/notification.model'
+    type NewAnswer,
+    type NewQuestion,
+    type NewReply,
+} from '@/entities/notification'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 

@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { readNotificationApi } from '@/api/notification/notification.api'
+import { readNotificationApi } from '@/entities/notification'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
