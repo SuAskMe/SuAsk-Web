@@ -1,4 +1,4 @@
-import type { AdminUserItem, CreateAdminUserReq, UpdateAdminUserReq } from '@/api/admin/admin.api'
+import type { AdminUserItem, CreateAdminUserReq, UpdateAdminUserReq } from '@/entities/admin-user'
 
 // ==================== 常量 ====================
 

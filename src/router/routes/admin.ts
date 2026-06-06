@@ -4,7 +4,7 @@ import { AdminAnnouncementsRoute } from './modules/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
-const UserManagement = () => import('@/views/admin/UserManagement.vue')
+const UserManagement = () => import('@/pages/admin/user-management')
 const QuestionManagement = () => import('@/views/admin/QuestionManagement.vue')
 const QuestionManagementDetail = () => import('@/views/admin/QuestionManagementDetail.vue')
 

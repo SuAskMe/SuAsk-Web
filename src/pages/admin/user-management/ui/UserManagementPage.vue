@@ -392,7 +392,7 @@ import {
     deleteAdminUser,
     updateAdminUserAvatar,
     type AdminUserItem,
-} from '@/api/admin/admin.api'
+} from '@/entities/admin-user'
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/widgets/question-header'
@@ -411,7 +411,7 @@ import {
     validatePassword,
     initCreateForm,
     initEditForm,
-} from './UserManagement'
+} from '../model'
 
 // ==================== 权限检查 ====================
 const router = useRouter()
@@ -708,4 +708,4 @@ onUnmounted(() => {
     clearEditAvatarPreview()
 })
 </script>
-<style scoped lang="scss" src="./UserManagement.scss"></style>
+<style scoped lang="scss" src="./UserManagementPage.scss"></style>
