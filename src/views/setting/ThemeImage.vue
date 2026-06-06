@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { Check } from '@element-plus/icons-vue'
 import { computed } from 'vue'
-import BackgroundImg from '@/components/background-img'
+import BackgroundImg from '@/shared/ui/background-img'
 
 const props = withDefaults(
     defineProps<{

@@ -1,3 +1,2 @@
-import BackgroundImg from './BackgroundImg.vue'
-
-export default BackgroundImg
+export { default } from '@/shared/ui/background-img'
+export { BackgroundImg } from '@/shared/ui/background-img'
