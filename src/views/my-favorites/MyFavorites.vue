@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import { onActivated, onMounted, ref } from 'vue'
-import QuestionHeader from '@/components/question-header'
+import QuestionHeader from '@/widgets/question-header'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleQuestion } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'

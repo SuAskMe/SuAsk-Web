@@ -84,7 +84,7 @@
 
 <script setup lang="ts">
 import { BubbleAnswer, BubbleCard } from '@/components/bubble-card'
-import QuestionHeader from '@/components/question-header'
+import QuestionHeader from '@/widgets/question-header'
 import BackgroundImg from '@/components/background-img'
 import { scrollToQuote } from './QuestionDetail'
 import { computed, nextTick, onMounted, provide, ref } from 'vue'

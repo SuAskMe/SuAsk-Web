@@ -1,3 +1,2 @@
-import QuestionHeader from './QuestionHeader.vue'
-
-export default QuestionHeader
+export { default } from '@/widgets/question-header'
+export { QuestionHeader } from '@/widgets/question-header'

@@ -130,7 +130,7 @@
 import { onMounted, ref, reactive, watch } from 'vue'
 import { BubbleCard } from '@/components/bubble-card'
 import QuestionListPage from '@/components/question-list-page'
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'

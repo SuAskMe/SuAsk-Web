@@ -195,7 +195,7 @@ import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { UserStore } from '@/store/modules/user'
 import {

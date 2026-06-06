@@ -210,7 +210,7 @@ import {
 import type { AnnouncementItem } from '@/entities/announcement'
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 
 const router = useRouter()

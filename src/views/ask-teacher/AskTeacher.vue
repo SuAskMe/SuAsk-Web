@@ -56,7 +56,7 @@ import { nextTick, onMounted, provide, ref } from 'vue'
 import QuestionListPage from '@/components/question-list-page'
 import { BubbleCard } from '@/components/bubble-card'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'

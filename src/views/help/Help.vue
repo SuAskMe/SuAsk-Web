@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { Check } from '@element-plus/icons-vue'
 import { ElCard } from 'element-plus/es/components/card/index.mjs'
