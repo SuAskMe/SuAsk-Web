@@ -58,8 +58,7 @@
 <script setup lang="ts">
 import SvgIcon from '@/shared/ui/svg-icon'
 import { onMounted, ref } from 'vue'
-import TeacherCard from '@/components/teacher-card'
-import { getTeacherApi, TeacherPerm, type TeacherItem } from '@/entities/teacher'
+import { getTeacherApi, TeacherCard, TeacherPerm, type TeacherItem } from '@/entities/teacher'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { UserStore } from '@/store/modules/user'
