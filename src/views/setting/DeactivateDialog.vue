@@ -46,7 +46,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
 import 'element-plus/es/components/dialog/style/css'
 import { WarningFilled } from '@element-plus/icons-vue'
-import { deactivateAccountApi } from '@/api/user/user.api'
+import { deactivateAccountApi } from '@/entities/user'
 import { UserStore } from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 

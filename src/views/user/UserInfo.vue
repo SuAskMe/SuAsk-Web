@@ -69,8 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { getUserByIdApi } from '@/api/user/user.api'
-import type { UserInfo } from '@/model/user.model'
+import { getUserByIdApi, type UserInfo } from '@/entities/user'
 import { BubbleCard } from '@/components/bubble-card'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { onMounted, ref } from 'vue'

@@ -63,7 +63,7 @@ import { getTeacherApi, TeacherPerm, type TeacherItem } from '@/entities/teacher
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { UserStore } from '@/store/modules/user'
-import { Role } from '@/model/user.model'
+import { Role } from '@/entities/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 // import { isMobile } from "@/utils/device";

@@ -1,6 +1,6 @@
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStoreWithOut } from '@/store/modules/user'
-import { Role } from '@/model/user.model'
+import { Role } from '@/entities/user'
 import { getDeviceId } from '@/utils/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
