@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
-import AnnouncementBanner from '@/components/announcement-banner/AnnouncementBanner.vue'
+import AnnouncementBanner from '@/widgets/announcement-banner'
 import {
     ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
     ANNOUNCEMENT_LIST_ROUTE_NAME,
