@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { getTimeStr } from '../bubble-card'
-import CardMediaGrid from '../shared/CardMediaGrid.vue'
+import CardMediaGrid from '@/shared/ui/card-media-grid'
 import CardMetaRow from '../shared/CardMetaRow.vue'
 import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
 import MarkdownPreview from '@/shared/ui/markdown-preview'

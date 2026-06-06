@@ -5,7 +5,7 @@ import { UserAvatar } from '@/shared/ui/user-avatar'
 import { getTimeStr } from '../bubble-card'
 import AnswerMetaRow from '../shared/AnswerMetaRow.vue'
 import AnswerQuoteBlock from '../shared/AnswerQuoteBlock.vue'
-import CardMediaGrid from '../shared/CardMediaGrid.vue'
+import CardMediaGrid from '@/shared/ui/card-media-grid'
 import { computed } from 'vue'
 interface BubbleAnswerProps {
     isMine?: boolean
