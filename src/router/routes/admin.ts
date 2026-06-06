@@ -3,7 +3,7 @@ import { isMobile } from '@/utils/device'
 import { AdminAnnouncementsRoute } from './modules/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
-const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
+const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 const UserManagement = () => import('@/views/admin/UserManagement.vue')
 const QuestionManagement = () => import('@/views/admin/QuestionManagement.vue')
 const QuestionManagementDetail = () => import('@/views/admin/QuestionManagementDetail.vue')

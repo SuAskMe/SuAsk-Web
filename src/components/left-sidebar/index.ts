@@ -1,3 +1,2 @@
-import LeftSidebar from './LeftSidebar.vue'
-
-export { LeftSidebar }
+export { default } from '@/widgets/app-shell/left-sidebar'
+export { LeftSidebar } from '@/widgets/app-shell/left-sidebar'

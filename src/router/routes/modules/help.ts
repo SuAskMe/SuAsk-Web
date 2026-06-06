@@ -3,7 +3,7 @@ import { isMobile } from '@/utils/device'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 
-const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
+const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
 const Help = () => import('@/views/help')
 
