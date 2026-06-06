@@ -2,6 +2,10 @@
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
 import AnnouncementBanner from '@/components/announcement-banner/AnnouncementBanner.vue'
+import {
+    ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
+    ANNOUNCEMENT_LIST_ROUTE_NAME,
+} from '@/constants/announcement'
 
 const sidebarStore = SidebarStore()
 const deviceStore = DeviceTypeStore()
@@ -32,8 +36,8 @@ const toggleSidebar = (event: MouseEvent) => {
                         'AskTeacherDetail',
                         'AskTeacher',
                         'Login',
-                        'AnnouncementListRoot',
-                        'AdminAnnouncementsRoot',
+                        ANNOUNCEMENT_LIST_ROUTE_NAME,
+                        ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
                     ]"
                 >
                     <component :is="Component" />

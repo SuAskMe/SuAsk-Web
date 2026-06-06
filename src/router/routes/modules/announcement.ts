@@ -1,13 +1,19 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { isMobile } from '@/utils/device'
+import {
+    ADMIN_ANNOUNCEMENTS_PATH,
+    ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
+    ANNOUNCEMENT_LIST_PATH,
+    ANNOUNCEMENT_LIST_ROUTE_NAME,
+} from '@/constants/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
 const AnnouncementList = () => import('@/views/announcement/AnnouncementList.vue')
 
 export const AnnouncementListRoute: AppRouteRecordRaw = {
-    path: '/announcements',
-    name: 'AnnouncementListRoot',
+    path: ANNOUNCEMENT_LIST_PATH,
+    name: ANNOUNCEMENT_LIST_ROUTE_NAME,
     meta: {
         title: '公告中心',
     },
@@ -32,8 +38,8 @@ export const AnnouncementListRoute: AppRouteRecordRaw = {
 }
 
 export const AdminAnnouncementsRoute: AppRouteRecordRaw = {
-    path: '/admin/announcements',
-    name: 'AdminAnnouncementsRoot',
+    path: ADMIN_ANNOUNCEMENTS_PATH,
+    name: ADMIN_ANNOUNCEMENTS_ROUTE_NAME,
     meta: {
         title: '公告管理',
         requiresAdmin: true,

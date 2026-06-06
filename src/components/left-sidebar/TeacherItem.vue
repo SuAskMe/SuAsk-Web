@@ -19,7 +19,7 @@
             id="announcements"
             icon="pushpin"
             text="公告中心"
-            jump-to-path="/announcements"
+            :jump-to-path="ANNOUNCEMENT_LIST_PATH"
         />
         <control-panel-item
             class="control-panel-item"
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import ControlPanelItem from '@/components/control-panel-item'
+import { ANNOUNCEMENT_LIST_PATH } from '@/constants/announcement'
 </script>
 
 <style scoped lang="scss">

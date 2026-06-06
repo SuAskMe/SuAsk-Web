@@ -14,10 +14,13 @@ import { useRouter } from 'vue-router'
 import { getActiveAnnouncement } from '@/api/announcement/announcement.api'
 import type { ActiveAnnouncementRes } from '@/model/announcement.model'
 import { UserStore } from '@/store/modules/user'
+import {
+    ANNOUNCEMENT_DISMISSED_STORAGE_KEY,
+    ANNOUNCEMENT_LIST_PATH,
+} from '@/constants/announcement'
 
 const router = useRouter()
 const userStore = UserStore()
-const dismissedStorageKey = 'announcement_dismissed_id'
 const cacheTtlMs = 60 * 1000
 
 const announcement = ref<ActiveAnnouncementRes['announcement']>(null)
@@ -31,7 +34,7 @@ const visible = computed(
 
 function getDismissedId(): number {
     try {
-        const raw = localStorage.getItem(dismissedStorageKey)
+        const raw = localStorage.getItem(ANNOUNCEMENT_DISMISSED_STORAGE_KEY)
         return raw ? Number(raw) : 0
     } catch {
         return 0
@@ -67,13 +70,13 @@ async function fetchActive(force = false) {
 
 function dismiss() {
     if (announcement.value) {
-        localStorage.setItem(dismissedStorageKey, String(announcement.value.id))
+        localStorage.setItem(ANNOUNCEMENT_DISMISSED_STORAGE_KEY, String(announcement.value.id))
         dismissedId.value = announcement.value.id
     }
 }
 
 function navigateToList() {
-    router.push('/announcements')
+    router.push(ANNOUNCEMENT_LIST_PATH)
 }
 
 onMounted(() => fetchActive(true))

@@ -33,7 +33,7 @@
             id="admin-announcements"
             icon="pushpin"
             text="公告管理"
-            jump-to-path="/admin/announcements"
+            :jump-to-path="ADMIN_ANNOUNCEMENTS_PATH"
         />
         <control-panel-item
             class="control-panel-item"
@@ -68,6 +68,7 @@
 
 <script setup lang="ts">
 import ControlPanelItem from '@/components/control-panel-item'
+import { ADMIN_ANNOUNCEMENTS_PATH } from '@/constants/announcement'
 </script>
 
 <style scoped lang="scss">
