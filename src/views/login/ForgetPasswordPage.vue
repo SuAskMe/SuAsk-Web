@@ -76,8 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { sendCodeApi, forgetPasswordApi } from '@/api/user/reset_password.api'
-import type { ResetPassword } from '@/model/user.model'
+import { forgetPasswordApi, sendCodeApi, type ResetPassword } from '@/entities/password-reset'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { mailCheck } from '@/utils/login/register'
 import { Lock } from '@element-plus/icons-vue'

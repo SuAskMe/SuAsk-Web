@@ -17,6 +17,7 @@ export type {
     Word as HistoryWord,
 } from './history/model/history.model'
 export * from './notification'
+export * from './password-reset'
 export type {
     AddQuestionReq,
     GetKeywordReq,

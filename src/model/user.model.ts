@@ -40,27 +40,6 @@ export interface UserInfo {
     responses?: number
 }
 
-export interface SendCodeReq {
-    email: string
-    type: string
-}
-
-export interface SendCodeRes {
-    code: string
-}
-
-export interface ResetPassword {
-    email: string
-    code: string
-    password: string
-}
-
-export interface ForgetPassword {
-    email: string
-    code: string
-    password: string
-}
-
 export interface LoginReq {
     name: string
     email: string
@@ -77,3 +56,5 @@ export interface LoginRes {
 export interface HeartbeatRes {
     id: number
 }
+
+export * from '@/entities/password-reset'

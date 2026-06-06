@@ -80,8 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { resetPasswordApi, sendCodeApi } from '@/api/user/reset_password.api'
-import type { ResetPassword } from '@/model/user.model'
+import { resetPasswordApi, sendCodeApi, type ResetPassword } from '@/entities/password-reset'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { UserStore } from '@/store/modules/user'
 import { Lock } from '@element-plus/icons-vue'
