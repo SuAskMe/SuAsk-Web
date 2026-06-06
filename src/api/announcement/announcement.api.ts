@@ -10,6 +10,7 @@ import type {
 enum Api {
     ACTIVE = '/announcements/active',
     LIST = '/announcements',
+    ADMIN_LIST = '/announcements/admin',
     DETAIL = '/announcements/detail',
     COMMENT = '/announcements/comment',
 }
@@ -24,6 +25,13 @@ export async function getActiveAnnouncement(): Promise<ActiveAnnouncementRes> {
 /** 获取公告列表 */
 export async function getAnnouncementList(page: number): Promise<AnnouncementListRes> {
     return request.get(Api.LIST, { params: { page } }).then((res) => {
+        if (res) return res.data
+    })
+}
+
+/** 获取公告管理列表 */
+export async function getAdminAnnouncementList(page: number): Promise<AnnouncementListRes> {
+    return request.get(Api.ADMIN_LIST, { params: { page } }).then((res) => {
         if (res) return res.data
     })
 }

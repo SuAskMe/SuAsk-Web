@@ -201,7 +201,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import {
-    getAnnouncementList,
+    getAdminAnnouncementList,
     getAnnouncementDetail,
     createAnnouncement,
     updateAnnouncement,
@@ -258,7 +258,7 @@ const totalCount = ref(0)
 async function fetchList() {
     tableLoading.value = true
     try {
-        const res = await getAnnouncementList(currentPage.value)
+        const res = await getAdminAnnouncementList(currentPage.value)
         if (res) {
             announcementList.value = res.announcements || []
             totalCount.value = res.total || 0
