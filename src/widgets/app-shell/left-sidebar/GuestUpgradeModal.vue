@@ -93,7 +93,7 @@
 import { onUnmounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { Lock, User } from '@element-plus/icons-vue'
-import { guestSendCodeApi, guestUpgradeApi } from '@/api/guest/guest.api'
+import { guestSendCodeApi, guestUpgradeApi } from '@/entities/guest'
 import { UserStore } from '@/store/modules/user'
 
 defineProps<{

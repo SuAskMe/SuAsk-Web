@@ -3,6 +3,7 @@ export * from './admin-user'
 export * from './announcement'
 export * from './answer'
 export * from './favorite'
+export * from './guest'
 export { getHistoryApi, getHistoryByKeywordApi, searchHistoryApi } from './history/api/history.api'
 export type {
     GetHistoryByKeywordReq,

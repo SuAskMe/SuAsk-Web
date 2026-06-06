@@ -1,5 +1,5 @@
 import { heartbeatApi, loginApi, logoutApi, type LoginReq } from '@/entities/session'
-import { guestLoginApi } from '@/api/guest/guest.api'
+import { guestLoginApi } from '@/entities/guest'
 import { getUserInfoApi, Role, type User } from '@/entities/user'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
