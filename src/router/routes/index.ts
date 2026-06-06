@@ -10,6 +10,7 @@ import { UserRoute } from './modules/userInfo'
 import { AskHistoryRoute } from './modules/student-page'
 import { QuestionDetailRoute } from './modules/questionDetail'
 import { AskMeRoute } from './modules/teacher-page'
+import { AnnouncementListRoute } from './modules/announcement'
 
 // 根路由
 export const RootRoot: AppRouteRecordRaw = {
@@ -55,6 +56,7 @@ export const studentRoutes = [
     SettingRoute,
     AskHistoryRoute,
     MyFavoriteRoute,
+    AnnouncementListRoute,
 ]
 
 // 教师路由
@@ -68,4 +70,5 @@ export const teacherRoutes = [
     AskHistoryRoute,
     MyFavoriteRoute,
     AskMeRoute,
+    AnnouncementListRoute,
 ]

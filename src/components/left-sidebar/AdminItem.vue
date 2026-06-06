@@ -30,6 +30,13 @@
         />
         <control-panel-item
             class="control-panel-item"
+            id="admin-announcements"
+            icon="pushpin"
+            text="公告管理"
+            jump-to-path="/admin/announcements"
+        />
+        <control-panel-item
+            class="control-panel-item"
             id="ask-history"
             icon="chat-history"
             text="历史提问"

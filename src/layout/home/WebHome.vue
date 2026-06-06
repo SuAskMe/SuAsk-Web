@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
+import AnnouncementBanner from '@/components/announcement-banner/AnnouncementBanner.vue'
 
 const sidebarStore = SidebarStore()
 const deviceStore = DeviceTypeStore()
@@ -19,6 +20,7 @@ const toggleSidebar = (event: MouseEvent) => {
             </aside>
         </Transition>
         <main class="main-content" @click="toggleSidebar">
+            <AnnouncementBanner />
             <router-view v-slot="{ Component }">
                 <keep-alive
                     :exclude="[
@@ -30,6 +32,8 @@ const toggleSidebar = (event: MouseEvent) => {
                         'AskTeacherDetail',
                         'AskTeacher',
                         'Login',
+                        'AnnouncementListRoot',
+                        'AdminAnnouncementsRoot',
                     ]"
                 >
                     <component :is="Component" />

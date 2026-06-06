@@ -16,6 +16,13 @@
         />
         <control-panel-item
             class="control-panel-item"
+            id="announcements"
+            icon="pushpin"
+            text="公告中心"
+            jump-to-path="/announcements"
+        />
+        <control-panel-item
+            class="control-panel-item"
             id="ask-history"
             icon="chat-history"
             text="历史提问"

@@ -1,5 +1,6 @@
 import type { AppRouteRecordRaw } from '@/router/types'
 import { isMobile } from '@/utils/device'
+import { AdminAnnouncementsRoute } from './modules/announcement'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/components/left-sidebar/LeftSidebar.vue')
@@ -75,4 +76,4 @@ export const AdminQuestionsRoute: AppRouteRecordRaw = {
     ],
 }
 
-export const adminRoutes: AppRouteRecordRaw[] = [AdminUsersRoute, AdminQuestionsRoute]
+export const adminRoutes: AppRouteRecordRaw[] = [AdminUsersRoute, AdminQuestionsRoute, AdminAnnouncementsRoute]
