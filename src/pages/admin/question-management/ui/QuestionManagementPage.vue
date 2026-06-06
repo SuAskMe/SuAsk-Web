@@ -203,7 +203,7 @@ import {
     getAdminQuestionList,
     restoreAdminQuestion,
     type AdminQuestionItem,
-} from '@/api/admin/admin.api'
+} from '@/entities/admin-question'
 import {
     type AdminQuestionListFilter,
     formatAdminTime,
@@ -214,7 +214,7 @@ import {
     pageSize,
     statusOptions,
     summarizeContent,
-} from './QuestionManagement'
+} from '../model'
 
 const router = useRouter()
 const userStore = UserStore()
@@ -340,4 +340,4 @@ async function handleRestore(question: AdminQuestionItem) {
 }
 </script>
 
-<style scoped lang="scss" src="./QuestionManagement.scss"></style>
+<style scoped lang="scss" src="./QuestionManagementPage.scss"></style>

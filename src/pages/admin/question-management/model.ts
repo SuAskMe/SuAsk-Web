@@ -2,7 +2,7 @@ import type {
     AdminDeletedStatusFilter,
     AdminQuestionItem,
     AdminQuestionListStatus,
-} from '@/api/admin/admin.api'
+} from '@/entities/admin-question'
 
 export const pageSize = 20
 

@@ -5,8 +5,8 @@ import { AdminAnnouncementsRoute } from './modules/announcement'
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 const UserManagement = () => import('@/pages/admin/user-management')
-const QuestionManagement = () => import('@/views/admin/QuestionManagement.vue')
-const QuestionManagementDetail = () => import('@/views/admin/QuestionManagementDetail.vue')
+const QuestionManagement = () => import('@/pages/admin/question-management')
+const QuestionManagementDetail = () => import('@/pages/admin/question-management/detail')
 
 export const AdminUsersRoute: AppRouteRecordRaw = {
     path: '/admin/users',

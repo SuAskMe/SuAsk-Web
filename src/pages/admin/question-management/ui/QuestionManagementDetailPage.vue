@@ -248,7 +248,7 @@ import {
     type AdminDeletedStatusFilter,
     type AdminQuestionAnswerItem,
     type AdminQuestionItem,
-} from '@/api/admin/admin.api'
+} from '@/entities/admin-question'
 import {
     deletedStatusOptions,
     formatAdminTime,
@@ -257,7 +257,7 @@ import {
     getStatusLabel,
     getTeacherLabel,
     summarizeContent,
-} from './QuestionManagement'
+} from '../model'
 
 defineOptions({
     name: 'QuestionManagementDetail',
@@ -440,4 +440,4 @@ async function handleDelete() {
 }
 </script>
 
-<style scoped lang="scss" src="./QuestionManagement.scss"></style>
+<style scoped lang="scss" src="./QuestionManagementPage.scss"></style>
