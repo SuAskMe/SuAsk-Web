@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SvgIcon from '@/components/svg-icon'
-import { UserAvatar } from '@/components/user-avatar'
+import { UserAvatar } from '@/shared/ui/user-avatar'
 
 withDefaults(
     defineProps<{

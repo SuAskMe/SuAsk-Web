@@ -72,7 +72,7 @@
 import { getUserByIdApi } from '@/api/user/user.api'
 import type { UserInfo } from '@/model/user.model'
 import { BubbleCard } from '@/components/bubble-card'
-import { UserAvatar } from '@/components/user-avatar'
+import { UserAvatar } from '@/shared/ui/user-avatar'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import MarkdownPreview from '@/shared/ui/markdown-preview'

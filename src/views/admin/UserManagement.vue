@@ -396,7 +396,7 @@ import {
 import { UserStore } from '@/store/modules/user'
 import { SidebarStore } from '@/store/modules/sidebar'
 import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
-import { UserAvatar } from '@/components/user-avatar'
+import { UserAvatar } from '@/shared/ui/user-avatar'
 import {
     roleOptions,
     roleChoices,

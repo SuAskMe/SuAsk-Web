@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserAvatar } from '@/components/user-avatar'
+import { UserAvatar } from '@/shared/ui/user-avatar'
 
 defineProps<{
     avatar?: string | null

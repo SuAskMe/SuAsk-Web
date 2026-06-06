@@ -1,7 +1,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import { UserAvatar } from '@/components/user-avatar'
+import { UserAvatar } from '@/shared/ui/user-avatar'
 import { getTimeStr } from '../bubble-card'
 import AnswerMetaRow from '../shared/AnswerMetaRow.vue'
 import AnswerQuoteBlock from '../shared/AnswerQuoteBlock.vue'

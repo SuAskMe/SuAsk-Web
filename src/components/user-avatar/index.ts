@@ -1,2 +1,2 @@
-export { default as UserAvatar } from './UserAvatar.vue'
-export { default } from './UserAvatar.vue'
+export { default } from '@/shared/ui/user-avatar'
+export { UserAvatar } from '@/shared/ui/user-avatar'
