@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { onUnmounted, watch } from 'vue'
-import NotificationDialog from '@/components/notification-dialog/NotificationDialog.vue'
+import NotificationDialog from '@/widgets/notification-dialog'
 
 const props = defineProps<{
     modelValue: boolean
