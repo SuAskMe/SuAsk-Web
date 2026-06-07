@@ -4,7 +4,7 @@ import { Role } from '@/entities/user'
 import { getDeviceId } from '@/shared/lib/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { containsChineseCharacters } from '@/utils/ischinese'
+import { containsChineseCharacters } from '@/shared/lib/text'
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_URL,
