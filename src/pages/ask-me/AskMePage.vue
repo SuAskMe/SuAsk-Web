@@ -653,7 +653,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped src="../../views/ask-me/AskMe.scss"></style>
+<style scoped src="./styles/AskMe.scss"></style>
 
 <style scoped lang="scss">
 .tabs-container {
