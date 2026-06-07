@@ -3,7 +3,7 @@ import { isMobile } from '@/utils/device'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
-const AskHistory = () => import('@/views/ask-history')
+const AskHistory = () => import('@/pages/ask-history')
 
 export const AskHistoryRoute: AppRouteRecordRaw = {
     path: '/ask-history',

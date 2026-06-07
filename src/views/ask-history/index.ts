@@ -1,3 +1,2 @@
-import AskHistory from './AskHistory.vue'
-
-export default AskHistory
+export { default } from '@/pages/ask-history'
+export { AskHistoryPage } from '@/pages/ask-history'
