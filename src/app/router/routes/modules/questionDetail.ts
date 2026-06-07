@@ -5,7 +5,7 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const QuestionDetail = () => import('@/views/question-detail/QuestionDetail.vue')
+const QuestionDetail = () => import('@/pages/question-detail')
 
 export const QuestionDetailRoute: AppRouteRecordRaw = {
     path: '/question-detail',
