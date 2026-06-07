@@ -64,7 +64,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { UserStore } from '@/app/store/modules/user'
 import { Role } from '@/entities/user'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 // import { isMobile } from '@/shared/lib/device'
 
 const deviceTypeStore = DeviceTypeStore()

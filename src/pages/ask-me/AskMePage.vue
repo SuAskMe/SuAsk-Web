@@ -427,7 +427,7 @@ import {
 } from '@/entities/teacher-self'
 import { deleteQuestionApi, restoreQuestionApi } from '@/entities/question'
 import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'

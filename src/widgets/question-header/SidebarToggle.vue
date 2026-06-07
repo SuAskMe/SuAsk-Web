@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 
 defineEmits(['toggle'])
 

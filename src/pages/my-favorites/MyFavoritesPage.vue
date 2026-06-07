@@ -49,7 +49,7 @@ import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-l
 import { useQuestionDetailNavigation } from '@/features/question-detail-navigation'
 import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import { Favorite, questionList, InitStatus, getNextQuestions, refresh } from './myFavorite'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 const loading = ref(false)
 

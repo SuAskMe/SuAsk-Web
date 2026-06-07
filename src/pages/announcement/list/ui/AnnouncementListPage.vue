@@ -61,7 +61,7 @@
 import { ref, onMounted } from 'vue'
 import { getAnnouncementList } from '@/entities/announcement'
 import type { AnnouncementItem } from '@/entities/announcement'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import QuestionHeader from '@/widgets/question-header'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 

@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { readNotificationApi } from '@/entities/notification'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import { UserStore } from '@/app/store/modules/user'
 import { getTimeStr } from '@/shared/lib/date-time'
 import { Delete } from '@element-plus/icons-vue'

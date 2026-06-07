@@ -45,7 +45,7 @@ import SidebarNotificationDrawer from './SidebarNotificationDrawer.vue'
 import GuestUpgradeModal from './GuestUpgradeModal.vue'
 import { UserStore } from '@/app/store/modules/user'
 import { useRouter } from 'vue-router'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { NotificationStore } from '@/app/store/modules/notification'
 

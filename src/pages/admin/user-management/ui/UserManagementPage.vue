@@ -394,7 +394,7 @@ import {
     type AdminUserItem,
 } from '@/entities/admin-user'
 import { UserStore } from '@/app/store/modules/user'
-import { SidebarStore } from '@/app/store/modules/sidebar'
+import { SidebarStore } from '@/widgets/app-shell/model'
 import QuestionHeader from '@/widgets/question-header'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import {

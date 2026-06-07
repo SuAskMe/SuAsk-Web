@@ -28,7 +28,7 @@ vi.mock('@/shared/model/device-type.store', () => ({
     DeviceTypeStore: () => deviceState,
 }))
 
-vi.mock('@/app/store/modules/sidebar', () => ({
+vi.mock('@/widgets/app-shell/model', () => ({
     SidebarStore: () => sidebarState,
 }))
 
