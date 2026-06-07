@@ -3,7 +3,7 @@
 import { computed } from 'vue'
 import { getTimeStr } from '../bubble-card'
 import CardMediaGrid from '@/shared/ui/card-media-grid'
-import CardMetaRow from '@/components/bubble-card/shared/CardMetaRow.vue'
+import CardMetaRow from '../shared/CardMetaRow.vue'
 import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 
