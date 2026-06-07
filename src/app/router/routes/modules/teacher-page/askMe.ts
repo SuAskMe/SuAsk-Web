@@ -4,7 +4,7 @@ import { isMobile } from '@/utils/device'
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const AskMe = () => import('@/views/ask-me/AskMe.vue')
+const AskMe = () => import('@/pages/ask-me')
 
 export const AskMeRoute: AppRouteRecordRaw = {
     path: '/ask-me',
