@@ -58,7 +58,7 @@ import { BubbleCard } from '@/shared/ui/bubble-card'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
 import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
-import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
+import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import type { QuestionItem } from '@/entities/question'
 import { useRoute, useRouter } from 'vue-router'
 import { DeviceTypeStore } from '@/store/modules/device-type'

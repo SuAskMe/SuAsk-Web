@@ -417,7 +417,7 @@ import { getTimeStr } from '@/shared/lib/date-time'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
-import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
+import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import {
     getQFMAllApi,
     pinQFMApi,

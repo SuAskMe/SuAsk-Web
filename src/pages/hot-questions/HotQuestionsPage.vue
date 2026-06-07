@@ -133,7 +133,7 @@ import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-l
 import QuestionHeader from '@/widgets/question-header'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
-import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
+import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'

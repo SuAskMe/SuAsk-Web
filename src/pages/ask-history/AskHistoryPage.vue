@@ -51,7 +51,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { BubbleQuestion } from '@/shared/ui/bubble-card'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
-import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
+import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import {
     Favorite,
     questionList,
