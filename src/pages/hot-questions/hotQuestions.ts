@@ -4,7 +4,7 @@ import {
     type GetQuestionRes,
     type QuestionItem,
 } from '@/entities/question'
-import { usePagination, type PaginationParams } from '@/utils/pagination'
+import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 import { ref } from 'vue'
 
 export const currentTimeRange = ref<'week' | 'month' | 'all'>('all')

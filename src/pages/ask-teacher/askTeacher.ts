@@ -6,7 +6,7 @@ import {
     type QuestionItem,
 } from '@/entities/question'
 import { favoriteApi } from '@/entities/favorite'
-import { usePagination, type PaginationParams } from '@/utils/pagination'
+import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 
 export const currentTeacherId: { value: number | null } = { value: null }
 

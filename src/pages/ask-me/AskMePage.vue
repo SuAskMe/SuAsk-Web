@@ -426,7 +426,7 @@ import {
     type QFMItem,
 } from '@/entities/teacher-self'
 import { deleteQuestionApi, restoreQuestionApi } from '@/entities/question'
-import { usePagination, type PaginationParams } from '@/utils/pagination'
+import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 import { SidebarStore } from '@/store/modules/sidebar'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'

@@ -6,7 +6,7 @@ import {
     type FavoriteItem,
     type GetFavoriteRes,
 } from '@/entities/favorite'
-import { usePagination, type PaginationParams } from '@/utils/pagination'
+import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 
 const pagination = usePagination<FavoriteItem>({
     fetchData: async (params: PaginationParams) => {

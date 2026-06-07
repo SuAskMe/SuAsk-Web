@@ -1,7 +1,7 @@
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { favoriteApi } from '@/entities/favorite'
 import { getHistoryApi, searchHistoryApi, type GetHistoryRes, type HistoryItem } from '@/entities/history'
-import { usePagination, type PaginationParams } from '@/utils/pagination'
+import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 
 const {
     data: questionList,
