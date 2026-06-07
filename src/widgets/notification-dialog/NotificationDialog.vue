@@ -182,7 +182,7 @@ import { NotificationStore } from '@/store/modules/notification'
 import { storeToRefs } from 'pinia'
 
 // 导入全局事件总线
-import { emitter } from '@/utils/emitter'
+import { emitter } from '@/shared/lib/event-bus'
 
 const deleteDialogVisible = ref(false)
 

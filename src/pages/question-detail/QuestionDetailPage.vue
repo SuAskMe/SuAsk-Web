@@ -115,7 +115,7 @@ import ComposeDialog from '@/features/question-compose'
 import { ComposeDialogStore } from '@/store/modules/compose-dialog'
 
 // 导入全局事件总线
-import { emitter } from '@/utils/emitter'
+import { emitter } from '@/shared/lib/event-bus'
 
 const userStore = UserStore()
 const bg_img_index = computed(() => (userStore.getUser().themeId ? userStore.getUser().themeId : 1))
