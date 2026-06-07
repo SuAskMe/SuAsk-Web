@@ -41,7 +41,7 @@ vi.mock('element-plus/es/components/message/index.mjs', () => ({
     },
 }))
 
-vi.mock('@/store/modules/user', () => ({
+vi.mock('@/app/store/modules/user', () => ({
     UserStoreWithOut: () => ({
         getToken: mocks.getToken,
         getRole: mocks.getRole,
@@ -50,13 +50,13 @@ vi.mock('@/store/modules/user', () => ({
     }),
 }))
 
-vi.mock('@/store/modules/control-panel', () => ({
+vi.mock('@/app/store/modules/control-panel', () => ({
     ControlPanelStore: () => ({
         clearSelectedItem: mocks.clearSelectedItem,
     }),
 }))
 
-vi.mock('@/utils/device', () => ({
+vi.mock('@/shared/lib/device', () => ({
     getDeviceId: mocks.getDeviceId,
 }))
 
@@ -89,7 +89,7 @@ describe('request interceptors', () => {
         mocks.getToken.mockReturnValue('token-abc')
         mocks.getRole.mockReturnValue(Role.ADMIN)
 
-        const request = (await import('@/utils/http/request')).default
+        const request = (await import('@/shared/api/request')).default
         const interceptor = request.interceptors.request as unknown as InterceptorRecord<RequestFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -101,7 +101,7 @@ describe('request interceptors', () => {
     })
 
     it('returns payload data on successful business responses', async () => {
-        const request = (await import('@/utils/http/request')).default
+        const request = (await import('@/shared/api/request')).default
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -120,7 +120,7 @@ describe('request interceptors', () => {
     })
 
     it('handles login timeout by showing an error and scheduling redirect cleanup', async () => {
-        const request = (await import('@/utils/http/request')).default
+        const request = (await import('@/shared/api/request')).default
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -144,7 +144,7 @@ describe('request interceptors', () => {
     })
 
     it('shows backend Chinese messages and returns null for handled business errors', async () => {
-        const request = (await import('@/utils/http/request')).default
+        const request = (await import('@/shared/api/request')).default
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -161,7 +161,7 @@ describe('request interceptors', () => {
     })
 
     it('returns false and shows a generic message on transport errors', async () => {
-        const request = (await import('@/utils/http/request')).default
+        const request = (await import('@/shared/api/request')).default
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<
             ResponseFulfilled,
             ResponseRejected

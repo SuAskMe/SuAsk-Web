@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { usePagination } from '@/utils/pagination'
+import { usePagination } from '@/shared/lib/pagination'
 
 const { successMock } = vi.hoisted(() => ({
     successMock: vi.fn(),

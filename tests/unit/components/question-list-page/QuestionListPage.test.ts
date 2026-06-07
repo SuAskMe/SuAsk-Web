@@ -15,7 +15,7 @@ const wrapRef = reactive({
     scrollHeight: 0,
 })
 
-vi.mock('@/store/modules/device-type', () => ({
+vi.mock('@/app/store/modules/device-type', () => ({
     DeviceTypeStore: () => deviceState,
 }))
 

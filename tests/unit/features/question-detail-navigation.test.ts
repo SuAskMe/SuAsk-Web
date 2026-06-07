@@ -1,6 +1,6 @@
 import { nextTick, reactive } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
+import { useQuestionDetailNavigation } from '@/features/question-detail-navigation'
 
 type SyncStoreStub = {
     Views: number
@@ -33,7 +33,7 @@ vi.mock('vue-router', () => ({
     }),
 }))
 
-vi.mock('@/store/modules/question-detail', () => ({
+vi.mock('@/app/store/modules/question-detail', () => ({
     SyncStore: () => shared.syncStore,
 }))
 

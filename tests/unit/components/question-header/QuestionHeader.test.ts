@@ -3,7 +3,7 @@
 import { defineComponent, h, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import QuestionHeader from '@/components/question-header/QuestionHeader.vue'
+import QuestionHeader from '@/widgets/question-header/QuestionHeader.vue'
 
 const shared = vi.hoisted(() => ({
     requestGetMock: vi.fn(),
@@ -18,17 +18,17 @@ const shared = vi.hoisted(() => ({
 const deviceState = reactive(shared.deviceState)
 const sidebarState = reactive(shared.sidebarState)
 
-vi.mock('@/utils/http/request', () => ({
+vi.mock('@/shared/api/request', () => ({
     default: {
         get: shared.requestGetMock,
     },
 }))
 
-vi.mock('@/store/modules/device-type', () => ({
+vi.mock('@/app/store/modules/device-type', () => ({
     DeviceTypeStore: () => deviceState,
 }))
 
-vi.mock('@/store/modules/sidebar', () => ({
+vi.mock('@/app/store/modules/sidebar', () => ({
     SidebarStore: () => sidebarState,
 }))
 
@@ -138,7 +138,7 @@ describe('QuestionHeader', () => {
         const wrapper = mountHeader()
 
         const items = wrapper.findAll('.dropdown-item-stub')
-        await items[2].trigger('click')
+        await items[1].trigger('click')
 
         expect(wrapper.emitted('changeSort')).toEqual([[2]])
     })
@@ -182,7 +182,7 @@ describe('QuestionHeader', () => {
         expect(shared.requestGetMock).toHaveBeenCalledWith('/questions/keywords', {
             params: {
                 keyword: 'po',
-                sort_type: 1,
+                sort_type: 2,
                 teacher_id: 7,
             },
         })

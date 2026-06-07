@@ -197,7 +197,7 @@ const emit = defineEmits<{
 ### 2. API服务模板
 
 ```typescript
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 import type { User } from '@/model/user.model'
 
 export const userApi = {

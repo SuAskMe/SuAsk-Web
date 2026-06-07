@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
-import { useQuestionListPageShell } from '@/composables/useQuestionListPageShell'
+import { useQuestionListPageShell } from '@/widgets/question-list-page'
 
 describe('useQuestionListPageShell', () => {
     it('calls scrollToTop on the bound page instance', async () => {
