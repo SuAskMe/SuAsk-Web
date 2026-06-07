@@ -3,7 +3,7 @@
 import { defineComponent, h, reactive } from 'vue'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import QuestionListPage from '@/components/question-list-page/QuestionListPage.vue'
+import QuestionListPage from '@/widgets/question-list-page/ui/QuestionListPage.vue'
 
 const deviceState = reactive({
     isMobile: false,
@@ -19,7 +19,7 @@ vi.mock('@/app/store/modules/device-type', () => ({
     DeviceTypeStore: () => deviceState,
 }))
 
-vi.mock('@/components/background-img', () => ({
+vi.mock('@/shared/ui/background-img', () => ({
     default: defineComponent({
         name: 'BackgroundImgStub',
         props: {

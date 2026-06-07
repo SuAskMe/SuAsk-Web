@@ -58,7 +58,7 @@
 
 ```vue
 <script setup lang="ts">
-import bubbleAnswer from "@/components/bubble-card/bubble-answer/bubble-answer.vue";
+import bubbleAnswer from "@/shared/ui/bubble-card/bubble-answer/bubble-answer.vue";
 const nickname = ...
 ...
 const isLiked = ref(false)

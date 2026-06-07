@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Role } from '@/model/user.model'
+import { Role } from '@/entities/user'
 
 type InterceptorRecord<TFulfilled, TRejected = unknown> = {
     handlers: Array<{

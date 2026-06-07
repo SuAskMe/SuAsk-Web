@@ -2,7 +2,7 @@
 
 import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
-import MarkdownPreview from '@/components/markdown-preview/MarkdownPreview.vue'
+import MarkdownPreview from '@/shared/ui/markdown-preview/MarkdownPreview.vue'
 
 describe('MarkdownPreview', () => {
     it('renders markdown text and external links', async () => {
