@@ -57,7 +57,7 @@ import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-l
 import { BubbleCard } from '@/shared/ui/bubble-card'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
 import QuestionHeader from '@/widgets/question-header'
-import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
+import { useQuestionDetailNavigation } from '@/features/question-detail-navigation'
 import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import type { QuestionItem } from '@/entities/question'
 import { useRoute, useRouter } from 'vue-router'
