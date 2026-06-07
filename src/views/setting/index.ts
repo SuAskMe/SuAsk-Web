@@ -1,3 +1,2 @@
-import Setting from './UserSetting.vue'
-
-export default Setting
+export { default } from '@/pages/settings'
+export { SettingsPage } from '@/pages/settings'

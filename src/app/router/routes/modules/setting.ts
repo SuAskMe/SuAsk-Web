@@ -5,7 +5,7 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const Setting = () => import('@/views/setting')
+const Setting = () => import('@/pages/settings')
 
 export const SettingRoute: AppRouteRecordRaw = {
     path: '/setting',
