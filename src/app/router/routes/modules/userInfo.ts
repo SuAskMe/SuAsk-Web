@@ -5,7 +5,7 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const UserInfo = () => import('@/views/user/UserInfo.vue')
+const UserInfo = () => import('@/pages/user-profile')
 
 export const UserRoute: AppRouteRecordRaw = {
     path: '/user',

@@ -1,0 +1,174 @@
+<template>
+    <div class="container">
+        <header class="user-header">
+            <QuestionHeader @return="navigateBack" :return_btn="true" />
+        </header>
+        <el-scrollbar class="profile-scroll">
+            <main class="main-container">
+                <div class="main">
+                    <div class="basic-item">
+                        <div class="user-profile-container">
+                            <div class="section-title">
+                                <p>个人信息</p>
+                            </div>
+                            <div class="user-profile">
+                                <UserAvatar
+                                    class="user-avatar"
+                                    :src="userInfo.avatar"
+                                    :name="userInfo.nickname"
+                                    :size="200"
+                                />
+                                <p class="nickname">{{ userInfo.nickname }}</p>
+                                <p class="name">@{{ userInfo.name }}</p>
+                                <p class="role" :style="{ backgroundColor: roleColor }">
+                                    {{ roleFormat(userInfo.role) }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="intro-container">
+                            <div class="section-title">
+                                <p>简介</p>
+                            </div>
+                            <MarkdownPreview class="md" :model-value="userInfo.introduction" />
+                        </div>
+                    </div>
+                    <div v-if="userInfo.role == 'teacher'" class="teacher-item">
+                        <div class="top-question-box">
+                            <div class="title">
+                                <p>置顶问题</p>
+                            </div>
+                            <div v-if="!questionList">
+                                <p class="no-pin-question">暂无置顶问题</p>
+                            </div>
+                            <div v-if="questionList" class="question">
+                                <!-- <div class="question"> -->
+                                <BubbleCard
+                                    class="question-item"
+                                    v-for="(question, index) in questionList"
+                                    :key="question.id"
+                                    :title="question.title"
+                                    :text="question.contents"
+                                    :views="question.views"
+                                    :time-stamp="question.created_at"
+                                    :image-urls="question.image_urls"
+                                    :bubble-key="question.id"
+                                    :style="{
+                                        marginTop: index === 0 ? '24px' : '0',
+                                    }"
+                                    width="80%"
+                                    :click-card="navigateTo"
+                                    center
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </el-scrollbar>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { getUserByIdApi, type UserInfo } from '@/entities/user'
+import { BubbleCard } from '@/components/bubble-card'
+import { UserAvatar } from '@/shared/ui/user-avatar'
+import { onMounted, ref } from 'vue'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import MarkdownPreview from '@/shared/ui/markdown-preview'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import QuestionHeader from '@/widgets/question-header'
+import { router } from '@/app/router'
+import { getTeacherPinApi, type TeacherPinItem } from '@/entities/teacher'
+// import { DeviceTypeStore } from '@/store/modules/device-type'
+
+// const deviceTypeStore = DeviceTypeStore()
+
+const userInfo = ref<UserInfo>({
+    id: 0,
+    name: '',
+    nickname: '',
+    role: '',
+    introduction: '',
+    avatar: null,
+})
+const roleColor = ref<string>('#71b6ff')
+
+const route = useRoute()
+
+async function getUserInfo(userId: string) {
+    if (Number(userId) === userInfo.value.id) return
+    await getUserByIdApi(userId)
+        .then((res) => {
+            if (res) {
+                userInfo.value = res
+            } else {
+                ElMessage.error('获取用户信息失败')
+            }
+        })
+        .catch(() => {
+            ElMessage.error('获取用户信息失败')
+        })
+}
+
+function navigateBack() {
+    history.back()
+}
+
+const navigateTo = (key: number) => {
+    router.push({
+        path: `/question-detail/${key}`,
+    })
+}
+
+onBeforeRouteUpdate(async (to) => {
+    const userId = to.params.id.toString()
+    await getUserInfo(userId)
+    if (userInfo.value.role == 'teacher') {
+        await getPinQuestion()
+    }
+})
+
+onMounted(async () => {
+    const userId = route.params.id.toString()
+    await getUserInfo(userId)
+    if (userInfo.value.role == 'teacher') {
+        await getPinQuestion()
+    }
+})
+
+const questionList = ref<TeacherPinItem[]>([])
+
+async function getPinQuestion() {
+    await getTeacherPinApi(userInfo.value.id)
+        .then((res) => {
+            if (res) {
+                questionList.value = res.question_list
+            } else {
+                ElMessage.error('获取置顶问题失败')
+            }
+        })
+        .catch(() => {
+            ElMessage.error('获取置顶问题失败')
+        })
+}
+
+function roleFormat(role: string) {
+    switch (role) {
+        case 'student':
+            return '学生'
+        case 'teacher':
+            roleColor.value = '#f0c245'
+            return '教师'
+        case 'admin':
+            roleColor.value = '#fc4f43;'
+            return '管理员'
+        case 'guest':
+            roleColor.value = '#e6a23c'
+            return '游客'
+        default:
+            return '未知'
+    }
+}
+</script>
+
+<style scoped lang="scss" src="./user-profile.scss"></style>
