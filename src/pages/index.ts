@@ -1,3 +1,4 @@
 export * from './home'
 export * from './login'
 export * from './help'
+export * from './not-found'
