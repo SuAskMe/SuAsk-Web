@@ -107,7 +107,7 @@ import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import { Plus } from '@element-plus/icons-vue'
 import { favoriteApi } from '@/entities/favorite'
 import { storeToRefs } from 'pinia'
-import { SyncStore } from '@/app/store/modules/question-detail'
+import { QuestionDetailSyncStore } from '@/features/question-detail-navigation'
 
 import { UserStore } from '@/app/store/modules/user'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
@@ -168,7 +168,7 @@ function navigateToUser(key: { userId: number }) {
     router.push('/user/' + key.userId)
 }
 
-const syncStore = SyncStore()
+const syncStore = QuestionDetailSyncStore()
 
 onMounted(async () => {
     document.title = '加载中...'

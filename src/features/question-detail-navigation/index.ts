@@ -1,4 +1,5 @@
-import { SyncStore } from '@/app/store/modules/question-detail'
+import { QuestionDetailSyncStore } from './model'
+export { QuestionDetailSyncStore } from './model'
 import { useRouter } from 'vue-router'
 import { watch } from 'vue'
 
@@ -9,7 +10,7 @@ interface SyncableQuestionItem {
 
 export function useQuestionDetailNavigation<T extends SyncableQuestionItem>(questionList: T[]) {
     const router = useRouter()
-    const syncStore = SyncStore()
+    const syncStore = QuestionDetailSyncStore()
 
     let record = {
         index: -1,

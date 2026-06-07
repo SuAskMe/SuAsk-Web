@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const SyncStore = defineStore('sync', () => {
+export const QuestionDetailSyncStore = defineStore('questionDetailSync', () => {
     const IndexOf = ref(-1)
     const QuestionID = ref(-1)
     const Views = ref(0)

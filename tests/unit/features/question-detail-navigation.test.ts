@@ -2,7 +2,7 @@ import { nextTick, reactive } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useQuestionDetailNavigation } from '@/features/question-detail-navigation'
 
-type SyncStoreStub = {
+type QuestionDetailSyncStoreStub = {
     Views: number
     IndexOf: number
     QuestionID: number
@@ -11,7 +11,7 @@ type SyncStoreStub = {
 
 const shared = vi.hoisted(() => ({
     push: vi.fn(),
-    syncStore: null as unknown as SyncStoreStub | null,
+    syncStore: null as unknown as QuestionDetailSyncStoreStub | null,
 }))
 
 const syncStore = reactive({
@@ -33,8 +33,8 @@ vi.mock('vue-router', () => ({
     }),
 }))
 
-vi.mock('@/app/store/modules/question-detail', () => ({
-    SyncStore: () => shared.syncStore,
+vi.mock('@/features/question-detail-navigation/model', () => ({
+    QuestionDetailSyncStore: () => shared.syncStore,
 }))
 
 describe('useQuestionDetailNavigation', () => {
@@ -59,7 +59,7 @@ describe('useQuestionDetailNavigation', () => {
         expect(shared.push).toHaveBeenCalledWith({ path: '/question-detail/22' })
     })
 
-    it('updates the cached item views when SyncStore reports a changed count', async () => {
+    it('updates the cached item views when QuestionDetailSyncStore reports a changed count', async () => {
         const questionList = reactive([
             { id: 11, views: 7 },
             { id: 22, views: 5 },
