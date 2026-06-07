@@ -3,8 +3,8 @@ import { isMobile } from '@/utils/device'
 
 const WebHome = () => import('@/layout/home/WebHome.vue')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
-const AskTeacher = () => import('@/views/ask-teacher/AskTeacher.vue')
-const TeacherQuestionBox = () => import('@/views/ask-teacher/TeacherQuestionBox.vue')
+const AskTeacher = () => import('@/pages/ask-teacher/AskTeacherDetailPage.vue')
+const TeacherQuestionBox = () => import('@/pages/ask-teacher')
 
 export const AskTeacherRoute: AppRouteRecordRaw = {
     path: '/ask-teacher',
