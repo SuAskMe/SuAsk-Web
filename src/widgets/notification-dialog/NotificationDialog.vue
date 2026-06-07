@@ -177,7 +177,7 @@ import {
     WarningFilled,
 } from '@element-plus/icons-vue'
 import 'element-plus/es/components/dialog/style/css'
-import { hasTeacherAbility } from '@/utils/auth'
+import { hasTeacherAbility } from '@/shared/lib/auth'
 import { NotificationStore } from '@/store/modules/notification'
 import { storeToRefs } from 'pinia'
 
