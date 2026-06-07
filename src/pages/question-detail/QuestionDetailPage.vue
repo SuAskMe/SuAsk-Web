@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { BubbleAnswer, BubbleCard } from '@/components/bubble-card'
+import { BubbleAnswer, BubbleCard } from '@/shared/ui/bubble-card'
 import QuestionHeader from '@/widgets/question-header'
 import BackgroundImg from '@/shared/ui/background-img'
 import { scrollToQuote } from './questionDetail'

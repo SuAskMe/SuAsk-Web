@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
 import { getUserByIdApi, type UserInfo } from '@/entities/user'
-import { BubbleCard } from '@/components/bubble-card'
+import { BubbleCard } from '@/shared/ui/bubble-card'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'

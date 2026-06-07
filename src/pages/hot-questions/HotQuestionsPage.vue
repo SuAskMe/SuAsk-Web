@@ -128,7 +128,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, reactive, watch } from 'vue'
-import { BubbleCard } from '@/components/bubble-card'
+import { BubbleCard } from '@/shared/ui/bubble-card'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import QuestionHeader from '@/widgets/question-header'
 import { DeviceTypeStore } from '@/store/modules/device-type'

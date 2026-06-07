@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, provide, ref } from 'vue'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
-import { BubbleCard } from '@/components/bubble-card'
+import { BubbleCard } from '@/shared/ui/bubble-card'
 // import { AskDialog } from "@/components/ask-and-answer-dialog";
 import QuestionHeader from '@/widgets/question-header'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'

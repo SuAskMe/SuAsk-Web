@@ -44,7 +44,7 @@
 import { onActivated, onMounted, ref } from 'vue'
 import QuestionHeader from '@/widgets/question-header'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { BubbleQuestion } from '@/components/bubble-card'
+import { BubbleQuestion } from '@/shared/ui/bubble-card'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import { useQuestionDetailNavigation } from '@/composables/useQuestionDetailNavigation'
 import { useThemeBackgroundIndex } from '@/composables/useThemeBackgroundIndex'
