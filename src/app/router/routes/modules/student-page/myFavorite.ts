@@ -5,7 +5,7 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const MyFavorite = () => import('@/views/my-favorites')
+const MyFavorite = () => import('@/pages/my-favorites')
 
 export const MyFavoriteRoute: AppRouteRecordRaw = {
     path: '/my-favorite',
