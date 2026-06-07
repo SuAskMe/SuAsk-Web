@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { ControlPanelStore } from '@/store/modules/control-panel'
-import { UserStore } from '@/store/modules/user'
+import { ControlPanelStore } from '@/app/store/modules/control-panel'
+import { UserStore } from '@/app/store/modules/user'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
 import 'element-plus/es/components/dialog/style/css'

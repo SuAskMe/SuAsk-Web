@@ -104,7 +104,7 @@
 <script setup lang="ts">
 import { registerApi, sendVerificationCodeApi, type RegisterReq } from '@/entities/register'
 import { router } from '@/app/router'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 import { mailCheck, passwordCheck, userNameCheck } from '@/shared/lib/account-validation'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'

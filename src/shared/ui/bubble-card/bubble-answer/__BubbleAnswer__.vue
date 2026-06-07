@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { getTimeStr } from '../bubble-card'
 import AnswerMetaRow from '../shared/AnswerMetaRow.vue'

@@ -61,10 +61,10 @@ import { onMounted, ref } from 'vue'
 import { getTeacherApi, TeacherCard, TeacherPerm, type TeacherItem } from '@/entities/teacher'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { UserStore } from '@/store/modules/user'
+import { UserStore } from '@/app/store/modules/user'
 import { Role } from '@/entities/user'
-import { DeviceTypeStore } from '@/store/modules/device-type'
-import { SidebarStore } from '@/store/modules/sidebar'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { SidebarStore } from '@/app/store/modules/sidebar'
 // import { isMobile } from '@/shared/lib/device'
 
 const deviceTypeStore = DeviceTypeStore()

@@ -61,8 +61,8 @@ import {
     onCancelSearch,
     refresh,
 } from './AskHistory'
-import { SidebarStore } from '@/store/modules/sidebar'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/app/store/modules/sidebar'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 const loading = ref(false)
 
 const deviceType = DeviceTypeStore()

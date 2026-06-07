@@ -393,8 +393,8 @@ import {
     updateAdminUserAvatar,
     type AdminUserItem,
 } from '@/entities/admin-user'
-import { UserStore } from '@/store/modules/user'
-import { SidebarStore } from '@/store/modules/sidebar'
+import { UserStore } from '@/app/store/modules/user'
+import { SidebarStore } from '@/app/store/modules/sidebar'
 import QuestionHeader from '@/widgets/question-header'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import {

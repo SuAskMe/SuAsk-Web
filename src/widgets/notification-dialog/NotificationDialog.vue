@@ -178,7 +178,7 @@ import {
 } from '@element-plus/icons-vue'
 import 'element-plus/es/components/dialog/style/css'
 import { hasTeacherAbility } from '@/shared/lib/auth'
-import { NotificationStore } from '@/store/modules/notification'
+import { NotificationStore } from '@/app/store/modules/notification'
 import { storeToRefs } from 'pinia'
 
 // 导入全局事件总线

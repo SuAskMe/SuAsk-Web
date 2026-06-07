@@ -208,8 +208,8 @@ import {
     deleteAnnouncement,
 } from '@/entities/announcement'
 import type { AnnouncementItem } from '@/entities/announcement'
-import { UserStore } from '@/store/modules/user'
-import { SidebarStore } from '@/store/modules/sidebar'
+import { UserStore } from '@/app/store/modules/user'
+import { SidebarStore } from '@/app/store/modules/sidebar'
 import QuestionHeader from '@/widgets/question-header'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 

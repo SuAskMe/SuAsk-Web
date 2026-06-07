@@ -205,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserStore } from '@/store/modules/user'
+import { UserStore } from '@/app/store/modules/user'
 import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
@@ -217,7 +217,7 @@ import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { loadDraftDb, type Answer } from './draftDb'
-import { ComposeDialogStore } from '@/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
 import { addAnswerApi, type AddAnswer, type AnswerItem, type Question } from '@/entities/answer'
 import { hasTeacherAbility } from '@/shared/lib/auth'

@@ -1,4 +1,4 @@
-import { SyncStore } from '@/store/modules/question-detail'
+import { SyncStore } from '@/app/store/modules/question-detail'
 import { useRouter } from 'vue-router'
 import { watch } from 'vue'
 

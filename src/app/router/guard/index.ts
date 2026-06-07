@@ -1,4 +1,4 @@
-import { UserStore } from '@/store/modules/user'
+import { UserStore } from '@/app/store/modules/user'
 import type { Router } from 'vue-router'
 import { basicRoutes, guestRoutes, studentRoutes, teacherRoutes } from '../routes'
 import type { AppRouteRecordRaw } from '../types'

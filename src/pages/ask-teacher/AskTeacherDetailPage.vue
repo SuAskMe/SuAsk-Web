@@ -61,8 +61,8 @@ import { useQuestionDetailNavigation } from '@/features/question-detail-navigati
 import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import type { QuestionItem } from '@/entities/question'
 import { useRoute, useRouter } from 'vue-router'
-import { DeviceTypeStore } from '@/store/modules/device-type'
-import { ComposeDialogStore } from '@/store/modules/compose-dialog'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
 import ComposeDialog from '@/features/question-compose'
 import { Plus } from '@element-plus/icons-vue'
 import {

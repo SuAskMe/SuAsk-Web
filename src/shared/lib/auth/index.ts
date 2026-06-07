@@ -5,7 +5,7 @@
  * 这样当角色体系变化时（比如新增 admin），只需要改这一个文件。
  */
 
-import { UserStore } from '@/store/modules/user'
+import { UserStore } from '@/app/store/modules/user'
 
 /** 当前用户是否已登录（持有有效 token） */
 export function isLoggedIn(): boolean {

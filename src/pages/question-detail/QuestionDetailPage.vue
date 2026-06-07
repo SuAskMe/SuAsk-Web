@@ -107,12 +107,12 @@ import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import { Plus } from '@element-plus/icons-vue'
 import { favoriteApi } from '@/entities/favorite'
 import { storeToRefs } from 'pinia'
-import { SyncStore } from '@/store/modules/question-detail'
+import { SyncStore } from '@/app/store/modules/question-detail'
 
-import { UserStore } from '@/store/modules/user'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { UserStore } from '@/app/store/modules/user'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 import ComposeDialog from '@/features/question-compose'
-import { ComposeDialogStore } from '@/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
 
 // 导入全局事件总线
 import { emitter } from '@/shared/lib/event-bus'

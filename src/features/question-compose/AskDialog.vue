@@ -225,8 +225,8 @@
 
 <script setup lang="ts">
 import { addQuestionApi, type AddQuestionReq, type QuestionItem } from '@/entities/question'
-import { UserStore } from '@/store/modules/user'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { UserStore } from '@/app/store/modules/user'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
@@ -238,7 +238,7 @@ import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { loadDraftDb, type Question } from './draftDb'
-import { ComposeDialogStore } from '@/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
 import ImgList from './ImgList.vue'
 import {
     createObjectUrlPreview,

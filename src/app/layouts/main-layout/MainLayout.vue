@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { DeviceTypeStore } from '@/store/modules/device-type'
-import { SidebarStore } from '@/store/modules/sidebar'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { SidebarStore } from '@/app/store/modules/sidebar'
 import AnnouncementBanner from '@/widgets/announcement-banner'
 import {
     ADMIN_ANNOUNCEMENTS_ROUTE_NAME,

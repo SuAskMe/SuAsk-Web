@@ -13,9 +13,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ControlPanelStore } from '@/store/modules/control-panel'
-import { DeviceTypeStore } from '@/store/modules/device-type'
-import { SidebarStore } from '@/store/modules/sidebar'
+import { ControlPanelStore } from '@/app/store/modules/control-panel'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { SidebarStore } from '@/app/store/modules/sidebar'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 

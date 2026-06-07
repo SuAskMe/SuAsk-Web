@@ -89,8 +89,8 @@ import ForgetPasswordDialog from './ForgetPasswordDialog.vue'
 import RegisterDialog from './RegisterDialog.vue'
 import type { LoginReq } from '@/entities/session'
 import { mailCheck } from '@/shared/lib/account-validation'
-import { ControlPanelStore } from '@/store/modules/control-panel'
-import { UserStore } from '@/store/modules/user'
+import { ControlPanelStore } from '@/app/store/modules/control-panel'
+import { UserStore } from '@/app/store/modules/user'
 
 const router = useRouter()
 const loading = ref(false)

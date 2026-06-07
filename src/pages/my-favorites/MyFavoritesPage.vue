@@ -49,8 +49,8 @@ import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-l
 import { useQuestionDetailNavigation } from '@/features/question-detail-navigation'
 import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import { Favorite, questionList, InitStatus, getNextQuestions, refresh } from './myFavorite'
-import { SidebarStore } from '@/store/modules/sidebar'
-import { DeviceTypeStore } from '@/store/modules/device-type'
+import { SidebarStore } from '@/app/store/modules/sidebar'
+import { DeviceTypeStore } from '@/app/store/modules/device-type'
 const loading = ref(false)
 
 const deviceType = DeviceTypeStore()
