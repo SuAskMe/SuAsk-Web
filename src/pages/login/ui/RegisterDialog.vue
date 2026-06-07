@@ -105,7 +105,7 @@
 import { registerApi, sendVerificationCodeApi, type RegisterReq } from '@/entities/register'
 import { router } from '@/app/router'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import { mailCheck, passwordCheck, userNameCheck } from '@/utils/login/register'
+import { mailCheck, passwordCheck, userNameCheck } from '@/shared/lib/account-validation'
 import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'

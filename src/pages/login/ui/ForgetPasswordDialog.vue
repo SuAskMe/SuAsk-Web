@@ -78,7 +78,7 @@
 <script setup lang="ts">
 import { forgetPasswordApi, sendCodeApi, type ResetPassword } from '@/entities/password-reset'
 import { DeviceTypeStore } from '@/store/modules/device-type'
-import { mailCheck } from '@/utils/login/register'
+import { mailCheck } from '@/shared/lib/account-validation'
 import { Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'

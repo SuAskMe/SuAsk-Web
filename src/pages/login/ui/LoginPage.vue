@@ -88,7 +88,7 @@ import { useRouter } from 'vue-router'
 import ForgetPasswordDialog from './ForgetPasswordDialog.vue'
 import RegisterDialog from './RegisterDialog.vue'
 import type { LoginReq } from '@/entities/session'
-import { mailCheck } from '@/utils/login/register'
+import { mailCheck } from '@/shared/lib/account-validation'
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStore } from '@/store/modules/user'
 
