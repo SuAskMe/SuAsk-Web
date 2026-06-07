@@ -1,7 +1,7 @@
 import type { AppRouteRecordRaw } from '@/app/router/types'
 import { isMobile } from '@/utils/device'
 
-const WebHome = () => import('@/layout/home/WebHome.vue')
+const WebHome = () => import('@/app/layouts/main-layout')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 const AskHistory = () => import('@/pages/ask-history')
 

@@ -7,7 +7,7 @@ import {
     ANNOUNCEMENT_LIST_ROUTE_NAME,
 } from '@/entities/announcement'
 
-const WebHome = () => import('@/layout/home/WebHome.vue')
+const WebHome = () => import('@/app/layouts/main-layout')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 const AnnouncementList = () => import('@/pages/announcement/list')
 

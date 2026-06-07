@@ -13,7 +13,7 @@ import {
 } from '@/entities/admin-user'
 import { AdminAnnouncementsRoute } from './modules/announcement'
 
-const WebHome = () => import('@/layout/home/WebHome.vue')
+const WebHome = () => import('@/app/layouts/main-layout')
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 const UserManagement = () => import('@/pages/admin/user-management')
 const QuestionManagement = () => import('@/pages/admin/question-management')
