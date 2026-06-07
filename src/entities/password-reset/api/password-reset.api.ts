@@ -1,5 +1,5 @@
 import type { ForgetPassword, ResetPassword, SendCodeReq } from '../model/password-reset.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     FORGET_PASSWORD = '/user/forget-password',

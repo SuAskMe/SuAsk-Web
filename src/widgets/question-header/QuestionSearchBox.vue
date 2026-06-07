@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import type { GetKeywordReq, GetKeywordRes } from '@/entities/question'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 import { ref } from 'vue'
 
 const props = withDefaults(

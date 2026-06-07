@@ -1,5 +1,5 @@
 import type { GetQuestionRes } from '../model/question.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 export interface GetHotQuestionsReq {
     page: number

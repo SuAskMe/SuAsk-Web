@@ -6,7 +6,7 @@ import type {
     SearchHistoryReq,
     SearchHistoryRes,
 } from '../model/history.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     GET_HISTORY = '/history',

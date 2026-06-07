@@ -7,7 +7,7 @@ import type {
     PinQFMRes,
     SearchQFMReq,
 } from '../model/teacher-self.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 // 新版统一收件箱接口（替代旧的 /teacher/question/* 系列）
 enum Api {

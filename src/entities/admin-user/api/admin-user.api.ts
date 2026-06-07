@@ -1,4 +1,4 @@
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 import type {
     AdminUserIdRes,
     AdminUserListRes,

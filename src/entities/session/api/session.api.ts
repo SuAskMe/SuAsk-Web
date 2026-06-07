@@ -1,5 +1,5 @@
 import type { HeartbeatRes, LoginReq, LoginRes } from '../model/session.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     LOGIN = '/login',

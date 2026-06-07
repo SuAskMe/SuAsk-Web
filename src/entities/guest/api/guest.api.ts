@@ -1,6 +1,6 @@
 import type { LoginRes } from '@/entities/session'
 import type { GuestSendCodeReq, GuestSendCodeRes, GuestUpgradeReq } from '../model/guest.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     GUEST_LOGIN = '/guest/login',

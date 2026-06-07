@@ -3,7 +3,7 @@ import type {
     Notification,
     NotificationCountRes,
 } from '../model/notification.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     NOTIFICATION = 'notification',

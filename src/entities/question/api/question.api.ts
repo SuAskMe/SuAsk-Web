@@ -6,7 +6,7 @@ import type {
     SearchQuestionReq,
     SearchQuestionRes,
 } from '../model/question.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     ADD = '/questions/add',

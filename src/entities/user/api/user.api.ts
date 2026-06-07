@@ -1,5 +1,5 @@
 import type { User, UserInfo } from '../model/user.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     UPDATE_PASSWORD = '/user/password',

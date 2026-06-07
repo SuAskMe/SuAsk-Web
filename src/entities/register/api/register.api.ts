@@ -1,5 +1,5 @@
 import type { RegisterReq, SendVerificationCodeReq } from '../model/register.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     SEND_VERIFICATION_CODE = '/register/send-verification-code',

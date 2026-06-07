@@ -1,5 +1,5 @@
 import type { UpvoteAnswerReq } from '../model/answer.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 const Api = {
     GET: '/answer',

@@ -8,7 +8,7 @@ import type {
     SearchFavoriteReq,
     SearchFavoriteRes,
 } from '../model/favorite.model'
-import request from '@/utils/http/request'
+import request from '@/shared/api/request'
 
 enum Api {
     FAVORITE = '/favorites',
