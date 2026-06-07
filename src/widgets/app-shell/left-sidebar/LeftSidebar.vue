@@ -46,7 +46,7 @@ import GuestUpgradeModal from './GuestUpgradeModal.vue'
 import { UserStore } from '@/app/store/modules/user'
 import { useRouter } from 'vue-router'
 import { SidebarStore } from '@/app/store/modules/sidebar'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { NotificationStore } from '@/app/store/modules/notification'
 
 // 导入全局事件总线

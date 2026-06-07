@@ -63,7 +63,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { UserStore } from '@/app/store/modules/user'
 import { Role } from '@/entities/user'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { SidebarStore } from '@/app/store/modules/sidebar'
 // import { isMobile } from '@/shared/lib/device'
 

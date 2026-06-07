@@ -79,7 +79,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import QuestionHeader from '@/widgets/question-header'
 import { router } from '@/app/router'
 import { getTeacherPinApi, type TeacherPinItem } from '@/entities/teacher'
-// import { DeviceTypeStore } from '@/app/store/modules/device-type'
+// import { DeviceTypeStore } from '@/shared/model/device-type.store'
 
 // const deviceTypeStore = DeviceTypeStore()
 

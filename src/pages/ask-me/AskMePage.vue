@@ -428,7 +428,7 @@ import {
 import { deleteQuestionApi, restoreQuestionApi } from '@/entities/question'
 import { usePagination, type PaginationParams } from '@/shared/lib/pagination'
 import { SidebarStore } from '@/app/store/modules/sidebar'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
 

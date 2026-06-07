@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { readNotificationApi } from '@/entities/notification'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { SidebarStore } from '@/app/store/modules/sidebar'
 import { UserStore } from '@/app/store/modules/user'
 import { getTimeStr } from '@/shared/lib/date-time'

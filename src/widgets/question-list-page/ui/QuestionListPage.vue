@@ -31,7 +31,7 @@
 import { ElScrollbar } from 'element-plus/es/components/scrollbar/index.mjs'
 import { nextTick, ref } from 'vue'
 import BackgroundImg from '@/shared/ui/background-img'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 
 const props = withDefaults(
     defineProps<{

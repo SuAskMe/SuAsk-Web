@@ -62,7 +62,7 @@ import {
     refresh,
 } from './AskHistory'
 import { SidebarStore } from '@/app/store/modules/sidebar'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 const loading = ref(false)
 
 const deviceType = DeviceTypeStore()

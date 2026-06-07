@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 const deviceType = DeviceTypeStore()
 function setRealVH() {
     const vh = window.innerHeight * 0.01

@@ -110,7 +110,7 @@ import { storeToRefs } from 'pinia'
 import { SyncStore } from '@/app/store/modules/question-detail'
 
 import { UserStore } from '@/app/store/modules/user'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import ComposeDialog from '@/features/question-compose'
 import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
 

@@ -34,7 +34,7 @@ import PageHeader from './PageHeader.vue'
 import QuestionSearchBox from './QuestionSearchBox.vue'
 import SidebarToggle from './SidebarToggle.vue'
 import SortDropdown from './SortDropdown.vue'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { ref } from 'vue'
 const emit = defineEmits(['changeSort', 'search', 'cancelSearch', 'return', 'sidebar'])
 

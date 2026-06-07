@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { resetPasswordApi, sendCodeApi, type ResetPassword } from '@/entities/password-reset'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { UserStore } from '@/app/store/modules/user'
 import { Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'

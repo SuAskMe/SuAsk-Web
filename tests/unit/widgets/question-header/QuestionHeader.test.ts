@@ -24,7 +24,7 @@ vi.mock('@/shared/api/request', () => ({
     },
 }))
 
-vi.mock('@/app/store/modules/device-type', () => ({
+vi.mock('@/shared/model/device-type.store', () => ({
     DeviceTypeStore: () => deviceState,
 }))
 

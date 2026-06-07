@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { getTimeStr } from '../bubble-card'
 import CardMediaGrid from '@/shared/ui/card-media-grid'
 import CardMetaRow from '../shared/CardMetaRow.vue'
-import { DeviceTypeStore } from '@/app/store/modules/device-type'
+import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 
 interface BubbleCardProps {
