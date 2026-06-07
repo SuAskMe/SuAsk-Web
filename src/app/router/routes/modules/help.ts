@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '@/app/router/types'
-import { isMobile } from '@/utils/device'
+import { isMobile } from '@/shared/lib/device'
 
 const WebHome = () => import('@/app/layouts/main-layout')
 

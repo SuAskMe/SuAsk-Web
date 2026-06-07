@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '@/app/router/types'
-import { isMobile } from '@/utils/device'
+import { isMobile } from '@/shared/lib/device'
 import {
     ADMIN_QUESTION_DETAIL_ROUTE_NAME,
     ADMIN_QUESTIONS_CHILD_ROUTE_NAME,

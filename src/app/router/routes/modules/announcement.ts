@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '@/app/router/types'
-import { isMobile } from '@/utils/device'
+import { isMobile } from '@/shared/lib/device'
 import {
     ADMIN_ANNOUNCEMENTS_PATH,
     ADMIN_ANNOUNCEMENTS_ROUTE_NAME,

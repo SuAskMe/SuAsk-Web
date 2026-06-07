@@ -1,7 +1,7 @@
 import { ControlPanelStore } from '@/store/modules/control-panel'
 import { UserStoreWithOut } from '@/store/modules/user'
 import { Role } from '@/entities/user'
-import { getDeviceId } from '@/utils/device'
+import { getDeviceId } from '@/shared/lib/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { containsChineseCharacters } from '@/utils/ischinese'

@@ -65,7 +65,7 @@ import { UserStore } from '@/store/modules/user'
 import { Role } from '@/entities/user'
 import { DeviceTypeStore } from '@/store/modules/device-type'
 import { SidebarStore } from '@/store/modules/sidebar'
-// import { isMobile } from "@/utils/device";
+// import { isMobile } from '@/shared/lib/device'
 
 const deviceTypeStore = DeviceTypeStore()
 
