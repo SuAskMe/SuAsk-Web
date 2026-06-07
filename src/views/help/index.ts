@@ -1,3 +1,2 @@
-import Help from './Help.vue'
-
-export default Help
+export { default } from '@/pages/help'
+export { HelpPage } from '@/pages/help'

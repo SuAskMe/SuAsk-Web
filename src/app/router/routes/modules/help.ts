@@ -5,7 +5,7 @@ const WebHome = () => import('@/layout/home/WebHome.vue')
 
 const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
 
-const Help = () => import('@/views/help')
+const Help = () => import('@/pages/help')
 
 export const HelpRoute: AppRouteRecordRaw = {
     path: '/help',
