@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive, watch } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { BubbleCard } from '@/shared/ui/bubble-card'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import QuestionHeader from '@/widgets/question-header'
@@ -149,7 +149,8 @@ import {
 
 const loading = ref(false)
 const searchKeyword = ref('')
-const listKey = ref(0)
+
+type TimeRange = 'week' | 'month' | 'all'
 
 const deviceType = DeviceTypeStore()
 const sidebarStore = SidebarStore()
@@ -161,22 +162,18 @@ function toggleSidebar() {
     sidebarStore.toggle()
 }
 
-const timeRange = ref<'week' | 'month' | 'all'>('all')
+const timeRange = ref<TimeRange>('all')
 
 // Store separate lists for each time range tab to prevent double rendering and card drifting during transitions
-const timeRangeLists = reactive<Record<string, QuestionItem[]>>({
+const timeRangeLists = reactive<Record<TimeRange, QuestionItem[]>>({
     all: [],
     week: [],
     month: [],
 })
 
-watch(
-    questionList,
-    (newList) => {
-        timeRangeLists[timeRange.value] = [...newList]
-    },
-    { deep: true, immediate: true },
-)
+const syncActiveTimeRangeList = () => {
+    timeRangeLists[timeRange.value] = [...questionList]
+}
 const slideDirection = ref('slide-left')
 const timeOptions = [
     { label: '全部', value: 'all' },
@@ -184,46 +181,67 @@ const timeOptions = [
     { label: '本月', value: 'month' },
 ]
 
-const timeOrder = ['all', 'week', 'month']
+const timeOrder: TimeRange[] = ['all', 'week', 'month']
 
 const handleTimeRangeChange = async (val: string | number) => {
+    const nextTimeRange = val as TimeRange
+    if (nextTimeRange === timeRange.value) {
+        return
+    }
+
     const oldIndex = timeOrder.indexOf(timeRange.value)
-    const newIndex = timeOrder.indexOf(val as string)
+    const newIndex = timeOrder.indexOf(nextTimeRange)
     slideDirection.value = newIndex > oldIndex ? 'slide-left' : 'slide-right'
 
-    timeRange.value = val as 'week' | 'month' | 'all'
-    currentTimeRange.value = val as 'week' | 'month' | 'all'
-    listKey.value++
+    timeRange.value = nextTimeRange
+    currentTimeRange.value = nextTimeRange
     loading.value = true
-    InitStatus()
-    await getNextQuestions(0, searchKeyword.value || undefined)
-    resetScrollPosition()
-    loading.value = false
+    try {
+        InitStatus()
+        await getNextQuestions(0, searchKeyword.value || undefined)
+        syncActiveTimeRangeList()
+        resetScrollPosition()
+    } finally {
+        loading.value = false
+    }
 }
 
 const handleSearch = async () => {
-    if (searchKeyword.value.trim() === '') {
+    const keyword = searchKeyword.value.trim()
+    if (keyword === '') {
         return
     }
     loading.value = true
-    await onSearch(searchKeyword.value.trim())
-    resetScrollPosition()
-    loading.value = false
+    try {
+        await onSearch(keyword)
+        syncActiveTimeRangeList()
+        resetScrollPosition()
+    } finally {
+        loading.value = false
+    }
 }
 
 const handleCancelSearch = async () => {
     searchKeyword.value = ''
     loading.value = true
-    await onCancelSearch()
-    resetScrollPosition()
-    loading.value = false
+    try {
+        await onCancelSearch()
+        syncActiveTimeRangeList()
+        resetScrollPosition()
+    } finally {
+        loading.value = false
+    }
 }
 
 const handleReachBottom = async () => {
     if (!loading.value) {
         loading.value = true
-        await getNextQuestions()
-        loading.value = false
+        try {
+            await getNextQuestions()
+            syncActiveTimeRangeList()
+        } finally {
+            loading.value = false
+        }
     }
 }
 
@@ -232,9 +250,15 @@ onMounted(async () => {
     if (questionList.length === 0) {
         InitStatus()
         loading.value = true
-        await getNextQuestions(0)
-        loading.value = false
+        try {
+            await getNextQuestions(0)
+            syncActiveTimeRangeList()
+        } finally {
+            loading.value = false
+        }
+        return
     }
+    syncActiveTimeRangeList()
 })
 </script>
 
