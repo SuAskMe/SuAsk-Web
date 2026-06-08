@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Role } from '@/entities/user'
 
 type InterceptorRecord<TFulfilled, TRejected = unknown> = {
     handlers: Array<{
@@ -41,18 +40,6 @@ vi.mock('element-plus/es/components/message/index.mjs', () => ({
     },
 }))
 
-vi.mock('@/entities/user', () => ({
-    Role: {
-        ADMIN: 'admin',
-    },
-    UserStoreWithOut: () => ({
-        getToken: mocks.getToken,
-        getRole: mocks.getRole,
-        setToken: mocks.setToken,
-        resetState: mocks.resetState,
-    }),
-}))
-
 vi.mock('@/shared/model', () => ({
     ControlPanelStore: () => ({
         clearSelectedItem: mocks.clearSelectedItem,
@@ -62,6 +49,20 @@ vi.mock('@/shared/model', () => ({
 vi.mock('@/shared/lib/device', () => ({
     getDeviceId: mocks.getDeviceId,
 }))
+
+async function importRequestWithAuth() {
+    const { configureRequestAuth } = await import('@/shared/api/request-auth')
+    configureRequestAuth({
+        getToken: mocks.getToken,
+        getRole: mocks.getRole,
+        clearSession: () => {
+            mocks.setToken('')
+            mocks.resetState()
+        },
+    })
+
+    return (await import('@/shared/api/request')).default
+}
 
 describe('request interceptors', () => {
     beforeEach(() => {
@@ -90,9 +91,9 @@ describe('request interceptors', () => {
 
     it('adds auth, admin mode, and device headers on requests', async () => {
         mocks.getToken.mockReturnValue('token-abc')
-        mocks.getRole.mockReturnValue(Role.ADMIN)
+        mocks.getRole.mockReturnValue('admin')
 
-        const request = (await import('@/shared/api/request')).default
+        const request = await importRequestWithAuth()
         const interceptor = request.interceptors.request as unknown as InterceptorRecord<RequestFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -104,7 +105,7 @@ describe('request interceptors', () => {
     })
 
     it('returns payload data on successful business responses', async () => {
-        const request = (await import('@/shared/api/request')).default
+        const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -123,7 +124,7 @@ describe('request interceptors', () => {
     })
 
     it('handles login timeout by showing an error and scheduling redirect cleanup', async () => {
-        const request = (await import('@/shared/api/request')).default
+        const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -147,7 +148,7 @@ describe('request interceptors', () => {
     })
 
     it('shows backend Chinese messages and returns null for handled business errors', async () => {
-        const request = (await import('@/shared/api/request')).default
+        const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
 
@@ -164,7 +165,7 @@ describe('request interceptors', () => {
     })
 
     it('returns false and shows a generic message on transport errors', async () => {
-        const request = (await import('@/shared/api/request')).default
+        const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<
             ResponseFulfilled,
             ResponseRejected

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import { useThemeBackgroundIndex } from '@/shared/lib/theme'
+import { useThemeBackgroundIndex } from '@/entities/user'
 
-vi.mock('@/entities/user', () => ({
+vi.mock('@/entities/user/model/user.store', () => ({
     UserStore: () => ({
         getUser: () => ({
             themeId: 3,

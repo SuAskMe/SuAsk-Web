@@ -100,7 +100,7 @@ import {
     type UpvoteAnswerRes,
 } from '@/entities/answer'
 import { deleteQuestionApi } from '@/entities/question'
-import { canDelete, hasTeacherAbility } from '@/shared/lib/auth'
+import { canDelete, hasTeacherAbility } from '@/entities/user'
 // import { AnswerDialog } from '@/features/question-compose'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'

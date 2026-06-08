@@ -1,10 +1,11 @@
 import { ControlPanelStore } from '@/shared/model'
-import { UserStoreWithOut } from '@/entities/user'
-import { Role } from '@/entities/user'
 import { getDeviceId } from '@/shared/lib/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { containsChineseCharacters } from '@/shared/lib/text'
+import { getRequestAuthAdapter } from './request-auth'
+
+const ADMIN_ROLE = 'admin'
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -13,9 +14,8 @@ const request = axios.create({
 
 const returnToLogin = () => {
     setTimeout(() => {
-        UserStoreWithOut().setToken('')
+        getRequestAuthAdapter().clearSession()
         location.href = '/login'
-        UserStoreWithOut().resetState()
         ControlPanelStore().clearSelectedItem()
     }, 1000)
 }
@@ -52,14 +52,14 @@ request.interceptors.response.use(
 
 request.interceptors.request.use(
     (config) => {
-        const userStore = UserStoreWithOut()
-        const token = userStore.getToken()
+        const authAdapter = getRequestAuthAdapter()
+        const token = authAdapter.getToken()
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
 
         // 管理员：始终附加 X-Admin-Mode header
-        if (userStore.getRole() === Role.ADMIN) {
+        if (authAdapter.getRole() === ADMIN_ROLE) {
             config.headers['X-Admin-Mode'] = 'true'
         }
 

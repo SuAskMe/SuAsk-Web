@@ -5,8 +5,9 @@ import '@/styles/main.scss'
 import 'virtual:svg-icons-register'
 import SvgIcon from '@/shared/ui/svg-icon'
 import { setupRouter } from '@/app/router'
+import { setupRequestAuth } from '@/app/providers'
 import { isMobile } from '@/shared/lib/device'
-import { setupStore } from '@/app/store'
+import { setupStore } from '@/shared/model'
 import { ElAutocomplete } from 'element-plus/es/components/autocomplete/index.mjs'
 import { ElButton } from 'element-plus/es/components/button/index.mjs'
 import { ElCheckbox, ElCheckboxGroup } from 'element-plus/es/components/checkbox/index.mjs'
@@ -56,8 +57,9 @@ for (const component of elementComponents) {
     app.use(component)
 }
 
-setupRouter(app)
 setupStore(app)
+setupRequestAuth()
+setupRouter(app)
 app.use(ElLoading)
 app.component('svg-icon', SvgIcon)
 app.mount('#app')

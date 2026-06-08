@@ -220,7 +220,7 @@ import { loadDraftDb, type Answer } from './draftDb'
 import { ComposeDialogStore } from '@/features/question-compose/model'
 import ImgList from './ImgList.vue'
 import { addAnswerApi, type AddAnswer, type AnswerItem, type Question } from '@/entities/answer'
-import { hasTeacherAbility } from '@/shared/lib/auth'
+import { hasTeacherAbility } from '@/entities/user'
 import {
     createObjectUrlPreview,
     revokeObjectUrlPreview,
