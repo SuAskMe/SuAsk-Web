@@ -50,7 +50,7 @@ vi.mock('@/app/store/modules/user', () => ({
     }),
 }))
 
-vi.mock('@/app/store/modules/control-panel', () => ({
+vi.mock('@/shared/model', () => ({
     ControlPanelStore: () => ({
         clearSelectedItem: mocks.clearSelectedItem,
     }),

@@ -1,4 +1,4 @@
-import { ControlPanelStore } from '@/app/store/modules/control-panel'
+import { ControlPanelStore } from '@/shared/model'
 import { UserStoreWithOut } from '@/app/store/modules/user'
 import { Role } from '@/entities/user'
 import { getDeviceId } from '@/shared/lib/device'

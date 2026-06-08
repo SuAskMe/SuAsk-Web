@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ControlPanelStore } from '@/app/store/modules/control-panel'
+import { ControlPanelStore } from '@/shared/model'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { SidebarStore } from '@/widgets/app-shell/model'
 import { computed } from 'vue'
