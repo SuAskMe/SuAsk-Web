@@ -26,7 +26,7 @@
                 :image-urls="question.image_urls"
                 :is-favorite="question.is_favorite"
                 :answer-num="question.answer_num"
-                :avatars="question.answer_avatars"
+                :avatars="question.answer_users ?? question.answer_avatars"
                 :bubble-key="index"
                 :click-card="navigateTo"
                 :click-favorite="favorite"

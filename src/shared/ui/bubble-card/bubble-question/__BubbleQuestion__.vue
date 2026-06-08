@@ -7,6 +7,15 @@ import CardMetaRow from '../shared/CardMetaRow.vue'
 import QuestionCardFooter from '../shared/QuestionCardFooter.vue'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
 
+interface AvatarItem {
+    src?: string | null
+    avatar?: string | null
+    name?: string
+    nickname?: string
+}
+
+type QuestionAvatar = string | AvatarItem
+
 interface BubbleQuestionProps {
     title: string
     text: string
@@ -18,7 +27,7 @@ interface BubbleQuestionProps {
     bubbleKey?: any
     answerNum?: number
     imageUrls?: string[]
-    avatars?: string[]
+    avatars?: QuestionAvatar[]
     isFavorite?: boolean
     showFavorite?: boolean
     showDelete?: boolean

@@ -8,6 +8,11 @@ export interface GetHistoryRes {
     remain_page: number
 }
 
+export interface AnswerUserAvatar {
+    avatar: string
+    nickname: string
+}
+
 export interface HistoryItem {
     id: number
     title: string
@@ -18,6 +23,7 @@ export interface HistoryItem {
     is_favorite: boolean
     answer_num: number
     answer_avatars: string[]
+    answer_users?: AnswerUserAvatar[]
 }
 
 export interface GetHistoryByKeywordReq {

@@ -1,11 +1,21 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 
-withDefaults(
+interface AvatarItem {
+    src?: string | null
+    avatar?: string | null
+    name?: string
+    nickname?: string
+}
+
+type QuestionAvatar = string | AvatarItem
+
+const props = withDefaults(
     defineProps<{
         answerNum?: number
-        avatars?: string[]
+        avatars?: QuestionAvatar[]
         showFavorite?: boolean
         isFavorite?: boolean
         showDelete?: boolean
@@ -19,6 +29,19 @@ withDefaults(
     },
 )
 
+const normalizedAvatars = computed(() =>
+    props.avatars.map((avatar) => {
+        if (typeof avatar === 'string') {
+            return { src: avatar, name: '' }
+        }
+
+        return {
+            src: avatar.src ?? avatar.avatar ?? '',
+            name: avatar.name ?? avatar.nickname ?? '',
+        }
+    }),
+)
+
 defineEmits(['favorite', 'delete', 'footer'])
 </script>
 
@@ -26,9 +49,10 @@ defineEmits(['favorite', 'delete', 'footer'])
     <!-- 底部模式只由 answerNum 决定，避免“有回答”和“待回答”两种状态同时渲染一半。 -->
     <div v-if="answerNum && answerNum > 0" class="card-footer">
         <UserAvatar
-            v-for="(avatar, index) in avatars"
+            v-for="(avatar, index) in normalizedAvatars"
             :key="index"
-            :src="avatar"
+            :src="avatar.src"
+            :name="avatar.name"
             :size="32"
             :style="{
                 marginLeft: index === 0 ? '16px' : '-14px',

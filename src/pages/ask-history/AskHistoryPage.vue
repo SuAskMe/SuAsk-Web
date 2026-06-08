@@ -29,7 +29,7 @@
                 :time-stamp="question.created_at"
                 :image-urls="question.image_urls"
                 :answer-num="question.answer_num"
-                :avatars="question.answer_avatars"
+                :avatars="question.answer_users ?? question.answer_avatars"
                 :bubble-key="index"
                 :click-card="navigateTo"
                 :click-favorite="favorite"
