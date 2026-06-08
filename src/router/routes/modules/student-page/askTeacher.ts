@@ -28,7 +28,7 @@ export const AskTeacherRoute: AppRouteRecordRaw = {
             },
         },
         {
-            path: ':teacher_id/:teacher_name',
+            path: ':teacher_id/:teacher_name?',
             name: 'AskTeacherDetail',
             meta: {
                 NoAlive: true,
