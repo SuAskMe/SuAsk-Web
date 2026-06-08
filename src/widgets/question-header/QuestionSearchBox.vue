@@ -43,7 +43,17 @@ const emit = defineEmits(['search', 'cancelSearch', 'update:active'])
 
 const showInput = ref(false)
 const searchText = ref('')
+const keywordCache = new Map<string, GetKeywordRes['words']>()
 let searchRecord = false
+let latestQuerySeq = 0
+
+const buildKeywordCacheKey = (keyword: string) =>
+    JSON.stringify({
+        url: props.getKeywordsUrl,
+        keyword,
+        sort_type: props.sortType,
+        teacher_id: props.teacherId ?? null,
+    })
 
 const setActive = (value: boolean) => {
     showInput.value = value
@@ -52,15 +62,41 @@ const setActive = (value: boolean) => {
 
 async function querySearch(queryString: string, cb: (results: unknown[]) => void) {
     if (queryString.length < 2) {
+        latestQuerySeq++
         cb([])
         return
     }
-    const results = await getKeywords({
-        keyword: queryString,
-        sort_type: props.sortType,
-        teacher_id: props.teacherId,
-    })
-    cb(results?.words || [])
+
+    const querySeq = ++latestQuerySeq
+    if (!props.getKeywordsUrl) {
+        cb([])
+        return
+    }
+
+    const cacheKey = buildKeywordCacheKey(queryString)
+    const cachedWords = keywordCache.get(cacheKey)
+    if (cachedWords) {
+        cb(cachedWords)
+        return
+    }
+
+    try {
+        const results = await getKeywords({
+            keyword: queryString,
+            sort_type: props.sortType,
+            teacher_id: props.teacherId,
+        })
+        if (querySeq !== latestQuerySeq) {
+            return
+        }
+        const words = results?.words || []
+        keywordCache.set(cacheKey, words)
+        cb(words)
+    } catch {
+        if (querySeq === latestQuerySeq) {
+            cb([])
+        }
+    }
 }
 
 const clickSearch = () => {
