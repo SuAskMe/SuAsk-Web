@@ -41,12 +41,12 @@ request.interceptors.response.use(
             }
         } else {
             ElMessage.error('请求错误')
-            return res.data
+            return null
         }
     },
     () => {
         ElMessage.error('请求无响应')
-        return false
+        return null
     },
 )
 

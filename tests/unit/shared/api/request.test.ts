@@ -164,7 +164,7 @@ describe('request interceptors', () => {
         expect(mocks.error).toHaveBeenCalledWith('系统繁忙')
     })
 
-    it('returns false and shows a generic message on transport errors', async () => {
+    it('returns null and shows a generic message on transport errors', async () => {
         const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<
             ResponseFulfilled,
@@ -174,7 +174,7 @@ describe('request interceptors', () => {
 
         const result = await handler(new Error('network down'))
 
-        expect(result).toBe(false)
+        expect(result).toBeNull()
         expect(mocks.error).toHaveBeenCalledWith('请求无响应')
     })
 })

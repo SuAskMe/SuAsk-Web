@@ -2,7 +2,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { reactive } from 'vue'
 
 export interface PaginationOptions<T> {
-    fetchData: (params: PaginationParams) => Promise<PaginationResponse<T>>
+    fetchData: (params: PaginationParams) => Promise<PaginationResponse<T> | null | undefined>
     initialPage?: number
     initialSortType?: number
 }
@@ -58,6 +58,8 @@ export function usePagination<T>(options: PaginationOptions<T>): UsePaginationRe
     const loadMore = async (sortType_?: number, keyword_?: string, cancelSearch?: boolean) => {
         if (loading) return
 
+        const previousPage = currentPage
+
         // 使用 hasOwnProperty 来检查是否传入了排序参数
         const hasSortType = sortType_ !== undefined
         const hasKeyword = keyword_ !== undefined
@@ -107,6 +109,10 @@ export function usePagination<T>(options: PaginationOptions<T>): UsePaginationRe
             }
 
             const res = await fetchData(params)
+            if (!res) {
+                currentPage = previousPage
+                return
+            }
 
             if (res.remain_page <= 0) {
                 isEnd = true

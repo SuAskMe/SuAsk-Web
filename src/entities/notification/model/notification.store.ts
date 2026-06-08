@@ -64,7 +64,8 @@ export const NotificationStore = defineStore('notification', () => {
     }
 
     async function deleteNotification(id: number, type: string) {
-        await deleteNotificationApi(id)
+        const res = await deleteNotificationApi(id)
+        if (!res) return
         if (type === 'question') {
             newQuestion.value = newQuestion.value.filter((item) => item.id !== id)
         } else if (type === 'answer') {
