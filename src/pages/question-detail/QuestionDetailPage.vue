@@ -109,7 +109,7 @@ import { favoriteApi } from '@/entities/favorite'
 import { storeToRefs } from 'pinia'
 import { QuestionDetailSyncStore } from '@/features/question-detail-navigation'
 
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import ComposeDialog from '@/features/question-compose'
 import { ComposeDialogStore } from '@/features/question-compose/model'

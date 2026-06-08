@@ -1,9 +1,10 @@
 import { heartbeatApi, loginApi, logoutApi, type LoginReq } from '@/entities/session'
 import { guestLoginApi } from '@/entities/guest'
-import { getUserInfoApi, Role, type User } from '@/entities/user'
+import { getUserInfoApi } from '../api/user.api'
+import { Role, type User } from './user.model'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { pinia } from '..'
+import { pinia } from '@/shared/model/pinia'
 
 export const UserStore = defineStore(
     'user',

@@ -208,7 +208,7 @@ import {
     deleteAnnouncement,
 } from '@/entities/announcement'
 import type { AnnouncementItem } from '@/entities/announcement'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { SidebarStore } from '@/widgets/app-shell/model'
 import QuestionHeader from '@/widgets/question-header'
 import MarkdownPreview from '@/shared/ui/markdown-preview'

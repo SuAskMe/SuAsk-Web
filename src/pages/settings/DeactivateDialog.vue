@@ -47,7 +47,7 @@ import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
 import 'element-plus/es/components/dialog/style/css'
 import { WarningFilled } from '@element-plus/icons-vue'
 import { deactivateAccountApi } from '@/entities/user'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { useRouter } from 'vue-router'
 
 const visible = defineModel('visible', { type: Boolean, default: false })

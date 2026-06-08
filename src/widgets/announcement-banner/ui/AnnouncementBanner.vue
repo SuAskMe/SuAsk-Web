@@ -13,7 +13,7 @@ import { computed, ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { getActiveAnnouncement } from '@/entities/announcement'
 import type { ActiveAnnouncementRes } from '@/entities/announcement'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import {
     ANNOUNCEMENT_DISMISSED_STORAGE_KEY,
     ANNOUNCEMENT_LIST_PATH,

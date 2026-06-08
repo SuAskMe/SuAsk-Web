@@ -238,7 +238,7 @@ import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
 import QuestionHeader from '@/widgets/question-header'
 import { SidebarStore } from '@/widgets/app-shell/model'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import {
     ADMIN_QUESTIONS_PATH,
     deleteAdminQuestion,

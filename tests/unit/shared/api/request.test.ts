@@ -41,7 +41,10 @@ vi.mock('element-plus/es/components/message/index.mjs', () => ({
     },
 }))
 
-vi.mock('@/app/store/modules/user', () => ({
+vi.mock('@/entities/user', () => ({
+    Role: {
+        ADMIN: 'admin',
+    },
     UserStoreWithOut: () => ({
         getToken: mocks.getToken,
         getRole: mocks.getRole,

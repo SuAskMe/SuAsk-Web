@@ -225,7 +225,7 @@
 
 <script setup lang="ts">
 import { addQuestionApi, type AddQuestionReq, type QuestionItem } from '@/entities/question'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'

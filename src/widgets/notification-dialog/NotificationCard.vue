@@ -57,7 +57,7 @@
 import { readNotificationApi } from '@/entities/notification'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { SidebarStore } from '@/widgets/app-shell/model'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { getTimeStr } from '@/shared/lib/date-time'
 import { Delete } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'

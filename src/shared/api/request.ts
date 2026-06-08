@@ -1,5 +1,5 @@
 import { ControlPanelStore } from '@/shared/model'
-import { UserStoreWithOut } from '@/app/store/modules/user'
+import { UserStoreWithOut } from '@/entities/user'
 import { Role } from '@/entities/user'
 import { getDeviceId } from '@/shared/lib/device'
 import axios from 'axios'

@@ -205,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { GenId } from '@/shared/lib/gen-id'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'

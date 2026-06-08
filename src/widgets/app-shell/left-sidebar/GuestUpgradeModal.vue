@@ -94,7 +94,7 @@ import { onUnmounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { Lock, User } from '@element-plus/icons-vue'
 import { guestSendCodeApi, guestUpgradeApi } from '@/entities/guest'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 
 defineProps<{
     modelValue: boolean

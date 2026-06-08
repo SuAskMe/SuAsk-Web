@@ -90,7 +90,7 @@ import RegisterDialog from './RegisterDialog.vue'
 import type { LoginReq } from '@/entities/session'
 import { mailCheck } from '@/shared/lib/account-validation'
 import { ControlPanelStore } from '@/shared/model'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 
 const router = useRouter()
 const loading = ref(false)

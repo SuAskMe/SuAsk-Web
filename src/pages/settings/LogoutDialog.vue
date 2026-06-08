@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { ControlPanelStore } from '@/shared/model'
-import { UserStore } from '@/app/store/modules/user'
+import { UserStore } from '@/entities/user'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElDialog } from 'element-plus/es/components/dialog/index.mjs'
 import 'element-plus/es/components/dialog/style/css'
