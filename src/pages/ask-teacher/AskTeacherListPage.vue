@@ -178,7 +178,7 @@ const navigateTo = (key: any) => {
         return
     } else {
         router.push({
-            path: `/ask-teacher/${key.teacherId}/${key.teacherName}`,
+            path: `/ask-teacher/${key.teacherId}`,
         })
     }
 }

@@ -64,6 +64,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import { ComposeDialogStore } from '@/features/question-compose/model'
 import ComposeDialog from '@/features/question-compose'
+import { getUserByIdApi } from '@/entities/user/api/user.api'
 import { Plus } from '@element-plus/icons-vue'
 import {
     questionList,
@@ -200,9 +201,32 @@ const handleQuestionPosted = (question: QuestionItem) => {
 //     }
 // );
 
-onMounted(() => {
+const getRouteParam = (param: unknown) => {
+    if (Array.isArray(param)) {
+        return param[0]
+    }
+    return typeof param === 'string' ? param : ''
+}
+
+const resolveTeacherName = async () => {
+    const routeTeacherName = getRouteParam(route.params.teacher_name)
+    if (routeTeacherName) {
+        teacherName.value = routeTeacherName
+        return
+    }
+
+    teacherName.value = '老师'
+    try {
+        const teacher = await getUserByIdApi(String(teacherId.value))
+        teacherName.value = teacher?.name || teacher?.nickname || '老师'
+    } catch {
+        teacherName.value = '老师'
+    }
+}
+
+onMounted(async () => {
     teacherId.value = Number(route.params.teacher_id)
-    teacherName.value = String(route.params.teacher_name)
+    await resolveTeacherName()
     document.title = `${teacherName.value}的提问箱`
     Init()
 })
