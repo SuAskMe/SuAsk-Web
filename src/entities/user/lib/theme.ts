@@ -1,4 +1,4 @@
-import { UserStore } from '@/entities/user'
+import { UserStore } from '../model/user.store'
 import { computed } from 'vue'
 
 export function useThemeBackgroundIndex() {
