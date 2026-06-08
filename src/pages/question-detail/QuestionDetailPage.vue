@@ -112,7 +112,7 @@ import { QuestionDetailSyncStore } from '@/features/question-detail-navigation'
 import { UserStore } from '@/app/store/modules/user'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
 import ComposeDialog from '@/features/question-compose'
-import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/features/question-compose/model'
 
 // 导入全局事件总线
 import { emitter } from '@/shared/lib/event-bus'

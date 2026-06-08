@@ -62,7 +62,7 @@ import { useThemeBackgroundIndex } from '@/shared/lib/theme'
 import type { QuestionItem } from '@/entities/question'
 import { useRoute, useRouter } from 'vue-router'
 import { DeviceTypeStore } from '@/shared/model/device-type.store'
-import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/features/question-compose/model'
 import ComposeDialog from '@/features/question-compose'
 import { Plus } from '@element-plus/icons-vue'
 import {

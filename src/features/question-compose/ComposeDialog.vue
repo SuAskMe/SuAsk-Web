@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/features/question-compose/model'
 import { defineAsyncComponent, ref } from 'vue'
 import type { QuestionItem } from '@/entities/question'
 import type { AnswerItem } from '@/entities/answer'

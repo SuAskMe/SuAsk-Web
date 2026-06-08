@@ -238,7 +238,7 @@ import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
 import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { loadDraftDb, type Question } from './draftDb'
-import { ComposeDialogStore } from '@/app/store/modules/compose-dialog'
+import { ComposeDialogStore } from '@/features/question-compose/model'
 import ImgList from './ImgList.vue'
 import {
     createObjectUrlPreview,
