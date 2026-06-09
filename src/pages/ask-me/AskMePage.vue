@@ -513,14 +513,14 @@ import { ElEmpty } from 'element-plus/es/components/empty/index.mjs'
 import 'element-plus/es/components/empty/style/css'
 
 const tabs = [
-    { key: 'all', label: '全部' },
-    { key: 'answered', label: '已回答' },
     { key: 'unanswered', label: '未回答' },
+    { key: 'answered', label: '已回答' },
     { key: 'top', label: '已置顶' },
+    { key: 'all', label: '全部' },
     { key: 'deleted', label: '已删除' },
 ]
 
-const activeTab = ref('all')
+const activeTab = ref('unanswered')
 const loading = ref(false)
 
 const deviceType = DeviceTypeStore()
@@ -725,7 +725,7 @@ const handleRestore = async (question: QFMItem) => {
     }
 }
 
-const tabOrder = ['all', 'answered', 'unanswered', 'top', 'deleted']
+const tabOrder = ['unanswered', 'answered', 'top', 'all', 'deleted']
 const slideDirection = ref('slide-left')
 const listKey = ref(0)
 
