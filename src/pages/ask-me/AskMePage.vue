@@ -50,6 +50,7 @@
                                     'status-unanswered': question.tag === '未回答',
                                     'status-pinned': question.is_pinned,
                                     'status-deleted': question.tag === '已删除',
+                                    'card-leaving': leavingQuestionId === question.id,
                                 },
                             ]"
                             :style="{
@@ -141,6 +142,7 @@
                                     'status-unanswered': question.tag === '未回答',
                                     'status-pinned': question.is_pinned,
                                     'status-deleted': question.tag === '已删除',
+                                    'card-leaving': leavingQuestionId === question.id,
                                 },
                             ]"
                             :style="{
@@ -232,6 +234,7 @@
                                     'status-unanswered': question.tag === '未回答',
                                     'status-pinned': question.is_pinned,
                                     'status-deleted': question.tag === '已删除',
+                                    'card-leaving': leavingQuestionId === question.id,
                                 },
                             ]"
                             :style="{
@@ -323,6 +326,7 @@
                                     'status-unanswered': question.tag === '未回答',
                                     'status-pinned': question.is_pinned,
                                     'status-deleted': question.tag === '已删除',
+                                    'card-leaving': leavingQuestionId === question.id,
                                 },
                             ]"
                             :style="{
@@ -413,6 +417,7 @@
                                     'status-answered': question.tag === '已回答',
                                     'status-unanswered': question.tag === '未回答',
                                     'status-deleted': question.tag === '已删除',
+                                    'card-leaving': leavingQuestionId === question.id,
                                 },
                             ]"
                             :style="{
@@ -488,7 +493,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch, reactive } from 'vue'
+import { onMounted, onUnmounted, ref, computed, watch, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import { ElMessageBox } from 'element-plus/es/components/message-box/index.mjs'
@@ -561,17 +566,29 @@ const {
 
 const { navigateTo: origNavigateTo } = useQuestionDetailNavigation(questionList)
 const router = useRouter()
+const leavingQuestionId = ref<number | null>(null)
+const cardLeaveDurationMs = 280
+let leaveTimer: number | undefined
 
 const navigateTo = (question: QFMItem) => {
-    if (!question) return
-    const index = questionList.findIndex((q) => q.id === question.id)
-    if (index !== -1) {
-        origNavigateTo(index)
-    } else {
-        router.push({
-            path: `/question-detail/${question.id}`,
-        })
+    if (!question || leavingQuestionId.value !== null) return
+    leavingQuestionId.value = question.id
+
+    if (leaveTimer) {
+        window.clearTimeout(leaveTimer)
     }
+
+    leaveTimer = window.setTimeout(() => {
+        leaveTimer = undefined
+        const index = questionList.findIndex((q) => q.id === question.id)
+        if (index !== -1) {
+            origNavigateTo(index)
+        } else {
+            router.push({
+                path: `/question-detail/${question.id}`,
+            })
+        }
+    }, cardLeaveDurationMs)
 }
 
 const getQuestionStatusText = (question: QFMItem) => {
@@ -734,6 +751,12 @@ const handleTabChange = async (nextTab: string) => {
         return
     }
 
+    leavingQuestionId.value = null
+    if (leaveTimer) {
+        window.clearTimeout(leaveTimer)
+        leaveTimer = undefined
+    }
+
     const oldIndex = tabOrder.indexOf(activeTab.value)
     const newIndex = tabOrder.indexOf(nextTab)
     slideDirection.value = newIndex > oldIndex ? 'slide-left' : 'slide-right'
@@ -746,6 +769,12 @@ const handleTabChange = async (nextTab: string) => {
 
 onMounted(() => {
     Init()
+})
+
+onUnmounted(() => {
+    if (leaveTimer) {
+        window.clearTimeout(leaveTimer)
+    }
 })
 </script>
 

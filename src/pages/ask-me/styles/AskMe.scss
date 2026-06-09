@@ -54,6 +54,12 @@
         transform: translateY(-2px);
     }
 
+    &.card-leaving {
+        animation: card-slide-up-fade-out 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        pointer-events: none;
+        will-change: opacity, transform, filter;
+    }
+
     &.status-answered {
         border-color: rgba(#10b981, 0.2);
 
@@ -93,6 +99,20 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes card-slide-up-fade-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-28px) scale(0.98);
+        filter: blur(1px);
     }
 }
 
