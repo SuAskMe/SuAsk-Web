@@ -94,6 +94,48 @@
     }
 }
 
+.question-list {
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.question-list-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+}
+
+.slide-left-enter-active,
+.slide-left-leave-active {
+    transition: all 0.35s ease;
+}
+
+.slide-left-enter-from {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+    transition: all 0.35s ease;
+}
+
+.slide-right-enter-from {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.slide-right-leave-to {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
 .ask-btn {
     position: absolute;
     bottom: 56px;
@@ -116,17 +158,6 @@
 
 .ask-btn:hover {
     transform: translateY(-10px);
-}
-
-.question-enter-active,
-.question-leave-active {
-    transition: all 0.5s ease;
-}
-
-.question-enter-from,
-.question-leave-to {
-    opacity: 0;
-    transform: translateX(-100px);
 }
 
 :deep(.bubble-card) {
