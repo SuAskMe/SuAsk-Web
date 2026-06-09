@@ -27,23 +27,40 @@ export function createRoleMap() {
     addRoutesToMap(teacherRoutes, 'teacher')
 }
 
+let authPromise: Promise<void> | null = null
+
+function ensureBootstrapAuth() {
+    if (!authPromise) {
+        authPromise = new Promise((resolve) => {
+            const userStore = UserStore()
+            userStore.bootstrapAuth().finally(() => resolve())
+        })
+    }
+    return authPromise
+}
+
 export function createRoleGuard(router: Router) {
     router.beforeEach(async (to, from, next) => {
         const name = to.name?.toString() + 'Root'
         const userStore = UserStore()
-        const userRole = userStore.getRole()
-        const token = userStore.getToken()
 
-        // 未登录（无 token）且不是基础路由 → 重定向到登录页
+        // Wait for auth bootstrap to complete if it hasn't yet.
+        if (!userStore.authReady) {
+            await ensureBootstrapAuth()
+        }
+
+        const userRole = userStore.getRole()
+
+        // 未登录且不是基础路由 → 重定向到登录页
         const isBasicRoute = basicRoutes.some(
             (r) => r.name === name || r.name === to.name?.toString(),
         )
-        if (!token && !isBasicRoute) {
+        if (!userStore.isLoggedIn() && !isBasicRoute) {
             next({ name: 'Login' })
             return
         }
 
-        // 检查 requiresAdmin meta：非 admin 用户重定向到 404
+        // 检查 requiresAdmin meta
         if (to.meta.requiresAdmin) {
             if (userRole !== 'admin') {
                 next({ name: 'NotFound' })
@@ -58,6 +75,7 @@ export function createRoleGuard(router: Router) {
             next()
             return
         }
+
         const roles = routeMap.get(name)
         if (roles) {
             if (!roles.includes(userRole)) {

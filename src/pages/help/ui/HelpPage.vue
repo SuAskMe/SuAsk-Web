@@ -116,7 +116,7 @@ const router = useRouter()
 const sidebar = () => {
     sidebarStore.toggle()
 }
-const canViewAnnouncements = computed(() => !!userStore.token && !userStore.isGuest())
+const canViewAnnouncements = computed(() => userStore.isLoggedIn() && !userStore.isGuest())
 const tabs: Array<{ key: HelpTabKey; label: string }> = [
     { key: 'help', label: '使用帮助' },
     { key: 'announcements', label: '公告列表' },

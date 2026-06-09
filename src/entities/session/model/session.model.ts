@@ -7,8 +7,6 @@ export interface LoginReq {
 export interface LoginRes {
     id: number
     role: string
-    token: string
-    type: string
 }
 
 export interface HeartbeatRes {

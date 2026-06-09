@@ -50,15 +50,18 @@ vi.mock('@/shared/lib/device', () => ({
     getDeviceId: mocks.getDeviceId,
 }))
 
+vi.mock('@/shared/api/request-auth', () => ({
+    getRequestAuthAdapter: () => ({
+        getRole: mocks.getRole,
+    }),
+    configureRequestAuth: () => {},
+    resetRequestAuth: () => {},
+}))
+
 async function importRequestWithAuth() {
     const { configureRequestAuth } = await import('@/shared/api/request-auth')
     configureRequestAuth({
-        getToken: mocks.getToken,
         getRole: mocks.getRole,
-        clearSession: () => {
-            mocks.setToken('')
-            mocks.resetState()
-        },
     })
 
     return (await import('@/shared/api/request')).default
@@ -89,8 +92,7 @@ describe('request interceptors', () => {
         vi.useRealTimers()
     })
 
-    it('adds auth, admin mode, and device headers on requests', async () => {
-        mocks.getToken.mockReturnValue('token-abc')
+    it('adds admin mode and device headers on requests', async () => {
         mocks.getRole.mockReturnValue('admin')
 
         const request = await importRequestWithAuth()
@@ -99,7 +101,6 @@ describe('request interceptors', () => {
 
         const config = await handler({ headers: {} })
 
-        expect(config.headers.Authorization).toBe('Bearer token-abc')
         expect(config.headers['X-Admin-Mode']).toBe('true')
         expect(config.headers['X-Device-Id']).toBe('device-123')
     })
@@ -123,7 +124,7 @@ describe('request interceptors', () => {
         })
     })
 
-    it('handles login timeout by showing an error and scheduling redirect cleanup', async () => {
+    it('handles login timeout by showing an error and scheduling redirect', async () => {
         const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
@@ -141,8 +142,6 @@ describe('request interceptors', () => {
 
         vi.advanceTimersByTime(1000)
 
-        expect(mocks.setToken).toHaveBeenCalledWith('')
-        expect(mocks.resetState).toHaveBeenCalled()
         expect(mocks.clearSelectedItem).toHaveBeenCalled()
         expect(globalThis.location.href).toBe('/login')
     })

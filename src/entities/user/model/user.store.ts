@@ -1,4 +1,4 @@
-import { heartbeatApi, loginApi, logoutApi, type LoginReq } from '@/entities/session'
+import { loginApi, logoutApi, type LoginReq } from '@/entities/session'
 import { guestLoginApi } from '@/entities/guest'
 import { getUserInfoApi } from '../api/user.api'
 import { Role, type User } from './user.model'
@@ -10,35 +10,41 @@ export const UserStore = defineStore(
     'user',
     () => {
         const userInfo = ref<User | null>(null)
-        const token = ref<string | null>(null)
+        const authReady = ref(false)
 
         function getUser(): User {
             return userInfo.value || ({} as User)
-        }
-
-        function getToken(): string {
-            return token.value || ''
         }
 
         function getRole(): string {
             return userInfo.value?.role || ''
         }
 
-        function setToken(_token: string) {
-            token.value = _token
+        function isLoggedIn(): boolean {
+            return !!userInfo.value
         }
 
         function setUser(user: User) {
             userInfo.value = user
         }
 
-        // function setRole(_role: string) {
-        //     role.value = _role
-        // }
-
         function resetState() {
             userInfo.value = null
-            token.value = ''
+        }
+
+        async function bootstrapAuth(): Promise<User | null> {
+            // When cookie auth is active, hitting /user restores the session.
+            // If the cookie exists and is valid, the backend returns user info.
+            // If no cookie / expired, the backend returns 401 → request interceptor
+            // returns null → we treat as unauthenticated.
+            try {
+                const user = await getUserInfo()
+                authReady.value = true
+                return user
+            } catch {
+                authReady.value = true
+                return null
+            }
         }
 
         async function login(req: LoginReq): Promise<User | null> {
@@ -47,24 +53,9 @@ export const UserStore = defineStore(
                 if (!res) {
                     return null
                 }
-                setToken(res.token)
-                // setRole(res.role)
+                // Cookie is set by the backend; fetch user info.
                 const user = await getUserInfo()
                 return user
-            } catch {
-                return null
-            }
-        }
-
-        async function autoLogin(): Promise<User | null> {
-            try {
-                const res = await heartbeatApi()
-                if (res && res.id === userInfo.value?.id) {
-                    // 心跳成功，获取用户信息
-                    const user = await getUserInfo()
-                    return user
-                }
-                return null
             } catch {
                 return null
             }
@@ -80,13 +71,17 @@ export const UserStore = defineStore(
         }
 
         async function guestLogin(): Promise<User | null> {
-            const res = await guestLoginApi()
-            if (!res) {
+            try {
+                const res = await guestLoginApi()
+                if (!res) {
+                    return null
+                }
+                // Cookie is set by the backend; fetch user info.
+                const user = await getUserInfo()
+                return user
+            } catch {
                 return null
             }
-            setToken(res.token)
-            const user = await getUserInfo()
-            return user
         }
 
         function isGuest(): boolean {
@@ -94,38 +89,32 @@ export const UserStore = defineStore(
         }
 
         async function logout(): Promise<unknown> {
-            if (getToken()) {
+            if (isLoggedIn()) {
                 const res = await logoutApi()
+                resetState()
                 if (res) {
-                    resetState()
                     return res
-                } else {
-                    return Promise.reject(res)
                 }
             }
         }
 
         return {
             userInfo,
-            token,
-            // role,
+            authReady,
             getUser,
-            getToken,
             getRole,
-            setToken,
+            isLoggedIn,
             setUser,
             resetState,
+            bootstrapAuth,
             login,
-            autoLogin,
             getUserInfo,
             guestLogin,
             isGuest,
             logout,
         }
     },
-    {
-        persist: true,
-    },
+    // No persist — auth is cookie-based now.
 )
 
 export function UserStoreWithOut() {

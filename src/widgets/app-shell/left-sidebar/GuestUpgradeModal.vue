@@ -174,7 +174,6 @@ async function handleUpgrade() {
             password: upgradeForm.password,
         })
         if (res) {
-            userStore.setToken(res.token)
             await userStore.getUserInfo()
             closeModal()
             emit('upgraded')

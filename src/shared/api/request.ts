@@ -10,11 +10,11 @@ const GENERIC_ERROR_MESSAGE = '请求失败，请稍后重试'
 const request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_URL,
     timeout: 5000,
+    withCredentials: true,
 })
 
 const returnToLogin = () => {
     setTimeout(() => {
-        getRequestAuthAdapter().clearSession()
         location.href = '/login'
         ControlPanelStore().clearSelectedItem()
     }, 1000)
@@ -52,14 +52,8 @@ request.interceptors.response.use(
 
 request.interceptors.request.use(
     (config) => {
-        const authAdapter = getRequestAuthAdapter()
-        const token = authAdapter.getToken()
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`
-        }
-
         // 管理员：始终附加 X-Admin-Mode header
-        if (authAdapter.getRole() === ADMIN_ROLE) {
+        if (getRequestAuthAdapter().getRole() === ADMIN_ROLE) {
             config.headers['X-Admin-Mode'] = 'true'
         }
 

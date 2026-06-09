@@ -31,9 +31,6 @@
                 </div>
 
                 <div class="form-options">
-                    <el-checkbox v-model="autoLogin" class="auto-login-checkbox"
-                        >下次自动登录</el-checkbox
-                    >
                     <span class="forget-password" @click="openForgetPassword">忘记密码?</span>
                 </div>
 
@@ -98,31 +95,16 @@ const forgetPasswordVisible = ref(false)
 const registerVisible = ref(false)
 const userNameOrEmail = ref('')
 const password = ref('')
-const autoLogin = ref(false)
 
 const userStore = UserStore()
 
 onMounted(async () => {
-    // 如果用户选择了自动登录且本地有token，则尝试自动登录
-    if (autoLogin.value || (userStore.getToken() && localStorage.getItem('autoLogin') === 'true')) {
-        loading.value = true
-        try {
-            const userInfo = await userStore.autoLogin()
-            if (userInfo && Object.keys(userInfo).length > 0) {
-                ControlPanelStore().clearSelectedItem()
-                ElMessage.success('自动登录成功')
-                router.push({ name: 'AskTeacher' })
-                return
-            } else {
-                // 如果心跳失败或无法获取用户信息，则重新登录
-                await userStore.logout()
-                throw new Error('无法获取用户信息，请重新登录')
-            }
-        } catch {
-            ElMessage.error('自动登录失败，请手动登录')
-        } finally {
-            loading.value = false
-        }
+    // With cookie auth, try restoring session on page load.
+    // If the cookie is valid, bootstrapAuth restores user info.
+    const user = await userStore.bootstrapAuth()
+    if (user) {
+        ControlPanelStore().clearSelectedItem()
+        router.push({ name: 'AskTeacher' })
     }
 })
 
@@ -147,13 +129,6 @@ const handleLogin = async () => {
         const userInfo = await userStore.login(loginReq)
 
         if (userInfo) {
-            // 如果用户选择了自动登录，保存设置
-            if (autoLogin.value) {
-                localStorage.setItem('autoLogin', 'true')
-            } else {
-                localStorage.removeItem('autoLogin')
-            }
-
             ControlPanelStore().clearSelectedItem()
             ElMessage.success('登录成功')
             router.push({ name: 'AskTeacher' })
@@ -170,17 +145,6 @@ const guestLoading = ref(false)
 async function navigateToUnlogin() {
     guestLoading.value = true
     try {
-        // 如果 localStorage 已有 token，尝试 autoLogin
-        if (userStore.getToken()) {
-            const userInfo = await userStore.autoLogin()
-            if (userInfo && Object.keys(userInfo).length > 0) {
-                ControlPanelStore().clearSelectedItem()
-                ElMessage.success('自动登录成功')
-                router.push({ name: 'AskTeacher' })
-                return
-            }
-        }
-        // 无 token 或 autoLogin 失败，调用 guestLogin
         const userInfo = await userStore.guestLogin()
         if (userInfo) {
             ControlPanelStore().clearSelectedItem()
@@ -335,10 +299,6 @@ function isRateLimitError(error: unknown): boolean {
         align-items: center;
         margin-bottom: 24px;
         font-size: 14px;
-
-        .auto-login-checkbox {
-            color: #909399;
-        }
 
         .forget-password {
             color: #71b6ff;

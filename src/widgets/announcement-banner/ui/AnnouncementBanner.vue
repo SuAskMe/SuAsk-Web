@@ -75,7 +75,7 @@ let activeRequest: Promise<void> | null = null
 
 const visible = computed(
     () =>
-        !!userStore.token &&
+        !!userStore.isLoggedIn() &&
         !!announcement.value &&
         announcement.value.is_pinned &&
         announcement.value.id !== dismissedId.value,
@@ -91,7 +91,7 @@ function getDismissedId(): number {
 }
 
 async function fetchActive(force = false) {
-    if (!userStore.token) {
+    if (!userStore.isLoggedIn()) {
         announcement.value = null
         dismissedId.value = 0
         return
@@ -143,7 +143,7 @@ const handleEscKey = (event: KeyboardEvent) => {
 
 onMounted(() => fetchActive(true))
 watch(
-    () => userStore.token,
+    () => userStore.isLoggedIn(),
     () => fetchActive(true),
 )
 watch(
