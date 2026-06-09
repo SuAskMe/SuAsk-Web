@@ -45,7 +45,7 @@
             <Transition :name="slideDirection" mode="out-in">
                 <div v-if="activeSort === 0" key="time" class="question-list">
                     <BubbleCard
-                        v-for="(question, index) in sortLists.time"
+                        v-for="(question, index) in questionList"
                         :id="`question-${question.id}`"
                         :key="question.id"
                         :title="question.title"
@@ -64,7 +64,7 @@
                 </div>
                 <div v-else key="hot" class="question-list">
                     <BubbleCard
-                        v-for="(question, index) in sortLists.hot"
+                        v-for="(question, index) in questionList"
                         :id="`question-${question.id}`"
                         :key="question.id"
                         :title="question.title"
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, provide, reactive, ref } from 'vue'
+import { nextTick, onMounted, provide, ref } from 'vue'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import { BubbleCard } from '@/shared/ui/bubble-card'
 // import { AskDialog } from '@/features/question-compose'
@@ -122,10 +122,6 @@ const loading = ref(false)
 const searchKeyword = ref('')
 const activeSort = ref(0)
 const slideDirection = ref('slide-left')
-const sortLists = reactive<Record<'time' | 'hot', QuestionItem[]>>({
-    time: [],
-    hot: [],
-})
 const sortOptions = [
     { label: '时间', value: 0 },
     { label: '热度', value: 2 },
@@ -149,20 +145,13 @@ provide('teacher', {
     teacherName,
 })
 
-const syncActiveSortList = () => {
-    sortLists[activeSort.value === 2 ? 'hot' : 'time'] = [...questionList]
-}
-
 const Init = async () => {
     if (currentTeacherId.value != teacherId.value || questionList.length === 0) {
         InitStatus()
         loading.value = true
         currentTeacherId.value = teacherId.value
         await getNextQuestions(0)
-        syncActiveSortList()
         loading.value = false
-    } else {
-        syncActiveSortList()
     }
 }
 
@@ -170,7 +159,6 @@ const handleReachBottom = async () => {
     if (loading.value === false) {
         loading.value = true
         await getNextQuestions()
-        syncActiveSortList()
         loading.value = false
     }
 }
@@ -186,7 +174,6 @@ const handleSortChange = async (sortType: number) => {
     loading.value = true
     currentTeacherId.value = teacherId.value
     await refresh(sortType, searchKeyword.value.trim() || undefined)
-    syncActiveSortList()
     resetScrollPosition()
     loading.value = false
 }
@@ -201,7 +188,6 @@ const handleSearch = async () => {
     loading.value = true
     currentTeacherId.value = teacherId.value
     await refresh(activeSort.value, keyword)
-    syncActiveSortList()
     resetScrollPosition()
     loading.value = false
 }
@@ -211,7 +197,6 @@ const handleCancelSearch = async () => {
     loading.value = true
     currentTeacherId.value = teacherId.value
     await refresh(activeSort.value, '')
-    syncActiveSortList()
     resetScrollPosition()
     loading.value = false
 }
@@ -238,7 +223,6 @@ const observe = new IntersectionObserver(
 
 const handleQuestionPosted = (question: QuestionItem) => {
     questionList.unshift(question)
-    syncActiveSortList()
     nextTick(() => {
         const el = document.getElementById(`question-${question.id}`)
         if (el) {
