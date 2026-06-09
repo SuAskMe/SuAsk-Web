@@ -3,6 +3,7 @@
         ref="listPage"
         :img-index="bg_img_index"
         :loading="loading"
+        scroll-mask
         @reach-bottom="handleReachBottom"
     >
         <template #header>
