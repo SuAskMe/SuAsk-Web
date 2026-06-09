@@ -7,19 +7,39 @@
         @reach-bottom="handleReachBottom"
     >
         <template #header>
-            <QuestionHeader
-                @change-sort="changeSort"
-                @search="search"
-                @cancel-search="cancelSearch"
-                @return="navigateBack"
-                :title="teacherName + '的提问箱'"
-                search
-                return_btn
-                get_keywords_url="/questions/teacher/keywords"
-                has_sort_upvote
-                :teacher_id="teacherId"
-                sort_and_search
-            />
+            <QuestionHeader @return="navigateBack" :title="teacherName + '的提问箱'" return_btn />
+        </template>
+        <template #toolbar>
+            <div class="teacher-question-filter">
+                <div class="search-bar">
+                    <div class="search-wrapper">
+                        <svg-icon icon="search" color="#999" size="18px" class="search-icon" />
+                        <input
+                            v-model="searchKeyword"
+                            type="text"
+                            placeholder="搜索问题标题..."
+                            class="search-native-input"
+                            @keyup.enter="handleSearch"
+                        />
+                        <span v-if="searchKeyword" class="search-clear" @click="handleCancelSearch">
+                            &times;
+                        </span>
+                    </div>
+                </div>
+                <div class="sort-filter">
+                    <div class="sort-tabs">
+                        <button
+                            v-for="option in sortOptions"
+                            :key="option.value"
+                            type="button"
+                            :class="['sort-tab', { active: activeSort === option.value }]"
+                            @click="handleSortChange(option.value)"
+                        >
+                            {{ option.label }}
+                        </button>
+                    </div>
+                </div>
+            </div>
         </template>
         <TransitionGroup name="question">
             <BubbleCard
@@ -70,14 +90,18 @@ import {
     questionList,
     InitStatus,
     getNextQuestions,
-    onSearch,
-    onCancelSearch,
     refresh,
     currentTeacherId,
 } from './askTeacher'
 
 // const showDialog = ref(false);
 const loading = ref(false)
+const searchKeyword = ref('')
+const activeSort = ref(0)
+const sortOptions = [
+    { label: '时间', value: 0 },
+    { label: '热度', value: 2 },
+]
 
 const deviceType = DeviceTypeStore()
 const bg_img_index = useThemeBackgroundIndex()
@@ -114,32 +138,37 @@ const handleReachBottom = async () => {
     }
 }
 
-let sort_type: number | null = null
-
-const changeSort = async (sortType: number) => {
-    if (sort_type !== null && sortType === sort_type) {
+const handleSortChange = async (sortType: number) => {
+    if (sortType === activeSort.value) {
         return
     }
-    sort_type = sortType
+    activeSort.value = sortType
     loading.value = true
     currentTeacherId.value = teacherId.value
-    await refresh(sortType)
+    await refresh(sortType, searchKeyword.value.trim() || undefined)
     resetScrollPosition()
     loading.value = false
 }
 
-const search = async (keyword: string) => {
+const handleSearch = async () => {
+    const keyword = searchKeyword.value.trim()
+    if (!keyword) {
+        await handleCancelSearch()
+        return
+    }
+    searchKeyword.value = keyword
     loading.value = true
     currentTeacherId.value = teacherId.value
-    await onSearch(keyword)
+    await refresh(activeSort.value, keyword)
     resetScrollPosition()
     loading.value = false
 }
 
-const cancelSearch = async () => {
+const handleCancelSearch = async () => {
+    searchKeyword.value = ''
     loading.value = true
     currentTeacherId.value = teacherId.value
-    await onCancelSearch()
+    await refresh(activeSort.value, '')
     resetScrollPosition()
     loading.value = false
 }

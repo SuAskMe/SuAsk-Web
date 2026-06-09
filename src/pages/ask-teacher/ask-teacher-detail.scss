@@ -1,3 +1,99 @@
+.teacher-question-filter {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 16px;
+    position: relative;
+    z-index: 2;
+
+    .search-bar {
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: $su-bg-grey;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            border: 1.5px solid transparent;
+
+            &:focus-within {
+                background: #fff;
+                border-color: $su-blue;
+                box-shadow: 0 2px 12px rgba($su-blue, 0.15);
+            }
+
+            .search-icon {
+                flex-shrink: 0;
+            }
+
+            .search-native-input {
+                flex: 1;
+                border: none;
+                outline: none;
+                background: transparent;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.5;
+
+                &::placeholder {
+                    color: $su-grey-light;
+                }
+            }
+
+            .search-clear {
+                flex-shrink: 0;
+                cursor: pointer;
+                font-size: 18px;
+                color: $su-grey-light;
+                line-height: 1;
+                padding: 0 4px;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: $su-grey-dark;
+                }
+            }
+        }
+    }
+
+    .sort-filter {
+        display: flex;
+        justify-content: center;
+
+        .sort-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: #f0f2f5;
+            border-radius: 20px;
+
+            .sort-tab {
+                padding: 6px 18px;
+                border: none;
+                border-radius: 16px;
+                background: transparent;
+                font-size: 13px;
+                color: $su-grey;
+                cursor: pointer;
+                transition: all 0.25s ease;
+
+                &:hover {
+                    color: $su-grey-dark;
+                }
+
+                &.active {
+                    background: #fff;
+                    color: $su-blue;
+                    font-weight: 500;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+                }
+            }
+        }
+    }
+}
+
 .ask-btn {
     position: absolute;
     bottom: 56px;
