@@ -2,10 +2,10 @@ import { ControlPanelStore } from '@/shared/model'
 import { getDeviceId } from '@/shared/lib/device'
 import axios from 'axios'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { containsChineseCharacters } from '@/shared/lib/text'
 import { getRequestAuthAdapter } from './request-auth'
 
 const ADMIN_ROLE = 'admin'
+const GENERIC_ERROR_MESSAGE = '请求失败，请稍后重试'
 
 const request = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -30,12 +30,12 @@ request.interceptors.response.use(
                 returnToLogin()
                 return null
             } else {
-                const msg: string = res.data.message
+                const msg = typeof res.data.message === 'string' ? res.data.message : ''
                 if (msg.includes('登录')) {
                     ElMessage.error(msg)
                     returnToLogin()
-                } else if (containsChineseCharacters(res.data.message)) {
-                    ElMessage.error(res.data.message)
+                } else {
+                    ElMessage.error(GENERIC_ERROR_MESSAGE)
                 }
                 return null
             }

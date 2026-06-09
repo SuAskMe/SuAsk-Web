@@ -147,7 +147,7 @@ describe('request interceptors', () => {
         expect(globalThis.location.href).toBe('/login')
     })
 
-    it('shows backend Chinese messages and returns null for handled business errors', async () => {
+    it('shows a generic message for handled business errors instead of raw backend text', async () => {
         const request = await importRequestWithAuth()
         const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
         const handler = interceptor.handlers[0].fulfilled
@@ -161,7 +161,7 @@ describe('request interceptors', () => {
         })
 
         expect(result).toBeNull()
-        expect(mocks.error).toHaveBeenCalledWith('系统繁忙')
+        expect(mocks.error).toHaveBeenCalledWith('请求失败，请稍后重试')
     })
 
     it('returns null and shows a generic message on transport errors', async () => {
