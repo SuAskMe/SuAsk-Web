@@ -22,7 +22,6 @@ interface BubbleCardProps {
     imageUrls?: string[]
     showFavorite?: boolean
     isFavorite?: boolean
-    tag?: string
     center?: boolean
     clickCard?: (key: any) => void
     clickPin?: (key: any) => void
@@ -41,18 +40,6 @@ const containerStyle = computed(() => {
         width: '100%',
         maxWidth: props.width ? props.width : '100%',
         marginLeft: props.center || deviceType.isMobile ? '0' : '24px',
-    }
-})
-const tagStyle = computed(() => {
-    switch (props.tag) {
-        case '置顶':
-            return { border: 'solid 1px #ffc107', color: '#ffc107' }
-        case '未回答':
-            return { border: 'solid 1px #808080', color: '#808080' }
-        case '已回答':
-            return { border: 'solid 1px #71b6ff', color: '#71b6ff' }
-        default:
-            return { border: 'solid 1px #808080', color: '#808080' }
     }
 })
 </script>
@@ -98,8 +85,6 @@ const tagStyle = computed(() => {
                     <CardMediaGrid :image-urls="imageUrls" :width="props.width" />
                 </div>
                 <CardMetaRow
-                    :tag="tag"
-                    :tag-style="tagStyle"
                     :views="views"
                     :time-label="timeStr"
                     :show-favorite="showFavorite"

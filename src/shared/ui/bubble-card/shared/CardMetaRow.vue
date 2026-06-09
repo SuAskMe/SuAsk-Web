@@ -5,14 +5,10 @@ withDefaults(
     defineProps<{
         views: number
         timeLabel: string
-        tag?: string
-        tagStyle?: Record<string, string>
         showFavorite?: boolean
         isFavorite?: boolean
     }>(),
     {
-        tag: undefined,
-        tagStyle: undefined,
         showFavorite: false,
         isFavorite: false,
     },
@@ -23,9 +19,6 @@ defineEmits(['favorite'])
 
 <template>
     <div class="meta-row">
-        <div v-if="tag !== undefined" class="tag" :style="tagStyle">
-            {{ tag }}
-        </div>
         <div class="looks">
             <SvgIcon icon="eye" size="16" color="#818181" />
             <span class="counts">{{ views }}</span>
@@ -52,14 +45,6 @@ defineEmits(['favorite'])
     align-items: center;
     user-select: none;
     gap: 16px;
-}
-
-.tag {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    padding: 0px 4px 1px 4px;
 }
 
 .looks {
