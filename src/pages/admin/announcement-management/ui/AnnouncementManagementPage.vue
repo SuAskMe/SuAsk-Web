@@ -39,6 +39,7 @@
                         class="card-content"
                         :model-value="getPreview(item.contents)"
                     />
+                    <CardMediaGrid v-if="item.image_urls?.length" :image-urls="item.image_urls" />
                 </div>
             </div>
 
@@ -83,9 +84,7 @@
             <div v-if="createDialogVisible" class="modal-panel">
                 <div class="modal-header">
                     <h3>创建公告</h3>
-                    <button class="modal-close" @click="createDialogVisible = false">
-                        &times;
-                    </button>
+                    <button class="modal-close" @click="closeCreateDialog">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -115,9 +114,46 @@
                         <label>过期时间（可选）</label>
                         <input v-model="createForm.expires_at" type="datetime-local" />
                     </div>
+                    <div class="form-group">
+                        <label>公告图片（可选，最多 8 张）</label>
+                        <div class="image-upload-row">
+                            <button
+                                type="button"
+                                class="image-upload-btn"
+                                @click="pickCreateImages"
+                            >
+                                选择图片
+                            </button>
+                            <span class="image-hint">支持 jpg/png/gif/webp</span>
+                        </div>
+                        <input
+                            ref="createImagePicker"
+                            class="hidden-file-input"
+                            type="file"
+                            accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+                            multiple
+                            @change="pickCreateImagesImpl"
+                        />
+                        <div class="image-preview-grid" v-if="createImagePreviews.length > 0">
+                            <div
+                                class="image-preview-item"
+                                v-for="(img, index) in createImagePreviews"
+                                :key="img.id"
+                            >
+                                <img :src="img.url" alt="公告图片预览" />
+                                <button
+                                    type="button"
+                                    class="image-delete-btn"
+                                    @click="deleteCreateImage(index)"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn-cancel" @click="createDialogVisible = false">取消</button>
+                    <button class="btn-cancel" @click="closeCreateDialog">取消</button>
                     <button class="btn-confirm" :disabled="createLoading" @click="handleCreate">
                         {{ createLoading ? '创建中...' : '确认创建' }}
                     </button>
@@ -130,7 +166,7 @@
             <div v-if="editDialogVisible" class="modal-panel">
                 <div class="modal-header">
                     <h3>编辑公告</h3>
-                    <button class="modal-close" @click="editDialogVisible = false">&times;</button>
+                    <button class="modal-close" @click="closeEditDialog">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -160,9 +196,63 @@
                         <label>过期时间（可选）</label>
                         <input v-model="editForm.expires_at" type="datetime-local" />
                     </div>
+                    <div class="form-group">
+                        <label>公告图片（可选，最多 8 张）</label>
+                        <div class="image-upload-row">
+                            <button
+                                type="button"
+                                class="image-upload-btn"
+                                :disabled="editTotalImageCount >= maxImageCount"
+                                @click="pickEditImages"
+                            >
+                                添加图片
+                            </button>
+                            <span class="image-hint">支持 jpg/png/gif/webp</span>
+                        </div>
+                        <input
+                            ref="editImagePicker"
+                            class="hidden-file-input"
+                            type="file"
+                            accept="image/png,image/jpeg,image/jpg,image/gif,image/webp"
+                            multiple
+                            @change="pickEditImagesImpl"
+                        />
+                        <div class="image-preview-grid" v-if="editExistingImages.length > 0">
+                            <div
+                                class="image-preview-item"
+                                v-for="(img, index) in editExistingImages"
+                                :key="img.id"
+                            >
+                                <img :src="img.url" alt="公告已有图片" />
+                                <button
+                                    type="button"
+                                    class="image-delete-btn"
+                                    @click="deleteExistingImage(index)"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                        <div class="image-preview-grid" v-if="editImagePreviews.length > 0">
+                            <div
+                                class="image-preview-item"
+                                v-for="(img, index) in editImagePreviews"
+                                :key="img.id"
+                            >
+                                <img :src="img.url" alt="公告新增图片预览" />
+                                <button
+                                    type="button"
+                                    class="image-delete-btn"
+                                    @click="deleteEditImage(index)"
+                                >
+                                    &times;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn-cancel" @click="editDialogVisible = false">取消</button>
+                    <button class="btn-cancel" @click="closeEditDialog">取消</button>
                     <button class="btn-confirm" :disabled="editLoading" @click="handleEdit">
                         {{ editLoading ? '保存中...' : '保存修改' }}
                     </button>
@@ -197,7 +287,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
 import {
@@ -207,16 +297,25 @@ import {
     updateAnnouncement,
     deleteAnnouncement,
 } from '@/entities/announcement'
-import type { AnnouncementItem } from '@/entities/announcement'
+import type { AnnouncementImage, AnnouncementItem } from '@/entities/announcement'
 import { UserStore } from '@/entities/user'
 import { SidebarStore } from '@/widgets/app-shell/model'
 import QuestionHeader from '@/widgets/question-header'
 import MarkdownPreview from '@/shared/ui/markdown-preview'
+import CardMediaGrid from '@/shared/ui/card-media-grid'
+import {
+    createObjectUrlPreview,
+    revokeObjectUrlPreview,
+    revokeObjectUrlPreviews,
+    type ObjectUrlPreview,
+} from '@/features/question-compose/objectUrlPreviews'
 
 const router = useRouter()
 const userStore = UserStore()
 const sidebarStore = SidebarStore()
 const pageSize = 10
+const maxImageCount = 8
+let previewId = 1
 
 function toggleSidebar() {
     sidebarStore.toggle()
@@ -247,6 +346,11 @@ onMounted(() => {
         return
     }
     fetchList()
+})
+
+onBeforeUnmount(() => {
+    resetCreateImages()
+    resetEditImages()
 })
 
 // ==================== 列表数据 ====================
@@ -285,8 +389,8 @@ const showModal = computed(
 )
 
 function closeModal() {
-    createDialogVisible.value = false
-    editDialogVisible.value = false
+    closeCreateDialog()
+    closeEditDialog()
     deleteDialogVisible.value = false
 }
 
@@ -298,10 +402,63 @@ const createForm = reactive({
     is_pinned: false,
     expires_at: '',
 })
+const createImagePicker = ref<HTMLInputElement>()
+const createFiles = ref<File[]>([])
+const createImagePreviews = ref<ObjectUrlPreview[]>([])
+
+function resetCreateImages() {
+    revokeObjectUrlPreviews(createImagePreviews.value)
+    createFiles.value = []
+    createImagePreviews.value = []
+    if (createImagePicker.value) {
+        createImagePicker.value.value = ''
+    }
+}
 
 function openCreateDialog() {
     Object.assign(createForm, { title: '', content: '', is_pinned: false, expires_at: '' })
+    resetCreateImages()
     createDialogVisible.value = true
+}
+
+function closeCreateDialog() {
+    createDialogVisible.value = false
+    resetCreateImages()
+}
+
+function pickCreateImages() {
+    createImagePicker.value?.click()
+}
+
+function pickCreateImagesImpl(event: Event) {
+    const target = event.target as HTMLInputElement
+    const files = Array.from(target.files || [])
+    if (createFiles.value.length + files.length > maxImageCount) {
+        ElMessage.error(`最多只能上传${maxImageCount}张图片`)
+        target.value = ''
+        return
+    }
+    createFiles.value.push(...files)
+    createImagePreviews.value.push(
+        ...files.map((file) => createObjectUrlPreview(file, previewId++)),
+    )
+    target.value = ''
+}
+
+function deleteCreateImage(index: number) {
+    revokeObjectUrlPreview(createImagePreviews.value[index])
+    createFiles.value.splice(index, 1)
+    createImagePreviews.value.splice(index, 1)
+}
+
+function buildCreateFormData() {
+    const formData = new FormData()
+    formData.append('title', createForm.title.trim())
+    formData.append('content', createForm.content.trim())
+    formData.append('is_pinned', String(createForm.is_pinned))
+    formData.append('expires_at', createForm.expires_at || '')
+    createFiles.value.forEach((file) => formData.append('files', file))
+    return formData
 }
 
 async function handleCreate() {
@@ -315,14 +472,9 @@ async function handleCreate() {
     }
     createLoading.value = true
     try {
-        await createAnnouncement({
-            title: createForm.title.trim(),
-            content: createForm.content.trim(),
-            is_pinned: createForm.is_pinned,
-            expires_at: createForm.expires_at || '',
-        })
+        await createAnnouncement(buildCreateFormData())
         ElMessage.success('公告创建成功')
-        createDialogVisible.value = false
+        closeCreateDialog()
         fetchList()
     } catch {
         ElMessage.error('创建公告失败')
@@ -340,10 +492,71 @@ const editForm = reactive({
     is_pinned: false,
     expires_at: '',
 })
+const editImagePicker = ref<HTMLInputElement>()
+const editExistingImages = ref<AnnouncementImage[]>([])
+const editFiles = ref<File[]>([])
+const editImagePreviews = ref<ObjectUrlPreview[]>([])
+const editTotalImageCount = computed(() => editExistingImages.value.length + editFiles.value.length)
+
+function resetEditImages() {
+    revokeObjectUrlPreviews(editImagePreviews.value)
+    editExistingImages.value = []
+    editFiles.value = []
+    editImagePreviews.value = []
+    if (editImagePicker.value) {
+        editImagePicker.value.value = ''
+    }
+}
+
+function closeEditDialog() {
+    editDialogVisible.value = false
+    resetEditImages()
+}
+
+function pickEditImages() {
+    editImagePicker.value?.click()
+}
+
+function pickEditImagesImpl(event: Event) {
+    const target = event.target as HTMLInputElement
+    const files = Array.from(target.files || [])
+    if (editTotalImageCount.value + files.length > maxImageCount) {
+        ElMessage.error(`最多只能上传${maxImageCount}张图片`)
+        target.value = ''
+        return
+    }
+    editFiles.value.push(...files)
+    editImagePreviews.value.push(...files.map((file) => createObjectUrlPreview(file, previewId++)))
+    target.value = ''
+}
+
+function deleteExistingImage(index: number) {
+    editExistingImages.value.splice(index, 1)
+}
+
+function deleteEditImage(index: number) {
+    revokeObjectUrlPreview(editImagePreviews.value[index])
+    editFiles.value.splice(index, 1)
+    editImagePreviews.value.splice(index, 1)
+}
+
+function buildEditFormData() {
+    const formData = new FormData()
+    formData.append('id', String(editForm.id))
+    formData.append('title', editForm.title.trim())
+    formData.append('content', editForm.content.trim())
+    formData.append('is_pinned', String(editForm.is_pinned))
+    formData.append('expires_at', editForm.expires_at || '')
+    formData.append('sync_images', 'true')
+    formData.append('keep_image_ids', JSON.stringify(editExistingImages.value.map((img) => img.id)))
+    editFiles.value.forEach((file) => formData.append('files', file))
+    return formData
+}
 
 async function openEditDialog(item: AnnouncementItem) {
     editLoading.value = true
     editDialogVisible.value = true
+    resetEditImages()
     try {
         const detail = await getAnnouncementDetail(item.id)
         Object.assign(editForm, {
@@ -353,8 +566,9 @@ async function openEditDialog(item: AnnouncementItem) {
             is_pinned: detail.is_pinned,
             expires_at: toDatetimeLocal(detail.expires_at),
         })
+        editExistingImages.value = detail.images || []
     } catch {
-        editDialogVisible.value = false
+        closeEditDialog()
         ElMessage.error('获取公告详情失败')
     } finally {
         editLoading.value = false
@@ -372,15 +586,9 @@ async function handleEdit() {
     }
     editLoading.value = true
     try {
-        await updateAnnouncement({
-            id: editForm.id,
-            title: editForm.title.trim(),
-            content: editForm.content.trim(),
-            is_pinned: editForm.is_pinned,
-            expires_at: editForm.expires_at || '',
-        })
+        await updateAnnouncement(buildEditFormData())
         ElMessage.success('公告更新成功')
-        editDialogVisible.value = false
+        closeEditDialog()
         fetchList()
     } catch {
         ElMessage.error('更新公告失败')
@@ -723,6 +931,75 @@ async function handleDelete() {
         width: auto;
         margin: 0;
     }
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.image-upload-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.image-upload-btn {
+    padding: 7px 14px;
+    border: 1px solid var(--su-blue, #409eff);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--su-blue, #409eff);
+    font-size: 13px;
+    cursor: pointer;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.image-hint {
+    color: #999;
+    font-size: 12px;
+}
+
+.image-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.image-preview-item {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    overflow: hidden;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    background: #f8fafc;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+}
+
+.image-delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.58);
+    color: #fff;
+    line-height: 18px;
+    cursor: pointer;
 }
 
 .modal-footer {

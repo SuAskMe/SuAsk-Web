@@ -16,13 +16,6 @@
         />
         <control-panel-item
             class="control-panel-item"
-            id="announcements"
-            icon="pushpin"
-            text="公告中心"
-            :jump-to-path="ANNOUNCEMENT_LIST_PATH"
-        />
-        <control-panel-item
-            class="control-panel-item"
             id="ask-history"
             icon="chat-history"
             text="历史提问"
@@ -54,7 +47,6 @@
 
 <script setup lang="ts">
 import ControlPanelItem from './ControlPanelItem.vue'
-import { ANNOUNCEMENT_LIST_PATH } from '@/entities/announcement'
 </script>
 
 <style scoped lang="scss">

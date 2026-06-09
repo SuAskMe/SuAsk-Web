@@ -1,3 +1,8 @@
+export interface AnnouncementImage {
+    id: number
+    url: string
+}
+
 export interface AnnouncementItem {
     id: number
     title: string
@@ -7,6 +12,7 @@ export interface AnnouncementItem {
     published_at: number
     expires_at: number
     comment_cnt: number
+    image_urls: string[]
 }
 
 export interface AnnouncementListRes {
@@ -24,6 +30,7 @@ export interface AnnouncementDetailRes {
     published_at: number
     expires_at: number
     image_urls: string[]
+    images: AnnouncementImage[]
     comments: Array<{
         id: number
         user_id: number
@@ -35,8 +42,19 @@ export interface AnnouncementDetailRes {
     }>
 }
 
+export interface ActiveAnnouncementItem {
+    id: number
+    title: string
+    contents: string
+    author_name: string
+    is_pinned: boolean
+    published_at: number
+    expires_at: number
+    image_urls: string[]
+}
+
 export interface ActiveAnnouncementRes {
-    announcement: AnnouncementItem | null
+    announcement: ActiveAnnouncementItem | null
 }
 
 export interface CreateAnnouncementReq {

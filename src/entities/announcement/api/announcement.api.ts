@@ -3,8 +3,6 @@ import type {
     AnnouncementListRes,
     AnnouncementDetailRes,
     ActiveAnnouncementRes,
-    CreateAnnouncementReq,
-    UpdateAnnouncementReq,
 } from '../model/announcement.model'
 
 enum Api {
@@ -39,13 +37,13 @@ export async function getAnnouncementDetail(id: number): Promise<AnnouncementDet
     })
 }
 
-export async function createAnnouncement(data: CreateAnnouncementReq): Promise<{ id: number }> {
+export async function createAnnouncement(data: FormData): Promise<{ id: number }> {
     return request.post(Api.LIST, data).then((res) => {
         if (res) return res.data
     })
 }
 
-export async function updateAnnouncement(data: UpdateAnnouncementReq): Promise<{ id: number }> {
+export async function updateAnnouncement(data: FormData): Promise<{ id: number }> {
     return request.put(Api.LIST, data).then((res) => {
         if (res) return res.data
     })

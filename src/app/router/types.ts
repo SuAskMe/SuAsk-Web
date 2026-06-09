@@ -7,6 +7,7 @@ export interface AppRouteRecordRaw extends RouteMeta {
     meta: RouteMeta
     component?: Component | string
     components?: Component
+    redirect?: string
     children?: AppRouteRecordRaw[]
     fullPath?: string
 }

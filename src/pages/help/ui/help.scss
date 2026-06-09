@@ -54,8 +54,62 @@
         line-height: 1.6;
         color: #333;
 
+        &.announcement-content {
+            max-width: 980px;
+        }
+
         @media screen and (max-width: 768px) {
             width: 90%;
+        }
+
+        .help-tabs-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .help-tabs-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            background: #eef2f7;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 999px;
+        }
+
+        .help-tab-item {
+            min-width: 108px;
+            padding: 8px 18px;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+            background: transparent;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition:
+                color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+
+            &:hover {
+                color: $su-blue;
+            }
+
+            &.active {
+                color: $su-blue;
+                background: #fff;
+                box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+            }
+        }
+
+        .help-tab-panel {
+            min-height: 240px;
+        }
+
+        .announcement-tab-panel {
+            padding-bottom: 12px;
         }
 
         .help-card {
@@ -145,6 +199,20 @@
     .help-main {
         .help-content {
             padding: 16px 12px 40px;
+
+            .help-tabs-container {
+                margin-bottom: 16px;
+            }
+
+            .help-tabs-wrapper {
+                width: 100%;
+            }
+
+            .help-tab-item {
+                flex: 1;
+                min-width: 0;
+                padding: 8px 12px;
+            }
 
             h1 {
                 font-size: 1.8em;
