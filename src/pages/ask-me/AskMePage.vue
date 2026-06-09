@@ -61,6 +61,22 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-status-badges" aria-label="提问状态">
+                                            <span
+                                                :class="[
+                                                    'status-badge',
+                                                    getQuestionStatusClass(question),
+                                                ]"
+                                            >
+                                                {{ getQuestionStatusText(question) }}
+                                            </span>
+                                            <span
+                                                v-if="showPinnedBadge(question)"
+                                                class="status-badge pinned"
+                                            >
+                                                已置顶
+                                            </span>
+                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -136,6 +152,22 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-status-badges" aria-label="提问状态">
+                                            <span
+                                                :class="[
+                                                    'status-badge',
+                                                    getQuestionStatusClass(question),
+                                                ]"
+                                            >
+                                                {{ getQuestionStatusText(question) }}
+                                            </span>
+                                            <span
+                                                v-if="showPinnedBadge(question)"
+                                                class="status-badge pinned"
+                                            >
+                                                已置顶
+                                            </span>
+                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -211,6 +243,22 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-status-badges" aria-label="提问状态">
+                                            <span
+                                                :class="[
+                                                    'status-badge',
+                                                    getQuestionStatusClass(question),
+                                                ]"
+                                            >
+                                                {{ getQuestionStatusText(question) }}
+                                            </span>
+                                            <span
+                                                v-if="showPinnedBadge(question)"
+                                                class="status-badge pinned"
+                                            >
+                                                已置顶
+                                            </span>
+                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -286,6 +334,22 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-status-badges" aria-label="提问状态">
+                                            <span
+                                                :class="[
+                                                    'status-badge',
+                                                    getQuestionStatusClass(question),
+                                                ]"
+                                            >
+                                                {{ getQuestionStatusText(question) }}
+                                            </span>
+                                            <span
+                                                v-if="showPinnedBadge(question)"
+                                                class="status-badge pinned"
+                                            >
+                                                已置顶
+                                            </span>
+                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -360,6 +424,22 @@
                                 <div class="question-detail">
                                     <div class="question-title-row">
                                         <h3 class="question-title">{{ question.title }}</h3>
+                                        <div class="question-status-badges" aria-label="提问状态">
+                                            <span
+                                                :class="[
+                                                    'status-badge',
+                                                    getQuestionStatusClass(question),
+                                                ]"
+                                            >
+                                                {{ getQuestionStatusText(question) }}
+                                            </span>
+                                            <span
+                                                v-if="showPinnedBadge(question)"
+                                                class="status-badge pinned"
+                                            >
+                                                已置顶
+                                            </span>
+                                        </div>
                                     </div>
                                     <p class="question-summary">{{ question.contents }}</p>
                                     <CardMediaGrid
@@ -493,6 +573,20 @@ const navigateTo = (question: QFMItem) => {
         })
     }
 }
+
+const getQuestionStatusText = (question: QFMItem) => {
+    if (question.tag === '已删除') return '已删除'
+    if (question.tag === '已回答') return '已回答'
+    return '未回答'
+}
+
+const getQuestionStatusClass = (question: QFMItem) => {
+    if (question.tag === '已删除') return 'deleted'
+    if (question.tag === '已回答') return 'answered'
+    return 'unanswered'
+}
+
+const showPinnedBadge = (question: QFMItem) => question.is_pinned && question.tag !== '已删除'
 
 // Store separate lists for each tab to prevent double rendering and card drifting during transitions
 const tabLists = reactive<Record<string, QFMItem[]>>({
