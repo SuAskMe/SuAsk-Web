@@ -157,9 +157,9 @@
         }
 
         &.answered {
-            color: #047857;
-            background: #ecfdf5;
-            border-color: #a7f3d0;
+            color: #10b981;
+            background: #f0fdf4;
+            border-color: #bbf7d0;
         }
 
         &.unanswered {
@@ -169,15 +169,15 @@
         }
 
         &.pinned {
-            color: #a16207;
-            background: #fef9c3;
-            border-color: #fde047;
+            color: #eab308;
+            background: #fefce8;
+            border-color: #fef08a;
         }
 
         &.deleted {
-            color: #b91c1c;
-            background: #fef2f2;
-            border-color: #fecaca;
+            color: #f87171;
+            background: #fff1f2;
+            border-color: #fecdd3;
         }
     }
 
