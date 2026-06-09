@@ -27,7 +27,7 @@
                         v-for="tab in tabs"
                         :key="tab.key"
                         :class="['tab-item', { active: activeTab === tab.key }]"
-                        @click="activeTab = tab.key"
+                        @click="handleTabChange(tab.key)"
                     >
                         {{ tab.label }}
                     </div>
@@ -729,18 +729,20 @@ const tabOrder = ['unanswered', 'answered', 'top', 'all', 'deleted']
 const slideDirection = ref('slide-left')
 const listKey = ref(0)
 
-watch(
-    () => activeTab.value,
-    (newVal, oldVal) => {
-        const oldIndex = tabOrder.indexOf(oldVal || 'all')
-        const newIndex = tabOrder.indexOf(newVal)
-        slideDirection.value = newIndex > oldIndex ? 'slide-left' : 'slide-right'
-        listKey.value++
+const handleTabChange = async (nextTab: string) => {
+    if (nextTab === activeTab.value) {
+        return
+    }
 
-        Init()
-        resetScrollPosition()
-    },
-)
+    const oldIndex = tabOrder.indexOf(activeTab.value)
+    const newIndex = tabOrder.indexOf(nextTab)
+    slideDirection.value = newIndex > oldIndex ? 'slide-left' : 'slide-right'
+    listKey.value++
+
+    activeTab.value = nextTab
+    await Init()
+    resetScrollPosition()
+}
 
 onMounted(() => {
     Init()
