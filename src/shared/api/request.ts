@@ -26,6 +26,9 @@ request.interceptors.response.use(
             if (res.data.code == 0) {
                 return res.data
             } else if (res.data.code == 401) {
+                if (location.pathname === '/login') {
+                    return null
+                }
                 ElMessage.error('登录超时，请重新登录')
                 returnToLogin()
                 return null
@@ -44,7 +47,24 @@ request.interceptors.response.use(
             return null
         }
     },
-    () => {
+    (error) => {
+        if (axios.isAxiosError(error) && error.response) {
+            if (error.response.status === 401) {
+                if (location.pathname === '/login') {
+                    return null
+                }
+                ElMessage.error('登录超时，请重新登录')
+                returnToLogin()
+                return null
+            }
+
+            const msg = typeof error.response.data?.message === 'string' ? error.response.data.message : ''
+            if (msg) {
+                ElMessage.error(msg)
+                return null
+            }
+        }
+
         ElMessage.error('请求无响应')
         return null
     },

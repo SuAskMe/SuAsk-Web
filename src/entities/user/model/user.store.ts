@@ -11,6 +11,7 @@ export const UserStore = defineStore(
     () => {
         const userInfo = ref<User | null>(null)
         const authReady = ref(false)
+        let bootstrapPromise: Promise<User | null> | null = null
 
         function getUser(): User {
             return userInfo.value || ({} as User)
@@ -30,21 +31,37 @@ export const UserStore = defineStore(
 
         function resetState() {
             userInfo.value = null
+            authReady.value = false
+            bootstrapPromise = null
         }
 
         async function bootstrapAuth(): Promise<User | null> {
-            // When cookie auth is active, hitting /user restores the session.
-            // If the cookie exists and is valid, the backend returns user info.
-            // If no cookie / expired, the backend returns 401 → request interceptor
-            // returns null → we treat as unauthenticated.
-            try {
-                const user = await getUserInfo()
-                authReady.value = true
-                return user
-            } catch {
-                authReady.value = true
-                return null
+            if (authReady.value) {
+                return userInfo.value
             }
+
+            if (bootstrapPromise) {
+                return bootstrapPromise
+            }
+
+            bootstrapPromise = (async () => {
+                // When cookie auth is active, hitting /user restores the session.
+                // If the cookie exists and is valid, the backend returns user info.
+                // If no cookie / expired, the backend returns 401 → request interceptor
+                // returns null → we treat as unauthenticated.
+                try {
+                    const user = await getUserInfo()
+                    authReady.value = true
+                    return user
+                } catch {
+                    authReady.value = true
+                    return null
+                } finally {
+                    bootstrapPromise = null
+                }
+            })()
+
+            return bootstrapPromise
         }
 
         async function login(req: LoginReq): Promise<User | null> {
@@ -62,11 +79,14 @@ export const UserStore = defineStore(
         }
 
         async function getUserInfo(): Promise<User | null> {
+            await new Promise((resolve) => setTimeout(resolve, 0))
             const user = await getUserInfoApi()
             if (!user) {
+                resetState()
                 return null
             }
             setUser(user)
+            authReady.value = true
             return user
         }
 

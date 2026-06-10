@@ -99,6 +99,16 @@ const password = ref('')
 const userStore = UserStore()
 
 onMounted(async () => {
+    if (userStore.isLoggedIn()) {
+        ControlPanelStore().clearSelectedItem()
+        router.push({ name: 'AskTeacher' })
+        return
+    }
+
+    if (userStore.authReady) {
+        return
+    }
+
     // With cookie auth, try restoring session on page load.
     // If the cookie is valid, bootstrapAuth restores user info.
     const user = await userStore.bootstrapAuth()

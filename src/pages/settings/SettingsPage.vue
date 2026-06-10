@@ -6,6 +6,7 @@
         <div class="setting-scroll-area">
             <main v-if="isGuest" class="main-container">
                 <GuestUpgradeNotice />
+                <AccountActionsSection icon="setting-lock" is-guest @logout="showLogoutDialog" />
             </main>
 
             <template v-else>

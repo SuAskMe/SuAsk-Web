@@ -82,7 +82,7 @@ describe('request interceptors', () => {
         mocks.getRole.mockReturnValue('')
         mocks.getDeviceId.mockReturnValue('device-123')
         Object.defineProperty(globalThis, 'location', {
-            value: { href: '' },
+            value: { href: '', pathname: '/ask-teacher' },
             writable: true,
             configurable: true,
         })
@@ -143,6 +143,34 @@ describe('request interceptors', () => {
         vi.advanceTimersByTime(1000)
 
         expect(mocks.clearSelectedItem).toHaveBeenCalled()
+        expect(globalThis.location.href).toBe('/login')
+    })
+
+    it('does not redirect again when login page receives a business 401', async () => {
+        Object.defineProperty(globalThis, 'location', {
+            value: { href: '/login', pathname: '/login' },
+            writable: true,
+            configurable: true,
+        })
+
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const result = await handler({
+            status: 200,
+            data: {
+                code: 401,
+                message: 'expired',
+            },
+        })
+
+        expect(result).toBeNull()
+        expect(mocks.error).not.toHaveBeenCalled()
+
+        vi.advanceTimersByTime(1000)
+
+        expect(mocks.clearSelectedItem).not.toHaveBeenCalled()
         expect(globalThis.location.href).toBe('/login')
     })
 

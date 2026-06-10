@@ -7,7 +7,7 @@
     >
         <div class="account-actions-container">
             <div class="action-list">
-                <div class="action-item" @click="$emit('resetPassword')">
+                <div v-if="!isGuest" class="action-item" @click="$emit('resetPassword')">
                     <div class="action-item-left">
                         <component :is="Lock" class="action-icon" />
                         <span class="action-title">重置密码</span>
@@ -23,20 +23,22 @@
                 </div>
             </div>
 
-            <div class="danger-zone-divider"></div>
+            <template v-if="!isGuest">
+                <div class="danger-zone-divider"></div>
 
-            <div class="danger-zone-panel">
-                <div class="danger-zone-header">
-                    <component :is="WarningFilled" class="danger-header-icon" />
-                    <div class="danger-header-text">
-                        <h4 class="danger-title">敏感操作区域</h4>
-                        <p class="danger-desc">
-                            请谨慎操作，注销账户将永久清除您的账号信息，此操作不可恢复。
-                        </p>
+                <div class="danger-zone-panel">
+                    <div class="danger-zone-header">
+                        <component :is="WarningFilled" class="danger-header-icon" />
+                        <div class="danger-header-text">
+                            <h4 class="danger-title">敏感操作区域</h4>
+                            <p class="danger-desc">
+                                请谨慎操作，注销账户将永久清除您的账号信息，此操作不可恢复。
+                            </p>
+                        </div>
                     </div>
+                    <button class="deactivate-btn" @click="$emit('deactivate')">注销账号</button>
                 </div>
-                <button class="deactivate-btn" @click="$emit('deactivate')">注销账号</button>
-            </div>
+            </template>
         </div>
     </SettingSectionCard>
 </template>
@@ -47,6 +49,7 @@ import SettingSectionCard from './SettingSectionCard.vue'
 
 defineProps<{
     icon?: string
+    isGuest?: boolean
 }>()
 
 defineEmits(['resetPassword', 'logout', 'deactivate'])

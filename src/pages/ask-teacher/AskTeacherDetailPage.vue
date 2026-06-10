@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, provide, ref } from 'vue'
+import { nextTick, onMounted, provide, ref, watch } from 'vue'
 import QuestionListPage, { useQuestionListPageShell } from '@/widgets/question-list-page'
 import { BubbleCard } from '@/shared/ui/bubble-card'
 // import { AskDialog } from '@/features/question-compose'
@@ -266,7 +266,8 @@ const getRouteParam = (param: unknown) => {
 }
 
 const resolveTeacherName = async () => {
-    const routeTeacherName = getRouteParam(route.params.teacher_name)
+    const routeTeacherName =
+        getRouteParam(route.params.teacher_name) || getRouteParam(route.query.teacher_name)
     if (routeTeacherName) {
         teacherName.value = routeTeacherName
         return
@@ -281,12 +282,32 @@ const resolveTeacherName = async () => {
     }
 }
 
-onMounted(async () => {
-    teacherId.value = Number(route.params.teacher_id)
+const loadTeacherQuestions = async (newTeacherId: number) => {
+    teacherId.value = newTeacherId
+    searchKeyword.value = ''
+    activeSort.value = 0
+    slideDirection.value = 'slide-left'
     await resolveTeacherName()
     document.title = `${teacherName.value}的提问箱`
-    Init()
+    await Init()
+    resetScrollPosition()
+}
+
+onMounted(async () => {
+    await loadTeacherQuestions(Number(route.params.teacher_id))
 })
+
+watch(
+    () => route.params.teacher_id,
+    async (teacherIdParam, previousTeacherIdParam) => {
+        const nextTeacherId = Number(teacherIdParam)
+        const previousTeacherId = Number(previousTeacherIdParam)
+        if (!nextTeacherId || nextTeacherId === previousTeacherId) {
+            return
+        }
+        await loadTeacherQuestions(nextTeacherId)
+    },
+)
 </script>
 
 <style scoped src="./ask-teacher-detail.scss"></style>
