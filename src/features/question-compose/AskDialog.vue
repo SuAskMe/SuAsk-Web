@@ -236,6 +236,7 @@ import 'element-plus/es/components/dialog/style/css'
 import 'element-plus/es/components/image/style/css'
 import SvgIcon from '@/shared/ui/svg-icon'
 import { UserAvatar } from '@/shared/ui/user-avatar'
+import { compressionBlob } from '@/shared/lib/image-compression'
 import { inject, onBeforeUnmount, ref, type Ref } from 'vue'
 import { loadDraftDb, type Question } from './draftDb'
 import { ComposeDialogStore } from '@/features/question-compose/model'
@@ -349,7 +350,7 @@ async function openDraft() {
     await getDrafts()
 }
 
-function pickImageImpl(event: Event) {
+async function pickImageImpl(event: Event) {
     if (questionContent.value.fileList && questionContent.value.imageList) {
         const target = event.target as HTMLInputElement
         const files = target.files
@@ -357,9 +358,15 @@ function pickImageImpl(event: Event) {
             ElMessage.error('最多只能上传8张图片')
             return
         }
-        questionContent.value.fileList.push(...files)
-        for (let i = 0; i < files.length; i++) {
-            questionContent.value.imageList.push(createObjectUrlPreview(files[i], GenId()))
+        const compressedFiles = await Promise.all(
+            Array.from(files).map(async (file) => {
+                const compressedBlob = await compressionBlob(file, file.type, 0.8, 1600, 1600)
+                return new File([compressedBlob], file.name, { type: file.type })
+            }),
+        )
+        questionContent.value.fileList.push(...compressedFiles)
+        for (const file of compressedFiles) {
+            questionContent.value.imageList.push(createObjectUrlPreview(file, GenId()))
         }
         if (imgPicker.value) imgPicker.value.value = ''
     }
