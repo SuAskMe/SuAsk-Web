@@ -197,8 +197,8 @@ const emit = defineEmits<{
 ### 2. API服务模板
 
 ```typescript
-import request from '@/utils/http/request'
-import type { User } from '@/model/user.model'
+import request from '@/shared/api/request'
+import type { User } from '@/entities/user'
 
 export const userApi = {
   /**
@@ -230,8 +230,8 @@ export const userApi = {
 
 ```typescript
 import { defineStore } from 'pinia'
-import type { User } from '@/model/user.model'
-import { userApi } from '@/api/user/user.api'
+import type { User } from '@/entities/user'
+import { userApi } from '@/entities/user'
 import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
@@ -284,12 +284,12 @@ export const useUserStore = defineStore('user', () => {
 
 ```typescript
 import type { AppRouteRecordRaw } from '@/router/types'
-import { Role } from '@/model/user.model'
+import { Role } from '@/entities/user'
 
 export const UserRoute: AppRouteRecordRaw = {
   path: '/user',
   name: 'User',
-  component: () => import('@/views/user/User.vue'),
+  component: () => import('@/pages/user-profile'),
   meta: {
     title: '用户中心',
     roles: [Role.STUDENT, Role.TEACHER]

@@ -1,0 +1,227 @@
+// 基础布局与主容器
+.setting-page-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8fafc;
+    background-image:
+        radial-gradient(circle at 5% 10%, rgba(113, 182, 255, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 95% 90%, rgba(113, 182, 255, 0.04) 0%, transparent 40%),
+        linear-gradient(rgba(113, 182, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(113, 182, 255, 0.02) 1px, transparent 1px);
+    background-size:
+        100% 100%,
+        100% 100%,
+        24px 24px,
+        24px 24px;
+}
+
+.header {
+    border-bottom: solid 1px rgba(17, 24, 39, 0.05);
+    height: 60px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.setting-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(113, 182, 255, 0.2);
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+}
+
+.main-container {
+    position: relative;
+    max-height: 100%;
+    padding: 3rem 14%;
+    box-sizing: border-box;
+
+    @media (max-width: 1200px) {
+        padding: 2.5rem 8%;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem 5%;
+    }
+}
+
+// Settings Hero 欢迎区
+.settings-hero {
+    margin-bottom: 2.25rem;
+    animation: heroFadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) both;
+
+    .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.8px;
+    }
+
+    .hero-desc {
+        font-size: 0.92rem;
+        color: #6b7280;
+        margin: 0;
+        line-height: 1.5;
+        letter-spacing: 0.1px;
+    }
+}
+
+// 自定义底部保存提示浮条 (Toast)
+.save-reminder-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(230, 162, 60, 0.35);
+    padding: 0.8rem 1.6rem;
+    border-radius: 12px; // 与卡片圆角相衬
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08),
+        0 4px 12px rgba(230, 162, 60, 0.04),
+        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+
+    .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        white-space: nowrap;
+    }
+
+    .toast-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #d97706;
+        letter-spacing: 0.2px;
+    }
+
+    .toast-save-btn {
+        height: 32px;
+        padding: 0 1.25rem;
+        border-radius: 8px;
+        background-color: #71b6ff;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+        box-shadow: 0 4px 10px rgba(113, 182, 255, 0.25);
+
+        &:hover {
+            background-color: #4891e0;
+            box-shadow: 0 6px 14px rgba(113, 182, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}
+
+// 按钮容器与大保存按钮
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 2.5rem 0;
+
+    .save-button-custom {
+        min-width: 200px;
+        height: 46px;
+        border-radius: 10px; // 与卡片更加和谐的圆角
+        background: linear-gradient(135deg, #71b6ff, #449eff);
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(113, 182, 255, 0.25);
+        transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(113, 182, 255, 0.38);
+            filter: brightness(1.03);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}
+
+// 头像裁剪相关
+.cropper-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+// 动画
+@keyframes heroFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Vue Transition 动画类
+.toast-slide-enter-active {
+    animation: toastSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast-slide-leave-active {
+    animation: toastSlideOut 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes toastSlideIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 30px) scale(0.92);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+}
+
+@keyframes toastSlideOut {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 20px) scale(0.95);
+    }
+}

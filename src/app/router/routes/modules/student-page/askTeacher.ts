@@ -1,0 +1,42 @@
+import type { AppRouteRecordRaw } from '@/app/router/types'
+import { isMobile } from '@/shared/lib/device'
+
+const WebHome = () => import('@/app/layouts/main-layout')
+const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
+const AskTeacher = () => import('@/pages/ask-teacher/AskTeacherDetailPage.vue')
+const TeacherQuestionBox = () => import('@/pages/ask-teacher')
+
+export const AskTeacherRoute: AppRouteRecordRaw = {
+    path: '/ask-teacher',
+    name: 'AskTeacherRoot',
+    meta: {},
+    props: {
+        userType: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop',
+    },
+    component: WebHome,
+    children: [
+        {
+            path: '',
+            name: 'AskTeacher',
+            meta: {
+                title: '问老师',
+            },
+            components: {
+                default: TeacherQuestionBox,
+                left_side: LeftSidebar,
+            },
+        },
+        {
+            path: ':teacher_id/:teacher_name?',
+            name: 'AskTeacherDetail',
+            meta: {
+                NoAlive: true,
+            },
+            components: {
+                default: AskTeacher,
+                left_side: LeftSidebar,
+            },
+        },
+    ],
+}

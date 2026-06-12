@@ -1,13 +1,1 @@
-import type { AppRouteRecordRaw } from '../types'
-import NotFound from '@/views/404.vue'
-
-export const PageNotFound: AppRouteRecordRaw = {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: NotFound,
-    meta: {
-        title: 'ErrorPage',
-        hideBreadcrumb: true,
-        hideMenu: true,
-    },
-}
+export * from '@/app/router/routes/basic'

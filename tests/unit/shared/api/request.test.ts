@@ -1,0 +1,207 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+type InterceptorRecord<TFulfilled, TRejected = unknown> = {
+    handlers: Array<{
+        fulfilled: TFulfilled
+        rejected: TRejected
+    }>
+}
+
+type RequestConfig = {
+    headers: Record<string, string>
+}
+
+type ResponsePayload = {
+    status: number
+    data: {
+        code?: number
+        message?: string
+        payload?: unknown
+    }
+}
+
+type RequestFulfilled = (config: RequestConfig) => RequestConfig | Promise<RequestConfig>
+type ResponseFulfilled = (response: ResponsePayload) => unknown
+type ResponseRejected = (error: unknown) => unknown
+
+const mocks = vi.hoisted(() => ({
+    error: vi.fn(),
+    getToken: vi.fn(),
+    getRole: vi.fn(),
+    setToken: vi.fn(),
+    resetState: vi.fn(),
+    clearSelectedItem: vi.fn(),
+    getDeviceId: vi.fn(),
+}))
+
+vi.mock('element-plus/es/components/message/index.mjs', () => ({
+    ElMessage: {
+        error: mocks.error,
+    },
+}))
+
+vi.mock('@/shared/model', () => ({
+    ControlPanelStore: () => ({
+        clearSelectedItem: mocks.clearSelectedItem,
+    }),
+}))
+
+vi.mock('@/shared/lib/device', () => ({
+    getDeviceId: mocks.getDeviceId,
+}))
+
+vi.mock('@/shared/api/request-auth', () => ({
+    getRequestAuthAdapter: () => ({
+        getRole: mocks.getRole,
+    }),
+    configureRequestAuth: () => {},
+    resetRequestAuth: () => {},
+}))
+
+async function importRequestWithAuth() {
+    const { configureRequestAuth } = await import('@/shared/api/request-auth')
+    configureRequestAuth({
+        getRole: mocks.getRole,
+    })
+
+    return (await import('@/shared/api/request')).default
+}
+
+describe('request interceptors', () => {
+    beforeEach(() => {
+        vi.resetModules()
+        vi.useFakeTimers()
+        mocks.error.mockReset()
+        mocks.getToken.mockReset()
+        mocks.getRole.mockReset()
+        mocks.setToken.mockReset()
+        mocks.resetState.mockReset()
+        mocks.clearSelectedItem.mockReset()
+        mocks.getDeviceId.mockReset()
+        mocks.getToken.mockReturnValue('')
+        mocks.getRole.mockReturnValue('')
+        mocks.getDeviceId.mockReturnValue('device-123')
+        Object.defineProperty(globalThis, 'location', {
+            value: { href: '', pathname: '/ask-teacher' },
+            writable: true,
+            configurable: true,
+        })
+    })
+
+    afterEach(() => {
+        vi.useRealTimers()
+    })
+
+    it('adds admin mode and device headers on requests', async () => {
+        mocks.getRole.mockReturnValue('admin')
+
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.request as unknown as InterceptorRecord<RequestFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const config = await handler({ headers: {} })
+
+        expect(config.headers['X-Admin-Mode']).toBe('true')
+        expect(config.headers['X-Device-Id']).toBe('device-123')
+    })
+
+    it('returns payload data on successful business responses', async () => {
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const result = await handler({
+            status: 200,
+            data: {
+                code: 0,
+                payload: { ok: true },
+            },
+        })
+
+        expect(result).toEqual({
+            code: 0,
+            payload: { ok: true },
+        })
+    })
+
+    it('handles login timeout by showing an error and scheduling redirect', async () => {
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const result = await handler({
+            status: 200,
+            data: {
+                code: 401,
+                message: 'expired',
+            },
+        })
+
+        expect(result).toBeNull()
+        expect(mocks.error).toHaveBeenCalledWith('登录超时，请重新登录')
+
+        vi.advanceTimersByTime(1000)
+
+        expect(mocks.clearSelectedItem).toHaveBeenCalled()
+        expect(globalThis.location.href).toBe('/login')
+    })
+
+    it('does not redirect again when login page receives a business 401', async () => {
+        Object.defineProperty(globalThis, 'location', {
+            value: { href: '/login', pathname: '/login' },
+            writable: true,
+            configurable: true,
+        })
+
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const result = await handler({
+            status: 200,
+            data: {
+                code: 401,
+                message: 'expired',
+            },
+        })
+
+        expect(result).toBeNull()
+        expect(mocks.error).not.toHaveBeenCalled()
+
+        vi.advanceTimersByTime(1000)
+
+        expect(mocks.clearSelectedItem).not.toHaveBeenCalled()
+        expect(globalThis.location.href).toBe('/login')
+    })
+
+    it('shows a generic message for handled business errors instead of raw backend text', async () => {
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<ResponseFulfilled>
+        const handler = interceptor.handlers[0].fulfilled
+
+        const result = await handler({
+            status: 200,
+            data: {
+                code: 500,
+                message: '系统繁忙',
+            },
+        })
+
+        expect(result).toBeNull()
+        expect(mocks.error).toHaveBeenCalledWith('请求失败，请稍后重试')
+    })
+
+    it('returns null and shows a generic message on transport errors', async () => {
+        const request = await importRequestWithAuth()
+        const interceptor = request.interceptors.response as unknown as InterceptorRecord<
+            ResponseFulfilled,
+            ResponseRejected
+        >
+        const handler = interceptor.handlers[0].rejected
+
+        const result = await handler(new Error('network down'))
+
+        expect(result).toBeNull()
+        expect(mocks.error).toHaveBeenCalledWith('请求无响应')
+    })
+})

@@ -156,7 +156,7 @@ export const fetchData = async (id: number): Promise<ResponseData> => {
 
 ```typescript
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { apiService } from '@/api';
+import { apiService } from '@/shared/api';
 
 export interface DataState {
   data: any[];

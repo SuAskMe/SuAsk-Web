@@ -1,0 +1,165 @@
+@use './ask.scss';
+@use './answer.scss';
+@use '@/styles/colors.scss' as *;
+
+.dialog-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.compose {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(113, 182, 255, 0.1);
+        margin-bottom: 8px;
+        flex-shrink: 0;
+
+        @media screen and (max-width: 768px) {
+            padding: 14px 16px;
+            margin-bottom: 0;
+            background: #fff;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .ask-teacher {
+            margin: 0;
+            margin-left: 12px;
+            margin-right: auto;
+            font-size: 15px;
+            color: $su-grey;
+
+            span {
+                font-weight: 600;
+                color: var(--su-blue-dark);
+            }
+
+            span:hover {
+                cursor: pointer;
+                color: $su-blue;
+            }
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .draft-trigger {
+            font-weight: 500;
+        }
+
+        .post-btn-mobile {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 6px 20px;
+            font-size: 14px;
+            border: none;
+            box-shadow: 0 2px 8px rgba(113, 182, 255, 0.3);
+            transition: all 0.25s ease;
+
+            &:active {
+                transform: scale(0.96);
+                box-shadow: 0 1px 4px rgba(113, 182, 255, 0.2);
+            }
+        }
+    }
+
+    .line {
+        display: none; // 用 header 下边框代替，清除冗余线
+    }
+
+    .main {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        min-height: 0;
+        padding: 8px 0;
+
+        @media screen and (max-width: 768px) {
+            padding: 16px;
+            // 确保内容区域可以自由滚动，不被键盘遮挡
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(113, 182, 255, 0.1);
+        flex-shrink: 0;
+
+        @media screen and (max-width: 768px) {
+            margin-top: 0;
+            padding: 12px 16px;
+            border-top: 1px solid #f1f5f9;
+            background: #fff;
+            // 确保工具栏在键盘弹出时仍可见
+            position: sticky;
+            bottom: 0;
+        }
+    }
+
+    .image-container {
+        padding: 12px 0px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        pointer-events: none;
+
+        .picked-image {
+            width: calc(20% - 10px);
+            min-width: 70px;
+            pointer-events: all;
+            display: flex;
+            position: relative;
+
+            .delete-btn {
+                position: absolute;
+                top: -6px;
+                right: -6px;
+                background-color: #fff;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                z-index: 1;
+                transition: transform 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.15);
+                }
+            }
+
+            .image {
+                width: 100%;
+                aspect-ratio: 1/1;
+                border-radius: 12px;
+                border: solid 2px #fff;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                cursor: pointer;
+                transition: transform 0.2s ease;
+
+                &:hover {
+                    transform: scale(1.02);
+                }
+            }
+        }
+    }
+}

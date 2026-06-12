@@ -1,0 +1,101 @@
+import { ControlPanelStore } from '@/shared/model'
+import { getDeviceId } from '@/shared/lib/device'
+import axios from 'axios'
+import { ElMessage } from 'element-plus/es/components/message/index.mjs'
+import { getRequestAuthAdapter } from './request-auth'
+
+const ADMIN_ROLE = 'admin'
+const GENERIC_ERROR_MESSAGE = '请求失败，请稍后重试'
+
+const request = axios.create({
+    baseURL: import.meta.env.VITE_APP_BASE_URL,
+    timeout: 5000,
+    withCredentials: true,
+})
+
+const isAuthProbeRequest = (url?: string) => url === '/user'
+
+const returnToLogin = () => {
+    if (location.pathname === '/login') {
+        return
+    }
+
+    const redirect = `${location.pathname}${location.search}${location.hash}`
+    sessionStorage.setItem('login_redirect', redirect)
+    const search = new URLSearchParams({ redirect })
+    const loginHref = `/login?${search.toString()}`
+
+    setTimeout(() => {
+        location.href = loginHref
+        ControlPanelStore().clearSelectedItem()
+    }, 1000)
+}
+
+request.interceptors.response.use(
+    (res) => {
+        if (res.status === 200) {
+            if (res.data.code == 0) {
+                return res.data
+            } else if (res.data.code == 401) {
+                if (location.pathname === '/login' || isAuthProbeRequest(res.config?.url)) {
+                    return null
+                }
+                ElMessage.error('登录超时，请重新登录')
+                returnToLogin()
+                return null
+            } else {
+                const msg = typeof res.data.message === 'string' ? res.data.message : ''
+                if (msg.includes('登录')) {
+                    ElMessage.error(msg)
+                    returnToLogin()
+                } else {
+                    ElMessage.error(GENERIC_ERROR_MESSAGE)
+                }
+                return null
+            }
+        } else {
+            ElMessage.error('请求错误')
+            return null
+        }
+    },
+    (error) => {
+        if (axios.isAxiosError(error) && error.response) {
+            if (error.response.status === 401) {
+                if (location.pathname === '/login' || isAuthProbeRequest(error.config?.url)) {
+                    return null
+                }
+                ElMessage.error('登录超时，请重新登录')
+                returnToLogin()
+                return null
+            }
+
+            const msg = typeof error.response.data?.message === 'string' ? error.response.data.message : ''
+            if (msg) {
+                ElMessage.error(msg)
+                return null
+            }
+        }
+
+        ElMessage.error('请求无响应')
+        return null
+    },
+)
+
+request.interceptors.request.use(
+    (config) => {
+        // 管理员：始终附加 X-Admin-Mode header
+        if (getRequestAuthAdapter().getRole() === ADMIN_ROLE) {
+            config.headers['X-Admin-Mode'] = 'true'
+        }
+
+        // 附加设备标识
+        config.headers['X-Device-Id'] = getDeviceId()
+
+        return config
+    },
+    (error) => {
+        return Promise.reject(error)
+    },
+)
+
+export default request

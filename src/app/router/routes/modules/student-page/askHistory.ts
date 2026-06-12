@@ -1,0 +1,32 @@
+import type { AppRouteRecordRaw } from '@/app/router/types'
+import { isMobile } from '@/shared/lib/device'
+
+const WebHome = () => import('@/app/layouts/main-layout')
+const LeftSidebar = () => import('@/widgets/app-shell/left-sidebar')
+const AskHistory = () => import('@/pages/ask-history')
+
+export const AskHistoryRoute: AppRouteRecordRaw = {
+    path: '/ask-history',
+    name: 'AskHistoryRoot',
+    meta: {
+        title: '历史提问',
+    },
+    props: {
+        userType: 'student',
+        deviceType: isMobile() ? 'phone' : 'desktop',
+    },
+    component: WebHome,
+    children: [
+        {
+            path: '',
+            name: 'AskHistory',
+            meta: {
+                title: '历史提问',
+            },
+            components: {
+                default: AskHistory,
+                left_side: LeftSidebar,
+            },
+        },
+    ],
+}
