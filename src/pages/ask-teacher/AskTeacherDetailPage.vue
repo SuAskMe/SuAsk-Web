@@ -203,7 +203,7 @@ const handleCancelSearch = async () => {
 const router = useRouter()
 
 const navigateBack = () => {
-    router.back()
+    router.push({ name: 'AskTeacher' })
 }
 
 const observe = new IntersectionObserver(

@@ -58,8 +58,7 @@ export function createRoleGuard(router: Router) {
         if (!userStore.isLoggedIn() && !isBasicRoute) {
             sessionStorage.setItem('login_redirect', to.fullPath)
             const loginQuery = new URLSearchParams({ redirect: to.fullPath })
-            location.replace(`/login?${loginQuery.toString()}`)
-            next(false)
+            next(`/login?${loginQuery.toString()}`)
             return
         }
 
