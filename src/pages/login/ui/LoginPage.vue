@@ -53,21 +53,24 @@
                 <div class="social-divider">
                     <span>或者</span>
                 </div>
-                <div class="unlogin-btn">
-                    <el-tooltip
-                        content="不登录可以完全匿名，但部分功能会受到限制"
-                        placement="bottom"
-                        effect="light"
-                    >
-                        <el-button
-                            type="info"
-                            text
-                            large
-                            :loading="guestLoading"
-                            @click="navigateToUnlogin"
-                            >暂不登录
-                        </el-button>
-                    </el-tooltip>
+                <div class="unlogin-section">
+                    <div class="unlogin-tip">非本校用户请使用暂不登录</div>
+                    <div class="unlogin-btn">
+                        <el-tooltip
+                            content="不登录可以完全匿名，但部分功能会受到限制"
+                            placement="bottom"
+                            effect="light"
+                        >
+                            <el-button
+                                type="info"
+                                text
+                                large
+                                :loading="guestLoading"
+                                @click="navigateToUnlogin"
+                                >暂不登录
+                            </el-button>
+                        </el-tooltip>
+                    </div>
                 </div>
             </div>
         </div>
@@ -414,6 +417,20 @@ function isRateLimitError(error: unknown): boolean {
             font-size: 14px;
             color: #999;
         }
+    }
+
+    .unlogin-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .unlogin-tip {
+        font-size: 13px;
+        line-height: 1.4;
+        color: #8c6a2f;
+        text-align: center;
     }
 
     .unlogin-btn {
