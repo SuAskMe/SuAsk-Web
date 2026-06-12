@@ -4,6 +4,7 @@ import { AskTeacherRoute } from './modules/student-page'
 import { HotQuestionsRoute } from './modules/student-page'
 import { HelpRoute } from './modules/help'
 import HomePage from '@/pages/home'
+import LoginPage from '@/pages/login'
 import { MyFavoriteRoute } from './modules/student-page'
 import { SettingRoute } from './modules/setting'
 import { UserRoute } from './modules/userInfo'
@@ -26,7 +27,7 @@ export const RootRoot: AppRouteRecordRaw = {
 export const LoginRoute: AppRouteRecordRaw = {
     path: '/login',
     name: 'Login',
-    component: () => import('@/pages/login'),
+    component: LoginPage,
     meta: {
         title: '登录',
     },
