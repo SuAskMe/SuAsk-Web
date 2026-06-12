@@ -13,9 +13,20 @@ const request = axios.create({
     withCredentials: true,
 })
 
+const isAuthProbeRequest = (url?: string) => url === '/user'
+
 const returnToLogin = () => {
+    if (location.pathname === '/login') {
+        return
+    }
+
+    const redirect = `${location.pathname}${location.search}${location.hash}`
+    sessionStorage.setItem('login_redirect', redirect)
+    const search = new URLSearchParams({ redirect })
+    const loginHref = `/login?${search.toString()}`
+
     setTimeout(() => {
-        location.href = '/login'
+        location.href = loginHref
         ControlPanelStore().clearSelectedItem()
     }, 1000)
 }
@@ -26,7 +37,7 @@ request.interceptors.response.use(
             if (res.data.code == 0) {
                 return res.data
             } else if (res.data.code == 401) {
-                if (location.pathname === '/login') {
+                if (location.pathname === '/login' || isAuthProbeRequest(res.config?.url)) {
                     return null
                 }
                 ElMessage.error('登录超时，请重新登录')
@@ -50,7 +61,7 @@ request.interceptors.response.use(
     (error) => {
         if (axios.isAxiosError(error) && error.response) {
             if (error.response.status === 401) {
-                if (location.pathname === '/login') {
+                if (location.pathname === '/login' || isAuthProbeRequest(error.config?.url)) {
                     return null
                 }
                 ElMessage.error('登录超时，请重新登录')

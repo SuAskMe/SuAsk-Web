@@ -81,7 +81,7 @@
 import { ref, onMounted } from 'vue'
 import { User as UserIcon, Lock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus/es/components/message/index.mjs'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ForgetPasswordDialog from './ForgetPasswordDialog.vue'
 import RegisterDialog from './RegisterDialog.vue'
 import type { LoginReq } from '@/entities/session'
@@ -90,6 +90,7 @@ import { ControlPanelStore } from '@/shared/model'
 import { UserStore } from '@/entities/user'
 
 const router = useRouter()
+const route = useRoute()
 const loading = ref(false)
 const forgetPasswordVisible = ref(false)
 const registerVisible = ref(false)
@@ -98,10 +99,30 @@ const password = ref('')
 
 const userStore = UserStore()
 
+const getRedirectTarget = () => {
+    const redirect = route.query.redirect
+    if (typeof redirect === 'string' && redirect.startsWith('/')) {
+        return redirect
+    }
+
+    const storedRedirect = sessionStorage.getItem('login_redirect')
+    if (storedRedirect && storedRedirect.startsWith('/')) {
+        return storedRedirect
+    }
+
+    return { name: 'AskTeacher' as const }
+}
+
+const navigateAfterAuth = () => {
+    const target = getRedirectTarget()
+    sessionStorage.removeItem('login_redirect')
+    router.push(target)
+}
+
 onMounted(async () => {
     if (userStore.isLoggedIn()) {
         ControlPanelStore().clearSelectedItem()
-        router.push({ name: 'AskTeacher' })
+        navigateAfterAuth()
         return
     }
 
@@ -114,7 +135,7 @@ onMounted(async () => {
     const user = await userStore.bootstrapAuth()
     if (user) {
         ControlPanelStore().clearSelectedItem()
-        router.push({ name: 'AskTeacher' })
+        navigateAfterAuth()
     }
 })
 
@@ -141,7 +162,7 @@ const handleLogin = async () => {
         if (userInfo) {
             ControlPanelStore().clearSelectedItem()
             ElMessage.success('登录成功')
-            router.push({ name: 'AskTeacher' })
+            navigateAfterAuth()
         }
     } catch {
         ElMessage.error('登录失败，请检查用户名和密码')
@@ -158,7 +179,7 @@ async function navigateToUnlogin() {
         const userInfo = await userStore.guestLogin()
         if (userInfo) {
             ControlPanelStore().clearSelectedItem()
-            router.push({ name: 'AskTeacher' })
+            navigateAfterAuth()
         } else {
             ElMessage.error('临时登录失败，请稍后再试')
         }
