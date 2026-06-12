@@ -202,16 +202,11 @@ onMounted(() => {
 </script>
 
 <style scoped src="./ask-teacher-list.scss" />
-<style>
-.header .el-autocomplete {
-    width: 50%;
-
-    .el-input {
-        --el-input-border-radius: var(--el-border-radius-round);
-
-        .el-input__wrapper {
-            padding: 5px 18px;
-        }
-    }
+<style lang="scss">
+.header .el-autocomplete .el-input__wrapper:focus-within {
+    background: #fff;
+    box-shadow:
+        0 0 0 1.5px $su-blue inset,
+        0 2px 12px rgba($su-blue, 0.15);
 }
 </style>

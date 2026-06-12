@@ -139,45 +139,43 @@
     .status-badge {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 3px 9px;
-        border: 1px solid transparent;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 1.35;
+        gap: 5px;
+        padding: 3px 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1;
+        height: 20px;
+        box-sizing: border-box;
         white-space: nowrap;
 
         &::before {
             content: '';
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: currentColor;
         }
 
         &.answered {
-            color: #10b981;
-            background: #f0fdf4;
-            border-color: #bbf7d0;
+            color: #059669;
+            background: rgba(16, 185, 129, 0.08);
         }
 
         &.unanswered {
-            color: #b45309;
-            background: #fffbeb;
-            border-color: #fde68a;
+            color: #d97706;
+            background: rgba(245, 158, 11, 0.08);
         }
 
         &.pinned {
-            color: #eab308;
-            background: #fefce8;
-            border-color: #fef08a;
+            color: #ca8a04;
+            background: rgba(234, 179, 8, 0.1);
         }
 
         &.deleted {
-            color: #f87171;
-            background: #fff1f2;
-            border-color: #fecdd3;
+            color: #dc2626;
+            background: rgba(239, 68, 68, 0.08);
         }
     }
 

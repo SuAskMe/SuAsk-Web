@@ -7,9 +7,9 @@
             <SidebarToggle v-if="sidebar_btn" @toggle="$emit('sidebar')" />
         </template>
         <template #right>
-            <template v-if="props.sort_and_search">
+            <template v-if="props.sort_and_search || props.search">
                 <SortDropdown
-                    v-if="!searchActive"
+                    v-if="props.sort_and_search && !searchActive"
                     v-model="sortIndex"
                     :has-sort-upvote="props.has_sort_upvote"
                     @change="changeSort"
@@ -18,7 +18,7 @@
                     v-if="props.search"
                     :get-keywords-url="props.get_keywords_url"
                     :teacher-id="props.teacher_id"
-                    :sort-type="sortIndex"
+                    :sort-type="props.search_sort_type ?? sortIndex"
                     :mobile="deviceType.isMobile"
                     @search="$emit('search', $event)"
                     @cancel-search="$emit('cancelSearch')"
@@ -49,6 +49,7 @@ const props = withDefaults(
         search?: boolean
         has_sort_upvote?: boolean
         default_sort_type?: number
+        search_sort_type?: number
         sort_and_search?: boolean
         teacher_id?: number
     }>(),

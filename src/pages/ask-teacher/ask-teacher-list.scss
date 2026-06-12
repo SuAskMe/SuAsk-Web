@@ -66,6 +66,48 @@
         .search-teacher-btn:hover {
             background-color: #71b6ff20;
         }
+
+        :deep(.el-autocomplete) {
+            width: 50%;
+
+            .el-input {
+                --el-input-bg-color: #{$su-bg-grey};
+                --el-input-border-color: transparent;
+                --el-input-hover-border-color: transparent;
+                --el-input-focus-border-color: #{$su-blue};
+                --el-input-border-radius: 24px;
+
+                .el-input__wrapper {
+                    padding: 10px 16px;
+                    background: $su-bg-grey;
+                    border-radius: 24px;
+                    box-shadow: 0 0 0 1.5px transparent inset;
+                    transition: all 0.3s ease;
+                }
+
+                .el-input__inner {
+                    font-size: 14px;
+                    color: #333;
+                }
+
+                .el-input__inner::placeholder {
+                    color: $su-grey-light;
+                }
+
+                .el-input__wrapper:hover {
+                    box-shadow: 0 0 0 1.5px transparent inset;
+                }
+
+                &.is-focus .el-input__wrapper,
+                &:has(.el-input__inner:focus) .el-input__wrapper {
+                    background: #fff;
+                    box-shadow:
+                        0 0 0 1.5px $su-blue inset,
+                        0 2px 12px rgba($su-blue, 0.15);
+                }
+            }
+        }
+
         .bottom-line {
             position: absolute;
             bottom: 0;

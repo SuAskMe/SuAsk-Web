@@ -8,29 +8,42 @@
     >
         <template #header>
             <QuestionHeader
-                @change-sort="changeSort"
                 @search="search"
                 @cancel-search="cancelSearch"
                 @sidebar="sidebar"
                 title="我的提问箱"
                 :search="showSearchAndSort"
-                :has_sort_upvote="showSearchAndSort"
-                :sort_and_search="showSearchAndSort"
+                :search_sort_type="sortType"
                 sidebar_btn
                 get_keywords_url="/questions/inbox/keywords"
             />
         </template>
 
         <template #toolbar>
-            <div class="tabs-container">
-                <div class="tabs-wrapper">
-                    <div
-                        v-for="tab in tabs"
-                        :key="tab.key"
-                        :class="['tab-item', { active: activeTab === tab.key }]"
-                        @click="handleTabChange(tab.key)"
-                    >
-                        {{ tab.label }}
+            <div class="ask-me-toolbar">
+                <div class="tabs-container">
+                    <div class="tabs-wrapper">
+                        <div
+                            v-for="tab in tabs"
+                            :key="tab.key"
+                            :class="['tab-item', { active: activeTab === tab.key }]"
+                            @click="handleTabChange(tab.key)"
+                        >
+                            {{ tab.label }}
+                        </div>
+                    </div>
+                </div>
+                <div v-if="showSearchAndSort" class="sort-filter">
+                    <div class="sort-tabs">
+                        <button
+                            v-for="option in sortOptions"
+                            :key="option.value"
+                            type="button"
+                            :class="['sort-tab', { active: sortType === option.value }]"
+                            @click="handleSortChange(option.value)"
+                        >
+                            {{ option.label }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -609,7 +622,7 @@ watch(
 const Init = async () => {
     InitStatus()
     loading.value = true
-    await getNextQuestions(0)
+    await getNextQuestions(sortType.value)
     loading.value = false
 }
 
@@ -627,15 +640,19 @@ const sidebar = () => {
     sidebarStore.toggle()
 }
 
-let sort_type = 0
+const sortType = ref(0)
+const sortOptions = [
+    { label: '时间', value: 0 },
+    { label: '热度', value: 2 },
+]
 
-const changeSort = async (sortType: number) => {
-    if (sort_type === sortType) {
+const handleSortChange = async (nextSortType: number) => {
+    if (sortType.value === nextSortType) {
         return
     }
-    sort_type = sortType
+    sortType.value = nextSortType
     loading.value = true
-    await refresh(sortType)
+    await refresh(nextSortType)
     resetScrollPosition()
     loading.value = false
 }
@@ -688,7 +705,7 @@ const handleDelete = async (question: QFMItem) => {
     try {
         await deleteQuestionApi(question.id)
         ElMessage.success('删除提问成功')
-        await refresh(sort_type)
+        await refresh(sortType.value)
         resetScrollPosition()
     } catch {
         ElMessage.error('删除提问失败')
@@ -717,7 +734,7 @@ const handleRestore = async (question: QFMItem) => {
     try {
         await restoreQuestionApi(question.id)
         ElMessage.success('恢复提问成功')
-        await refresh(sort_type)
+        await refresh(sortType.value)
         resetScrollPosition()
     } catch {
         ElMessage.error('恢复提问失败')
@@ -753,13 +770,18 @@ onMounted(() => {
 <style scoped src="./styles/AskMe.scss"></style>
 
 <style scoped lang="scss">
+.ask-me-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 16px 8px;
+}
+
 .tabs-container {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 16px;
-    margin-bottom: 8px;
-    padding: 0 16px;
     box-sizing: border-box;
 }
 
@@ -794,6 +816,43 @@ onMounted(() => {
         color: #4891e0;
         font-weight: 600;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.sort-filter {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.sort-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    background: rgba(240, 242, 245, 0.72);
+    border: 1px solid rgba(113, 182, 255, 0.08);
+    border-radius: 999px;
+}
+
+.sort-tab {
+    padding: 4px 14px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    font-size: 12px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: #64748b;
+    }
+
+    &.active {
+        background: rgba(255, 255, 255, 0.92);
+        color: #4891e0;
+        font-weight: 500;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     }
 }
 
